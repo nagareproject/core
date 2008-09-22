@@ -1,0 +1,14 @@
+Filling a bug report
+====================
+
+First, please, check the `opened tickets <http://www.nagare.org/trac/report/1>`_
+to be sure you have found a new bug in Nagare.
+
+To fill in a new bug report:
+
+  1. `create an account <http://www.nagare.org/trac/register>`_ in the Nagare
+     Trac if you don't already have one,
+  2. `Login <http://www.nagare.org/trac/login>`_ with your account
+  3. `create the bug report <http://www.nagare.org/trac/newticket>`_
+
+.. wikiname: BugReport

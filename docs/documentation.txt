@@ -1,0 +1,35 @@
+Nagare documentation
+====================
+
+* About
+
+  - :wiki:`NagareDescription`
+  - :wiki:`NagareFeatures`
+  - :wiki:`NagareLicence`
+  - :wiki:`NagareDependencies`
+  - :wiki:`DocumentationGeneration`
+
+* Using it
+
+  - :wiki:`QuickStart`
+  - :wiki:`NagareInstallation`
+  - :wiki:`NagareAdmin`
+  - :wiki:`ApplicationConfiguration`
+  - :wiki:`PublisherConfiguration`
+  - :wiki:`ThirdParty`
+    
+* Developer documentation
+
+  - :wiki:`ApplicationCreation`
+  - :wiki:`PresentationTier`
+  - :wiki:`ComponentModel`
+  - :wiki:`DatabaseTier`
+  - :wiki:`CallbacksAndForms`
+  - :wiki:`RendererObjects`
+  - :wiki:`EntryPoints`
+    
+* Examples
+
+  - :wiki:`DemoInstallation`
+
+.. wikiname: WikiStart

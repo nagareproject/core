@@ -1,0 +1,105 @@
+#title {
+    float: right;
+    color: white;
+    font-style: italic;
+    font-size: 1.5em;
+    padding: 15px 10px 0 0;
+}
+
+.mybody {
+       font: 20px verdana;
+       background: transparent url(img/body_bg.gif) repeat-y top left;
+       width: 980px;
+       margin: 0 auto;
+       padding: 0;
+}
+
+#myheader {
+	height: 79px;
+	background: transparent url(img/header_bg.gif) no-repeat top left;
+	padding: 50px 37px 0 0;
+	margin: 0;
+}
+
+#logo {
+	margin: 0 30px;
+	float: left;
+	height: 79px;
+	border: none;
+}
+
+#logo img {
+    border: none;
+}
+
+.footer {
+    background: transparent url(img/footerwhite_bg.png) no-repeat top left;
+	height: 43px;
+	font-size: 0.9em;
+	width: 980px;
+	margin: 0 auto;
+}
+
+p {
+	padding-left: 30px;
+	padding-right: 10px;
+}
+
+h1 {
+    background: transparent url(img/h1.gif) no-repeat scroll left bottom;
+    height: 70px;
+    padding: 2px 0pt 0px 61px;
+    margin-top: 10px;
+	color: #AFB11D;
+}
+
+h3 {
+	font-weight: bold;
+	/*color:#CD2E2E;*/
+	font-size: 120%
+}
+
+h3 a, h2 a, h1 a {
+	border: 0 !important;
+}
+
+hr {
+	border-color: #CD7878 -moz-use-text-color -moz-use-text-color;
+}
+
+#main {
+	color: #4a4a4a;
+	padding: 5px 0 0 70px;
+	margin: 0 10px 0 30px;
+	background: white url(img/page_bg.png) repeat-y top left;
+	width: 843px;
+}
+
+#main ul {
+	list-style-type: square;
+}
+
+#main ul ul {
+	list-style-type: disc;
+}
+
+#main a, #main a.missing {
+	color: #afb11d;
+	border-bottom: 1px dotted #afb11d;
+	background-color: transparent;
+    text-decoration: none;
+}
+
+#main a:hover {
+	background-color: transparent;
+	border-bottom: 1px solid #afb11d;
+	text-decoration: none;
+}
+
+#main a em {
+	color: #757708;
+}
+
+pre {
+	font-size: 119%;
+}

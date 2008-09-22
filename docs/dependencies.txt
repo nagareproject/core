@@ -1,0 +1,28 @@
+Dependencies
+============
+
+================ ============================================ ========================================================
+Name             Nagare usage                                 Site
+================ ============================================ ========================================================
+Paste            Standalone multi-threaded Python HTTP server http://pythonpaste.org
+Flup             FastCGI <-> WSGI bridge                      http://trac.saddi.com/flup
+Python Memcached Memcached connector                          http://www.tummy.com/Community/software/python-memcached
+WebOb            Request and Response web objects             http://pythonpaste.org/webob
+WebError         Web error page                               http://pypi.python.org/pypi/WebError
+Peak Rules       Python Generic methods                       http://pypi.python.org/pypi/PEAK-Rules
+Lxml             XML DOM tree processing                      http://codespeak.net/lxml
+ConfigObj        Configuration files parser                   http://www.voidspace.org.uk/python/configobj.html
+VirtualEnv       Local installation of Python packages        http://pypi.python.org/pypi/virtualenv
+Setuptools       Packaging of Nagare and applications         http://pypi.python.org/pypi/setuptools
+Pyjamas          Python to javascript converter               http://code.google.com/p/pyjamas
+YUI              AJAX communication                           http://developer.yahoo.com/yui
+SQLAlchemy       Objects to Relational mapper                 http://www.sqlalchemy.org
+Elixir           Declarative layer on SQLAlchemy              http://elixir.ematia.de/trac/wiki
+PIL              Images processing                            http://www.pythonware.com/products/pil
+Docutils         Rst to HTML converter                        http://docutils.sourceforge.net
+Pygments         Syntax highlighting                          http://pygments.org
+RstDoc           API documentation generator                  http://pypi.python.org/pypi/RstDoc
+Nose             Unittests manager                            http://somethingaboutorange.com/mrl/projects/nose
+================ ============================================ ========================================================
+
+.. wikiname: NagareDependencies

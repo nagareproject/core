@@ -1,0 +1,63 @@
+Installing a third party application
+====================================
+
+This document describes how to deploy an application on the Nagare framework
+
+Prerequisites
+-------------
+
+The Nagare framework must be installed as explained in :wiki:`NagareInstallation`.
+
+Installing the application
+--------------------------
+
+If the application is available on the `PyPi <http://pypi.python.org>`_, use
+the command:
+
+  .. code-block:: sh
+  
+     <NAGARE_HOME>/bin/easy_install <application>
+     
+else, retrieve the application archive or egg and install it with:
+
+  .. code-block:: sh
+  
+     <NAGARE_HOME>/bin/easy_install <path/to/the/archive>
+
+To check the application is correctly registered to Nagare, enter:
+
+  .. code-block:: sh
+  
+     <NAGARE_HOME>/bin/nagare-admin serve
+     
+which lists all the registered applications.
+
+The application is installed in is own directory under
+``<NAGARE_HOME>/lib/python2.5/site-packages``
+
+Serving the application
+-----------------------
+
+Check, in the ``conf`` directory of the application that the parameters of
+the configuration file are correct for your environment. For example, check
+that the database URI is correct if the application uses a database. 
+
+If the application uses a database, create the database tables:
+
+  .. code-block:: sh
+  
+     <NAGARE_HOME>/bin/nagare-admin create-db <application>
+
+Then, the application is launched with:
+
+  .. code-block:: sh
+       
+     <NAGARE_HOME>/bin/nagare-admin serve <application>
+
+To know how to configure an application, consult the
+:wiki:`ApplicationConfiguration` guide.
+
+To change the way the application is published, consult the
+:wiki:`PublisherConfiguration` guide. 
+
+.. wikiname: ThirdParty

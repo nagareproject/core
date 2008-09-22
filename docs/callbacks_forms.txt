@@ -1,0 +1,505 @@
+Callbacks and forms
+===================
+
+Principle
+---------
+
+With Nagare, you directly associate a standard Python methods or *callbacks*
+to the links and to the form elements, without explicitly naming them and
+without manual analysis of the requests received.
+
+When the callbacks are processed, you can freely modified the components graph
+of the application.
+
+In this example, a callback is associated to a link, to count how many times
+this link is clicked:
+
+.. code-block:: python
+
+   from nagare import presentation
+   from nagare.namespaces import xhtml
+
+   class ClickCounter:
+       def __init__(self):
+           self.nb = 0
+
+       def clic(self):
+           self.nb += 1
+
+   @presentation.render_for(ClickCounter)
+   def render(self, h, *args):
+       return h.p(
+                   'You have ', h.a('clicked').action(self.clic),
+                   ' ', self.nb, ' times.'
+                 )
+
+To test this snippet, launched it with:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin serve-module <path/to/the/example/file.py>:ClickCounter clic
+
+This simple GuessBook example associates a callback to a textarea element,
+that append the new messages to the list of the existing ones:
+                 
+.. code-block:: python
+
+   from __future__ import with_statement
+
+   from nagare import presentation, var
+   from nagare.namespaces import xhtml
+
+   class GuestBook:
+   def __init__(self):
+       self.msgs = []
+
+   def add_message(self, msg):
+       self.msgs.append(msg)
+
+   @presentation.render_for(GuestBook)
+   def render(self, h, *args):
+       with h.div:
+           for msg in self.msgs:
+               h << h.blockquote(msg) << h.hr
+
+       with h.form:
+           h << 'New message:' << h.br
+           h << h.textarea.action(self.add_message) << h.br
+           h << h.input(type='submit', value='Send')
+
+       return h.root
+
+You can test it with:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin serve-module <path/to/the/example/file.py>:GuestBook book
+
+Form elements
+-------------
+
+Callbacks registration
+~~~~~~~~~~~~~~~~~~~~~~
+
+============================ ========================== ==================================================
+Element                      Callback registration      Callback parameters
+============================ ========================== ==================================================
+``h.a``                      ``.action(callback)``      *no parameter*
+``h.form``                   ``.pre_action(callback)``  *no parameter*
+``h.form``                   ``.post_action(callback)`` *no parameter*
+``h.input``                  ``.action(callback)``      the text received
+``h.input(type='text)``      ``.action(callback)``      the text received
+``h.input(type='password')`` ``.action(callback)``      the text received
+``h.input(type='radio')``    ``.action(callback)``      boolean: is the radio button selected ?
+``h.input(type='checkbox')`` ``.action(callback)``      *no parameter* (only the callbacks of the
+                                                        selected checkboxes are called)
+``h.input(type='submit')``   ``.action(callback)``      *no parameter*
+``h.input(type='hidden')``   ``.action(callback)``      *no parameter*
+``h.input(type='file')``     ``.action(callback)``      an empty string if no file was uploaded, else
+                                                        a ``cgi.FieldStorage`` object
+``h.input(type='image')``    ``.action(callback)``      the callback is called twice:
+                                                          1. with the parameters ``True`` and the x value
+                                                          2. with the parameters ``False`` and the y value
+``h.textarea``               ``.action(callback)``      the text received
+``h.select``                 ``.action(callback)``      the selected option value
+``h.select(multiple=1)``     ``.action(callback)``      a tuple of the selected options value (even if
+                                                        only one option is selected)
+``h.img``                    ``.action(callback)``      the image data (the callback will be called when
+                                                        the browser requests the image).
+                                                        If no ``h.response.content_type`` is set by the
+                                                        callback then Nagare will try to guess the image
+                                                        type. 
+============================ ========================== ==================================================
+
+.. note::
+
+  Nagare is a full unicode framework: the text values are passed to the callbacks
+  as unicode strings.
+
+Callback order
+~~~~~~~~~~~~~~
+
+The callbacks are processed in this order:
+
+  1. the ``form`` ``pre_action()`` callback
+  2. the ``select``, ``textarea`` and ``input`` of type ``text``, ``password``,
+     ``radio``, ``checkbox``, ``hidden`` and ``file`` ``action()`` callback 
+  3. the ``form`` ``post_action()`` callback
+  4. the ``a`` and ``input(type='submit')`` ``action()`` callback
+  5. the ``input(type='image')`` ``action()`` callback
+  6. the ``img`` ``action()`` callback
+
+.. warning::
+
+  Only modify the components graph in the ``a``, ``input(type='submit')`` or
+  ``input(type='image')`` callbacks.
+
+Elements selection
+~~~~~~~~~~~~~~~~~~
+
+Some form elements have an helper ``.selected()`` method to select it:
+
+============================ =========================================================
+Element                      ``.selected()`` parameter
+============================ =========================================================
+``h.input(type='radio')``    a boolean to select or unselect the radio button
+``h.input(type='checkbox')`` a boolean to select or unselect the checkbox
+``h.option``                 a list of values of the options to select
+============================ =========================================================
+
+Checkboxes reset
+~~~~~~~~~~~~~~~~
+
+The callbacks of the ``h.input(type='checkbox')`` are only called for the
+selected checkboxes. So, you need to reset the attributs that keep the current
+selected checkboxes before to process the callbacks. This reset method is
+typically the ```pre_action`` callback of ``h.form``: 
+   
+.. code-block:: python
+
+   from __future__ import with_statement
+
+   from nagare import presentation
+   from nagare.namespaces import xhtml
+
+   class ColorSelection:
+       def __init__(self):
+           self.reset_colors()
+               
+       def reset_colors(self):
+           self.colors = []
+
+       def set_color(self, color):
+           self.colors.append(color)
+
+   @presentation.render_for(ColorSelection)
+   def render(self, h, *args):
+       h << 'Selected colors: ' << ', '.join(self.colors) << h.hr
+
+       with h.form.pre_action(self.reset_colors):
+           h << h.input(type='checkbox', value='blue').action(self.set_color).selected(u'blue' in self.colors) << 'blue' << h.br
+           h << h.input(type='checkbox', value='white').action(self.set_color).selected(u'white' in self.colors) << 'white' << h.br
+           h << h.input(type='checkbox', value='red').action(self.set_color).selected(u'red' in self.colors) << 'red' << h.br
+
+           h << h.br << h.input(type='submit', value='Send')
+
+       return h.root
+
+or, with a more compact view method:
+
+.. code-block:: python
+
+   @presentation.render_for(ColorSelection)
+   def render(self, h, *args):
+       h << 'Selected colors: ' << ', '.join(self.colors) << h.hr
+
+       with h.form.pre_action(self.reset_colors):
+           for color in (u'blue', u'white', u'red'):
+               h << h.input(type='checkbox', value=color).action(self.set_color).selected(color in self.colors) << color << h.br
+
+           h << h.br << h.input(type='submit', value='Send')
+       return h.root
+       
+The ``var.Var()`` objects
+-------------------------
+
+The instances of the ``Var`` class in :apidoc:`nagare.var#var.Var` are
+variable-like objects that provide a "functional" interface:
+
+  - calling the object with a value, set the variable value
+  - calling the object without a value, return the variable value
+
+They can be usefull to directly get / set variables in a lambda expression
+callback.
+
+For example, the first snippet can be rewrote as: 
+
+.. code-block:: python
+
+   from nagare import presentation, var
+   from nagare.namespaces import xhtml
+
+   class ClickCounter:
+       def __init__(self):
+           self.nb = var.Var(0)
+
+   @presentation.render_for(ClickCounter)
+   def render(self, h, *args):
+       return h.p(
+                   'You have ',
+                   h.a('clicked').action(lambda: self.nb(self.nb()+1)),
+                   ' ', self.nb, ' times.'
+                 )
+
+Form validation
+---------------
+
+Erroneous element
+~~~~~~~~~~~~~~~~~
+
+Calling the ``.error(msg)`` method on an element wrap it into styled ``div``,
+if ``msg`` is not ``None``:
+
+.. code-block:: pycon
+
+   >>> from nagare.namespaces import xhtml
+   >>> h = xhtml.Renderer()
+
+   >>> tree = h.input
+   >>> print tree.write_xmlstring(pretty_print=True)
+   <input/>
+
+   >>> tree = h.input.error(None)
+   >>> print tree.write_xmlstring(pretty_print=True)
+   <input/>
+
+   >>> tree = h.input.error('Erroneous field')
+   >>> print tree.write_xmlstring(pretty_print=True)
+   <div class="nagare-error-field">
+     <div class="nagare-error-input">
+       <input/>
+     </div>
+     <div class="nagare-error-message">Erroneous field</div>
+   </div>
+
+So your application can defined the ``nagare-error-field``, ``nagare-error-input``
+and ``nagare-error-message`` css classes to design the erroneous fields rendering.
+
+The ``editor.Property`` objects
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The instances of the ``Property`` class in :apidoc:`nagare.editor#editor.Property`
+are objects:
+
+  - with a validation function, set by calling its ``.validate()`` method. A
+    validation function, when called with a value, must validate and, eventually,
+    convert it. If the value is valid, the (converted) value is returned.
+    Else the ``ValueError`` exception must be raised with an error message.
+
+  - that can be set with a value, by calling its ``.set()`` method or by directly
+    be called
+  - that always keeps the value in its ``input`` attribut
+  - that validates the value, by calling its validating function
+  - that keeps the last valid value in its ``value`` attribut
+  - that keeps the error message of the validation in its ``error`` attribut,
+    or ``None`` if the value is valid.
+  
+.. code-block:: pycon
+
+   >>> from nagare.editor import Property
+   
+   >>> def is_lesser_than_10(n):
+   ...     if n<10:
+   ...         return n
+   ...     else:
+   ...         raise ValueError, 'must be lesser than 10'
+   
+   >>> number = Property()
+   >>> number.validate(is_lesser_than_10)
+   <nagare.editor.Property object at 0x842348c>
+
+   >>> # Valid value
+   >>> number.set(2)
+   >>> number.input
+   2
+   >>> number.value
+   2
+   >>> number.error
+   
+   >>> # Invalid value
+   >>> number.set(20)
+   >>> number.input
+   20
+   >>> number.value
+   2
+   >>> number.error
+   u'must be lesser than 10'
+
+   # Setting a valid value by calling the property   
+   >>> number(2)
+   2
+   >>> number.input
+   2
+   >>> number()     # Calling the property without a value return its ``input`` value
+   2
+   >>> number.value
+   2
+   >>> number.error
+   
+   # Setting an invalid value by calling the property   
+   >>> number(20)
+   20
+   >>> number.input
+   20
+   >>> number()     # Calling the property without a value return its ``input`` value
+   20
+   >>> number.value
+   2
+   >>> number.error
+   u'must be lesser than 10'
+
+The ``validator`` module
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The :apidoc:`nagare.validator` module defines a ``IntValidator`` and a
+``StringValidator`` objects to validate the numbers and the strings. They are
+suitable to be used as a validating function of a ``editor.Property`` object:
+
+.. code-block:: pycon
+
+   >>> from nagare.validator import IntValidator
+   >>> from nagare.editor import Property
+   
+   >>> number = Property()
+
+   # The validating function, first creates a ``IntValidator()``, then checks
+   # the value is lesser than 10 and positive, and, finally, convert it to an
+   # integer before to return it
+   >>> number.validate(lambda v: IntValidator(v).lesser_than(10).greater_than(0).to_int())
+
+   >>> number(2)
+   2
+   >>> number.input
+   2
+   >>> number.value
+   2
+   >>> number.error
+
+   >>> number(20)
+   20
+   >>> number.input
+   20
+   >>> number.value
+   2
+   >>> number.error
+   u'Must be lesser than 10'
+
+   >>> number(-1)
+   -1
+   >>> number.input
+   -1
+   >>> number.value
+   2
+   >>> number.error
+   u'Must be greater than 0'
+
+The ``editor.Editor`` objects
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An instances of the ``Editor`` class in :apidoc:`nagare.editor#editor.Editor`
+is an intermediary between the values received from a form an a target object.
+
+An ``Editor`` object automatically creates ``editor.Property`` objects reflecting
+the attributs, of the target object, we want to edit with the form.
+
+An ``Editor`` object will modified the target object attributs only if all the
+validating functions of its properties validate the data from the form.  
+
+Putting all together
+~~~~~~~~~~~~~~~~~~~~
+
+In this example, we've got pure Python ``Person`` objects with ``name`` and
+``age`` attributs:
+
+.. code-block:: python
+
+   from __future__ import with_statement
+   from nagare import editor, presentation, component
+   from nagare.validator import StringValidator, IntValidator
+   
+   class Person:
+       def __init__(self):
+           self.name = ''
+           self.age = 0
+           
+We create a dedicated editor for this objects, to be able to edit these
+attributs with a web form:
+
+.. code-block:: python
+
+   class PersonEditor(editor.Editor):
+       # The ``__init__`` method receives the target ``Person`` object
+       def __init__(self, person):
+           # We create the ``name`` and ``age`` ``Properties``, initialized
+           # with the values from the target object
+           super(PersonEditor, self).__init__(person, ('name', 'age'))
+
+           # We use a string validator to check that the name is not empty i.e
+           # the name is required
+           self.name.validate(lambda name: StringValidator(name).not_empty().to_string())
+           
+           # We use an integer validator to check the age is positive 
+           self.age.validate(lambda age: IntValidator(age).greater_than(0).to_int())              
+
+       # This ``commit`` method will write back the values of the ``name`` and
+       # ``age`` attributes to the target object is they are valid
+       def commit(self):
+           super(PersonEditor, self).commit(('name', 'age'))
+           
+Then we can create a view on the ``PersonEditor`` objects to render the web
+form:
+
+.. code-block:: python
+
+    @presentation.render_for(PersonEditor)
+    def render(self, h, *args):
+        with h.form:
+            # The ``action()`` callback calls the ``name`` property of the editor
+            # with the value from the form. The validating function of the
+            # property will check the value is valid and, if not, will set
+            # the ``self.name.error`` value
+            #
+            # The ``error()`` method will display the error message if it's
+            # not ``None``
+            h << 'Name: ' << h.input.action(self.name).error(self.name.error) << h.br
+            
+            h << 'Age: ' << h.input.action(self.age).error(self.age.error) << h.br
+            
+            h << h.input(type='submit', value='Send').action(self.commit)
+            
+        return h.root
+
+Finally, an application creates a ``Person`` object and wraps it into a
+``PersonEditor`` component to edit these properties:
+
+.. code-block:: python
+
+   class App:
+       def __init__(self):
+           self.person = Person()
+
+           # Create a ``PersonEditor`` object that wrap the ``Person`` object to edit
+           editor = PersonEditor(self.person)
+           
+           # Transform the editor object into a component
+           self.editor_component = component.Component(editor)
+                  
+   @presentation.render_for(App)
+   def render(self, h, *args):
+       # Display the current values
+       h << h.p('Name: ', self.person.name)
+       h << h.p('Age: ', self.person.age)
+
+       h << h.hr
+          
+       # Render the editor
+       h << self.editor_component
+       return h.root
+
+Now launch this example with:
+
+.. code-block:: pycon
+
+   <NAGARE_HOME>/bin/nagare-admin serve-module <path/to/the/example/file.py>:App editor
+
+and check that the validation error messages are displayed and that the
+``Person`` target object is only modified is all the values are valid.
+
+.. note::
+   
+   For more complete examples of validations, use of all the possible form
+   elements, inter-fields validation ... see the
+   `Demo1 <http://www.nagare.org/demo/form/1>`_ and
+   `Demo2 <http://www.nagare.org/demo/form/2>`_, and read their source.
+
+.. wikiname: CallbacksAndForms

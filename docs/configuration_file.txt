@@ -1,0 +1,103 @@
+The application configuration file
+==================================
+
+Using the configuration file
+----------------------------
+
+The ``serve`` administrative command needs a proper configuration file to
+launch an application.
+
+You can directly give the configuration file to the ``serve`` command, as:
+
+  .. code-block:: sh
+
+    <NAGARE_HOME>/bin/nagare-admin serve /path/to/the/config.cfg
+  
+Or, if the application was registered to the framework
+(as described in :wiki:`EntryPoints`), then you can launch it with:
+
+  .. code-block:: sh
+  
+    <NAGARE_HOME>/bin/nagare-admin serve <application>
+
+In this case, the framework reads the configuration file named ``<application>.cfg``
+in the directory ``<application>*/conf`` under
+``<NAGARE_HOME>/lib/python2.5/site-packages``.
+
+.. note::
+
+  If an application is launched in debug mode, changes in the configuration
+  file is immediatly reflected. Else, you need to stop then re-launch the
+  application.
+  
+Structure
+---------
+
+For the boolean parameters, a value of ``true``, ``yes``, ``on`` or ``1`` means True
+and a value of ``false``, ``no``, ``off`` or ``0`` mean False.
+
+You can use the ``$here`` variable which contains the path to the directory where
+the configuration file is located.
+
+Comments, starting with the ``#`` character can be added to a configuration file.
+
+[application] section
+~~~~~~~~~~~~~~~~~~~~~
+
+=================== ========= ================== ================================================
+Name                Mandatory Default value      Description
+=================== ========= ================== ================================================
+path                Yes       *No default value* Reference to the root component factory of the
+                                                 application (see :wiki:`ObjectReferences`)
+name                Yes       *No default value* ``/name`` will be the URL of the application
+static              No        ``static``         Filesystem path to the static contents of
+                              directory          the application. By default, it's the
+                                                 ``static`` directory under the application
+                                                 installation directory.
+always_html         No        yes                If this parameter is false, the framework will
+                                                 send XHTML to the browsers that accept XHTML,
+                                                 else HTML. If this parameter is true, HTML is
+                                                 always generated
+debug               No        no                 Display the web debug page when an exception
+                                                 occurs. The ``nagare[debug]`` extra must be installed. 
+=================== ========= ================== ================================================
+
+[database] section
+~~~~~~~~~~~~~~~~~~
+
+=================== ========= ================== ================================================
+Name                Mandatory Default value      Description
+=================== ========= ================== ================================================
+activated           No        off                If not activated, the framework will not read
+                                                 the following parameters
+uri                 Yes       *No default value* URI or connection string to the database,
+                                                 as described in http://www.sqlalchemy.org/docs/04/dbengine.html#dbengine_establishing
+metadata            Yes       *No default value* Reference to the SQLAlchemy metadata object
+                                                 (see :wiki:`ObjectReferences`)
+populate            No        *No default value* Reference to an optional function, called
+                                                 after the table creation to populate them
+                                                 with some initial data (see :wiki:`ObjectReferences`)
+debug               No        off                Display the generated SQL requests 
+=================== ========= ================== ================================================
+
+All other parameters, if present, are passed as keywords to the SQLALchemy
+``create_engine()`` call (see http://www.sqlalchemy.org/docs/04/dbengine.html#dbengine_options)
+
+If an application needs to work with several database, several subsections can
+be embedded into the main ``[database]`` section:
+
+  .. code-block:: txt
+  
+    [database]
+    
+    [[database1]]      # The name of a subsection is irrelevant but must be unique
+    activated = on
+    uri = ...
+    metadata = ...
+    
+    [[database2]]
+    activated = on
+    uri = ...
+    metadata = ...
+
+.. wikiname: ApplicationConfiguration

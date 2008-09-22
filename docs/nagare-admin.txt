@@ -1,0 +1,223 @@
+nagare-admin
+============
+
+The ``nagare-admin`` command is used to create, configure and launch applications.
+
+Usage
+-----
+
+You can get a comprehensive list of the available commands by invoking ``nagare-admin``
+with the ``--help`` or ``-h`` options:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin --help
+
+::
+
+   Usage : nagare-admin <command>
+
+   with <command> :
+    - create-app  : Create an application skeleton
+    - create-db   : Create the database of an application
+    - create-rules: Create the rewrite rules
+    - drop-db     : Drop the database of an application
+    - info        : Display various informations
+    - serve       : Launch an application
+    - serve-module: Launch a python module
+    - shell       : Launch a shell
+
+And you can get an help about a specific command by entering :
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin <command> --help
+   
+Full commands reference
+-----------------------
+
+create-app
+~~~~~~~~~~
+
+The ``create-app`` command creates the whole directories and files structure
+of a skeleton application:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin create-app <application_name>
+
+See :wiki:`ApplicationCreation`
+
+create-db
+~~~~~~~~~
+
+The ``create-db`` command creates the database tables from an application
+entities description:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin create-db <application>
+
+The ``metadata`` parameter of the ``[database]`` section of your application
+:wiki:`ConfigurationFile` must be an :wiki:`ObjectReferences` to an
+`SQLAlchemy metadata object <http://www.sqlalchemy.org/docs/04/metadata.html>`_.
+The usage of the metadata object is described in :wiki:`DatabaseTier`. 
+
+The available options are:
+
+  --no-populate     by default, after the tables creation, the function
+                    referenced by the ``populate`` parameter of the ``[database]``
+                    section is called, to initialize the database. The
+                    ``--no-populate`` option disable this behaviour.
+  --drop            if this option is given, the database tables are dropped
+                    before to be re-created.
+  -d, --debug       display the generated SQL requests
+
+create-rules
+~~~~~~~~~~~~
+
+The ``create-rules`` command generates rewrite rules for the ``lighttpd`` or ``nginx``
+web servers. These rules associate the URL ``/static/<application>`` to the
+directory path of the static contents of the application. With such rules
+activated, the web server will deliver the static contents instead of Nagare.
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin create-rules [<application> ...]
+
+If no applications are given, the rules for all the registered applications are
+created. When a list of applications is given, only the rules for these
+applications are generated.
+
+The available options are:
+
+  -l                create rules for lighttpd (default)
+  -n                create rules for nginx
+
+drop-db
+~~~~~~~
+
+The ``drop-db`` command deletes the database tables of the application:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin drop-db
+  
+The ``metadata`` parameter of the ``[database]`` section of your application
+:wiki:`ConfigurationFile` must be an :wiki:`ObjectReferences` to an
+`SQLAlchemy metadata object <http://www.sqlalchemy.org/docs/04/metadata.html>`_.
+The usage of the metadata object is described in :wiki:`DatabaseTier`. 
+
+The available options are:
+
+  -d, --debug       display the generated SQL requests
+
+info
+~~~~
+
+The ``info`` command displays informations about your system environment
+(suitable to be added into a bug ticket):
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin info
+
+serve
+~~~~~
+
+The ``serve`` command launches one or several applications:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin serve <application> ...
+
+The *<application>* argument can be the name of a registered application or
+an application configuration file (see :wiki:`ConfigurationFile`).
+
+Without any parameters, the command displays the list of all the registered
+applications.
+
+The available options are:
+
+  --host            by default, the publisher only accepts requests on the
+                    local interface. If you want to accept external requests,
+                    set this parameter to the internet address of your external
+                    interface or to '0.0.0.0' to listen to on all the interfaces
+                    of your system. This option overwrites the ``host`` parameter
+                    of the :wiki:`PublisherFile` 
+  -p, --port        port where to listen to the requests. This option overwrites
+                    the ``port`` parameter of the :wiki:`PublisherFile`
+  -c, --conf        path to the :wiki:`PublisherFile`. If not given, the
+                    standalone Python threaded HTTP server is used.
+  -d, --debug       display the web debug page when an exception occurs. This
+                    option overwrites the ``debug`` option of the
+                    :wiki:`ConfigurationFile`.
+                    the ``nagare[debug]`` extra must be installed.
+  --reload          This option activates the reloader process which automatically
+                    detect source changes and re-launch the application.
+
+serve-module
+~~~~~~~~~~~~
+
+The ``serve-module`` command directly launches a component. It's a simplified
+version of the ``server`` command, that don't need a configuration file, mainly
+used to quickly prototype some code that doesn't need database accesses:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin serve-module <path_to_module:component_factory> <url>
+
+*/url* will be the URL of the application.
+
+The *path_to_module* parameter can be a filesystem path as:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin serve-module /tmp/nagare/examples/counter.py:Counter counter
+   
+or a module name as:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin serve-module nagare.examples.counter:Counter counter
+
+The available options are:
+
+  --host            by default, the publisher only accepts requests on the
+                    local interface. If you want to accept external requests,
+                    set this parameter to the internet address of your external
+                    interface or to '0.0.0.0' to listen to on all the interfaces
+                    of your system.
+  -p, --port        port where to listen to the requests (default 8080).
+  --no-debug        by default, the web debug page is activated. Desactivated
+                    it with this option.
+
+.. warning::
+
+   The ``serve-module`` command always uses the standalone publisher and sessions
+   manager, with a reloader activated. So don't use it in production.
+
+shell
+~~~~~
+
+The ``shell`` command launches an interactive Python (or IPython, if available)
+interpreter:
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin shell <application> ...
+
+Once launched, two variables are available:
+
+  - `apps` is a dictionary that associates the name of an application to its
+    root component factory.
+  - `session` is the SQLAlchemy session
+
+The available options are:
+
+
+  --plain           always launch a plain Python shell, even if IPython is
+                    available
+  -d, --debug       display the generated SQL requests
+
+.. wikiname: NagareAdmin

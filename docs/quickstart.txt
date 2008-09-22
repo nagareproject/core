@@ -1,0 +1,88 @@
+QuickStart
+==========
+
+This document describes the standard installation of the Nagare framework
+on Linux and how to start your first application. To install it on Windows,
+read :wiki:`NagareInstallation`.
+
+1. Stackless Python installation
+--------------------------------
+
+The Nagare framework uses Stackless Python (version 2.5.2 or above). So, grab
+the latest version of
+`Stackless Python <http://www.stackless.com/download/>`_ for your platform and
+install it.
+
+For example, to install Stackless Python in the *<STACKLESS_HOME>* directory,
+on Linux:
+
+  .. code-block:: sh
+  
+     cd /tmp
+     wget http://www.stackless.com/binaries/stackless-252-export.tar.bz2
+     tar jxvf stackless-252-export.tar.bz2
+     
+     cd stackless-2.5.2*
+     ./configure --prefix=<STACKLESS_HOME>
+     make all
+     make install 
+
+2. Nagare installation
+----------------------
+
+The following two steps install the Nagare framework and all its dependences into
+the *<NAGARE_HOME>* directory of your choice. 
+
+2.1 Create a virtual environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Download ``virtualenv`` and create a virtual environment into the *<NAGARE_HOME>*
+directory **with Stackless Python**:
+ 
+  .. code-block:: sh
+
+     cd /tmp
+     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.1.tar.gz
+     tar zxvf virtualenv-1.1.tar.gz
+     
+     <STACKLESS_HOME>/bin/python virtualenv-1.1/virtualenv.py <NAGARE_HOME>
+
+2.2 Install the framework
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Install the whole framework and all its dependencies into <NAGARE_HOME> with
+``easy_install``:
+
+  .. code-block:: sh
+  
+     <NAGARE_HOME>/bin/easy_install 'nagare[full]'
+ 
+3. Create your first application
+--------------------------------
+
+To create the application ``my_first_app``, in the current directory:
+
+  1. create the application skeleton:
+ 
+     .. code-block:: sh
+     
+        <NAGARE_HOME>/bin/nagare-admin create-app my_first_app
+
+  2. register your new application to the framework:
+  
+     .. code-block:: sh
+     
+        cd my_first_app; <NAGARE_HOME>/bin/python setup.py develop
+        
+  3. launch it:
+  
+     .. code-block:: sh
+     
+        <NAGARE_HOME>/bin/nagare-admin serve my_first_app
+
+Congratulations your first application is available at http://localhost:8080/my_first_app.
+
+The source code of your application is in ``my_first_app/my_first_app/my_first_app.py``, ready to
+be modified !
+
+.. wikiname: QuickStart

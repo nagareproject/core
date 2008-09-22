@@ -1,0 +1,15 @@
+Installation
+============
+
+The :wiki:`QuickStart` guide describes the standard, recommended and quick way
+to install the Nagare framework.
+
+The :wiki:`NagareInstallation` guide details the various ways and options to
+install the framework under Linux and Windows. Especially, read this guide if you
+want a developer installation of the framework.
+
+Then, if you want to install the demonstration follow the :wiki:`DemoInstallation`
+documentation.
+
+.. wikiname: NagareDownload
+

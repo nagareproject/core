@@ -1,0 +1,7 @@
+IRC
+===
+
+You can chat with other Nagare users on the
+`Freenode #nagare <irc://irc.freenode.net/nagare>`_ channel.
+
+.. wikiname: IrcChannel

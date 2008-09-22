@@ -1,0 +1,48 @@
+Entry points
+============
+ 
+The entry points are a mecanism to extend the framework.
+
+How the entry points are declared in the :browser:`core/setup.py` file of your project
+is described in the `Setuptools documentation <http://peak.telecommunity.com/DevCenter/setuptools#extensible-applications-and-frameworks>`_.
+
+Look at the value of the ``entry_points`` keywork of ``the setup()`` call into
+the :browser:`core/setup.py` of the framework to see all the defined default entry points. 
+ 
+The framework knows about the following entry points:
+ 
+  - ``nagare.applications``: this entry point is the most often used as it registers
+    an application to the framework.
+    
+    An application can be an instance of ``WSGIApp``, configurated with a
+    component factory, or a direct component factory which, in this case, will
+    be automatically wrapped into a default ``WSGIApp`` object.
+          
+  - ``nagare.publishers``: these entry points defined the publishers that can be
+    used in :wiki:`PublisherFile#publisher-section`.
+    
+    The framework publishers are defined into the :browser:`core/nagare/publishers`
+    directory. The class ``Publisher`` in :apidoc:`nagare.publishers.common#common.Publisher`
+    is the base class of all the publishers.
+      
+  - ``nagare.sessions``: there entry points defined the sessions manager that
+    can be used in :wiki:`PublisherFile#sessions-section`.
+
+    The framework sessions managers are defined into the :browser:`core/nagare/sessions`
+    directory. The class ``Sessions`` in :apidoc:`nagare.sessions.common#common.Sessions`
+    is the base class of all the sessions managers.
+
+  -  ``nagare.commands``: these entry points defined new administrative commands
+     (launched with ``nagare-admin``)
+         
+     All the build-in administrative commands of the framework are defined into
+     the :browser:`core/nagare/admin` directory. The class ``Command`` in
+     :apidoc:`nagare.admin.util#util.Command` is the interface an administrative command
+     must respect.
+
+  - ``nagare.admin``: these entry points defined components that will be rendered
+    into the "Nagare Administration interface" page (launched with ``nagare-admin serve admin``).
+    See the :browser:`core/nagare/admin/interface/info.py` and
+    :browser:`core/nagare/admin/interface/applications.py` files. 
+          
+.. wikiname: EntryPoints

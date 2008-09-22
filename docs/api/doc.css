@@ -1,0 +1,163 @@
+p {
+	text-align: justify;
+	padding-left: 30px;
+    /* font-family: times; */
+}
+
+h1, h2, h3, h4 {
+	color: #AFB11D;
+	font-family: arial;
+}
+
+h1.title {
+	background: transparent url(img/h1.gif) no-repeat scroll left bottom;
+	height: 70px;
+	padding: 2px 0pt 0px 61px;
+	margin-top: 10px;
+}
+
+h2 {
+	/* font-weight: bold; */
+	font-style: italic;
+}
+
+h3 a, h2 a, h1 a {
+	border: 0 !important;
+}
+
+hr {
+	border-color: #CD7878 -moz-use-text-color -moz-use-text-color;
+}
+
+.document {
+	color: #4a4a4a;
+	margin: 0 30px 0 30px;
+}
+
+ul {
+	list-style-type: square;
+}
+
+ul ul {
+	list-style-type: disc;
+}
+
+a, a.missing, a:visited {
+	color: #afb11d;
+	border-bottom: 1px dotted #afb11d;
+	border: 0;
+	text_decoration: none;
+}
+
+a em {
+	color: #757708;
+}
+
+.admonition-title {
+	display: none;
+}
+
+.note {
+	background: #ffffff url(img/light.png) no-repeat top left;
+	max-width: 900px;
+    padding: 5px 5px 5px 50px;
+	margin: 0.27em 0 0.27em 60px;
+	border: solid 1px #aeaeae;
+}
+
+* html .note {
+    background: #ffffff url(img/light.png) no-repeat top left;
+    width: 900px;
+    padding: 5px 5px 5px 50px;
+    margin: 0.27em 0 0.27em 60px;
+    border: solid 1px #aeaeae;
+}
+
+.warning {
+	background: #ffffff url(img/error_bg.png) no-repeat top left;
+    max-width: 900px;
+    padding: 5px 5px 5px 50px;
+    margin: 0.27em 0 0.27em 60px;
+	border: solid 1px #8d1818;
+}
+
+* html .warning {
+    background: #ffffff url(img/error_bg.png) no-repeat top left;
+    width: 900px;
+    padding: 5px 5px 5px 50px;
+    margin: 0.27em 0 0.27em 60px;
+    border: solid 1px #8d1818;
+}
+
+/*********************************************/
+/*	ALERTS AND BLOCKS */
+/*********************************************/
+
+div.system-message {
+	background: #f7dfd3 url(img/error_bg.png) no-repeat top left;
+	width: 900px;
+	padding-left: 35px;
+	padding-bottom: 10px;
+	border-color: #8d1818;
+	min-height: 50px;
+}
+
+/*********************************************/
+/*	CODE */
+/*********************************************/
+
+.highlighttable {
+	width: 100%;
+	max-width: 900px;
+}
+
+div.highlight {
+	padding: 0.27em;
+	border-color: #aeaeae;
+    border: 1px dashed;
+    margin-left: 30px;
+}
+
+div.highlight pre {
+	background: #ffffff url(img/code.png) no-repeat top right !important;
+    overflow-x: auto;
+    width: 99%;
+	margin: 0;
+	padding: 5px 5px 1.5em 5px;
+}
+
+/*********************************************/
+/*	TABLE */
+/*********************************************/
+
+table.docutils {
+	border: 2px solid #757708;
+	border-collapse: collapse;
+}
+
+table.docutils thead th {
+	color: #8e9009;
+	font-weight: bold;
+	padding: 3px;
+	border: 1px solid #c1c22d;
+}
+
+table.docutils tbody td {
+	padding: 3px;
+	border: 1px solid #c1c22d;
+}
+
+table a {
+	border-bottom:0 !important;
+}
+
+.htmlscreen {
+	border: solid 1px #aaa;
+	padding: 5px;
+	margin: 0 60px 0 90px;
+	background-color: #eee;
+}
+
+.document .pre {
+    background-color: #eee;
+}
