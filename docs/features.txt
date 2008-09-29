@@ -13,7 +13,7 @@ need to split its control flow in a multitude of controllers and with the
 automatic handling of the back, fork and refresh actions from the browser.
 
 Its component model and use of the continuation come from the famous
-`Seaside <http://www.seaside.st/>`_ SmallTalk framework.
+`Seaside <http://www.seaside.st/>`_ Smalltalk framework.
 
 Python is a great language and Nagare makes full use of it:
 
