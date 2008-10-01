@@ -51,17 +51,17 @@ class Sessions(common.Sessions):
             return None
         
         last_cont_id = int(session[KEY_PREFIX+session_id+'_cont'])
-        (query_string, externals) = session[KEY_PREFIX+session_id]
+        (secureid, query_string, externals) = session[KEY_PREFIX+session_id]
         cont = session[KEY_PREFIX+id]
-        
-        return (last_cont_id, query_string, externals, cont)
+
+        return (last_cont_id, secureid, query_string, externals, cont)
     
-    def _set(self, session_id, cont_id, new_id, query_string, externals, data):
+    def _set(self, session_id, cont_id, new_id, secureid, query_string, externals, data):
         if new_id:
             self._get_connection().incr(KEY_PREFIX+session_id+'_cont')
         
         self._get_connection().set_multi({
-            KEY_PREFIX+session_id : (query_string, externals),
+            KEY_PREFIX+session_id : (secureid, query_string, externals),
             KEY_PREFIX+session_id+'%05d' % cont_id : data
         }, self.ttl)
  
