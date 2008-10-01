@@ -118,7 +118,7 @@ def run(parser, options, args):
                                 h << h.li('If your application uses a database, add your database entities into ', h.i(models_file))
                                 h << h.li('Add your application components into ', h.i(this_file), ' or create new files')
 
-                        h << h.p('To lean more, go to the ', h.a('official website', href='http://www.nagare.org/'))
+                        h << h.p('To learn more, go to the ', h.a('official website', href='http://www.nagare.org/'))
 
                         h << "Have fun !"
 
