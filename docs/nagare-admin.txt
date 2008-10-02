@@ -144,10 +144,10 @@ The available options are:
                     set this parameter to the internet address of your external
                     interface or to '0.0.0.0' to listen to on all the interfaces
                     of your system. This option overwrites the ``host`` parameter
-                    of the :wiki:`PublisherFile` 
+                    of the :wiki:`PublisherConfiguration` 
   -p, --port        port where to listen to the requests. This option overwrites
-                    the ``port`` parameter of the :wiki:`PublisherFile`
-  -c, --conf        path to the :wiki:`PublisherFile`. If not given, the
+                    the ``port`` parameter of the :wiki:`PublisherConfiguration`
+  -c, --conf        path to the :wiki:`PublisherConfiguration`. If not given, the
                     standalone Python threaded HTTP server is used.
   -d, --debug       display the web debug page when an exception occurs. This
                     option overwrites the ``debug`` option of the

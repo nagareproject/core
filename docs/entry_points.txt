@@ -19,14 +19,14 @@ The framework knows about the following entry points:
     be automatically wrapped into a default ``WSGIApp`` object.
           
   - ``nagare.publishers``: these entry points defined the publishers that can be
-    used in :wiki:`PublisherFile#publisher-section`.
+    used in :wiki:`PublisherConfiguration#publisher-section`.
     
     The framework publishers are defined into the :browser:`core/nagare/publishers`
     directory. The class ``Publisher`` in :apidoc:`nagare.publishers.common#common.Publisher`
     is the base class of all the publishers.
       
   - ``nagare.sessions``: there entry points defined the sessions manager that
-    can be used in :wiki:`PublisherFile#sessions-section`.
+    can be used in :wiki:`PublisherConfiguration#sessions-section`.
 
     The framework sessions managers are defined into the :browser:`core/nagare/sessions`
     directory. The class ``Sessions`` in :apidoc:`nagare.sessions.common#common.Sessions`
