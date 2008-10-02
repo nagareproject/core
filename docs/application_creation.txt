@@ -89,7 +89,7 @@ Edit the *conf/my_app.cfg* file:
 .. note::
 
   The structure and informations in this file are described with details in
-  :wiki:`ConfigurationFile`.
+  :wiki:`ApplicationConfiguration`.
 
 Briefly, the **[application]** section contains:
 

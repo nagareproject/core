@@ -59,7 +59,7 @@ entities description:
    <NAGARE_HOME>/bin/nagare-admin create-db <application>
 
 The ``metadata`` parameter of the ``[database]`` section of your application
-:wiki:`ConfigurationFile` must be an :wiki:`ObjectReferences` to an
+:wiki:`ApplicationConfiguration` must be an :wiki:`ObjectReferences` to an
 `SQLAlchemy metadata object <http://www.sqlalchemy.org/docs/04/metadata.html>`_.
 The usage of the metadata object is described in :wiki:`DatabaseTier`. 
 
@@ -104,7 +104,7 @@ The ``drop-db`` command deletes the database tables of the application:
    <NAGARE_HOME>/bin/nagare-admin drop-db
   
 The ``metadata`` parameter of the ``[database]`` section of your application
-:wiki:`ConfigurationFile` must be an :wiki:`ObjectReferences` to an
+:wiki:`ApplicationConfiguration` must be an :wiki:`ObjectReferences` to an
 `SQLAlchemy metadata object <http://www.sqlalchemy.org/docs/04/metadata.html>`_.
 The usage of the metadata object is described in :wiki:`DatabaseTier`. 
 
@@ -132,7 +132,7 @@ The ``serve`` command launches one or several applications:
    <NAGARE_HOME>/bin/nagare-admin serve <application> ...
 
 The *<application>* argument can be the name of a registered application or
-an application configuration file (see :wiki:`ConfigurationFile`).
+an application configuration file (see :wiki:`ApplicationConfiguration`).
 
 Without any parameters, the command displays the list of all the registered
 applications.
@@ -151,7 +151,7 @@ The available options are:
                     standalone Python threaded HTTP server is used.
   -d, --debug       display the web debug page when an exception occurs. This
                     option overwrites the ``debug`` option of the
-                    :wiki:`ConfigurationFile`.
+                    :wiki:`ApplicationConfiguration`.
                     the ``nagare[debug]`` extra must be installed.
   --reload          This option activates the reloader process which automatically
                     detect source changes and re-launch the application.
