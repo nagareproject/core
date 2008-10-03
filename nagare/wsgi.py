@@ -269,7 +269,7 @@ class WSGIApp(object):
         response = webob.Response(headerlist=[])
         
         accept = MIMEAcceptWithoutWildcards('Accept', 'text/html' if self.always_html else str(request.accept))
-        request.xhtml_output = accept.best_match(('text/html', 'application/xhtml+xml')) == 'application/xhtml+xml'
+        response.xhtml_output = accept.best_match(('text/html', 'application/xhtml+xml')) == 'application/xhtml+xml'
 
         self.start_request(request, response)
 

@@ -50,7 +50,7 @@ def serialize(output, request, response, declaration):
     
     content_type = request.content_type
     
-    if request.xhtml_output or (content_type and content_type.startswith('application/xhtml+xml')): 
+    if response.xhtml_output or (content_type and content_type.startswith('application/xhtml+xml')): 
         # The browser accepts XHTML
         response.content_type = 'application/xhtml+xml'
 

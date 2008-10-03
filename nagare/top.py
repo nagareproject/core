@@ -32,7 +32,7 @@ def wrap(content_type, h, body):
         
         if not isinstance(body, xhtml_base._HTMLTag) or not body.tag.endswith('html'):
             # No ``<html>`` found, add it
-            if h.request.xhtml_output:
+            if h.response.xhtml_output:
                 h.namespaces = { None : 'http://www.w3.org/1999/xhtml' }
 
             if not isinstance(body, xhtml_base._HTMLTag) or not body.tag.endswith('body'):
