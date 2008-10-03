@@ -87,5 +87,6 @@ def register_role(trac_url):
         
     trac_ref = roles.tracRef(trac_url)
     roles.setTracRef(lambda *path, **query: tracRef(trac_ref, *path, **query))
+    roles.setTracRef = lambda f: None
 
     setDocStringFilter(wiki_filter.wikiFilter)
