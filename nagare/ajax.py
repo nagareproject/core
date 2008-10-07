@@ -145,7 +145,7 @@ class Update(object):
                 head.javascript_url(YUI_PREFIX+'/event/event-min.js')
                 head.javascript_url(YUI_PREFIX+'/connection/connection-min.js')
                 
-                head.javascript('_nagare_content_type_', 'NAGARE_CONTENT_TYPE="%s"' % ('application/xhtml+xml' if response.xhtml_output else 'text/html'))
+                head.javascript('_nagare_content_type_', 'NAGARE_CONTENT_TYPE="%s"' % ('application/xhtml+xml' if renderer.response.xhtml_output else 'text/html'))
                 head.javascript_url('/static/nagare/ajax.js')
 
         js = 'nagare_updateNode'
