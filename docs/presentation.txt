@@ -346,10 +346,10 @@ These three methods of the DOM objects are helpers to work with templates:
         ...   <li meld:id="alist" align="center">A line example</li>
         ... </ul>''')
     
-        >>> l = ['Item %d' % i for i in range(3)]
+        >>> items = ['Item %d' % i for i in range(3)]
     
-        >>> for (element, line) in root.findmeld('alist').repeat(l):
-        ...     element.text = line
+        >>> for (element, item) in root.findmeld('alist').repeat(items):
+        ...     element.text = item
         ...
     
         >>> print root.write_xmlstring()
