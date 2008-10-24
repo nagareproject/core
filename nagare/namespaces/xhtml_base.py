@@ -15,8 +15,7 @@ Having not dependencies to the framework make it suitable to be used in others f
 
 from __future__ import with_statement
 
-import operator
-import cStringIO, StringIO
+import cStringIO
 
 from lxml import etree as ET
 
@@ -95,121 +94,10 @@ class HeadRenderer(xml.XmlRenderer):
         cls._xml_parser = ET.XMLParser()
         cls._xml_parser.setElementClassLookup(ET.ElementDefaultClassLookup(element=_HTMLTag))
 
-    def __init__(self):
-        """Renderer initialisation
-        
-        The ``HeadRenderer`` keeps track of the javascript and css used by every views,
-        to be able to concatenate them into the ``<head>`` section.
-        """
-        super(HeadRenderer, self).__init__()
-        
-        self._css = {}              # CSS code
-        self._css_url = {}          # CSS URLs
-        self._javascript = {}       # Javascript code
-        self._javascript_url = {}   # Javascript URLs
-        self._order = 0             # Memorize the order of the javascript and css
-
-    def css(self, name, style):
-        """Memorize a in-line css style
-        
-        In:
-          - ``name`` -- unique name of this css style (to prevent double definition)
-          - ``style`` -- the css style
-          
-        Return:
-          - ``()``
-        """
-        self._css.setdefault(name, (self._order, style))
-        self._order += 1
-        return ()
-
-    def css_url(self, url):
-        """Memorize a css style URL
-        
-        In:
-          - ``url`` -- the css style URL
-          
-        Return:
-          - ``()``
-        """
-        self._css_url.setdefault(url, self._order)
-        self._order += 1
-        return ()
-
-    def javascript(self, name, script):
-        """Memorize a in-line javascript code
-        
-        In:
-          - ``name`` -- unique name of this javascript code (to prevent double definition)
-          - ``script`` -- the javascript code
-          
-        Return:
-          - ``()``
-        """
-        self._javascript.setdefault(name, (self._order, script))
-        self._order += 1
-        return ()
-
-    def javascript_url(self, url):
-        """Memorize a javascript URL
-        
-        In:
-          - ``url`` -- the javascript URL
-          
-        Return:
-          - ``()``
-        """
-        self._javascript_url.setdefault(url, self._order)
-        self._order += 1
-        return ()
-
-    def _get_css(self):
-        """Return the list of the in-line css styles, sorted by order of insertion
-        
-        Return:
-          - list of css styles
-        """
-        return [css[1] for css in sorted(self._css.values())]
-
-    def _get_css_url(self):
-        """Return the list of css URLs, sorted by order of insertion
-        
-        Return:
-          - list of css URLs
-        """
-        return [url[0] for url in sorted(self._css_url.items(), key=operator.itemgetter(1))]
-
-    def _get_javascript(self):
-        """Return the list of javascript codes, sorted by order of insertion
-        
-        Return:
-          - list of javascript codes
-        """
-        return [js[1] for js in sorted(self._javascript.values())]
-
-    def _get_javascript_url(self):
-        """Return the list of javascript URLs, sorted by order of insertion
-        
-        Return:
-          - list of javascript URLs
-        """
-        return [url[0] for url in sorted(self._javascript_url.items(), key=operator.itemgetter(1))]
-
-
-class DummyRenderer(xml.DummyRenderer):
-    """Root of the ``xhtml_base.Renderer`` objects"""
-    head_renderer_factory = HeadRenderer
-    
-    def __init__(self, *args):
-        """Initialisation
-        """
-        super(DummyRenderer, self).__init__()
-        
-        # Create an ``head`` attribute which is a ``HeadRenderer``
-        self.head = self.head_renderer_factory(*args)
-
 
 class Renderer(xml.XmlRenderer):
+    head_renderer_factory = HeadRenderer
+    
     componentattrs = ('id', 'class', 'style', 'title')
     i18nattrs = ('lang', 'dir')
     eventattrs = ('onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmousemove', 'onmouseover', 'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup')
@@ -336,18 +224,18 @@ class Renderer(xml.XmlRenderer):
         cls._html_parser = ET.HTMLParser()
         cls._html_parser.setElementClassLookup(ET.ElementDefaultClassLookup(element=_HTMLTag))
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, **kw):
         """Renderer initialisation
         
         In:
           - ``parent`` -- parent renderer
         """
-        if parent is None:
-            parent = DummyRenderer()
-
         super(Renderer, self).__init__(parent)
 
-        self.head = parent.head
+        if parent is None:
+            self.head = self.head_renderer_factory(**kw)
+        else:
+            self.head = parent.head
         
     def makeelement(self, tag):
         """Make a tag
@@ -451,7 +339,7 @@ if __name__ == '__main__':
     h = Renderer()
     
     h.head << h.head.title('A test')
-    h.head << h.head.javascript('__toto__', 'function() {}')
+    h.head << h.head.script('function() {}')
     h.head << h.head.meta(name='meta1', content='content1')
 
     with h.body(onload='javascript:alert()'):
@@ -477,4 +365,4 @@ if __name__ == '__main__':
                         with h.td:
                             h << column
 
-    print h.html(h.head.head(h.head), h.root).write_htmlstring(pretty_print=True)
+    print h.html(h.head.head(h.head.root), h.root).write_htmlstring(pretty_print=True)

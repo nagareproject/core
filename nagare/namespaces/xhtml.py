@@ -14,7 +14,7 @@ This renderer is dedicated to the framework
 
 from __future__ import with_statement
 
-import types, urllib, imghdr
+import operator, types, urllib, imghdr
 
 from lxml import etree as ET
 import peak.rules
@@ -40,7 +40,7 @@ def add_attribut(self, name, value):
       - ``value`` -- ``ajax.Update`` value
     """
     # Generate a XHR request
-    add_attribut(self, name, value.generate_action(3, self.renderer))
+    xml.add_attribut(self, name, value.generate_action(3, self.renderer))
 
 @peak.rules.when(xml.add_attribut, (xml._Tag, basestring, types.FunctionType))
 def add_attribut(self, name, value):
@@ -52,7 +52,7 @@ def add_attribut(self, name, value):
       - ``value`` -- function value
     """
     # Transcode the function to javascript
-    add_attribut(self, name, ajax.JS(value))
+    xml.add_attribut(self, name, ajax.JS(value))
 
 @peak.rules.when(xml.add_attribut, (xml._Tag, basestring, types.MethodType))
 def add_attribut(self, name, value):
@@ -64,7 +64,7 @@ def add_attribut(self, name, value):
       - ``value`` -- method value
     """
     # Transcode the method to javascript
-    add_attribut(self, name, ajax.JS(value))
+    xml.add_attribut(self, name, ajax.JS(value))
 
 @peak.rules.when(xml.add_attribut, (xml._Tag, basestring, ajax.JS))
 def add_attribut(self, name, value):
@@ -98,30 +98,44 @@ def absolute_url(url, static):
             url = static + url
         
     return url
-        
+
 
 class HeadRenderer(xhtml_base.HeadRenderer):
     """The XHTML head Renderer
     
     This renderer knows about the static contents of the application
-    """    
+    """
     def __init__(self, static):
+        """Renderer initialisation
+        
+        The ``HeadRenderer`` keeps track of the javascript and css used by every views,
+        to be able to concatenate them into the ``<head>`` section.
+        """
         super(HeadRenderer, self).__init__()
 
         # Directory where are located the static contents of the application
         self.static = static
-        self.anonymous = 0
-
-    def add_script(self, script, url):
-        if url:
-            self.javascript_url(url)
-        else:
-            self.javascript(self.anonymous, script)
-            self.anonymous += 1
         
-    def add_css(self, css):
-        self.css(self.anonymous, css)
-        self.anonymous += 1
+        self._named_css = {}        # CSS code
+        self._css_url = {}          # CSS URLs
+        self._named_javascript = {} # Javascript code
+        self._javascript_url = {}   # Javascript URLs
+
+        self._order = 0             # Memorize the order of the javascript and css
+
+    def css(self, name, style):
+        """Memorize an in-line named css style
+        
+        In:
+          - ``name`` -- unique name of this css style (to prevent double definition)
+          - ``style`` -- the css style
+          
+        Return:
+          - ``()``
+        """
+        self._named_css.setdefault(name, (self._order, style))
+        self._order += 1
+        return ()
 
     def css_url(self, url):
         """Memorize a css style URL
@@ -132,14 +146,16 @@ class HeadRenderer(xhtml_base.HeadRenderer):
         Return:
           - ``()``
         """
-        return super(HeadRenderer, self).css_url(absolute_url(url, self.static))
+        self._css_url.setdefault(absolute_url(url, self.static), self._order)
+        self._order += 1
+        return ()
 
     def javascript(self, name, script):
-        """Memorize a in-line javascript code
+        """Memorize an in-line named javascript code
         
         In:
           - ``name`` -- unique name of this javascript code (to prevent double definition)
-          - ``script`` -- a function, a method or a javascript code
+          - ``script`` -- the javascript code
           
         Return:
           - ``()``
@@ -153,7 +169,9 @@ class HeadRenderer(xhtml_base.HeadRenderer):
             self.javascript_url('/static/nagare/pyjslib.js')
             script = script.javascript
 
-        return super(HeadRenderer, self).javascript(name, script)
+        self._named_javascript.setdefault(name, (self._order, script))
+        self._order += 1
+        return ()
 
     def javascript_url(self, url):
         """Memorize a javascript URL
@@ -164,7 +182,48 @@ class HeadRenderer(xhtml_base.HeadRenderer):
         Return:
           - ``()``
         """
-        return super(HeadRenderer, self).javascript_url(absolute_url(url, self.static))
+        self._javascript_url.setdefault(absolute_url(url, self.static), self._order)
+        self._order += 1
+        return ()
+
+    def _style(self, append, tag, style):
+        append(tag, style)
+    
+    def _script(self, append, tag, script):
+        append(tag, script)
+
+    def _get_named_css(self):
+        """Return the list of the in-line named css styles, sorted by order of insertion
+        
+        Return:
+          - list of (name, css style)
+        """
+        
+        return [(name, style) for (name, (order, style)) in sorted(self._named_css.items(), key=operator.itemgetter(1))]
+
+    def _get_css_url(self):
+        """Return the list of css URLs, sorted by order of insertion
+        
+        Return:
+          - list of css URLs
+        """
+        return [url for (url, order) in sorted(self._css_url.items(), key=operator.itemgetter(1))]
+
+    def _get_named_javascript(self):
+        """Return the list of named javascript codes, sorted by order of insertion
+        
+        Return:
+          - list of (name, javascript code)
+        """
+        return [(name, js) for (name, (order, js)) in sorted(self._named_javascript.items(), key=operator.itemgetter(1))]
+
+    def _get_javascript_url(self):
+        """Return the list of javascript URLs, sorted by order of insertion
+        
+        Return:
+          - list of javascript URLs
+        """
+        return [url for (url, order) in sorted(self._javascript_url.items(), key=operator.itemgetter(1))]
 
 @presentation.render_for(HeadRenderer)
 def render(self, h, *args):
@@ -180,15 +239,6 @@ def render(self, h, *args):
     
     # Create the tags to include the CSS styles and the javascript codes
 
-    css_url = [self.link(rel='stylesheet', type='text/css', href='%s' % url) for url in self._get_css_url()]
-    
-    css = self._get_css()
-    if css:
-        css = self.style(css, type='text/css')
-
-    javascript_url = [self.script(src=url, type='text/javascript') for url in self._get_javascript_url()]
-    javascript = [self.script(script.encode('utf-8'), type='text/javascript') for script in self._get_javascript()]
-
     head = self.root
 
     if isinstance(head, ET.ElementBase) and (head.tag == 'head'):
@@ -197,8 +247,19 @@ def render(self, h, *args):
     else:
         head = self.head(head)
     
-    return head(css_url, css, javascript_url, javascript, '\n')
+    css = [css for (name, css) in self._get_named_css()]
+    if css:
+        head.append(self.style('\n'.join(css), type='text/css'))
 
+    head.extend([self.link(rel='stylesheet', type='text/css', href=url) for url in self._get_css_url()])
+    
+    javascript = [js for (name, js) in self._get_named_javascript()]
+    if javascript:
+        head.append(self.script('\n'.join(javascript), type='text/javascript'))
+
+    head.extend([self.script(type='text/javascript', src=url) for url in self._get_javascript_url()])
+
+    return head
 
 # ----------------------------------------------------------------------------------
 
@@ -639,7 +700,8 @@ class Img(_HTMLActionTag):
             # to guess the format of the image
             img_type = imghdr.what(None, img[:32])
             if img_type is not None:
-                response.content_type = 'image/'+img_type
+                response.content_type = 'image/'+(img_type or '*') 
+
         return img
         
     def sync_action(self, renderer, action, permissions, subject):
@@ -691,37 +753,44 @@ class Label(xhtml_base._HTMLTag):
 
 # ----------------------------------------------------------------------------------
 
-class DummyRenderer(xhtml_base.DummyRenderer):
-    """Root of the ``xhtml.Renderer`` objects"""
-    head_renderer_factory = HeadRenderer
-        
-    def __init__(self, session=None, request=None, response=None, callbacks=None, static='', url='/'):
-        """Initialisation
-        
-        In:
-          - ``session`` -- the session object
-          - ``request`` -- the request object
-          - ``response`` -- the response object
-          - ``callbacks`` -- the registered actions on the tags
-          - ``static`` -- directory of the static contents of the application
-          - ``url`` -- url prefix of the application
-        """
-        super(DummyRenderer, self).__init__(static)
+class Script(xhtml_base._HTMLTag):
+    pass
 
-        self.session = session
-        self.request = request
-        self.response = response        
-        self._callbacks = callbacks
-        self._rendered = set()      # List a the component rendered by all the renderers
-        self.url = url
-        
-        self.component = None        
-        #self.model = None
+@peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, Script))
+def add_child(next_method, self, script):
+    """Add a <script> to a tag
+    
+    In:
+      - ``self`` -- the tag
+      - ``script`` -- the script to add
+    """
+    self.renderer.head._script(next_method, self, script)
+    return ''
+
+
+class Style(xhtml_base._HTMLTag):
+    pass
+
+@peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, Style))
+def add_child(next_method, self, style):
+    """Add a <style> to a tag
+    
+    In:
+      - ``self`` -- the tag
+      - ``style`` -- the style to add
+    """
+    self.renderer.head._style(next_method, self, style)
+    return ''
+
+
+# ----------------------------------------------------------------------------------
 
 class Renderer(xhtml_base.Renderer):
     """The XHTML synchronous renderer
     """
     
+    head_renderer_factory = HeadRenderer
+
     # Redefinition of the he HTML tags with actions
     # ---------------------------------------------
 
@@ -738,6 +807,9 @@ class Renderer(xhtml_base.Renderer):
     select = TagProp('select', set(xhtml_base.allattrs + ('name', 'size', 'multiple', 'disabled', 'tabindex', 'onfocus', 'onblur', 'onchange', 'rows')), Select)
     textarea = TagProp('textarea', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap')), TextArea)
 
+    script = TagProp('script', set(('id', 'charset', 'type', 'language', 'src', 'defer')), Script)
+    style = TagProp('style', set(xhtml_base.i18nattrs+('id', 'type', 'media', 'title')), Style)
+    
     _specialTags = dict(
                     text_input     = TextInput,
                     radio_input    = RadioInput,
@@ -769,6 +841,38 @@ class Renderer(xhtml_base.Renderer):
         cls._custom_lookup = CustomLookup(cls._specialTags, ET.ElementDefaultClassLookup(element=xhtml_base._HTMLTag))
         cls._html_parser = ET.HTMLParser()
         cls._html_parser.setElementClassLookup(cls._custom_lookup)
+        
+    def __init__(self, parent=None, session=None, request=None, response=None, callbacks=None, static='', url='/'):
+        """Renderer initialisation
+        
+        In:
+          - ``parent`` -- parent renderer
+          - ``session`` -- the session object
+          - ``request`` -- the request object
+          - ``response`` -- the response object
+          - ``callbacks`` -- the registered actions on the tags
+          - ``static`` -- directory of the static contents of the application
+          - ``url`` -- url prefix of the application
+        """        
+        super(Renderer, self).__init__(parent, static=static)
+
+        if parent is None:
+            self.session = session
+            self.request = request
+            self.response = response
+            self._callbacks = callbacks
+            self.url = url
+            self._rendered = set()
+        else:
+            self.session = parent.session
+            self.request = parent.request
+            self.response = parent.response
+            self._callbacks = parent._callbacks
+            self.url = parent.url
+            self._rendered = parent._rendered
+        
+        self.component = None
+        self.model = None
 
     def makeelement(self, tag):
         """Make a tag
@@ -802,27 +906,6 @@ class Renderer(xhtml_base.Renderer):
         
         return self._parse_html(parser, source, fragment, no_leading_text, **kw)
 
-    def __init__(self, parent=None):
-        """Renderer initialisation
-        
-        In:
-          - ``parent`` -- parent renderer
-        """        
-        if parent is None:
-            parent = DummyRenderer()
-
-        super(Renderer, self).__init__(parent)
-
-        self.session = parent.session
-        self.request = parent.request
-        self.response = parent.response
-        self._callbacks = parent._callbacks
-        self._rendered = parent._rendered
-        self.component = parent.component
-        self.url = parent.url
-        self.head = parent.head
-        
-        self.model = None
 
     def start_rendering(self, component, model):
         """Method called before to render a component
@@ -920,9 +1003,68 @@ class Renderer(xhtml_base.Renderer):
             u += '?' + sep.join(self.session.sessionid_in_url(self.request, self.response) + params)
 
         return u
-    
 
-@presentation.render_for(HeadRenderer, model='async')
+
+class AsyncHeadRenderer(HeadRenderer):
+    def __init__(self, static):
+        """Renderer initialisation
+        
+        The ``HeadRenderer`` keeps track of the javascript and css used by every views,
+        to be able to concatenate them into the ``<head>`` section.
+        """
+        super(AsyncHeadRenderer, self).__init__(static=static)
+                
+        self._anonymous_css = []         # CSS
+        self._anonymous_javascript = []  # Javascript code
+
+    def _css(self, style):
+        """Memorize an in-line anonymous css style
+        
+        In:
+          - ``style`` -- the css style
+        """
+        self._anonymous_css.append((self._order, style))
+        self._order += 1
+
+    def _javascript(self, script):
+        """Memorize an in-line anonymous javascript code
+        
+        In:
+          - ``script`` -- the javascript code
+        """
+        self._anonymous_javascript.append((self._order, script))
+        self._order += 1
+
+    def _style(self, append, tag, style):
+        self._css(style.text or '')
+    
+    def _script(self, append, tag, script):    
+        url = script.get('src')
+        
+        if url:
+            self.javascript_url(url)
+        else:
+            self._javascript(script.text or '')
+
+    def _get_anonymous_css(self):
+        """Return the list of the in-line anonymous css styles, sorted by order of insertion
+        
+        Return:
+          - list of css styles
+        """
+        return [css for (order, css) in sorted(self._anonymous_css)]
+        
+
+    def _get_anonymous_javascript(self):
+        """Return the list of anonymous javascript codes, sorted by order of insertion
+        
+        Return:
+          - list of javascript codes
+        """
+        return [js for (order, js) in sorted(self._anonymous_javascript)]
+
+    
+@presentation.render_for(AsyncHeadRenderer)
 def render(self, h, *args):
     """Generate a javascript view of the head
     
@@ -930,71 +1072,43 @@ def render(self, h, *args):
       - ``h`` -- the current renderer
       
     Return:
-      - a javascript
+      - a javascript string
     """
-    css = ' '.join(self._get_css())         # Inline CSS    
-    js = ';'.join(self._get_javascript())   # Javascript codes
-
-    return "nagare_loadAll(%s, %s, '%s', '%s')" % (
-                                                 ajax.py2js(self._get_javascript_url(), h),
-                                                 ajax.py2js(self._get_css_url(), h),
-                                                 css.replace("'", r"\'").replace('\n', ''),
-                                                 js.replace("'", r"\'").replace('\n', '').encode('utf-8')
-                                                )
-
-
-class AsyncScript(xhtml_base._HTMLTag):
-    pass
-
-
-@peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, AsyncScript))
-def add_child(self, script):
-    """Add a script to a tag
-    
-    In:
-      - ``self`` -- the tag
-      - ``script`` -- the script to add
-    """
-    # Don't generate any tags but remember the script text or url
-    self.renderer.head.add_script(script.text, script.get('src'))
-    return ''
-
-
-class AsyncStyle(xhtml_base._HTMLTag):
-    pass
-
-
-@peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, AsyncStyle))
-def add_child(self, css):
-    """Add a css to a tag
-    
-    In:
-      - ``self`` -- the tag
-      - ``css`` -- the script to add
-    """
-    # Don't generate any tags but remember the css text
-    self.renderer.head.add_css(css.text)
-    return ''
+    return "nagare_loadAll(%s, %s, %s, %s, %s, %s)" % (
+                                                         ajax.py2js(self._get_named_css(), h),
+                                                         ajax.py2js(r'\n'.join(self._get_anonymous_css()), h),
+                                                         ajax.py2js(self._get_css_url(), h),
+                                                         ajax.py2js(self._get_named_javascript(), h),
+                                                         ajax.py2js(r'\n'.join(self._get_anonymous_javascript()), h),
+                                                         ajax.py2js(self._get_javascript_url(), h)
+                                                      )
 
 
 class AsyncRenderer(Renderer):
     """The XHTML asynchronous renderer
     """
-    script = TagProp('script', set(('id', 'charset', 'type', 'language', 'src', 'defer')), AsyncScript)
-    style = TagProp('style', set(Renderer.i18nattrs+('id', 'type', 'media', 'title')), AsyncStyle)
-        
-    _specialTags = Renderer._specialTags.copy()
+    head_renderer_factory = AsyncHeadRenderer
 
-    def __init__(self, parent):
+    def __init__(self, *args, **kw):
         """Renderer initialisation
         
         In:
           - ``parent`` -- parent renderer
-        """        
-        super(AsyncRenderer, self).__init__(parent)
+        """
+        super(AsyncRenderer, self).__init__(*args, **kw)
+
         self.async_root = True;
         self.wrapper_to_generate = False    # Add a ``<div>`` around the rendering ?
+
+    def javascript_url(url):
+        self.head.javascript_url(url)
         
+    def _javascript(self, js):
+        self.head._javascript(js)
+        
+    def _css(self, style):
+        self.head._css(style)
+
     def action(self, tag, action, permissions, subject):
         """Register an asynchronous action on a tag
         
@@ -1069,4 +1183,4 @@ if __name__ == '__main__':
                         with h.td:
                             h << column
 
-    print h.html(h.head.head(h.head.render()), h.root).write_htmlstring(pretty_print=True)
+    print h.html(presentation.render(h.head, None, None, None), h.root).write_htmlstring(pretty_print=True)

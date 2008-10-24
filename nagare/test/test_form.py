@@ -183,7 +183,7 @@ class MyStringEditor3(MyStringEditor):
 
     def __init__(self, source):
         super(MyStringEditor3, self).__init__(source)
-        self.name.validate(lambda v: validator.to_string(v, strip=True).shorter_than(5, msg="test6 - Length must be shorter than %d characters"))
+        self.name.validate(lambda v: validator.to_string(v, strip=True).shorter_than(5, msg="test6 - Length must be shorter than %(max)d characters"))
    
    
 def test6():
@@ -207,7 +207,7 @@ class MyStringEditor4(MyStringEditor):
 
     def __init__(self, source):
         super(MyStringEditor4, self).__init__(source)
-        self.name.validate(lambda v: validator.to_string(v, strip=True).length_equal(5, msg="test7 - Length must be %d characters"))
+        self.name.validate(lambda v: validator.to_string(v, strip=True).length_equal(5, msg="test7 - Length must be %(len)d characters"))
    
    
 def test7():

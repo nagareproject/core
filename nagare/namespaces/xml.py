@@ -448,14 +448,6 @@ class RendererMetaClass(type):
 
 # -----------------------------------------------------------------------
 
-class DummyRenderer(object):
-    """Root of the ``XmlRenderer`` objects
-    """
-    def __init__(self):
-        self.namespaces = None
-        self._default_namespace = None
-
-
 class XmlRenderer(common.Renderer):
     """The base class of all the renderers that generate a XML dialect
     """
@@ -479,13 +471,14 @@ class XmlRenderer(common.Renderer):
           - ``parent`` -- parent renderer
         """
         if parent is None:
-            parent = DummyRenderer()
+            self.namespaces = None
+            self._default_namespace = None
+        else:
+            # This renderer use the same XML namespaces than its parent
+            self.namespaces = parent.namespaces
+            self._default_namespace = parent._default_namespace
 
         self.parent = parent
-
-        # This renderer use the same XML namespaces than its parent
-        self.namespaces = parent.namespaces
-        self._default_namespace = parent._default_namespace
         self._prefix = ''
 
         # The stack, contening the last tag push by a ``with`` statement

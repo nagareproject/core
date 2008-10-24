@@ -191,21 +191,23 @@ class WSGIApp(object):
         """
         return self.root_factory()
 
-    def create_renderer(self, session, request, response, callbacks):
+    def create_renderer(self, async, session, request, response, callbacks):
         """Create the initial renderer (the root of all the renderers used)
 
         In:
+          - ``async`` -- is an XHR request ?
           - ``session`` -- the session
           - ``request`` -- the web request object
           - ``response`` -- the web response object
           - ``callbacks`` -- object to register the callbacks
         """
-        return xhtml.Renderer(xhtml.DummyRenderer(
+        renderer_factory = xhtml.AsyncRenderer if async else xhtml.Renderer
+        return renderer_factory(None,
                                                   session,
                                                   request, response,
                                                   callbacks,
                                                   self.static, request.script_name
-                                                 ))
+                                                 )
 
     # Processing phase
     def _phase1(self, params, callbacks):
@@ -243,13 +245,8 @@ class WSGIApp(object):
         Return:
           - the content to send back to the browser
         """
-        output = serializer.serialize(output, request, response,not is_xhr)
-
-        response.content_length = len(output)
+        response.body = serializer.serialize(output, request, response, not is_xhr)
         response.charset = 'utf-8'
-        response.body_file.write(output)
-
-        return output
 
     def __call__(self, environ, start_response):
         """WSGI interface
@@ -325,7 +322,7 @@ class WSGIApp(object):
             # -------
 
             # Create a new renderer
-            renderer = self.create_renderer(session, request, response, callbacks)
+            renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
             # If the phase 1 has returned a render function, use it
             # else, start the rendering by the application root component
             output = render(renderer) if render else root.render(renderer)

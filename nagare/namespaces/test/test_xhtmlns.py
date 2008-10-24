@@ -133,7 +133,7 @@ def head_render_javascript_test1():
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.javascript('test', 'function test(arg1) { return true }')
 
-    assert h._javascript == {'test': (0, 'function test(arg1) { return true }')}
+    assert h._named_javascript == {'test': (0, 'function test(arg1) { return true }')}
 
 
 def head_render_javascript_test2():
@@ -147,7 +147,7 @@ def head_render_javascript_test2():
         h << h.javascript('test', js_method)
 
     assert h._javascript_url == {'/static/nagare/pyjslib.js':0}
-    assert h._javascript.has_key('test')
+    assert h._named_javascript.has_key('test')
 
 
 def head_render_javascript_test3():
@@ -157,7 +157,7 @@ def head_render_javascript_test3():
         h << h.javascript('test', 'function test(arg1) { return true }')
         h << h.javascript('test', 'function test(arg1) { return true }')
 
-    assert h._javascript == {'test': (0, 'function test(arg1) { return true }')}
+    assert h._named_javascript == {'test': (0, 'function test(arg1) { return true }')}
 
 
 def head_render_render_test1():
@@ -221,7 +221,7 @@ def head_render_render_test8():
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.javascript('test', js_method)
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head lang="lang" profile="profile" id="id" dir="dir"><script src="/static/nagare/pyjslib.js" type="text/javascript"></script><script type="text/javascript">function nagare_namespaces_test_test_xhtmlns_js_method(arg1) {    return true;}</script></head>'
+    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head lang="lang" profile="profile" id="id" dir="dir"><script type="text/javascript">function nagare_namespaces_test_test_xhtmlns_js_method(arg1) {    return true;}</script><script src="/static/nagare/pyjslib.js" type="text/javascript"></script></head>'
 
 
 def head_render_render_test9():
@@ -867,7 +867,7 @@ def html_render_img_test1():
 
 def html_render_img_test2():
     """ XHTML namespace unit test - Tag img - init - relative source """
-    h = xhtml.Renderer(xhtml.DummyRenderer(static='/tmp/static/'))
+    h = xhtml.Renderer(static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -878,7 +878,7 @@ def html_render_img_test2():
 
 def html_render_img_test3():
     """ XHTML namespace unit test - Tag img - init - absolute source """
-    h = xhtml.Renderer(xhtml.DummyRenderer(static='/tmp/static/'))
+    h = xhtml.Renderer(static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -913,7 +913,7 @@ def html_render_a_test1():
 
 def html_render_img_test2():
     """ XHTML namespace unit test - Tag a - init - relative source """
-    h = xhtml.Renderer(xhtml.DummyRenderer(static='/tmp/static/'))
+    h = xhtml.Renderer(static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -924,7 +924,7 @@ def html_render_img_test2():
 
 def html_render_action_test1():
     """ XHTML namespace unit test - action - put action method on tag a """
-    h = xhtml.Renderer(xhtml.DummyRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/'))
+    h = xhtml.Renderer(callbacks=callbacks.Callbacks(), static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -936,7 +936,7 @@ def html_render_action_test1():
 
 def html_render_action_test2():
     """ XHTML namespace unit test - action - put action method on tag a (replace existing href) """
-    h = xhtml.Renderer(xhtml.DummyRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/'))
+    h = xhtml.Renderer(callbacks=callbacks.Callbacks(), static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -948,7 +948,7 @@ def html_render_action_test2():
 
 def html_render_action_test3():
     """ XHTML namespace unit test - action - put action method on tag imagge """
-    h = xhtml.Renderer(xhtml.DummyRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/'))
+    h = xhtml.Renderer(callbacks=callbacks.Callbacks(), static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -960,7 +960,7 @@ def html_render_action_test3():
 
 def html_render_action_test4():
     """ XHTML namespace unit test - action - put action method on tag a (replace existing href) """
-    h = xhtml.Renderer(xhtml.DummyRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/'))
+    h = xhtml.Renderer(callbacks=callbacks.Callbacks(), static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -972,7 +972,7 @@ def html_render_action_test4():
 
 def html_render_action_test5():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a """
-    h = xhtml.AsyncRenderer(xhtml.DummyRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/'))
+    h = xhtml.AsyncRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -984,7 +984,7 @@ def html_render_action_test5():
 
 def html_render_action_test6():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a (replace existing href) """
-    h = xhtml.AsyncRenderer(xhtml.DummyRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/'))
+    h = xhtml.AsyncRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -996,7 +996,7 @@ def html_render_action_test6():
 
 def html_render_action_test7():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag imagge """
-    h = xhtml.AsyncRenderer(xhtml.DummyRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/'))
+    h = xhtml.AsyncRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -1008,7 +1008,7 @@ def html_render_action_test7():
 
 def html_render_action_test8():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a (replace existing href) """
-    h = xhtml.AsyncRenderer(xhtml.DummyRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/'))
+    h = xhtml.AsyncRenderer(callbacks=callbacks.Callbacks(), static='/tmp/static/')
 
     with h.html:
         with h.body:
