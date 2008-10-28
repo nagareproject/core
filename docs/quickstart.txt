@@ -47,6 +47,14 @@ directory **with Stackless Python**:
      
      <STACKLESS_HOME>/bin/python virtualenv-1.1/virtualenv.py <NAGARE_HOME>
 
+  .. warning::
+     If you are using Stackless Python **2.6**, download the development version of virtualenv::
+   
+       cd /tmp
+       wget http://svn.colorstudy.com/virtualenv/trunk/virtualenv.py
+
+       <STACKLESS_HOME>/bin/python virtualenv.py <NAGARE_HOME>
+
 2.2 Install the framework
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 

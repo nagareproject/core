@@ -60,12 +60,24 @@ On Linux:
      tar zxvf virtualenv-1.1.tar.gz
      
      <STACKLESS_HOME>/bin/python virtualenv-1.1/virtualenv.py <NAGARE_HOME>
+    
+  .. warning::
+     If you are using Stackless Python **2.6**, download the development version of virtualenv::
+   
+       cd /tmp
+       wget http://svn.colorstudy.com/virtualenv/trunk/virtualenv.py
 
+       <STACKLESS_HOME>/bin/python virtualenv.py <NAGARE_HOME>
+      
 On Windows:
     
     Manually download
     `http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.1.tar.gz <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.1.tar.gz>`_
     and extract the file ``virtualenv.py`` (you could need an archiver as ``7-zip`` or ``winrar``).
+    
+    .. warning::
+       If you are using Stackless Python **2.6**, download the development version of virtualenv at
+       http://svn.colorstudy.com/virtualenv/trunk/virtualenv.py
 
     Then launch:
     
@@ -144,6 +156,14 @@ and launch it **with Stackless Python**.
      tar zxvf virtualenv-1.1.tar.gz
      
      <STACKLESS_HOME>/bin/python virtualenv-1.1/virtualenv.py <NAGARE_HOME>
+     
+  .. warning::
+     If you are using Stackless Python **2.6**, download the development version of virtualenv::
+   
+       cd /tmp
+       wget http://svn.colorstudy.com/virtualenv/trunk/virtualenv.py
+
+       <STACKLESS_HOME>/bin/python virtualenv.py <NAGARE_HOME>
  
 Second, grab the framework sources from the repository:
 
