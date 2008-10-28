@@ -74,7 +74,7 @@ a em {
 }
 
 .warning {
-	background: #ffffff url(img/error_bg.png) no-repeat top left;
+	background: #f7dfd3 url(img/error_bg.png) no-repeat top left;
     max-width: 900px;
     padding: 5px 5px 5px 50px;
     margin: 0.27em 0 0.27em 60px;
@@ -161,3 +161,4 @@ table a {
 .document .pre {
     background-color: #eee;
 }
+
