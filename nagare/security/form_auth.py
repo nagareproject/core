@@ -13,7 +13,7 @@ The id and password of the user are first searched into the parameters of
 the request. So, first, set a form with the fields names ``__ac_name``
 and ``__ac_password`` (the prefix ``__ac`` is configurable).
 
-Then the user id and the password are automatically keeped into a cookie,
+Then the user id and the password are automatically kept into a cookie,
 sent back on each request by the browser.
 
 .. warning::
@@ -22,8 +22,6 @@ sent back on each request by the browser.
    clear into the cookie. So this authentification manager is as secure as
    the HTTP basic authentification. 
 """
-
-import base64
 
 import webob
 
@@ -50,7 +48,10 @@ class HTTPRefresh(webob.exc.HTTPMovedPermanently):
 class Authentification(basic_auth.Authentification):
     """Simple from based authentification"""
 
-    def __init__(self, prefix='__ac', realm=None):
+    def __init__(self, prefix='__ac', key=None, max_age=None,
+                 path='/', domain=None, secure=None, httponly=False,
+                 version=None, comment=None, expires=None,
+                 realm=None):
         """Initialisation
         
         In:
@@ -58,9 +59,23 @@ class Authentification(basic_auth.Authentification):
             into the form
           - ``realm`` -- is the form based authentification completed by a
             basic HTTP authentification ?
+          - all the other keyword parameters are passed to the ``set_cookie()``
+            method of the WebOb response object
+            (see http://pythonpaste.org/webob/reference.html#id5)
         """        
         super(Authentification, self).__init__(realm)        
         self.prefix = prefix
+        
+        self.key = key or prefix
+        self.max_age = max_age
+        self.path = path
+        self.domain = domain
+        self.secure = secure
+        self.httponly = httponly
+        self.version = version
+        self.comment = comment
+        self.expires = expires
+        
 
     def get_ids_from_params(self, params):
         """Search the data associated with the connected user into the request
@@ -81,13 +96,13 @@ class Authentification(basic_auth.Authentification):
           - ``cookies`` -- cookies dictionary
           
         Return:
-          - A tuple with the id of the user and its password
+          - A list with the id of the user and its password
         """                
-        data = cookies.get(self.prefix)
-        if data is not None:
-            return base64.b64decode(data).split(':')
+        data = cookies.get(self.key)
+        if data is None:
+            return (None, None)
         
-        return (None, None)
+        return [s.decode('base64').decode('utf-8') for s in data.split(':')]
 
     def _get_ids(self, request, response):
         """Return the data associated with the connected user
@@ -97,21 +112,32 @@ class Authentification(basic_auth.Authentification):
           - ``response`` -- the web response object
           
         Return:
-          - A tuple with the id of the user and its password
+          - A list with the id of the user and its password
         """
         # First, search into the request parameters                
-        (username, password) = self.get_ids_from_params(request.params)
-        if username:
-            # Copy the user id and the password into a cookie
-            response.set_cookie(self.prefix, base64.b64encode(('%s:%s' % (username, password))))
-        else:
+        ids = self.get_ids_from_params(request.params)
+        if not all(ids):
             # Second, search into the cookies
-            (username, password) = self.get_ids_from_cookie(request.cookies)
-            if not username and self.realm:
-                # Third, is a realm is set, look into the basic authentification header
-                (username, password) = super(Authentification, self)._get_ids(request, response)
+            ids = self.get_ids_from_cookie(request.cookies)
+            if not all(ids) and self.realm:
+                # Third, if a realm is set, look into the basic authentication header
+                ids = super(Authentification, self)._get_ids(request, response)
 
-        return (username, password)
+        if all(ids):
+            # Copy the user id and the password into a cookie
+            response.set_cookie(
+                                self.key,
+                                ':'.join([s.encode('utf-8').encode('base64')[:-1] for s in ids]),            
+                                max_age=self.max_age,
+                                path=self.path,
+                                domain=self.domain,
+                                secure=self.secure,
+                                httponly=self.httponly,
+                                version=self.version, 
+                                comment=self.comment, 
+                                expires=self.expires
+                               )
+        return ids
     
     def denies(self, detail):
         """Method called when a permission is denied
@@ -130,5 +156,5 @@ class Authentification(basic_auth.Authentification):
         Delete the cookie
         """
         exc = HTTPRefresh()
-        exc.delete_cookie(self.prefix)
+        exc.delete_cookie(self.key, self.path, self.domain)
         raise exc
