@@ -19,6 +19,10 @@ import random
 
 from nagare.component import call_wrapper
 
+class CallbackLookupError(LookupError):
+    pass
+
+
 class Callbacks:
     """Callback manager
     
@@ -124,8 +128,8 @@ class Callbacks:
             r = callbacks.get(name)
             if r is not None:
                 return r
-            
-        return (None, None)
+
+        raise CallbackLookupError(name)
 
     def process_response(self, request):
         """Call the actions associated to the callback identifiers received
