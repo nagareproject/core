@@ -9,8 +9,6 @@
 
 """Authentification manager for the basic HTTP authentification scheme"""
 
-import base64
-
 from webob import exc
 
 from nagare.security import common
@@ -34,15 +32,16 @@ class Authentification(common.Authentification):
           - ``response`` -- the web response object
           
         Return:
-          - A tuple with the id of the user and its password
+          - A list with the id of the user and its password
         """        
-        ids = (None, None)  # The anonymous user by default
+        ids = [None, None]  # The anonymous user by default
         
         authorization = request.headers.get('authorization')
         if authorization is not None:
-            (scheme, data) = authorization.split()
+            (scheme, data) = authorization.split(' ', 1)
             if scheme == 'Basic':
-                ids = base64.b64decode(data).split(':')
+                encoding = request.accept_charset.best_match(['iso-8859-1', 'utf-8'])
+                ids = [s.decode(encoding) for s in data.decode('base64').split(':', 1)]
     
         return ids
 
@@ -55,7 +54,7 @@ class Authentification(common.Authentification):
           
         Return:
           - A tuple with the id of the user and its password as a dictionary
-        """        
+        """
         (username, password) = self._get_ids(request, response)    
         return (username, { 'password' : password })
 
