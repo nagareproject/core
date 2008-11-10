@@ -38,7 +38,7 @@ class Authentification(common.Authentification):
           
         Return:
           - A tuple with the id of the user and all the challenge response parameters
-        """                
+        """
         authorization = request.headers.get('authorization')
         if authorization is not None:
             (scheme, data) = authorization.split(' ', 1)
@@ -46,28 +46,31 @@ class Authentification(common.Authentification):
                 data = [x.split('=', 1) for x in data.split(',')]
                 data = dict([(k.lstrip(), v.strip('"')) for (k, v) in data])
 
-                return (data.pop('username'), data)
+                encoding = request.accept_charset.best_match(['iso-8859-1', 'utf-8'])
+                data['encoding'] = encoding 
+                return (data.pop('username').decode(encoding), data)
 
-        return (None, { 'response' : None })
+        return (None, { 'response' : None, 'encoding' : None })
 
-    def check_password(self, username, password, response, realm='', uri='', nonce='', nc='', cnonce='', qop='', **kw):
+    def check_password(self, username, password, response, encoding, realm='', uri='', nonce='', nc='', cnonce='', qop='', **kw):
         """Authentification
         
         In:
           - ``username`` -- user id
           - ``password`` -- real password of the user
+          - ``encoding`` -- encoding of username and password on the client
           - ``response``, ``realm``, ``uri``, ``nonce``, ``nc``, ``cnonce``,
             ``qop`` -- elements of the challenge response 
           
         Return:
           - a boolean
-        """        
+        """
         if (username is None) and (response is None):
             # Anonymous user
             return None
-        
+
         # Make our side hash
-        hda1 = hashlib.md5('%s:%s:%s' % (username, realm, password)).hexdigest()             
+        hda1 = hashlib.md5('%s:%s:%s' % (username.encode(encoding), realm, password.encode(encoding))).hexdigest()             
         hda2 = hashlib.md5('GET:' + uri).hexdigest()
         sig = '%s:%s:%s:%s:%s:%s' % (hda1, nonce, nc, cnonce, qop, hda2)
         
