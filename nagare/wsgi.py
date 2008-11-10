@@ -22,7 +22,7 @@ from webob import exc, acceptparse
 
 from nagare import component, presentation, serializer, database, top, security
 from nagare.security import dummy_manager
-from nagare.callbacks import Callbacks
+from nagare.callbacks import Callbacks, CallbackLookupError
 from nagare.namespaces import xhtml
 
 # ---------------------------------------------------------------------------
@@ -308,7 +308,16 @@ class WSGIApp(object):
             # Create a database transaction for each request
             database.session.clear()
             with database.session.begin():
-                (render, store_session) = self._phase1(request.params, callbacks)
+                try:
+                    (render, store_session) = self._phase1(request.params, callbacks)
+                except CallbackLookupError:
+                    if xhr_request:
+                        # As the XHR requests use the same continuation, a callback
+                        # can be not found (i.e deleted by a previous XHR)
+                        # In this case, do nothing 
+                        (render, store_session) = (lambda h: '', False)
+                    else:
+                        raise
 
             # If the ``redirect_after_post`` parameter of the ``[application``
             # section is `True`` (the default), conform to the PRG__ pattern
