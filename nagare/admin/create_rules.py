@@ -56,7 +56,7 @@ def create_rules(app_names, error):
     for app_name in app_names:
         (cfgfile, app, dist, aconf) = util.read_application(app_name, error)
     
-        static = aconf['application'].get('static', os.path.join(dist.location, 'static'))
+        static = aconf['application'].get('static', os.path.join(dist.location, 'static') if dist else None)
     
         if static and not os.path.isdir(static):
             static = None
