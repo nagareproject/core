@@ -18,7 +18,6 @@ import peak.rules
 
 from lxml import etree as ET
 
-from nagare import var
 from nagare.namespaces import common
 
 CHECK_ATTRIBUTS = False
