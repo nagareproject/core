@@ -7,23 +7,53 @@
 # this distribution.
 #--
 
-"""The ``shell`` administrative command
+"""The ``shell`` and ``batch`` administrative commands
 
-Launch an interactive Python shell where:
+The ``shell`` command launches an interactive Python shell.
+The ``batch`` command execute Python statements from files.
+
+In both cases:
 
   - the global variable ``apps`` is a dictionary of application name -> application object
   - the global variable ``session`` is the database session
   - the metadata of the applications are activated
 """
 
-import sys, os, code, atexit
+import sys, os, code, atexit, fileinput
 
 import configobj
 
 from nagare.admin import util, db
 from nagare import database
 
-def set_options(optparser):
+def create_globals(cfgfiles, debug, error):
+    """
+    In:
+      - ``cfgfile`` -- paths to application configuration files or names of
+        registered applications
+      - ``debug`` -- enable the display of the generated SQL statements
+      - ``error`` -- the function to call in case of configuration errors
+    """
+    apps = {}
+
+    # For each application given, activate its metadata
+    for cfgfile in cfgfiles:
+        (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
+
+        apps[aconf['application']['name']] = app
+
+        for (section, content) in aconf['database'].items():
+            if isinstance(content, configobj.Section):
+                db.set_metadata(content, debug)
+                del aconf['database'][section]
+
+        db.set_metadata(aconf['database'], debug)
+
+    return dict(session=database.session, apps=apps)
+
+# -----------------------------------------------------------------------------
+
+def set_shell_options(optparser):
     optparser.usage += ' <application>'
 
     optparser.add_option('-d', '--debug', action='store_const', const=True, default=False, dest='debug', help='debug mode for the database engine')
@@ -71,7 +101,7 @@ def run_python_shell(ns):
     interpreter.interact("Python %s on %s\nVariables 'apps' and 'session' are available" % (sys.version, sys.platform))
 
 
-def run(parser, options, args):
+def shell(parser, options, args):
     """Launch an interactive shell
 
     In:
@@ -82,26 +112,8 @@ def run(parser, options, args):
     The arguments are a list of names of registered applications
     or paths to applications configuration files.
     """
-    apps = {}
-
-    # For each application given, activate its metadata
-    for cfgfile in args:
-        (cfgfile, app, dist, aconf) = util.read_application(cfgfile, parser.error)
-
-        apps[aconf['application']['name']] = app
-
-        for (section, content) in aconf['database'].items():
-            if isinstance(content, configobj.Section):
-                db.set_metadata(content, options.debug)
-                del aconf['database'][section]
-
-        db.set_metadata(aconf['database'], options.debug)
-
-    ns = dict(
-              session=database.session,
-              apps=apps,
-              __name__='__console__'
-                 )
+    ns = create_globals(args, options.debug, parser.error)
+    ns['__name__'] = '__console__'
 
     try:
         import IPython
@@ -118,5 +130,36 @@ def run(parser, options, args):
 class Shell(util.Command):
     desc = 'Launch a shell'
 
-    set_options = staticmethod(set_options)
-    run = staticmethod(run)
+    set_options = staticmethod(set_shell_options)
+    run = staticmethod(shell)
+
+# -----------------------------------------------------------------------------
+
+def set_batch_options(optparser):
+    optparser.usage += ' <application> [file1.py [file2.py] ...]'
+
+    optparser.add_option('-d', '--debug', action='store_const', const=True, default=False, dest='debug', help='debug mode for the database engine')
+
+def batch(parser, options, args):
+    """Execute Python statements from files
+
+    In:
+      - ``parser`` -- the optparse.OptParser object used to parse the configuration file
+      - ``options`` -- options in the command lines
+      - ``args`` -- arguments in the command lines
+
+    The arguments are the name of a registered applications, or the path to
+    an applications configuration file, followed by the paths of the files to
+    execute (or ``stdin`` if empty)
+    """
+    if not args:
+        parser.error('No application given')
+
+    ns = create_globals(args[:1], options.debug, parser.error)
+    exec(''.join(fileinput.input(args[1:]))) in ns
+    
+class Batch(util.Command):
+    desc = 'Execute Python statements from files'
+    
+    set_options = staticmethod(set_batch_options)
+    run = staticmethod(batch)

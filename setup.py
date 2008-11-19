@@ -81,6 +81,7 @@ setup(
       create-db = nagare.admin.db:DBCreate
       drop-db = nagare.admin.db:DBDrop
       shell = nagare.admin.shell:Shell
+      batch = nagare.admin.shell:Batch
       create-rules = nagare.admin.create_rules:CreateRules
 
       [nagare.publishers]
