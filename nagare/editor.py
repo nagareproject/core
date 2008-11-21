@@ -101,11 +101,11 @@ class Property(object):
         return self.input
 
     def commit(self, o, name):
-        """Set the attribut ``name`` of the object ``o`` with the valid value
+        """Set the attribute ``name`` of the object ``o`` with the valid value
         
         In:
           - ``o`` -- target object
-          - ``name`` -- name of the attribut to set in the target object
+          - ``name`` -- name of the attribute to set in the target object
         """
         setattr(o, name, self.value)
 
@@ -121,7 +121,7 @@ class Editor(object):
     def __init__(self, target, properties_to_create=()):
         """Initialisation
         
-        Create the set of properties from some attributs of the target object
+        Create the set of properties from some attributes of the target object
         
         In:
           - ``target`` - the target object

@@ -41,7 +41,7 @@ class _HTMLTag(xml._Tag):
         
         In:
           - ``encoding`` -- encoding of the XML
-          - ``pipeline`` -- if False, the ``meld:id`` attributs are deleted
+          - ``pipeline`` -- if False, the ``meld:id`` attributes are deleted
           
         Return:
           - the XHTML

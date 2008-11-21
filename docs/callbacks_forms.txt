@@ -151,7 +151,7 @@ Checkboxes reset
 ~~~~~~~~~~~~~~~~
 
 The callbacks of the ``h.input(type='checkbox')`` are only called for the
-selected checkboxes. So, you need to reset the attributs that keep the current
+selected checkboxes. So, you need to reset the attributes that keep the current
 selected checkboxes before to process the callbacks. This reset method is
 typically the ```pre_action`` callback of ``h.form``: 
    
@@ -278,10 +278,10 @@ are objects:
 
   - that can be set with a value, by calling its ``.set()`` method or by directly
     be called
-  - that always keeps the value in its ``input`` attribut
+  - that always keeps the value in its ``input`` attribute
   - that validates the value, by calling its validating function
-  - that keeps the last valid value in its ``value`` attribut
-  - that keeps the error message of the validation in its ``error`` attribut,
+  - that keeps the last valid value in its ``value`` attribute
+  - that keeps the error message of the validation in its ``error`` attribute,
     or ``None`` if the value is valid.
   
 .. code-block:: pycon
@@ -390,16 +390,16 @@ An instances of the ``Editor`` class in :apidoc:`nagare.editor#editor.Editor`
 is an intermediary between the values received from a form an a target object.
 
 An ``Editor`` object automatically creates ``editor.Property`` objects reflecting
-the attributs, of the target object, we want to edit with the form.
+the attributes, of the target object, we want to edit with the form.
 
-An ``Editor`` object will modified the target object attributs only if all the
+An ``Editor`` object will modified the target object attributes only if all the
 validating functions of its properties validate the data from the form.  
 
 Putting all together
 ~~~~~~~~~~~~~~~~~~~~
 
 In this example, we've got pure Python ``Person`` objects with ``name`` and
-``age`` attributs:
+``age`` attributes:
 
 .. code-block:: python
 
@@ -413,7 +413,7 @@ In this example, we've got pure Python ``Person`` objects with ``name`` and
            self.age = 0
            
 We create a dedicated editor for this objects, to be able to edit these
-attributs with a web form:
+attributes with a web form:
 
 .. code-block:: python
 

@@ -20,7 +20,7 @@ from lxml import etree as ET
 
 from nagare.namespaces import common
 
-CHECK_ATTRIBUTS = False
+CHECK_ATTRIBUTES = False
 
 # Namespace for the ``meld:id`` attribute 
 _MELD_NS = 'http://www.plope.com/software/meld3'
@@ -55,7 +55,7 @@ class _Tag(ET.ElementBase):
         
         In:
           - ``encoding`` -- encoding of the XML
-          - ``pipeline`` -- if False, the ``meld:id`` attributs are deleted
+          - ``pipeline`` -- if False, the ``meld:id`` attributes are deleted
           
         Return:
           - the XML
@@ -105,10 +105,10 @@ class _Tag(ET.ElementBase):
         add_child(self, child)
 
     def meld_id(self, id):
-        """Set the value of the attribut ``meld:id`` of this tag
+        """Set the value of the attribute ``meld:id`` of this tag
         
         In:
-          - ``id`` - value of the ``meld;id`` attribut
+          - ``id`` - value of the ``meld;id`` attribute
           
         Return:
           - ``self``
@@ -195,7 +195,7 @@ class _Tag(ET.ElementBase):
                 children = children[0]
             self.add_child(children)
 
-        if CHECK_ATTRIBUTS and not frozenset(self.attrib).issubset(self._authorized_attribs):
+        if CHECK_ATTRIBUTES and not frozenset(self.attrib).issubset(self._authorized_attribs):
             raise AttributeError, ("Bad attributes for element <%s>: " % self.tag) + ', '.join(list(frozenset(self.attrib) - self._authorized_attribs))
 
         return self
@@ -354,53 +354,53 @@ def add_child(self, d):
         if name.endswith('_'):
             name = name[:-1]
 
-        add_attribut(self, name, value)
+        add_attribute(self, name, value)
 
 # ---------------------------------------------------------------------------
 
-# Generic methods to add an attribut to a tag
-# -------------------------------------------
+# Generic methods to add an attribute to a tag
+# --------------------------------------------
 
-def add_attribut(self, name, value):
-    """Default method to add an attribut to a tag
+def add_attribute(self, name, value):
+    """Default method to add an attribute to a tag
     
     In:
       - ``self`` -- the tag
-      - ``name`` -- name of the attribut to add
-      - ``value`` -- value of the attribut to add
+      - ``name`` -- name of the attribute to add
+      - ``value`` -- value of the attribute to add
     """
-    add_attribut(self, name, unicode(value))
+    add_attribute(self, name, unicode(value))
 
-@peak.rules.when(add_attribut, (_Tag, basestring, basestring))
-def add_attribut(self, name, value):
+@peak.rules.when(add_attribute, (_Tag, basestring, basestring))
+def add_attribute(self, name, value):
     self.set(name, value)
 
 # ---------------------------------------------------------------------------
 
 class TagProp(object):
-    """Tag factory with a behaviour of an object attribut
+    """Tag factory with a behavior of an object attribute
     
-    Each time this attribut is read, a new tag is created
+    Each time this attribute is read, a new tag is created
     """
     def __init__(self, name, authorized_attribs, factory=None):
-        """Initialisation
+        """Initialization
         
         In:
           - ``name`` -- name of the tags to create
-          - ``authorized_attribs`` -- names of the valid attributs
+          - ``authorized_attribs`` -- names of the valid attributes
           - ``factory`` -- special factory to create the tag
         """
         self._name = name
         self._factory = factory
 
-        if CHECK_ATTRIBUTS:
+        if CHECK_ATTRIBUTES:
             self._authorized_attribs = frozenset(authorized_attribs)
 
     def __get__(self, renderer, cls):
-        """Create a new tag each time this attribut is read
+        """Create a new tag each time this attribute is read
         
         In:
-          - ``renderer`` -- the object that has this attribut
+          - ``renderer`` -- the object that has this attribute
           - ``cls`` -- *not used*
           
         Return:
@@ -408,7 +408,7 @@ class TagProp(object):
         """
         element = renderer.makeelement(self._name)
 
-        if CHECK_ATTRIBUTS:
+        if CHECK_ATTRIBUTES:
             element._authorized_attribs = self._authorized_attribs
 
         return element

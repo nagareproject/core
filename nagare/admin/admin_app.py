@@ -38,7 +38,7 @@ class Admin(object):
         # Load the components
         self.components = [entry.load()(apps) for entry in pkg_resources.iter_entry_points('nagare.admin')]
         
-        # Sort them according to their ``priority`` attribut
+        # Sort them according to their ``priority`` attribute
         self.components.sort(key=operator.attrgetter('priority'))
 
 @presentation.render_for(Admin)

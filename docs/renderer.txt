@@ -77,10 +77,10 @@ A XHTML renderer is an instance of the ``Renderer`` class of
 
 A XHTML renderer is a factory for all the possible XHTML tags. It also has:
 
-  - a ``request`` and a ``response`` attributs which are WebOb `Request and
+  - a ``request`` and a ``response`` attributes which are WebOb `Request and
     Response <http://pythonpaste.org/webob/reference.html>`_ objects.
     
-  - a ``head`` attribut which is a Head renderer instance, see below.
+  - a ``head`` attribute which is a Head renderer instance, see below.
 
   - the following methods:
   
@@ -98,7 +98,7 @@ A XHTML renderer is a factory for all the possible XHTML tags. It also has:
 Head renderer
 ~~~~~~~~~~~~~
 
-The ``head`` attribut of a XHTML renderer is a Head renderer, an instance
+The ``head`` attribute of a XHTML renderer is a Head renderer, an instance
 of the class ``HeadRenderer`` of
 :apidoc:`nagare.namespaces.xhtml#xhtml.HeadRenderer`.
 
@@ -215,7 +215,7 @@ Namespaces and renderers mixin
 A renderer can create DOM object in a specific
 `XML namespace <http://www.w3.org/TR/REC-xml-names/>`_. First the
 namespace(s) must be declared to the renderer by setting its ``namespaces``
-attribut to a *namespace prefix* -> *namespace uri* dictionary. Then, at any
+attribute to a *namespace prefix* -> *namespace uri* dictionary. Then, at any
 moment, the namespace to use is choosen by setting its ``default_namespace``
 atttribut to the prefix of the namespace:
 

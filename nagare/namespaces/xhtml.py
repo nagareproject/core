@@ -30,8 +30,8 @@ from nagare.namespaces import xhtml_base
 # Generic methods to add an attribute to a tag
 # --------------------------------------------
 
-@peak.rules.when(xml.add_attribut, (xml._Tag, basestring, ajax.Update))
-def add_attribut(self, name, value):
+@peak.rules.when(xml.add_attribute, (xml._Tag, basestring, ajax.Update))
+def add_attribute(self, name, value):
     """Add an attribute with a ``ajax.Update`` value
     
     In:
@@ -40,11 +40,11 @@ def add_attribut(self, name, value):
       - ``value`` -- ``ajax.Update`` value
     """
     # Generate a XHR request
-    xml.add_attribut(self, name, value.generate_action(3, self.renderer))
+    xml.add_attribute(self, name, value.generate_action(3, self.renderer))
 
-@peak.rules.when(xml.add_attribut, (xml._Tag, basestring, types.FunctionType))
-def add_attribut(self, name, value):
-    """Add an attribut with a function value
+@peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.FunctionType))
+def add_attribute(self, name, value):
+    """Add an attribute with a function value
     
     In:
       - ``self`` -- the tag
@@ -52,11 +52,11 @@ def add_attribut(self, name, value):
       - ``value`` -- function value
     """
     # Transcode the function to javascript
-    xml.add_attribut(self, name, ajax.JS(value))
+    xml.add_attribute(self, name, ajax.JS(value))
 
-@peak.rules.when(xml.add_attribut, (xml._Tag, basestring, types.MethodType))
-def add_attribut(self, name, value):
-    """Add an attribut with a method value
+@peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.MethodType))
+def add_attribute(self, name, value):
+    """Add an attribute with a method value
     
     In:
       - ``self`` -- the tag
@@ -64,11 +64,11 @@ def add_attribut(self, name, value):
       - ``value`` -- method value
     """
     # Transcode the method to javascript
-    xml.add_attribut(self, name, ajax.JS(value))
+    xml.add_attribute(self, name, ajax.JS(value))
 
-@peak.rules.when(xml.add_attribut, (xml._Tag, basestring, ajax.JS))
-def add_attribut(self, name, value):
-    """Add an attribut with a ``ajax.JS`` value
+@peak.rules.when(xml.add_attribute, (xml._Tag, basestring, ajax.JS))
+def add_attribute(self, name, value):
+    """Add an attribute with a ``ajax.JS`` value
     
     In:
       - ``self`` -- the tag
@@ -673,8 +673,8 @@ class A(_HTMLActionTag):
         return self
     """
 
-@peak.rules.when(xml.add_attribut, (A, basestring, basestring))
-def add_attribut(next_method, self, name, value):
+@peak.rules.when(xml.add_attribute, (A, basestring, basestring))
+def add_attribute(next_method, self, name, value):
     if name == 'href':
         value = absolute_url(value, self._renderer.url)
 

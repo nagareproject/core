@@ -30,7 +30,7 @@ DOM objects creation
 --------------------
 
 A ``Renderer`` is a DOM objects factory. For example, the XHTML renderer
-:apidoc:`nagare.namespaces.xhtml#xhtml.Renderer` has an attribut, for
+:apidoc:`nagare.namespaces.xhtml#xhtml.Renderer` has an attribute, for
 each XHTML tag, that create a DOM object:
 
 .. code-block:: pycon
@@ -78,11 +78,11 @@ Functional DOM building API
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``_Tag`` class implements a ``__call__``  method to add children, text or
-attributs to a DOM object: 
+attributes to a DOM object: 
 
   .. code-block:: python
   
-     def __call__(self, *children, **attributs)
+     def __call__(self, *children, **attributes)
 
 Each element in ``children`` can be a:
 
@@ -90,9 +90,9 @@ Each element in ``children`` can be a:
   - string, unicode string, integer or float that is converted to unicode
     string and added as data to the DOM object
   - list, tuple or generator which each elements are added to the DOM object
-  - dictionary which each items are added as attributs of the DOM object
+  - dictionary which each items are added as attributes of the DOM object
   
-Each items in ``attributs`` are added as attributs of the DOM object.
+Each items in ``attributes`` are added as attributes of the DOM object.
 
 .. note::
 
@@ -120,7 +120,7 @@ Once a context is opened using the ``with`` statement, children can be added
 to the context manager using the ``<<`` operator on the renderer.
 
 So a DOM tree can be imperatively built from the nesting of contexts. With is root
-finally retrieved from the attribut ``root`` of the Renderer:
+finally retrieved from the attribute ``root`` of the Renderer:
 
 .. code-block:: python
 
@@ -191,7 +191,7 @@ objects given their identifiers and manipulates them, in Python.
 The template must be a valid XML document, for example a XHTML template and
 the namespace ``http://www.plope.com/software/meld3`` must be declared.
 
-To mark the nodes, use the attribut ``id`` of this namespace:
+To mark the nodes, use the attribute ``id`` of this namespace:
 
 .. code-block:: html
 
@@ -205,7 +205,7 @@ To mark the nodes, use the attribut ``id`` of this namespace:
    </html>
 
 The helper method ``meld_id()`` is available to add, in Python, a ``meld:id``
-attribut to a DOM object:
+attribute to a DOM object:
 
 .. code-block:: pycon
 
@@ -285,9 +285,9 @@ Lxml, functional or imperative API:
 
 These three methods of the DOM objects are helpers to work with templates:
 
-  - ``fill(self, *children, **attributs)`` -- replaces the children of the
-    DOM object by the given children and appends the ``attributs`` to the DOM
-    object current attributs.
+  - ``fill(self, *children, **attributes)`` -- replaces the children of the
+    DOM object by the given children and appends the ``attributes`` to the DOM
+    object current attributes.
 
     .. code-block:: python
       
@@ -366,13 +366,13 @@ Once a tree of DOM object is build, it can be serialized in (X)HTML:
 
   - ``write_xmlstring(self, encoding='utf-8', pipeline=True)`` -- serializes
     the DOM tree into a XML string, encoded according to the ``encoding``
-    parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributs are
+    parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
     removed, else they are kept so that the xml string can be re-parse as a
     template.
     
   - ``write_htmlstring(self, encoding='utf-8', pipeline=True)`` -- serializes
     the DOM tree into a HTML string, encoded according to the ``encoding``
-    parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributs are
+    parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
     removed.
 
 .. wikiname: PresentationTier

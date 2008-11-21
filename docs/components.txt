@@ -35,7 +35,7 @@ From example, starting with a pure Python ``Counter`` class :
            
        def decrease(self):
            self.value -= 1  
-
+           
 to create a ``Counter`` component, you only need to do:
 
 .. code-block:: python
@@ -160,7 +160,7 @@ How to build a compound component ?
 -----------------------------------
 
 A component can be build from other existing components. The inner components
-simply are normal Python attributs of the compound component.
+simply are normal Python attributes of the compound component.
 
 First we create a ``ColorChooser`` component, a component displaying four clickable
 cells with differents colors:
