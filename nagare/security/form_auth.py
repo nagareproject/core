@@ -7,7 +7,7 @@
 # this distribution.
 #--
 
-"""Simple form based authentification manager
+"""Simple form based authentication manager
 
 The id and password of the user are first searched into the parameters of
 the request. So, first, set a form with the fields names ``__ac_name``
@@ -18,9 +18,9 @@ sent back on each request by the browser.
 
 .. warning::
 
-   This simple authentification manager keeps the user id and password in
-   clear into the cookie. So this authentification manager is as secure as
-   the HTTP basic authentification. 
+   This simple authentication manager keeps the user id and password in
+   clear into the cookie. So this authentication manager is as secure as
+   the HTTP basic authentication. 
 """
 
 import webob
@@ -45,25 +45,25 @@ class HTTPRefresh(webob.exc.HTTPMovedPermanently):
         return super(HTTPRefresh, self).__call__(environ, start_response)
 
 
-class Authentification(basic_auth.Authentification):
-    """Simple from based authentification"""
+class Authentication(basic_auth.Authentication):
+    """Simple from based authentication"""
 
     def __init__(self, prefix='__ac', key=None, max_age=None,
                  path='/', domain=None, secure=None, httponly=False,
                  version=None, comment=None, expires=None,
                  realm=None):
-        """Initialisation
+        """Initialization
         
         In:
           - ``prefix`` -- prefix of the names of the user id and password fields
             into the form
-          - ``realm`` -- is the form based authentification completed by a
-            basic HTTP authentification ?
+          - ``realm`` -- is the form based authentication completed by a
+            basic HTTP authentication ?
           - all the other keyword parameters are passed to the ``set_cookie()``
             method of the WebOb response object
             (see http://pythonpaste.org/webob/reference.html#id5)
         """        
-        super(Authentification, self).__init__(realm)        
+        super(Authentication, self).__init__(realm)        
         self.prefix = prefix
         
         self.key = key or prefix
@@ -121,7 +121,7 @@ class Authentification(basic_auth.Authentification):
             ids = self.get_ids_from_cookie(request.cookies)
             if not all(ids) and self.realm:
                 # Third, if a realm is set, look into the basic authentication header
-                ids = super(Authentification, self)._get_ids(request, response)
+                ids = super(Authentication, self)._get_ids(request, response)
 
         if all(ids):
             # Copy the user id and the password into a cookie
@@ -146,7 +146,7 @@ class Authentification(basic_auth.Authentification):
           - ``details`` -- a ``security.common.denial`` object
         """        
         if self.realm:
-            super(Authentification, self).denies(detail)
+            super(Authentication, self).denies(detail)
 
         raise webob.exc.HTTPForbidden(str(detail)) 
 

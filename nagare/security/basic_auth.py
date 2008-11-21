@@ -7,20 +7,20 @@
 # this distribution.
 #--
 
-"""Authentification manager for the basic HTTP authentification scheme"""
+"""Authentication manager for the basic HTTP authentication scheme"""
 
 from webob import exc
 
 from nagare.security import common
 
-class Authentification(common.Authentification):
-    """Authentification manager for the basic HTTP authentification scheme
+class Authentication(common.Authentication):
+    """Authentication manager for the basic HTTP authentication scheme
     """
     def __init__(self, realm):
-        """Initialisation
+        """Initialization
         
         In:
-          - ``realm`` -- authentification realm
+          - ``realm`` -- authentication realm
         """
         self.realm = realm
 
@@ -59,7 +59,7 @@ class Authentification(common.Authentification):
         return (username, { 'password' : password })
 
     def check_password(self, username, real_password, password):
-        """Authentification
+        """Authentication
         
         In:
           - ``username`` -- user id

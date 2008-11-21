@@ -7,7 +7,7 @@
 # this distribution.
 #--
 
-"""Authentification manager for the digest HTTP authentification scheme"""
+"""Authentication manager for the digest HTTP authentication scheme"""
 
 import time
 import hashlib
@@ -16,14 +16,14 @@ import webob
 
 from nagare.security import common
 
-class Authentification(common.Authentification):
-    """Authentification manager for the digest HTTP authentification scheme
+class Authentication(common.Authentication):
+    """Authentication manager for the digest HTTP authentication scheme
     """
     def __init__(self, realm, private_key):
-        """Initialisation
+        """Initialization
         
         In:
-          - ``realm`` -- authentification realm
+          - ``realm`` -- authentication realm
           - ``private_key`` -- will be hashed to generate the digest
         """        
         self.realm = realm
@@ -53,7 +53,7 @@ class Authentification(common.Authentification):
         return (None, { 'response' : None, 'encoding' : None })
 
     def check_password(self, username, password, response, encoding, realm='', uri='', nonce='', nc='', cnonce='', qop='', **kw):
-        """Authentification
+        """Authentication
         
         In:
           - ``username`` -- user id

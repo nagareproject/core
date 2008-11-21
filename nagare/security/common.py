@@ -137,8 +137,8 @@ class Rules(object):
 
 # ---------------------------------------------------------------------------
 
-class Authentification(object):
-    """An ``Authentification`` object identify, authentify and create the
+class Authentication(object):
+    """An ``Authentication`` object identify, authenticate and create the
     user objects
     
     .. note::
@@ -150,17 +150,17 @@ class Authentification(object):
         # Retrieve the data associated with the connected user
         (username, ids) = self.get_ids(request, response)
 
-        # Retrieve the authentification data
+        # Retrieve the authentication data
         password = self.get_password(username)
         if not self.check_password(username, password, **ids):
-            # Bad authentification of the user, create an anonymous user
+            # Bad authentication of the user, create an anonymous user
             username = None
         
         # Create the user object
         return self._create_user(username)
 
     def check_password(self, username, password, **kw):
-        """Authentification
+        """Authentication
         
         In:
           - ``username`` -- the user id
