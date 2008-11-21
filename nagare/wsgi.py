@@ -141,21 +141,6 @@ class WSGIApp(object):
                                   location=request.path_url + '?' + '&'.join(ids)
                                )
 
-    def on_refresh(self, request, response, h, output):
-        """The user has asked for a page refresh
-
-        In:
-          - ``request`` -- the web request object
-          - ``response`` -- the web response object
-          - ``h`` -- the current renderer
-          - ``output`` -- the tree for the refreshed page
-
-        Return:
-          - a tree
-        """
-        #print 'Warning: refresh used'
-        return output
-
     def on_back(self, request, response, h, output):
         """The user used the back button
 
@@ -338,9 +323,7 @@ class WSGIApp(object):
         except exc.HTTPException, e:
             return e(environ, start_response)
 
-        if session.refresh_used:
-            output = self.on_refresh(request, response, renderer, output)
-        elif session.back_used:
+        if session.back_used:
             output = self.on_back(request, response, renderer, output)
 
         if not xhr_request:
@@ -353,7 +336,7 @@ class WSGIApp(object):
 
         # Store the session
         if store_session:
-            session.set((root, callbacks), request.query_string)
+            session.set((root, callbacks))
 
         callbacks.end_rendering()
 
