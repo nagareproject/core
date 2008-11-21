@@ -24,14 +24,14 @@ DEFAULT_NB_CONTS = 20
 class Sessions(common.Sessions):
     """Sessions manager
     """
-    def __init__(self, nb_sessions=DEFAULT_NB_SESSIONS, nb_conts=DEFAULT_NB_CONTS):
+    def __init__(self, nb_sessions=DEFAULT_NB_SESSIONS, nb_continuations=DEFAULT_NB_CONTS):
         """Initialization
 
         In:
           - ``nb_sessions`` -- maximum number of sessions kept in memory
-          - ``nb_conts`` -- maximum number of continuations, for each sessions kept in memory
+          - ``nb_continuations`` -- maximum number of continuations, for each sessions kept in memory
         """
-        self.nb_conts = nb_conts
+        self.nb_continuations = nb_continuations
         self._sessions = lru_dict.ThreadSafeLRUDict(nb_sessions)
         
     def _is_session_exist(self, session_id):
@@ -51,7 +51,7 @@ class Sessions(common.Sessions):
         In:
           - ``session_id`` -- id of the session
         """
-        self._sessions[session_id] = [0, None, None, lru_dict.ThreadSafeLRUDict(self.nb_conts)]        
+        self._sessions[session_id] = [0, None, None, lru_dict.ThreadSafeLRUDict(self.nb_continuations)]        
         
     def _get(self, session_id, cont_id):
         with self._sessions:
@@ -74,5 +74,8 @@ class Sessions(common.Sessions):
             
 
 class SessionsFactory(common.SessionsFactory):
-    spec = { 'nb' : 'integer(default=%d)' % DEFAULT_NB_SESSIONS }
+    spec = {
+            'nb_sessions' : 'integer(default=%d)' % DEFAULT_NB_SESSIONS,
+            'nb_continuations' : 'integer(default=%d)' % DEFAULT_NB_CONTS,
+           }
     sessions = Sessions

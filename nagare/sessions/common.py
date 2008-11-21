@@ -275,5 +275,4 @@ class SessionsFactory(object):
         return conf
 
     def __call__(self):
-        #return self.sessions(**self.conf)
-        return self.sessions()
+        return self.sessions(**self.conf)
