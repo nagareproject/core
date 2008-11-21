@@ -34,12 +34,12 @@ class Session(object):
         self.cont_id = cont_id
         self.is_xhr = request.is_xhr or ('_a' in request.params)
         
-        self.refresh_used = self.back_used = self.is_expired = self.is_new = False
+        self.back_used = self.is_expired = self.is_new = False
 
         # -------------------------------------------------------------------
 
         # Ask the session manager to retrieve the data for the current session and continuation
-        (self.data, new_cont_id, self.secureid, query_string) = self.sessions_manager.get(session_id, cont_id)
+        (self.data, new_cont_id, self.secureid) = self.sessions_manager.get(session_id, cont_id)
 
         c = request.cookies.get('_nagare')
         if not self.data or not c or (c != self.secureid):
@@ -56,8 +56,7 @@ class Session(object):
             # A previous session is used
             # --------------------------
             
-            self.refresh_used = ((request.method == 'GET') and (query_string == request.query_string))
-            self.back_used = query_string and (cont_id != (new_cont_id-1))
+            self.back_used = cont_id and (cont_id != (new_cont_id-1))
 
             # Save the data into the same session / continuation if the request is a XHR one
             self.new_cont_id = new_cont_id if not self.is_xhr else cont_id
@@ -74,20 +73,27 @@ class Session(object):
         #return (str(request.cookies.get('_s', '')), int(request.params.get('_c', 0)))
         return (str(request.str_params.get('_s', '')), int(request.str_params.get('_c', 0)))
 
-    def set(self, data, query_string, inc_cont_id=True):
+    def set(self, data, inc_cont_id=True):
         """Memorize the session data
         
         In:
           - ``data`` -- the data
-          - ``query_string`` -- the complete URL
           - ``inc_cont_id`` -- create a new continuation id or save the data
             under the same continuation id ?
         """
+        """
+        if not inc_cont_id:
+            print "KO inc_count"
+        if self.is_xhr:
+            print "KO is_xhr"
+        if self.refresh_used:
+            print "KO refresh_used"
+        """ 
         # Forward the call to the sessions manager
         self.sessions_manager.set(
                                   self.session_id, self.new_cont_id,
-                                  data, self.secureid, query_string,
-                                  inc_cont_id and not self.is_xhr and not self.refresh_used
+                                  data, self.secureid,
+                                  inc_cont_id and not self.is_xhr
                                  )
 
     def sessionid_in_url(self, request, response):
@@ -208,22 +214,21 @@ class Sessions(object):
             - externals objects dictionary
             - the current cont_id
             - the secure id of the session
-            - the query string of the session
         """
         if not session_id:
-            return (None,)*4
+            return (None,)*3
 
         session = self._get(session_id, cont_id)
         if session is None:
-            return (None,)*4
+            return (None,)*3
         
-        (last_cont_id, secureid, query_string, externals, cont) = session
+        (last_cont_id, secureid, externals, cont) = session
         
         p = cPickle.Unpickler(cStringIO.StringIO(cont))
         if externals:
             p.persistent_load = lambda i: externals.get(int(i))
 
-        return (self._loads(externals, cont), last_cont_id, secureid, query_string)
+        return (self._loads(externals, cont), last_cont_id, secureid)
 
     def _set(id, session_id, cont_id, new_id, secureid, query_string, externals, data):
             pass
@@ -244,7 +249,7 @@ class Sessions(object):
 
         return (externals, f.getvalue())
 
-    def set(self, session_id, cont_id, data, secureid, query_string, new_id):
+    def set(self, session_id, cont_id, data, secureid, new_id):
         f = cStringIO.StringIO()
         p = cPickle.Pickler(f, protocol=-1)
         
@@ -252,7 +257,7 @@ class Sessions(object):
         p.persistent_id = lambda o: self._persistent_id(o, externals)        
         p.dump(data)
         
-        self._set(session_id, cont_id, new_id, secureid, query_string, *self._dumps(data))
+        self._set(session_id, cont_id, new_id, secureid, *self._dumps(data))
     
 
 class SessionsFactory(object):
@@ -270,4 +275,5 @@ class SessionsFactory(object):
         return conf
 
     def __call__(self):
-        return self.sessions(**self.conf)
+        #return self.sessions(**self.conf)
+        return self.sessions()
