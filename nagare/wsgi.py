@@ -187,12 +187,13 @@ class WSGIApp(object):
           - ``callbacks`` -- object to register the callbacks
         """
         renderer_factory = xhtml.AsyncRenderer if async else xhtml.Renderer
-        return renderer_factory(None,
-                                                  session,
-                                                  request, response,
-                                                  callbacks,
-                                                  self.static, request.script_name
-                                                 )
+        return renderer_factory(
+                                None,
+                                session,
+                                request, response,
+                                callbacks,
+                                self.static, request.script_name
+                               )
 
     # Processing phase
     def _phase1(self, params, callbacks):
@@ -253,8 +254,6 @@ class WSGIApp(object):
         accept = MIMEAcceptWithoutWildcards('Accept', 'text/html' if self.always_html else str(request.accept))
         response.xhtml_output = accept.best_match(('text/html', 'application/xhtml+xml')) == 'application/xhtml+xml'
 
-        self.start_request(request, response)
-
         xhr_request = request.is_xhr or ('_a' in request.params)
 
         # Test the request validity
@@ -270,29 +269,30 @@ class WSGIApp(object):
         if session.is_expired:
             return self.on_session_expired(request, response)(environ, start_response)
 
-        if session.is_new:
-            # A new session is created, create a new application root component too
-            root = self.create_root()
-
-            # If a URL is given, initialize the objects graph with it
-            url = request.path_info.strip('/')
-            if url and presentation.init(root, [u.decode('utf-8') for u in url.split('/')], request, None) == presentation.NOT_FOUND:
-                return self.on_not_found(request, response)(environ, start_response)
-
-            # Create a new callbacks registry
-            callbacks = Callbacks()
-        else:
-            # An existing session is used, retrieve the application root component
-            # and the callbacks registry
-            (root, callbacks) = session.data
-
         try:
             # Phase 1
             # -------
-
+            
             # Create a database transaction for each request
-            database.session.clear()
             with database.session.begin():
+                self.start_request(request, response)
+
+                if session.is_new:
+                    # A new session is created, create a new application root component too
+                    root = self.create_root()
+        
+                    # If a URL is given, initialize the objects graph with it
+                    url = request.path_info.strip('/')
+                    if url and presentation.init(root, [u.decode('utf-8') for u in url.split('/')], request, None) == presentation.NOT_FOUND:
+                        return self.on_not_found(request, response)(environ, start_response)
+        
+                    # Create a new callbacks registry
+                    callbacks = Callbacks()
+                else:
+                    # An existing session is used, retrieve the application root component
+                    # and the callbacks registry
+                    (root, callbacks) = session.data
+
                 try:
                     (render, store_session) = self._phase1(request.params, callbacks)
                 except CallbackLookupError:
@@ -322,6 +322,8 @@ class WSGIApp(object):
             output = render(renderer) if render else root.render(renderer)
         except exc.HTTPException, e:
             return e(environ, start_response)
+        finally:
+            database.session.remove()
 
         if session.back_used:
             output = self.on_back(request, response, renderer, output)
