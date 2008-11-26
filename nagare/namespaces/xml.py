@@ -288,6 +288,18 @@ def add_child(self, i):
     """
     self.append_text(str(i))
 
+@peak.rules.when(add_child, (_Tag, long))
+def add_child(self, l):
+    """Add a long integer to a tag
+    
+    In:
+      - ``self`` -- the tag
+      - ``l`` -- long integer to add
+      
+    Convert the long integer to string and then add it 
+    """
+    self.append_text(str(l))
+
 @peak.rules.when(add_child, (_Tag, float))
 def add_child(self, f):
     """Add a float to a tag
