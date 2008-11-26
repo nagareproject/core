@@ -331,11 +331,11 @@ class WSGIApp(object):
 
         self._phase2(request, response, output, render is not None)
 
-        if not xhr_request:
-            callbacks.clear_not_used(renderer._rendered)
-
         # Store the session
         if store_session:
+            if not xhr_request:
+                callbacks.clear_not_used(renderer._rendered)
+
             session.set((root, callbacks))
 
         callbacks.end_rendering()
