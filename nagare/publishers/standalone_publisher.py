@@ -9,6 +9,7 @@
 
 """The HTTP publisher"""
 
+import time
 from paste import httpserver
 
 from nagare.publishers import common
@@ -36,4 +37,5 @@ class Publisher(common.Publisher):
         
         # The puslisher is a threaded server so call once the ``on_new_process()`` method
         self.on_new_process()
+        print time.strftime('%x %X -', time.localtime()),
         httpserver.serve(self.urls, host, port, **conf)

@@ -9,6 +9,7 @@
 
 """The FastCGI publisher"""
 
+import time
 from flup.server import fcgi_fork
 
 from nagare.publishers import common
@@ -75,5 +76,5 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
         (host, port, conf) = self._validate_conf(filename, conf, error)
         
         fcgi_fork.WSGIServer.__init__(self, self.urls, bindAddress=(host, port), debug=False, **conf)
-        print 'Serving on fastcgi://%s:%d' % (host, port)
+        print time.strftime('%x %X -', time.localtime()), 'serving on fastcgi://%s:%d' % (host, port)
         self.run()
