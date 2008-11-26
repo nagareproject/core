@@ -9,7 +9,7 @@
 
 """The XHTML renderer
 
-This renderer is dedicated to the framework
+This renderer is dedicated to the Nagare framework
 """
 
 from __future__ import with_statement
@@ -371,7 +371,7 @@ class Form(xhtml_base._HTMLTag):
             action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
         # Generate a hidden field with the action attached
-        self.append(self.renderer.input(type='hidden', name=self.renderer.register_callback(0, action)))
+        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(0, action))))
         return self
         
     def post_action(self, action, permissions=None, subject=None):
@@ -391,7 +391,7 @@ class Form(xhtml_base._HTMLTag):
              action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
         # Generate a hidden field with the action attached
-        self.append(self.renderer.input(type='hidden', name=self.renderer.register_callback(3, action)))
+        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(3, action))))
         return self
     
 # ----------------------------------------------------------------------------------
@@ -920,11 +920,11 @@ class Renderer(xhtml_base.Renderer):
         if component.url is not None:
             self.url = self.url + '/' + component.url
 
-        # Delete all the previous callbacks registered by the component
+        # Delete all the previous callbacks registered by this component
         if self._callbacks and (component not in self._rendered):
             self._callbacks.unregister_callbacks(component)
         
-        # Memorize all the component rendered
+        # Memorize all the rendered components
         self._rendered.add(component)
 
     def action(self, tag, action, permissions, subject):
@@ -979,7 +979,7 @@ class Renderer(xhtml_base.Renderer):
           - ``form`` -- the form tag
         """
         if self.session:
-            form(self.session.sessionid_in_form(self, self.request, self.response))
+            form(self.div(self.session.sessionid_in_form(self, self.request, self.response)))
 
     def add_sessionid_in_url(self, u='', params=None, sep='&'):
         """Add the session and continuation ids into an url
