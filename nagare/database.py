@@ -15,6 +15,7 @@ except ImportError:
 
 try:
     from elixir import setup_all, session
+    session.configure(autoflush=True, transactional=False)
     query = session.query
 except ImportError:
     # If the framework haven't the SQLAlchemy or Elixir packages installed,
