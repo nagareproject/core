@@ -106,6 +106,18 @@ class ThreadSafeLRUDict(LRUDict):
     def __init__(self, *args, **kw):
         super(ThreadSafeLRUDict, self).__init__(*args, **kw)
         self.lock = threading.RLock()
+
+    def __contains__(self, k):
+        """Test if a key exists into this dictionary
+
+        In:
+          -  ``k`` -- the key
+          
+        Return:
+          - a boolean
+        """
+        with self.lock:
+            return k in self.items
     
     def __getitem__(self, k):
         with self.lock:
@@ -114,13 +126,6 @@ class ThreadSafeLRUDict(LRUDict):
     def __setitem__(self, k, o):
         with self.lock:
             super(ThreadSafeLRUDict, self).__setitem__(k, o)
-
-    def __enter__(self):
-        self.lock.acquire()
-        return self
-    
-    def __exit__(self, *args):
-        self.lock.release()
 
 # ----------------------------------------------------------------------------
 

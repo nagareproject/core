@@ -25,6 +25,8 @@ from nagare.security import dummy_manager
 from nagare.callbacks import Callbacks, CallbackLookupError
 from nagare.namespaces import xhtml
 
+from nagare.sessions.common import ExpirationError
+
 # ---------------------------------------------------------------------------
 
 class MIMEAcceptWithoutWildcards(acceptparse.Accept):
@@ -122,7 +124,7 @@ class WSGIApp(object):
         Return:
           - a WSGI object, used to generate the response to the browser
         """
-        print 'Warning: expired session, creating a new one'
+        #print 'Warning: expired session, creating a new one'
         return exc.HTTPMovedPermanently()
 
     def on_after_post(self, request, response, ids):
@@ -155,7 +157,23 @@ class WSGIApp(object):
         """
         #print 'Warning: back used'
         return output
+    
+    def on_callback_lookuperror(self, async, request, response):
+        """
+        In:e
+          - ``async`` -- is an XHR request ?
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
+          
+        """
+        if not async:
+            raise
 
+        # As the XHR requests use the same continuation, a callback
+        # can be not found (i.e deleted by a previous XHR)
+        # In this case, do nothing                     
+        return (lambda h: '', False)
+    
     # -----------------------------------------------------------------------
 
     def start_request(self, request, response):
@@ -265,82 +283,82 @@ class WSGIApp(object):
         if len(request.path_info) == 0:
             return self.on_incomplete_url(request, response)(environ, start_response)
 
-        session = self.sessions(request, response)
-        if session.is_expired:
+        try:
+            session = self.sessions.get(request, response)
+        except ExpirationError:
             return self.on_session_expired(request, response)(environ, start_response)
 
         try:
-            # Phase 1
-            # -------
-            
-            # Create a database transaction for each request
-            with database.session.begin():
-                self.start_request(request, response)
-
-                if session.is_new:
-                    # A new session is created, create a new application root component too
-                    root = self.create_root()
-        
-                    # If a URL is given, initialize the objects graph with it
-                    url = request.path_info.strip('/')
-                    if url and presentation.init(root, [u.decode('utf-8') for u in url.split('/')], request, None) == presentation.NOT_FOUND:
-                        return self.on_not_found(request, response)(environ, start_response)
-        
-                    # Create a new callbacks registry
-                    callbacks = Callbacks()
-                else:
-                    # An existing session is used, retrieve the application root component
-                    # and the callbacks registry
-                    (root, callbacks) = session.data
-
-                try:
-                    (render, store_session) = self._phase1(request.params, callbacks)
-                except CallbackLookupError:
-                    if xhr_request:
-                        # As the XHR requests use the same continuation, a callback
-                        # can be not found (i.e deleted by a previous XHR)
-                        # In this case, do nothing 
-                        (render, store_session) = (lambda h: '', False)
+            try:
+                # Phase 1
+                # -------
+                
+                # Create a database transaction for each request
+                with database.session.begin():
+                    self.start_request(request, response)
+    
+                    if not session.is_new:
+                        # An existing session is used, retrieve the application root component
+                        # and the callbacks registry
+                        (root, callbacks) = session.data
                     else:
-                        raise
+                        # A new session is created, create a new application root component too
+                        root = self.create_root()
+            
+                        # If a URL is given, initialize the objects graph with it
+                        url = request.path_info.strip('/')
+                        if url and presentation.init(root, [u.decode('utf-8') for u in url.split('/')], request, None) == presentation.NOT_FOUND:
+                            return self.on_not_found(request, response)(environ, start_response)
+            
+                        # Create a new callbacks registry
+                        callbacks = Callbacks()
+    
+                    try:
+                        (render, store_session) = self._phase1(request.params, callbacks)
+                    except CallbackLookupError:
+                        (render, store_session) = self.on_callback_lookuperror(xhr_request, request, response)
 
-            # If the ``redirect_after_post`` parameter of the ``[application``
-            # section is `True`` (the default), conform to the PRG__ pattern
-            #
-            # __ http://en.wikipedia.org/wiki/Post/Redirect/GetPRG
-            if (request.method == 'POST') and not xhr_request and self.redirect_after_post:
-                session.set((root, callbacks), None, False)
-                return self.on_after_post(request, response, session.sessionid_in_url(request, response))(environ, start_response)
-
-            # Phase 2
-            # -------
-
-            # Create a new renderer
-            renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
-            # If the phase 1 has returned a render function, use it
-            # else, start the rendering by the application root component
-            output = render(renderer) if render else root.render(renderer)
-        except exc.HTTPException, e:
-            return e(environ, start_response)
-        finally:
-            database.session.remove()
-
-        if session.back_used:
-            output = self.on_back(request, response, renderer, output)
-
-        if not xhr_request:
-            output = top.wrap(response.content_type, renderer, output)
-
-        self._phase2(request, response, output, render is not None)
-
-        # Store the session
-        if store_session:
+                # If the ``redirect_after_post`` parameter of the ``[application``
+                # section is `True`` (the default), conform to the PRG__ pattern
+                #
+                # __ http://en.wikipedia.org/wiki/Post/Redirect/GetPRG
+                if (request.method == 'POST') and not xhr_request and self.redirect_after_post:
+                    session.data = (root, callbacks)
+                    self.sessions.set(session, False)
+                    return self.on_after_post(request, response, session.sessionid_in_url(request, response))(environ, start_response)
+    
+                # Phase 2
+                # -------
+    
+                # Create a new renderer
+                renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
+                # If the phase 1 has returned a render function, use it
+                # else, start the rendering by the application root component
+                output = render(renderer) if render else root.render(renderer)
+            except exc.HTTPException, e:
+                return e(environ, start_response)
+            finally:
+                database.session.remove()
+    
+            if session.back_used:
+                output = self.on_back(request, response, renderer, output)
+    
             if not xhr_request:
-                callbacks.clear_not_used(renderer._rendered)
-
-            session.set((root, callbacks))
-
-        callbacks.end_rendering()
+                output = top.wrap(response.content_type, renderer, output)
+    
+            self._phase2(request, response, output, render is not None)
+    
+            # Store the session
+            if store_session:
+                if not xhr_request:
+                    callbacks.clear_not_used(renderer._rendered)
+    
+                session.data = (root, callbacks)
+                self.sessions.set(session, not xhr_request)
+    
+            callbacks.end_rendering()
+        finally:
+            session.lock.release()
 
         return response(environ, start_response)
 
