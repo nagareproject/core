@@ -105,7 +105,7 @@ class HeadRenderer(xhtml_base.HeadRenderer):
     
     This renderer knows about the static contents of the application
     """
-    def __init__(self, static):
+    def __init__(self, static_url):
         """Renderer initialisation
         
         The ``HeadRenderer`` keeps track of the javascript and css used by every views,
@@ -114,7 +114,7 @@ class HeadRenderer(xhtml_base.HeadRenderer):
         super(HeadRenderer, self).__init__()
 
         # Directory where are located the static contents of the application
-        self.static = static
+        self.static_url = static_url
         
         self._named_css = {}        # CSS code
         self._css_url = {}          # CSS URLs
@@ -146,7 +146,7 @@ class HeadRenderer(xhtml_base.HeadRenderer):
         Return:
           - ``()``
         """
-        self._css_url.setdefault(absolute_url(url, self.static), self._order)
+        self._css_url.setdefault(absolute_url(url, self.static_url), self._order)
         self._order += 1
         return ()
 
@@ -182,7 +182,7 @@ class HeadRenderer(xhtml_base.HeadRenderer):
         Return:
           - ``()``
         """
-        self._javascript_url.setdefault(absolute_url(url, self.static), self._order)
+        self._javascript_url.setdefault(absolute_url(url, self.static_url), self._order)
         self._order += 1
         return ()
 
@@ -728,7 +728,7 @@ class Img(_HTMLActionTag):
         # of the application
         src = self.get('src')
         if src is not None:
-            self.set('src', absolute_url(src, self.renderer.head.static))
+            self.set('src', absolute_url(src, self.renderer.head.static_url))
 
 
 # ----------------------------------------------------------------------------------
@@ -842,7 +842,7 @@ class Renderer(xhtml_base.Renderer):
         cls._html_parser = ET.HTMLParser()
         cls._html_parser.setElementClassLookup(cls._custom_lookup)
         
-    def __init__(self, parent=None, session=None, request=None, response=None, callbacks=None, static='', url='/'):
+    def __init__(self, parent=None, session=None, request=None, response=None, callbacks=None, static_url='', static_path='', url='/'):
         """Renderer initialisation
         
         In:
@@ -851,16 +851,18 @@ class Renderer(xhtml_base.Renderer):
           - ``request`` -- the request object
           - ``response`` -- the response object
           - ``callbacks`` -- the registered actions on the tags
-          - ``static`` -- directory of the static contents of the application
+          - ``static_url`` -- url of the static contents of the application
+          - ``static_path`` -- path of the static contents of the application
           - ``url`` -- url prefix of the application
         """        
-        super(Renderer, self).__init__(parent, static=static)
+        super(Renderer, self).__init__(parent, static_url=static_url)
 
         if parent is None:
             self.session = session
             self.request = request
             self.response = response
             self._callbacks = callbacks
+            self.static_path = static_path
             self.url = url
             self._rendered = set()
         else:
@@ -868,6 +870,7 @@ class Renderer(xhtml_base.Renderer):
             self.request = parent.request
             self.response = parent.response
             self._callbacks = parent._callbacks
+            self.static_path = parent.static_path
             self.url = parent.url
             self._rendered = parent._rendered
         
@@ -885,6 +888,26 @@ class Renderer(xhtml_base.Renderer):
         """                
         return self._makeelement(tag, self._html_parser)
 
+    def parse_xml(self, source, fragment=False, no_leading_text=False, **kw):
+        """Parse a XML file
+        
+        In:
+          - ``source`` -- can be a filename or a file object
+          - ``fragment`` -- if ``True``, can parse a XML fragment i.e a XML without
+            a unique root
+          - ``no_leading_text`` -- if ``fragment`` is ``True``, ``no_leading_text``
+            is ``False`` and the XML to parsed begins by a text, this text is keeped
+          - ``kw`` -- keywords parameters are passed to the XML parser
+          
+        Return:
+          - the root element of the parsed XML, if ``fragment`` is ``False``
+          - a list of XML elements, if ``fragment`` is ``True`` 
+        """
+        if isinstance(source, basestring):
+            source = absolute_url(source, self.static_path)
+
+        return super(Renderer, self).parse_xml(source, fragment, no_leading_text, **kw)
+
     def parse_html(self, source, fragment=False, no_leading_text=False, xhtml=False, **kw):
         """Parse a (X)HTML file
         
@@ -901,6 +924,9 @@ class Renderer(xhtml_base.Renderer):
           - the root element of the parsed HTML, if ``fragment`` is ``False``
           - a list of HTML elements, if ``fragment`` is ``True`` 
         """
+        if isinstance(source, basestring):
+            source = absolute_url(source, self.static_path)
+
         parser = ET.XMLParser(**kw) if xhtml else ET.HTMLParser(**kw)
         parser.setElementClassLookup(self._custom_lookup)
         
@@ -1006,13 +1032,13 @@ class Renderer(xhtml_base.Renderer):
 
 
 class AsyncHeadRenderer(HeadRenderer):
-    def __init__(self, static):
+    def __init__(self, static_url):
         """Renderer initialisation
         
         The ``HeadRenderer`` keeps track of the javascript and css used by every views,
         to be able to concatenate them into the ``<head>`` section.
         """
-        super(AsyncHeadRenderer, self).__init__(static=static)
+        super(AsyncHeadRenderer, self).__init__(static_url=static_url)
                 
         self._anonymous_css = []         # CSS
         self._anonymous_javascript = []  # Javascript code

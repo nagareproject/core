@@ -73,15 +73,16 @@ class WSGIApp(wsgi.WSGIApp):
     If ``True``, mappes itself to the ``/`` url.
     """
 
-    def set_config(self, config_filename, conf, error, static, publisher):
+    def set_config(self, config_filename, conf, error, static_url, static_path, publisher):
         """Read the value of the ``as_root`` parameter and keeps the list of all
         the launched applications
         
         In:
           -  ``config_filename`` -- the path to the configuration file
-          - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
+          - ``config`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
-          - ``static`` -- the directory where the static contents of the application
+          - ``static_url`` -- the url of the static contents of the application
+          - ``static_path`` -- the directory where the static contents of the application
             are located
           - ``publisher`` -- the publisher of the application
         """
@@ -91,7 +92,7 @@ class WSGIApp(wsgi.WSGIApp):
         if conf['application']['as_root']:
             publisher.register_application(conf['application']['path'], '', self, False)
         
-        super(WSGIApp, self).set_config(config_filename, conf, error, static, publisher)
+        super(WSGIApp, self).set_config(config_filename, conf, error, static_path, static_url, publisher)
         self.apps = publisher.apps
         
     def create_root(self):

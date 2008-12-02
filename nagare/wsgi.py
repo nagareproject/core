@@ -46,24 +46,27 @@ class WSGIApp(object):
         """
         self.root_factory = root_factory
 
-        self.static = ''
+        self.static_url = ''
+        self.static_path = ''
         self.redirect_after_post = False
         self.always_html = True
 
         self.security = dummy_manager.Manager()
 
-    def set_config(self, config_filename, config, error, static, publisher):
+    def set_config(self, config_filename, config, error, static_url, static_path, publisher):
         """Read the configuration parameters
 
         In:
           -  ``config_filename`` -- the path to the configuration file
           - ``config`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
-          - ``static`` -- the directory where the static contents of the application
+          - ``static_url`` -- the url of the static contents of the application
+          - ``static_path`` -- the directory where the static contents of the application
             are located
           - ``publisher`` -- the publisher of the application
         """
-        self.static = static
+        self.static_url = static_url
+        self.static_path = static_path
 
         self.redirect_after_post = config['application']['redirect_after_post']
         self.always_html = config['application']['always_html']
@@ -210,7 +213,8 @@ class WSGIApp(object):
                                 session,
                                 request, response,
                                 callbacks,
-                                self.static, request.script_name
+                                self.static_url, self.static_path,
+                                request.script_name
                                )
 
     # Processing phase

@@ -191,16 +191,17 @@ def run(parser, options, args):
         # Create the function to get the static contents of the application
         static = aconf['application'].get('static')
         get_file = None
-        if static is not None:
+        if static is not None and os.path.isdir(static): 
             # If a ``static`` parameter exists, under the ``[application]`` section,
             # serve the static contents from this root
-            if os.path.isdir(static):
-                get_file = lambda path, static=static: get_file_from_root(static, path)
+            get_file = lambda path, static=static: get_file_from_root(static, path)
         else:
-            # Else, serve the static contenants from the ``static`` directory
+            # Else, serve the static from the ``static`` directory
             # of the application package
             if dist is not None:
-                get_file = lambda path, requirement=pkg_resources.Requirement.parse(dist.project_name): get_file_from_package(requirement, path)
+                requirement = pkg_resources.Requirement.parse(dist.project_name)
+                get_file = lambda path, requirement=requirement: get_file_from_package(requirement, path)
+                static = pkg_resources.resource_filename(requirement, '/static')
 
         app = wsgi.create_WSGIApp(app)
 
@@ -224,7 +225,7 @@ def run(parser, options, args):
         static_url = p.register_static(aconf['application']['name'], get_file)
         
         # Configure the application
-        app.set_config(cfgfile, aconf, parser.error, static_url, p)
+        app.set_config(cfgfile, aconf, parser.error, static_url, static, p)
 
     # Register the function to serve the static contents of the framework
     p.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))
