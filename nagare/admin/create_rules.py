@@ -11,11 +11,11 @@
 
 Generate the rewrite rules for the `apache <http://httpd.apache.org/>`_,
 `lighttpd <http://www.lighttpd.net/>`_ or `nginx <http://nginx.net/>`_ http
-servers, to let them serve the static contents of the launched applications
+servers, to let them serve the static contents of the launched applications,
 instead of the applications themselves.
 """
 
-import os, pkg_resources, itertools
+import os, pkg_resources
 from nagare.admin import util
 
 def set_options(optparser):
@@ -54,7 +54,7 @@ def create_rules(app_names, error):
     package = pkg_resources.Requirement.parse('nagare')
     static = pkg_resources.resource_filename(package, 'static')
 
-    apps = [('nagare', static)]   # Initialise the result tuple with the static contents of the framework
+    apps = [('nagare', static)]   # Initialize the result tuple with the static contents of the framework
 
     for app_name in app_names:
         (cfgfile, app, dist, aconf) = util.read_application(app_name, error)
@@ -69,12 +69,16 @@ def create_rules(app_names, error):
     return sorted(apps, key=lambda x: len(x[0]))
 
 def commonprefix(filenames):
-    filenames = [filename.split(os.sep) for filename in filenames]
-
-    l = [map(t[0].__eq__, t) for t in zip(*filenames)]
-    n = len(list(itertools.takewhile(lambda x: all(x), l)))
+    """Return the common prefix of a list of filenames
     
-    return os.sep.join(filenames[0][:n]+[''])
+    In:
+      - ``filenames`` -- the list of filenames
+      
+    Return:
+      - the common prefix
+    """
+    filenames = [filename.split(os.sep) for filename in filenames]
+    return os.sep.join(os.path.commonprefix(filenames))
 
 def generate_lighttpd_rules(app_names, error):
     """Generate the lighttpd rewrite rules for the given registered applications
@@ -95,8 +99,6 @@ def generate_lighttpd_rules(app_names, error):
     yield 'url.rewrite = ('
     for (app_name, static) in apps:
         yield '  "^/static/%s/(.*)" => "%s/$1",' % (app_name, static[len(document_root):])
-
-    yield '  "^(.*)" => "/fcgi/$1"'
     yield ')'
 
 def generate_nginx_rules(app_names, error):
@@ -133,9 +135,7 @@ def generate_apache_rules(app_names, error):
 
     yield 'RewriteEngine On'
     for (app_name, static) in apps:
-        yield 'RewriteRule ^/static/%s/(.*)$ /%s/$1 [L]' % (app_name, static[len(document_root):])
-        
-    yield 'RewriteRule ^/(.*)$ /fcgi/$1 [QSA,L]'
+        yield 'RewriteRule ^/static/%s/(.*)$ %s/$1 [L]' % (app_name, static[len(document_root):])
 
 def run(parser, options, args):
     print '\n'.join(options.generate(args, parser.error))
