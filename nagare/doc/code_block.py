@@ -25,7 +25,8 @@ from rstdoc.traclib import roles, wiki_filter
 from rstdoc.rstlib.astdoc import setDocStringFilter
 
 DEFAULT = HtmlFormatter(noclasses=True)
-VARIANTS = { 'linenos' : HtmlFormatter(noclasses=True, linenos='inline') }
+#VARIANTS = { 'linenos' : HtmlFormatter(noclasses=True, linenos='inline') }
+VARIANTS = { 'linenos' : HtmlFormatter(noclasses=True, linenos=True, cssclass='toto') }
 
 def code_block_directive(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine):
     """The ``code-block`` directive uses Pygment to highlight a piece of code

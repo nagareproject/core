@@ -58,7 +58,7 @@ class IntValidator(Validator):
         try:
             self.value = int(self.value)
         except ValueError:
-            raise ValueError, 'Must be an integer'
+            raise ValueError('Must be an integer')
 
     def to_int(self):
         """Return the value, converted to an integer
@@ -76,7 +76,7 @@ class IntValidator(Validator):
         """
         return str(self.value)
 
-    def lesser_than(self, max, msg='Must be lesser than %d'):
+    def lesser_than(self, max, msg='Must be lesser than %(max)d'):
         """Check that the value is lesser than a limit
 
         In:
@@ -89,9 +89,9 @@ class IntValidator(Validator):
         if self.value < max:
             return self
         
-        raise ValueError, msg % max
+        raise ValueError(msg % { 'value' : self.value, 'max' : max })
     
-    def lesser_or_equal_than(self, max, msg='Must be lesser or equal than %d'):
+    def lesser_or_equal_than(self, max, msg='Must be lesser or equal than %(max)d'):
         """Check that the value is lesser or equal than a limit
 
         In:
@@ -104,9 +104,9 @@ class IntValidator(Validator):
         if self.value <= max:
             return self
         
-        raise ValueError, msg % max
+        raise ValueError({ 'value' : self.value, 'max' : max })
 
-    def greater_than(self, min, msg='Must be greater than %d'):
+    def greater_than(self, min, msg='Must be greater than %(min)d'):
         """Check that the value is greater than a limit
 
         In:
@@ -119,9 +119,9 @@ class IntValidator(Validator):
         if self.value > min:
             return self
         
-        raise ValueError, msg % min
+        raise ValueError(msg % { 'value' : self.value, 'min' : min })
 
-    def greater_or_equal_than(self, min, msg='Must be greater or equal than %d'):
+    def greater_or_equal_than(self, min, msg='Must be greater or equal than %(min)d'):
         """Check that the value is greater or equal than a limit
 
         In:
@@ -134,7 +134,7 @@ class IntValidator(Validator):
         if self.value >= min:
             return self
         
-        raise ValueError, msg % min
+        raise ValueError(msg % { 'value' : self.value, 'min' : min })
     
 
 class StringValidator(Validator):
@@ -171,7 +171,7 @@ class StringValidator(Validator):
         if len(self.value) != 0:
             return self
         
-        raise ValueError, msg
+        raise ValueError(msg)
     
     def match(self, r, msg='Incorrect format'):
         """Check that the value respects a format given as a regexp
@@ -186,9 +186,9 @@ class StringValidator(Validator):
         if re.match(r, self.value):
             return self
         
-        raise ValueError, msg
+        raise ValueError(msg % { 'value' : self.value })
     
-    def shorter_than(self, max, msg='Length must be shorter than %d characters'):
+    def shorter_than(self, max, msg='Length must be shorter than %(max)d characters'):
         """Check that the value is shorter than a limit
 
         In:
@@ -200,10 +200,11 @@ class StringValidator(Validator):
         """
         if len(self.value) < max:
             return self
-        
-        raise ValueError, msg % max
+
+        print ">>>", self.value, max, msg
+        raise ValueError(msg % { 'value' : self.value, 'max' : max })
     
-    def shorter_or_equal_than(self, max, msg='Length must be shorter or equal than %d characters'):
+    def shorter_or_equal_than(self, max, msg='Length must be shorter or equal than %(max)d characters'):
         """Check that the value is shorter or equal than a limit
 
         In:
@@ -216,13 +217,13 @@ class StringValidator(Validator):
         if len(self.value) <= max:
             return self
         
-        raise ValueError, msg % max
+        raise ValueError(msg % { 'value' : self.value, 'max' : max })
 
-    def length_equal(self, v, msg='Length must be %d characters'):
+    def length_equal(self, v, msg='Length must be %(len)d characters'):
         """Check that the value has an exact length
 
         In:
-          - ``v`` -- the lenght
+          - ``v`` -- the length
           - ``msg`` -- message to raise
           
         Return:
@@ -231,9 +232,9 @@ class StringValidator(Validator):
         if len(self.value) == v:
             return self
         
-        raise ValueError, msg % v
+        raise ValueError(msg % { 'value' : self.value, 'len' : v })
     
-    def longer_than(self, min, msg='Length must be longer than %d characters'):
+    def longer_than(self, min, msg='Length must be longer than %(min)d characters'):
         """Check that the value is longer than a limit
 
         In:
@@ -246,9 +247,9 @@ class StringValidator(Validator):
         if len(self.value) > min:
             return self
         
-        raise ValueError, msg % min
+        raise ValueError(msg % { 'value' : self.value, 'min' : min })
 
-    def longer_or_equal_than(self, min, msg='Length must be longer or equal than %d characters'):
+    def longer_or_equal_than(self, min, msg='Length must be longer or equal than %(min)d characters'):
         """Check that the value is longer or equal than a limit
 
         In:
@@ -261,7 +262,7 @@ class StringValidator(Validator):
         if len(self.value) >= min:
             return self
         
-        raise ValueError, msg % min
+        raise ValueError(msg % { 'value' : self.value, 'min' : min })
 
 # Aliases
 to_int = IntValidator

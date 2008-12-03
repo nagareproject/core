@@ -24,7 +24,7 @@ except ImportError:
         def begin(self):
             return self
         
-        __enter__ = __exit__ = clear = query = lambda *args, **kw: None
+        __enter__ = __exit__ = clear = query = remove = close = lambda *args, **kw: None
         
     session = DummySession()
 
