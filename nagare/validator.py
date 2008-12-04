@@ -7,7 +7,7 @@
 # this distribution.
 #--
 
-"""Set of validating object
+"""Set of validating objects
 
 Suitable to be the validating functions of ``editor.property`` objects
 """
@@ -20,15 +20,15 @@ class Validator(object):
     def __init__(self, v, strip=False, rstrip=False, lstrip=False, chars=None):
         """Initialization
         
-        This object only do conversions, knowing to remove characters at the
+        This object only do conversions, possibly removing characters at the
         beginning / end of the value
         
         In:
           - ``v`` -- value to validate
-          - ``strip`` -- remove the characters at the beginnig and the end
+          - ``strip`` -- remove the characters at the beginning and the end
           - ``rstrip`` -- remove the characters at the end
           - ``lstrip`` -- remove the characters at the beginning
-          - ``chars`` -- list of characters to removed, space by default
+          - ``chars`` -- list of characters to removed, spaces by default
         """
         if strip:
             v = v.strip(chars)
@@ -68,14 +68,6 @@ class IntValidator(Validator):
         """
         return self.value
     
-    def to_string(self):
-        """Return the value, converted to a string
-        
-        Return:
-          - the integer value as a string
-        """
-        return str(self.value)
-
     def lesser_than(self, max, msg='Must be lesser than %(max)d'):
         """Check that the value is lesser than a limit
 
@@ -104,7 +96,7 @@ class IntValidator(Validator):
         if self.value <= max:
             return self
         
-        raise ValueError({ 'value' : self.value, 'max' : max })
+        raise ValueError(msg % { 'value' : self.value, 'max' : max })
 
     def greater_than(self, min, msg='Must be greater than %(min)d'):
         """Check that the value is greater than a limit
@@ -201,7 +193,6 @@ class StringValidator(Validator):
         if len(self.value) < max:
             return self
 
-        print ">>>", self.value, max, msg
         raise ValueError(msg % { 'value' : self.value, 'max' : max })
     
     def shorter_or_equal_than(self, max, msg='Length must be shorter or equal than %(max)d characters'):
@@ -263,6 +254,43 @@ class StringValidator(Validator):
             return self
         
         raise ValueError(msg % { 'value' : self.value, 'min' : min })
+    
+    def isalnum(self, msg='some characters are not alphanumeric'):
+        if self.value.isalnum():
+            return self
+
+        raise ValueError(msg % { 'value' : self.value })
+    
+    def isalpha(self, msg='some characters are not alphabetic'):
+        if self.value.isalpha():
+            return self
+
+        raise ValueError(msg % { 'value' : self.value })
+    
+    def isdigit(self, msg='some characters are not digits'):
+        if self.value.isdigit():
+            return self
+
+        raise ValueError(msg % { 'value' : self.value })
+    
+    def islower(self, msg='some characters are not lowercase'):
+        if self.value.islower():
+            return self
+
+        raise ValueError(msg % { 'value' : self.value })
+
+    
+    def isupper(self, msg='some characters are not uppercase'):
+        if self.value.isupper():
+            return self
+
+        raise ValueError(msg % { 'value' : self.value })
+
+    def isspace(self, msg='some characters are not whitespace'):
+        if self.value.isspace():
+            return self
+
+        raise ValueError(msg % { 'value' : self.value })
 
 # Aliases
 to_int = IntValidator
