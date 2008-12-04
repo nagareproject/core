@@ -78,7 +78,7 @@ def commonprefix(filenames):
       - the common prefix
     """
     filenames = [filename.split(os.sep) for filename in filenames]
-    return os.sep.join(os.path.commonprefix(filenames))
+    return os.sep.join(os.path.commonprefix(filenames)) or '/'
 
 def generate_lighttpd_rules(app_names, error):
     """Generate the lighttpd rewrite rules for the given registered applications
