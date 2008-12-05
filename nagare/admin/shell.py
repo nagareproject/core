@@ -10,7 +10,7 @@
 """The ``shell`` and ``batch`` administrative commands
 
 The ``shell`` command launches an interactive Python shell.
-The ``batch`` command execute Python statements from files.
+The ``batch`` command execute Python statements from a file.
 
 In both cases:
 
@@ -136,9 +136,18 @@ class Shell(util.Command):
 # -----------------------------------------------------------------------------
 
 def set_batch_options(optparser):
-    optparser.usage += ' <application> [file1.py [file2.py] ...]'
+    optparser.usage += ' <application> <file.py>'
 
     optparser.add_option('-d', '--debug', action='store_const', const=True, default=False, dest='debug', help='debug mode for the database engine')
+
+    if not sys.argv[3:]:
+        return None
+
+    for (i, option) in enumerate(sys.argv[3:]):
+        if not option.startswith('-'):
+            break
+
+    return sys.argv[:i+4]
 
 def batch(parser, options, args):
     """Execute Python statements from files
@@ -149,11 +158,20 @@ def batch(parser, options, args):
       - ``args`` -- arguments in the command lines
 
     The arguments are the name of a registered applications, or the path to
-    an applications configuration file, followed by the paths of the files to
-    execute (or ``stdin`` if empty)
+    an applications configuration file, followed by the paths of a file to
+    execute (`-` for stdin)
     """
-    if not args:
+    if len(args)==0:
         parser.error('No application given')
+
+    if len(args)==1:
+        parser.error('No file given')
+    
+    for (i, option) in enumerate(sys.argv[3:]):
+        if not option.startswith('-'):
+            break
+
+    del sys.argv[:i+3]
 
     ns = create_globals(args[:1], options.debug, parser.error)
     exec(''.join(fileinput.input(args[1:]))) in ns
