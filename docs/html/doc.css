@@ -106,15 +106,22 @@ div.system-message {
 /*	CODE */
 /*********************************************/
 
-.highlighttable {
-	width: 100%;
-	max-width: 900px;
+.ncodediv {
+    background: #ffffff url(img/code.png) no-repeat top right !important;
+    overflow-x: auto;
+    width: 99%;
+    margin-left: 30px;
+    padding-bottom: 1.5em;
+    border: 1px #aeaeae dashed;
+}
+
+table.ncodetable pre {
+    margin: 5px 5px 0 5px;
 }
 
 div.highlight {
 	padding: 0.27em;
-	border-color: #aeaeae;
-    border: 1px dashed;
+    border: 1px #aeaeae dashed;
     margin-left: 30px;
 }
 
