@@ -24,9 +24,6 @@ from docutils.parsers.rst import directives
 from rstdoc.traclib import roles, wiki_filter
 from rstdoc.rstlib.astdoc import setDocStringFilter
 
-DEFAULT = HtmlFormatter(noclasses=True)
-VARIANTS = { 'linenos' : HtmlFormatter(noclasses=True, linenos=True, cssclass='ncode') }
-
 def code_block_directive(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine):
     """The ``code-block`` directive uses Pygment to highlight a piece of code
     
@@ -37,15 +34,22 @@ def code_block_directive(name, arguments, options, content, lineno, content_offs
     except ValueError:
         lexer = TextLexer()
 
-    formatter = VARIANTS[options.keys()[0]] if options else DEFAULT
+    if 'linenos' in options:
+        options['linenos'] = True
+        options['cssclass'] = 'ncode'
+
+    if 'hl_lines' in options:
+        options['hl_lines'] = [int(l.strip()) for l in options['hl_lines'].split(',')]
+
+    formatter = HtmlFormatter(noclasses=True, **options)
     parsed = highlight(u'\n'.join(content), lexer, formatter)
-    if formatter is not DEFAULT:
+    if 'linenos' in options:
         parsed = '<div class="ncodediv">'+parsed+'</div>'
     return [nodes.raw('', parsed, format='html')]
 
 code_block_directive.arguments = (1, 0, 1)
 code_block_directive.content = 1
-code_block_directive.options = dict([(key, directives.flag) for key in VARIANTS])
+code_block_directive.options = { 'linenos' : directives.flag, 'hl_lines' : directives.unchanged_required }
 
 
 def register_directive():

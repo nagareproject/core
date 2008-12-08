@@ -106,6 +106,10 @@ div.system-message {
 /*	CODE */
 /*********************************************/
 
+.hll {
+	background-color: yellow;
+}
+	
 .ncodediv {
     background: #ffffff url(img/code.png) no-repeat top right !important;
     overflow-x: auto;
@@ -117,6 +121,10 @@ div.system-message {
 
 table.ncodetable pre {
     margin: 5px 5px 0 5px;
+}
+
+.linenos pre {
+	color: #aeaeae;
 }
 
 div.highlight {
