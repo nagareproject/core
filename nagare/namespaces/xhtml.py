@@ -40,7 +40,7 @@ def add_attribute(self, name, value):
       - ``value`` -- ``ajax.Update`` value
     """
     # Generate a XHR request
-    xml.add_attribute(self, name, value.generate_action(3, self.renderer))
+    xml.add_attribute(self, name, value.generate_action(self._actions[0], self.renderer))
 
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.FunctionType))
 def add_attribute(self, name, value):
