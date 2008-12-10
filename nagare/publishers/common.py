@@ -16,14 +16,6 @@ import configobj
 
 from nagare import config
 
-try:
-    from weberror.evalexception import EvalException
-    
-    debugged_app = lambda app: EvalException(app, xmlhttp_key='_a')
-except ImportError:
-    debugged_app = lambda app: app
-
-
 def serve_file(filename):
     """Create a WSGI application that return a static file
     
@@ -55,21 +47,17 @@ class Publisher(object):
         self.apps = {}  # List of all the registered applications
         self.session_factory = session_factory
 
-    def register_application(self, app_name, name, app, debug):
+    def register_application(self, app_name, name, app, wsgi_pipe):
         """Register an application to launch
         
         In:
           - ``app_name`` -- name of the application
           - ``name`` -- url of the application
           - ``app`` -- the WSGI application
-          - ``debug`` -- activation of the web error page
+          - ``wsgi_pipe`` -- the pipe of WSGI "middlewares"
         """
-        self.apps[app] = (app_name, name)
-        
-        if debug:
-            app = debugged_app(app)
-
-        self.urls['/'+name] = app
+        self.apps[app] = (app_name, name)        
+        self.urls['/'+name] = wsgi_pipe
         print "Application '%s' registered as '/%s'" % (app_name, name)
 
     def register_static(self, name, get_file):

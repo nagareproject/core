@@ -18,7 +18,6 @@ import pkg_resources
 import configobj
 
 from nagare import wsgi, database, config
-
 from nagare.admin import reloader, db, util
 
 # ---------------------------------------------------------------------------
@@ -29,11 +28,11 @@ from nagare.admin import reloader, db, util
 publisher_options_spec = {
     'publisher' : dict(
         host = 'string(default="127.0.0.1")', # Listen only on the loopback interface
-        port = 'integer(default=-1)'    # The default port depends of the publisher used
+        port = 'integer(default=-1)' # The default port depends of the publisher used
     ),
     
     'reloader' : dict(
-        activated = 'boolean(default=False)',   # No automatic reload
+        activated = 'boolean(default=False)', # No automatic reload
         interval = 'integer(default=1)'
     ),
 }
@@ -44,8 +43,8 @@ def set_options(optparser):
     optparser.usage += ' application'
 
     optparser.add_option('-c', '--conf', dest='conf', help='configuration file')
-    optparser.add_option('--host', action='store', type='string', help='Name of the interface to listen to ("0.0.0.0" to listen to on all the interfaces)')
-    optparser.add_option('-p', '--port', action='store', type='int', dest='port', help='Port to listen to')
+    optparser.add_option('--host', action='store', type='string', help='Name of the interface to listen on ("0.0.0.0" to listen on all the interfaces)')
+    optparser.add_option('-p', '--port', action='store', type='int', dest='port', help='Port to listen on')
     optparser.add_option('-d', '--debug', action='store_const', const='on', dest='debug', help='Activation of the web error page')
     optparser.add_option('--reload', action='store_const', const=True, dest='reload', help='Restart the application when a source file is changed')
 
@@ -56,11 +55,11 @@ def read_publisher_options(parser, options):
     This configuration file is given with the ``-c``or ``--config`` option
     
     In:
-      - ``parser`` -- the optparse.OptParser object used to parse the configuration file
-      - ``options`` -- options on the command lines
+      - ``parser`` -- the ``optparse.OptParser`` object used to parse the configuration file
+      - ``options`` -- options in the command line
       
     Return:
-      - a ConfigObj with the publisher parameters    
+      - a ``ConfigObj`` with the publisher parameters    
     """
     if options.conf and not os.path.isfile(options.conf):
         parser.error('Configuration file "%s" doesn\'t exit' % options.conf)
@@ -76,7 +75,7 @@ def read_publisher_options(parser, options):
     conf = configobj.ConfigObj(options.conf, configspec=configspec)
     config.validate(options.conf, conf, parser.error)
 
-    # The options on the command line overwrite the parameters read into the configuration file
+    # The options in the command line overwrite the parameters read into the configuration file
     for (name, section, key) in (
                                     ('host', 'publisher', 'host'),
                                     ('port', 'publisher', 'port'),
@@ -91,13 +90,44 @@ def read_publisher_options(parser, options):
         
 # ---------------------------------------------------------------------------
 
+try:
+    from weberror.evalexception import EvalException
+    
+    debugged_app = lambda app: EvalException(app, xmlhttp_key='_a')
+except ImportError:
+    debugged_app = lambda app: app
+
+def create_wsgi_pipe(app, options, config_filename, config, error):
+    """Wrap the application into one or more WSGI "middlewares" to create a WSGI pipe
+    
+    In:
+      - ``app`` -- the application
+      - ``options`` -- options in the command line
+      - ``config_filename`` -- the path to the configuration file
+      - ``config`` -- the ``ConfigObj`` object, created from the configuration file
+      - ``error`` -- the function to call in case of configuration errors
+      
+    Return:
+      - the wsgi pipe
+    """
+    if options.debug or config['application']['debug']:
+        app = debugged_app(app)
+
+    wsgi_pipe = config['application']['wsgi_pipe']
+    if not wsgi_pipe:
+        return app
+    
+    return util.load_object(wsgi_pipe)[0](app, options, config_filename, config, error)
+   
+# ---------------------------------------------------------------------------
+
 def get_file_from_root(root, path):
     """
     Return the path of a static content, from a filesystem root
     
     In:
       - ``root`` -- the path of the root
-      - ``path`` -- the url path of the static content wanted
+      - ``path`` -- the url path of the wanted static content
       
     Return:
       - the path of the static content
@@ -116,7 +146,7 @@ def get_file_from_package(package, path):
     
     In:
       - ``package`` -- the setuptools package of a registered application
-      - ``path`` -- the url path of the static content wanted
+      - ``path`` -- the url path of the wanted static content
       
     Return:
       - the path of the static content
@@ -134,14 +164,14 @@ def run(parser, options, args):
     """Launch one or more applications
     
     In:
-      - ``parser`` -- the optparse.OptParser object used to parse the configuration file
+      - ``parser`` -- the ``optparse.OptParser`` object used to parse the configuration file
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines
       
     The arguments are a list of names of registered applications
-    or paths to applications configuration files.
+    or paths to application configuration files.
     """    
-    # If no argiments are given, display the list of the registered applications
+    # If no argument are given, display the list of the registered applications
     if len(args) == 0:
         print 'Available applications:'
         
@@ -176,7 +206,7 @@ def run(parser, options, args):
     t = pconf['publisher']['type']
     p = publishers[t].load()(s)
 
-    # If no port is given, set the port number according the publisher used
+    # If no port is given, set the port number according to the used publisher
     if pconf['publisher']['port'] == -1:
         pconf['publisher']['port'] = p.default_port
 
@@ -218,7 +248,7 @@ def run(parser, options, args):
                                aconf['application']['path'],
                                aconf['application']['name'],
                                app,
-                               options.debug or aconf['application']['debug']
+                               create_wsgi_pipe(app, options, cfgfile, aconf, parser.error)
                               )
 
         # Register the function to serve the static contents of the application

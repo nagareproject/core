@@ -9,7 +9,7 @@
 
 """The ``serve-module`` administrative command
 
-Launch a standalone (without database connection) application, in debug mode.
+Launch a standalone (without any database connection) application, in debug mode.
 
 No configuration file in read. The only possible parameters are given on the
 command line and are (run ``nagare-admin serve-module`` to see them):
@@ -19,10 +19,10 @@ command line and are (run ``nagare-admin serve-module`` to see them):
   - the web debug mode
   - the reload mode
 
-Also not static contents can be served.
+Also no static contents can be served.
 
 .. warning::
-    Use this command in development or to quickly test a piece code.
+    Use this command in development mode or to quickly test a piece code.
     Don't run a production application with this command
 """
 
@@ -33,13 +33,21 @@ import pkg_resources
 from nagare import wsgi
 from nagare.admin import util, reloader
 
+try:
+    from weberror.evalexception import EvalException
+    
+    debugged_app = lambda app: EvalException(app, xmlhttp_key='_a')
+except ImportError:
+    debugged_app = lambda app: app
+
+
 def get_file_from_package(package, path):
     """
     Return the path of a static content, located into a setuptools package
     
     In:
       - ``package`` -- the setuptools package of a registered application
-      - ``path`` -- the url path of the static content wanted
+      - ``path`` -- the url path of the wanted static content
       
     Return:
       - the path of the static content
@@ -55,8 +63,8 @@ def get_file_from_package(package, path):
 def set_options(optparser):
     optparser.usage += ' module_or_file name'
 
-    optparser.add_option('--host', action='store', type='string', default='127.0.0.1', help='Name of the interface to listen to ("0.0.0.0" to listen to on all the interfaces)')
-    optparser.add_option('-p', '--port', action='store', type='int', dest='port', default=8080, help='Port to listen to')
+    optparser.add_option('--host', action='store', type='string', default='127.0.0.1', help='Name of the interface to listen on ("0.0.0.0" to listen on all the interfaces)')
+    optparser.add_option('-p', '--port', action='store', type='int', dest='port', default=8080, help='Port to listen on')
     optparser.add_option('--no-debug', action='store_const', const=False, default=True, dest='debug', help='Desactivation of the web error page')
 
 
@@ -64,11 +72,11 @@ def run(parser, options, args):
     """launch an object
     
     In:
-      - ``parser`` -- the optparse.OptParser object used to parse the configuration file
+      - ``parser`` -- the ``optparse.OptParser`` object used to parse the configuration file
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines
       
-    The unique argument is the path of the object to launch. The path syntax is describe
+    The unique argument is the path of the object to launch. The path syntax is described
     into the module ``nagare.admin.util``. For example, ``/tmp/counter.py:Counter``
     is the path to the class ``Counter`` of the module ``tmp.counter.py``
      
@@ -79,8 +87,7 @@ def run(parser, options, args):
     if 'nagare_reloaded' not in os.environ:
         return reloader.restart_with_monitor()
     
-    # With the ``serve-module`` command, the automatic reloader on changes is
-    # always activated
+    # With the ``serve-module`` command, the automatic reloader is always activated
     watcher = reloader.install()
 
     # Load the object
@@ -101,7 +108,8 @@ def run(parser, options, args):
     publishers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.publishers')])
     p = publishers['standalone'].load()(s)
 
-    p.register_application(args[0], args[1], app, options.debug)
+    wsgi_pipe = debugged_app(app) if options.debug else app
+    p.register_application(args[0], args[1], app, wsgi_pipe)
     app.set_config('', { 'application' : { 'redirect_after_post' : False, 'name' : args[1], 'always_html' : True } }, None, '', '', p)
     
     # The static contents of the framework are served by the standalone server

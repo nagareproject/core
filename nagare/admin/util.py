@@ -7,7 +7,7 @@
 # this distribution.
 #--
 
-"""Various tools used be the directive commands"""
+"""Various tools used be the administrative commands"""
 
 import sys, os
 
@@ -19,7 +19,7 @@ from nagare import config
 # ---------------------------------------------------------------------------
 
 class Command:
-    """The base class of all the administration directives"""
+    """The base class of all the administration commands"""
     desc = ''
 
     @classmethod
@@ -94,7 +94,7 @@ def load_file(filename, app):
 
 
 def load_module(module, app):
-    """Load an object from a module
+    """Load an object from a Python module
     
     In:
       - ``module`` -- name of the module
@@ -135,7 +135,7 @@ def load_object(path):
         (for example: ``'app examples'``)
       
     Return:
-      - a tuple (object loaded, distribution where this object is located or None)
+      - a tuple (object loaded, distribution where this object is located or ``None``)
     """
     if ' ' in path:
         scheme, path = path.split(' ', 1)
@@ -156,20 +156,21 @@ def load_object(path):
 
 application_options_spec = {
     'application' : dict(
-        path = 'string()',              # Where to find the application object (for ``load_object()``) ?
-        name = 'string()',              # URL for the application
-        debug = 'boolean(default=False)',   # Debug web page activated ?
+        path = 'string()', # Where to find the application object (see ``load_object()``) ?
+        name = 'string()', # URL for the application
+        debug = 'boolean(default=False)', # Debug web page activated ?
                         
-        redirect_after_post = 'boolean(default=False)',  # Follow the PRG pattern ?
-        always_html = 'boolean(default=True)' # Don't generate xhtml, even if its a browser capability ?
+        redirect_after_post = 'boolean(default=False)', # Follow the PRG pattern ?
+        always_html = 'boolean(default=True)', # Don't generate xhtml, even if it's a browser capability ?
+        wsgi_pipe = 'string(default="")' # Method to create the WSGI middlewares pipe
     ),
     'database' : dict(
-        activated = 'boolean(default=False)',   # Activate the database engine ?
+        activated = 'boolean(default=False)', # Activate the database engine ?
         uri = 'string(default="")', # Database connection string
-        metadata = 'string(default="")',    # Database metadata : database entities description
+        metadata = 'string(default="")', # Database metadata : database entities description
         populate = 'string(default="")', # Method to call after the database tables creation
         debug = 'boolean(default=False)', # Set the database engine in debug mode ?
-        __many__ = dict(    # Database sub-sections
+        __many__ = dict( # Database sub-sections
             activated = 'boolean(default=False)',
             populate = 'string(default="")'
         )
@@ -185,7 +186,7 @@ def read_application_options(cfgfile, error, default={}):
       - ``default`` -- optional default values      
       
     Return:
-      - a ConfigObj with the application parameters    
+      - a ``ConfigObj`` of the application parameters    
     """    
     spec = configobj.ConfigObj(default)
     spec.merge(application_options_spec)
@@ -218,7 +219,7 @@ def read_application(cfgfile, error):
         - name of the application configuration file
         - the application object
         - the distribution of the application
-        - a ConfigObj with the application parameters
+        - a ``ConfigObj`` of the application parameters
     """
     if not os.path.isfile(cfgfile):
         # The name of a registered application is given, find its configuration file
@@ -235,7 +236,7 @@ def read_application(cfgfile, error):
         requirement = pkg_resources.Requirement.parse(app.dist.project_name)
         cfgfile = pkg_resources.resource_filename(requirement, os.path.join('conf', cfgfile+'.cfg'))
     
-    # Read the application configuration
+    # Read the application configuration file
     aconf = read_application_options(cfgfile, error)
 
     # From the path of the application, create the application object
