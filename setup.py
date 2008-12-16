@@ -39,7 +39,22 @@ setup(
       author = 'Alain Poirier',
       author_email = 'alain.poirier at net-ng.com',
       description = 'Nagare Python web framework',
-      long_description = long_description,
+      long_description = """
+      Description
+      ^^^^^^^^^^^
+      
+      %s
+      
+      Installation
+      ============
+      
+      For a standard installation, read the ``docs/quickstart.txt`` document.
+      
+      Read ``docs/framework_installation.txt`` to install the latest development
+      version from the
+      `Nagare subversion repository <svn://www.nagare.org/trunk/nagare/core#egg=nagare-dev>`_
+      or to create a Nagare developer installation.
+      """ % long_description,
       license = 'BSD',
       keywords = 'web wsgi framework sqlalchemy elixir seaside continuation ajax stackless',
       url = 'http://www.nagare.org',
