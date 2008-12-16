@@ -25,7 +25,7 @@ YUI_PREFIX = YUI_INTERNAL_PREFIX
 
 class ViewToJs(object):
     def __init__(self, js, id, renderer, output):
-        """Wrap a view into a callable javascript
+        """Wrap a view into a javascript code
         
         In:
           - ``js`` -- name of the function to call, on the client, to change the
@@ -33,9 +33,6 @@ class ViewToJs(object):
           - ``id`` -- id of the DOM element to replace on the client
           - ``renderer`` -- the current renderer
           - ``output`` -- the view
-          
-        Return:
-          - Javascript to be evaluated on the client
         """
         self.js = js
         self.id = id
@@ -44,19 +41,15 @@ class ViewToJs(object):
 
 @peak.rules.when(serializer.serialize, (ViewToJs,))
 def serialize(self, request, response, declaration):
-    """Wrap a view into a callable javascript
+    """Wrap a view into a javascript code
 
     In:
-      - ``output`` -- the text
       - ``request`` -- the web request object
       - ``response`` -- the web response object      
       - ``declaration`` -- has the declaration to be outputed ?
       
     Return:
-      - the content
-
-    Return:
-      - Javascript to be evaluated on the client
+      - Javascript to evaluate on the client
     """
     # Get the javascript for the header
     head = presentation.render(self.renderer.head, self.renderer, None, None)
@@ -69,25 +62,8 @@ def serialize(self, request, response, declaration):
     return "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head)
 
 
-def view_to_js(js, id, comp, renderer, model):
-    """Render components and wrap the generate view into a callable javascript
-    
-    In:
-      - ``js`` -- name of the function to call, on the client, to change the
-        DOM element    
-      - ``id`` -- id of the DOM element to replace on the client
-      - ``comp`` -- component to renderer
-      - ``renderer`` -- the current renderer
-      - ``model`` -- name of the view to render
-      
-    Return:
-      - Javascript to evaluate on the client
-    """
-    return ViewToJs(js, id, renderer, comp.render(namespaces.xhtml.AsyncRenderer(renderer), model=model))
-
-
 class Update(object):
-    """Asynchronous updater objects
+    """Asynchronous updater object
     
     Send a XHR request that can do an action, render a component and finally
     update the HTML with the rendered view
@@ -115,20 +91,14 @@ class Update(object):
         self.action = action
         self.component_to_update = component_to_update
 
-    def _generate_replace(self, priority, renderer):
-        """Register the action on the server and generate the javascript to 
-        the client
+    def _generate_render(self, renderer):
+        """Generate the rendering function
         
         In:
-          - ``priority`` -- type of the action (see ``callbacks.py``)
           - ``renderer`` -- the current renderer
 
         Return:
-          - a tuple:
-          
-            - id of the action registered on the server
-            - name of the javascript function to call on the client
-            - id of the tag to update on the client
+          - the rendering function
         """
         request = renderer.request
         
@@ -169,9 +139,26 @@ class Update(object):
             render = lambda r, render=render: ViewToJs(js, component_to_update, r, render(r))
         else:
             async_root = renderer.get_async_root()
-            render = lambda r, comp=async_root.component, render=async_root.model: view_to_js(js, component_to_update, comp, r, render)
-            
-        return renderer.register_callback(priority, self.action, render)
+            render = lambda r, comp=async_root.component, render=async_root.model: ViewToJs(js, component_to_update, r, comp.render(r, model=render))
+        
+        return render
+    
+    def _generate_replace(self, priority, renderer):
+        """Register the action on the server and generate the javascript to 
+        the client
+        
+        In:
+          - ``priority`` -- type of the action (see ``callbacks.py``)
+          - ``renderer`` -- the current renderer
+
+        Return:
+          - a tuple:
+          
+            - id of the action registered on the server
+            - name of the javascript function to call on the client
+            - id of the tag to update on the client
+        """
+        return renderer.register_callback(priority, self.action, self._generate_render(renderer))
 
     def generate_action(self, priority, renderer):
         """Generate the javascript action
@@ -194,9 +181,61 @@ class Update(object):
         else:
             return ''
 
+# ---------------------------------------------------------------------------
+
+class ViewsToJs(list):
+    """A list of ``ViewToJS`` objects
+    """
+    pass
+        
+@peak.rules.when(serializer.serialize, (ViewsToJs,))
+def serialize(self, request, response, declaration):
+    """Wrap all the views into a javascript code
+
+    In:
+      - ``request`` -- the web request object
+      - ``response`` -- the web response object      
+      - ``declaration`` -- has the declaration to be outputed ?
+      
+    Return:
+      - Javascript to evaluate on the client
+    """
+    return ';'.join(serializer.serialize(view, request, response, declaration) for view in self)
+
+
+class Updates(Update):
+    """A list of ``Update`` objects
+    """
+    def __init__(self, *updates):
+        """Initialization
+        
+        In:
+          - ``updates`` -- the list of ``Update`` object
+        """
+        self.updates = updates
+    
+    def action(self):
+        """Activate all the actions of the ``Update`` objects
+        """
+        for update in self.updates:
+            update.action()
+
+    def _generate_render(self, renderer):
+        """Generate the rendering function
+        
+        In:
+          - ``renderer`` -- the current renderer
+
+        Return:
+          - the rendering function
+        """        
+        renders = [update._generate_render(renderer) for update in self.updates]
+        return lambda r: ViewsToJs([render(r) for render in renders])
+
+# ---------------------------------------------------------------------------
 
 class JS(object):
-    """Transcode a Python function to javascript
+    """Transcode a Python function to javascript code
     """
     def __init__(self, f):
         """Transcode the Python function
