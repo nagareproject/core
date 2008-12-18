@@ -90,7 +90,7 @@ class WSGIApp(wsgi.WSGIApp):
         config.validate(config_filename, conf, error)
 
         if conf['application']['as_root']:
-            publisher.register_application(conf['application']['path'], '', self, False)
+            publisher.register_application(conf['application']['path'], '', self, self)
         
         super(WSGIApp, self).set_config(config_filename, conf, error, static_path, static_url, publisher)
         self.apps = publisher.apps
