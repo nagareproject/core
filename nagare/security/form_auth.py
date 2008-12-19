@@ -89,6 +89,17 @@ class Authentication(basic_auth.Authentication):
         """                
         return (params.get(self.prefix+'_name'), params.get(self.prefix+'_password'))
 
+    def cookie_decode(self, cookie): 
+        """Decode the data of the user cookie
+        
+        In:
+          - ``cookie`` -- the data of the user cookie
+          
+        Return:
+          - A list with the id of the user and its password
+        """
+        return [s.decode('base64').decode('utf-8') for s in cookie.split(':')]
+        
     def get_ids_from_cookie(self, cookies):
         """Search the data associated with the connected user into the cookies
         
@@ -102,8 +113,23 @@ class Authentication(basic_auth.Authentication):
         if data is None:
             return (None, None)
         
-        return [s.decode('base64').decode('utf-8') for s in data.split(':')]
+        return self.cookie_decode(data) 
 
+    def cookie_encode(self, username, password):
+        """Encode the data of the user cookie
+        
+        In:
+          - ``username`` -- name (login) of the user
+          - ``password`` -- password of the user
+          
+        Return:
+          - the data to put into the user cookie
+        """
+        return '%s:%s' % (
+                          username.encode('utf-8').encode('base64').rstrip(),
+                          password.encode('utf-8').encode('base64').rstrip()
+                         )
+        
     def _get_ids(self, request, response):
         """Return the data associated with the connected user
         
@@ -122,12 +148,11 @@ class Authentication(basic_auth.Authentication):
             if not all(ids) and self.realm:
                 # Third, if a realm is set, look into the basic authentication header
                 ids = super(Authentication, self)._get_ids(request, response)
-
+                
         if all(ids):
             # Copy the user id and the password into a cookie
             response.set_cookie(
-                                self.key,
-                                ':'.join([s.encode('utf-8').encode('base64')[:-1] for s in ids]),            
+                                self.key, self.cookie_encode(*ids),            
                                 max_age=self.max_age,
                                 path=self.path,
                                 domain=self.domain,
