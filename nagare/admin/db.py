@@ -47,16 +47,16 @@ def set_metadata(conf, debug):
         return metadata
 
 
-def read_options(parser, options, args):
+def read_options(debug, args, error):
     """Activate all the database metadata objects of an application
     
     Several metadata objects can be activated if there are sub-sections into
     the [database] section.
     
     In:
-      - ``parser`` -- the optparse.OptParser object used to parse the configuration file
-      - ``options`` -- options in the command lines
+      - ``debug`` -- flag to display the generated SQL statements
       - ``args`` -- arguments in the command lines : application to activate
+      - ``error`` -- the function to call in case of configuration errors
       
     Return:
       - yield tuples (metadata object, populate function)
@@ -71,19 +71,19 @@ def read_options(parser, options, args):
         return
 
     if len(args) != 1:
-        parser.error('Bad number of parameters')
+        error('Bad number of parameters')
 
     # Read the configuration of the application
-    (cfgfile, app, dist, aconf) = util.read_application(args[0], parser.error)
+    (cfgfile, app, dist, aconf) = util.read_application(args[0], error)
     
     for (section, content) in aconf['database'].items():
         if isinstance(content, configobj.Section):
-            metadata = set_metadata(content, options.debug)
+            metadata = set_metadata(content, debug)
             if metadata is not None:
                 yield (metadata, content['populate'])
             del aconf['database'][section]
 
-    metadata = set_metadata(aconf['database'], options.debug)
+    metadata = set_metadata(aconf['database'], debug)
     if metadata is not None:
         yield (metadata, aconf['database']['populate'])
 
@@ -101,7 +101,7 @@ def create(parser, options, args):
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines : application name
     """
-    for (metadata, populate) in read_options(parser, options, args):
+    for (metadata, populate) in read_options(options.debug, args, parser.error):
         with database.session.begin():
             if options.drop:
                 metadata.drop_all()
@@ -120,7 +120,7 @@ def drop(parser, options, args):
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines : application name
     """
-    for (metadata, populate) in read_options(parser, options, args):
+    for (metadata, populate) in read_options(options.debug, args, parser.error):
         with database.session.begin():
             metadata.drop_all()
 
