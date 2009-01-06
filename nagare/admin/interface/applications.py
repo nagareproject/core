@@ -10,6 +10,7 @@
 """Applications administration view
 """
 
+from __future__ import with_statement
 import operator
 
 from nagare import presentation
@@ -22,7 +23,7 @@ class Admin(object):
         
         In;
           - ``apps`` -- a dictionary where the keys are the application objects
-            and the keys a tuple (application name, application url)
+            and the keys a tuple (application name, application urls)
         """
         self.apps = sorted(apps.values(), key=operator.itemgetter(1))
 
@@ -31,8 +32,14 @@ class Admin(object):
 def render(self, h, *args):
     """Display the currently launched application, with their names and their URLs
     """
-    return h.div(
-        h.h2('Active applications'),
-        h.ul([h.li("Application '%s' registered as " % app_name,
-                   h.a('/'+name, href='/'+name+ ('/' if name else ''))) for (app_name, name) in self.apps])
-    )
+    with h.div:
+        h << h.h2('Active applications')
+        with h.ul:
+            for (app_name, names) in self.apps:
+                with h.li("Application '%s' registered as " % app_name):
+                   for (i, name) in enumerate(sorted(names)):
+                       if i:
+                           h << ' and '
+                       h << h.a('/'+name, href='/'+name+('/' if name else ''))
+
+    return h.root

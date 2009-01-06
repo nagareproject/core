@@ -56,7 +56,9 @@ class Publisher(object):
           - ``app`` -- the WSGI application
           - ``wsgi_pipe`` -- the pipe of WSGI "middlewares"
         """
-        self.apps[app] = (app_name, name)        
+        self.apps.setdefault(app, (app_name, []))
+        self.apps[app][1].append(name)
+                
         self.urls['/'+name] = wsgi_pipe
         print "Application '%s' registered as '/%s'" % (app_name, name)
 

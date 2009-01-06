@@ -22,7 +22,7 @@ class Admin(object):
         
         In:
           - ``apps`` -- a dictionary where the keys are the application objects
-            and the keys a tuple (application name, application url)
+            and the keys a tuple (application name, application urls)
         """
         pass
 
