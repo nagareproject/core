@@ -235,13 +235,18 @@ def run(parser, options, args):
 
         app = wsgi.create_WSGIApp(app)
 
+        metadatas = []
         # Activate the database metadata
         for (section, content) in aconf['database'].items():
             if isinstance(content, configobj.Section):
-                db.set_metadata(content, content['debug'])
+                metadata = db.set_metadata(content, content['debug'])
+                if metadata:
+                    metadatas.append(metadata)
                 del aconf['database'][section]
 
-        db.set_metadata(aconf['database'], aconf['database']['debug'])
+        metadata = db.set_metadata(aconf['database'], aconf['database']['debug'])
+        if metadata:
+            metadatas.append(metadata)
 
         # Register the application to the publisher
         p.register_application(
@@ -255,6 +260,7 @@ def run(parser, options, args):
         static_url = p.register_static(aconf['application']['name'], get_file)
         
         # Configure the application
+        app.metadatas = metadatas
         app.set_config(cfgfile, aconf, parser.error, static_url, static, p)
 
     # Register the function to serve the static contents of the framework
