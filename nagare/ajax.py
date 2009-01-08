@@ -68,7 +68,7 @@ class Update(object):
     Send a XHR request that can do an action, render a component and finally
     update the HTML with the rendered view
     """
-    def __init__(self, render=None, action=lambda: None, component_to_update=None):
+    def __init__(self, render=None, action=lambda *args: None, component_to_update=None):
         """Initialisation
         
         In:
@@ -206,19 +206,23 @@ def serialize(self, request, response, declaration):
 class Updates(Update):
     """A list of ``Update`` objects
     """
-    def __init__(self, *updates):
+    def __init__(self, *updates, **kw):
         """Initialization
         
         In:
-          - ``updates`` -- the list of ``Update`` object
+          - ``updates`` -- the list of ``Update`` objects
+          - ``action`` -- global action to execute (set by keyword call)
         """
-        self.updates = updates
+        self._updates = updates
+        self._action = kw['action'] if kw else lambda *args: None
     
-    def action(self):
-        """Activate all the actions of the ``Update`` objects
+    def action(self, *args):
+        """Execute all the actions of the ``Update`` objects
         """
-        for update in self.updates:
-            update.action()
+        self._action(*args)
+
+        for update in self._updates:
+            update.action(*args)
 
     def _generate_render(self, renderer):
         """Generate the rendering function
@@ -229,7 +233,7 @@ class Updates(Update):
         Return:
           - the rendering function
         """        
-        renders = [update._generate_render(renderer) for update in self.updates]
+        renders = [update._generate_render(renderer) for update in self._updates]
         return lambda r: ViewsToJs([render(r) for render in renders])
 
 # ---------------------------------------------------------------------------
