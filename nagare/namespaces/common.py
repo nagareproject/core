@@ -48,4 +48,4 @@ class Renderer(object):
         Prevent the common error of capturing the renderer into the closure
         of a callback
         """
-        raise Exception("A renderer object can't be used in a callback")
+        raise TypeError("can't pickle Renderer objects (are you using a renderer object in a callback ?)")

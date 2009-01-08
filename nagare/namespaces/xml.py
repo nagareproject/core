@@ -196,7 +196,7 @@ class _Tag(ET.ElementBase):
             self.add_child(children)
 
         if CHECK_ATTRIBUTES and not frozenset(self.attrib).issubset(self._authorized_attribs):
-            raise AttributeError, ("Bad attributes for element <%s>: " % self.tag) + ', '.join(list(frozenset(self.attrib) - self._authorized_attribs))
+            raise AttributeError("Bad attributes for element <%s>: " % self.tag) + ', '.join(list(frozenset(self.attrib) - self._authorized_attribs))
 
         return self
 
@@ -223,7 +223,7 @@ def add_child(self, o):
     """
     render = getattr(o, 'render', None)
     if render is None:
-        raise Exception("Can't append a '%s' to element <%s>" % (type(o), self.tag))
+        raise TypeError("Can't append a '%s' to element <%s>" % (type(o), self.tag))
 
     self.add_child(render(self.renderer))
 

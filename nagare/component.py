@@ -20,6 +20,10 @@ from peak.rules import when
 
 from nagare import presentation
 
+class AnswerWithoutCall(Exception):
+    pass
+
+
 def call_wrapper(action, *args, **kw):
     """A wrapper that create a tasklet.
     
@@ -160,7 +164,7 @@ class Component(object):
 
         # Else, check if I was called by a component
         if self._channel is None:
-            raise Exception, 'answer without call'
+            raise AnswerWithoutCall()
 
         # Returns my answer to the calling component
         self._channel.send(r)
@@ -241,8 +245,8 @@ class Task:
         comp.answer(self.go(comp))
 
     def go(self, comp):
-        raise 'AbstractMethod'
-
+        raise Exception('AbstractMethod')
+                        
 @presentation.render_for(Task)
 def render(self, renderer, comp, *args):
     return presentation.render(self._go, renderer, comp, *args)
