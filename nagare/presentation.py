@@ -13,7 +13,7 @@ import types
 
 from peak.rules import when
 
-class NoModelFound(LookupError):
+class ModelError(LookupError):
     pass
 
 def render(self, renderer, comp, model):
@@ -30,9 +30,9 @@ def render(self, renderer, comp, model):
       - ``model`` -- the name of the view
     """
     if model is not None:
-        raise NoModelFound('No model "%s" for %r' % (model, self))
+        raise ModelError('No model "%s" for %r' % (model, self))
     else:
-        raise NoModelFound('No default model for %r' % self)
+        raise ModelError('No default model for %r' % self)
 
 def render_for(cls, model=None):
     """Decorator helper to register a view for a class of objects
