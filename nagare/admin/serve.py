@@ -33,7 +33,8 @@ publisher_options_spec = {
     
     'reloader' : dict(
         activated = 'boolean(default=False)', # No automatic reload
-        interval = 'integer(default=1)'
+        interval = 'integer(default=1)',
+        files = 'string(default="")'
     ),
 }
 
@@ -65,6 +66,7 @@ def read_publisher_options(parser, options):
         parser.error('Configuration file "%s" doesn\'t exit' % options.conf)
 
     configspec = configobj.ConfigObj(publisher_options_spec)
+    configspec.merge({ 'here' : 'string(default="%s")' % os.path.abspath(os.path.dirname(options.conf)) })
 
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.publishers')])
     configspec.merge({ 'publisher' : { 'type' : 'option(%s, default="standalone")' % choices } })
@@ -72,7 +74,7 @@ def read_publisher_options(parser, options):
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
     configspec.merge({ 'sessions' : { 'type' : 'option(%s, default="standalone")' % choices } })
 
-    conf = configobj.ConfigObj(options.conf, configspec=configspec)
+    conf = configobj.ConfigObj(options.conf, configspec=configspec, interpolation='Template')
     config.validate(options.conf, conf, parser.error)
 
     # The options in the command line overwrite the parameters read into the configuration file
@@ -186,12 +188,11 @@ def run(parser, options, args):
     if pconf['reloader']['activated']:
         if 'nagare_reloaded' not in os.environ:
             return reloader.restart_with_monitor()
-        
+
+        filenames = filter(os.path.isfile, pconf['reloader']['files'].split())
         if options.conf:
-            filenames = [options.conf]
-        else:
-            filenames = None
-                    
+            filenames.append(options.conf)
+
         watcher = reloader.install(pconf['reloader']['interval'], files=filenames)
     else:
         watcher = None
