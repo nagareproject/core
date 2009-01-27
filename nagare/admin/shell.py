@@ -21,10 +21,8 @@ In both cases:
 
 import sys, os, code, atexit, fileinput
 
-import configobj
-
-from nagare.admin import util, db
 from nagare import database
+from nagare.admin import util
 
 def create_globals(cfgfiles, debug, error):
     """
@@ -34,20 +32,13 @@ def create_globals(cfgfiles, debug, error):
       - ``debug`` -- enable the display of the generated SQL statements
       - ``error`` -- the function to call in case of configuration errors
     """
+    
     apps = {}
-
+             
     # For each application given, activate its metadata
     for cfgfile in cfgfiles:
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
-
-        apps[aconf['application']['name']] = app
-
-        for (section, content) in aconf['database'].items():
-            if isinstance(content, configobj.Section):
-                db.set_metadata(content, debug)
-                del aconf['database'][section]
-
-        db.set_metadata(aconf['database'], debug)
+        apps[aconf['application']['name']] = util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[0]
 
     return dict(session=database.session, apps=apps)
 

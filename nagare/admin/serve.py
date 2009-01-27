@@ -17,8 +17,8 @@ import sys, os
 import pkg_resources
 import configobj
 
-from nagare import wsgi, database, config
-from nagare.admin import reloader, db, util
+from nagare import config
+from nagare.admin import reloader, util
 
 # ---------------------------------------------------------------------------
 
@@ -212,7 +212,7 @@ def run(parser, options, args):
 
     # Configure each application and register it to the publisher
     for cfgfile in args:
-        # Read the configuraton file of the application
+        # Read the configuration file of the application
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, parser.error)
         
         if watcher:
@@ -233,20 +233,10 @@ def run(parser, options, args):
                 get_file = lambda path, requirement=requirement: get_file_from_package(requirement, path)
                 static = pkg_resources.resource_filename(requirement, '/static')
 
-        app = wsgi.create_WSGIApp(app)
+        # Register the function to serve the static contents of the application
+        static_url = p.register_static(aconf['application']['name'], get_file)
 
-        metadatas = []
-        # Activate the database metadata
-        for (section, content) in aconf['database'].items():
-            if isinstance(content, configobj.Section):
-                metadata = db.set_metadata(content, content['debug'])
-                if metadata:
-                    metadatas.append(metadata)
-                del aconf['database'][section]
-
-        metadata = db.set_metadata(aconf['database'], aconf['database']['debug'])
-        if metadata:
-            metadatas.append(metadata)
+        (app, metadatas) = util.activate_WSGIApp(app, cfgfile, aconf, parser.error, static, static_url, p)
 
         # Register the application to the publisher
         p.register_application(
@@ -255,13 +245,6 @@ def run(parser, options, args):
                                app,
                                create_wsgi_pipe(app, options, cfgfile, aconf, parser.error)
                               )
-
-        # Register the function to serve the static contents of the application
-        static_url = p.register_static(aconf['application']['name'], get_file)
-        
-        # Configure the application
-        app.metadatas = metadatas
-        app.set_config(cfgfile, aconf, parser.error, static_url, static, p)
 
     # Register the function to serve the static contents of the framework
     p.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))

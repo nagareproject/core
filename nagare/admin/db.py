@@ -14,38 +14,10 @@ Create or delete the database tables of an application
 
 from __future__ import with_statement
 
-import os
-
 import pkg_resources
-import configobj
 
 from nagare import database
 from nagare.admin import util
-
-def set_metadata(conf, debug):
-    """Activate the database metadata object
-    
-    The location of the metadata object is read from the configuration file
-    
-    In:
-      - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
-      - ``debug`` -- debug mode for the database engine
-      
-    Return:
-      - the metadata object
-    """
-    metadata = conf.get('metadata', '')
-
-    if conf['activated'] and metadata:
-        metadata = util.load_object(metadata)[0]
-        
-        # All the parameters, of the [database] section, with an unknown name are
-        # given to the database engine
-        engine_conf = dict([(k, v) for (k, v) in conf.items() if k not in ('uri', 'activated', 'metadata', 'debug', 'populate')])
-        database.set_metadata(metadata, conf['uri'], debug, **engine_conf)
-    
-        return metadata
-
 
 def read_options(debug, args, error):
     """Activate all the database metadata objects of an application
@@ -55,37 +27,26 @@ def read_options(debug, args, error):
     
     In:
       - ``debug`` -- flag to display the generated SQL statements
-      - ``args`` -- arguments in the command lines : application to activate
+      - ``args`` -- arguments in the command lines: application to activate
       - ``error`` -- the function to call in case of configuration errors
       
     Return:
-      - yield tuples (metadata object, populate function)
+      - tuples (metadata object, populate function)
     """
-    apps = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.applications')])
-
     # If no application name is given, display the list of the registered applications
     if len(args) == 0:
         print 'Available applications:'
-        for app_name in sorted(apps):
+        app_names = [entry.name for entry in pkg_resources.iter_entry_points('nagare.applications')]
+        for app_name in sorted(app_names):
             print ' -', app_name
-        return
+        return ()
 
     if len(args) != 1:
         error('Bad number of parameters')
 
     # Read the configuration of the application
     (cfgfile, app, dist, aconf) = util.read_application(args[0], error)
-    
-    for (section, content) in aconf['database'].items():
-        if isinstance(content, configobj.Section):
-            metadata = set_metadata(content, debug)
-            if metadata is not None:
-                yield (metadata, content['populate'])
-            del aconf['database'][section]
-
-    metadata = set_metadata(aconf['database'], debug)
-    if metadata is not None:
-        yield (metadata, aconf['database']['populate'])
+    return util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[1]
 
 
 def create(parser, options, args):
@@ -105,7 +66,7 @@ def create(parser, options, args):
         with database.session.begin():
             if options.drop:
                 metadata.drop_all()
-            
+                
             metadata.create_all()
 
             if options.populate and populate:

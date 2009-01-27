@@ -14,7 +14,7 @@ import sys, os
 import pkg_resources
 import configobj
 
-from nagare import config
+from nagare import wsgi, database, config
 
 # ---------------------------------------------------------------------------
 
@@ -250,3 +250,70 @@ def read_application(cfgfile, error):
     aconf = read_application_options(cfgfile, error, defaults)
     
     return (cfgfile, app, dist, aconf)
+
+# ---------------------------------------------------------------------------
+
+def set_metadata(conf, debug):
+    """Activate the database metadata object
+    
+    The location of the metadata object is read from the configuration file
+    
+    In:
+      - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
+      - ``debug`` -- debug mode for the database engine
+      
+    Return:
+      - the metadata object
+    """
+    metadata = conf.get('metadata', '')
+
+    if conf['activated'] and metadata:
+        metadata = load_object(metadata)[0]
+        
+        # All the parameters, of the [database] section, with an unknown name are
+        # given to the database engine
+        engine_conf = dict([(k, v) for (k, v) in conf.items() if k not in ('uri', 'activated', 'metadata', 'debug', 'populate')])
+        database.set_metadata(metadata, conf['uri'], debug, **engine_conf)
+    
+        return metadata
+
+
+def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=None, p=None, debug=False):
+    """
+    
+    In:
+      - ``app`` -- the application root object
+      - ``cfgfile`` -- the path to the configuration file
+      - ``aconf`` -- the ``ConfigObj`` object, created from the configuration file
+      - ``error`` -- the function to call in case of configuration errors
+      - ``static_path`` -- the directory where the static contents of the application
+        are located
+      - ``static_url`` -- the url of the static contents of the application
+      - ``publisher`` -- the publisher of the application
+      - ``debug`` -- flag to display the generated SQL statements
+      
+    Return:
+      - a tuple:
+          - the ``wsgi.WSGIApp`` object
+          - tuples (application metadata object, application database populate function)
+    """
+    metadatas = []
+    populates = []
+    # Activate the database metadata
+    for (section, content) in aconf['database'].items():
+        if isinstance(content, configobj.Section):
+            metadata = set_metadata(content, content['debug'] or debug)
+            if metadata:
+                metadatas.append(metadata)
+                populates.append(content['populate'])
+            del aconf['database'][section]
+
+    metadata = set_metadata(aconf['database'], aconf['database']['debug'] or debug)
+    if metadata:
+        metadatas.append(metadata)
+        populates.append(aconf['database']['populate'])
+
+    app = wsgi.create_WSGIApp(app, metadatas)
+    app.set_config(cfgfile, aconf, error, static_path, static_url, p)
+
+    return (app, zip(metadatas, populates))
