@@ -73,17 +73,17 @@ class WSGIApp(wsgi.WSGIApp):
     If ``True``, mappes itself to the ``/`` url.
     """
 
-    def set_config(self, config_filename, conf, error, static_url, static_path, publisher):
+    def set_config(self, config_filename, conf, error, static_path, static_url, publisher):
         """Read the value of the ``as_root`` parameter and keeps the list of all
         the launched applications
         
         In:
-          -  ``config_filename`` -- the path to the configuration file
+          - ``config_filename`` -- the path to the configuration file
           - ``config`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
-          - ``static_url`` -- the url of the static contents of the application
           - ``static_path`` -- the directory where the static contents of the application
             are located
+          - ``static_url`` -- the url of the static contents of the application
           - ``publisher`` -- the publisher of the application
         """
         conf = configobj.ConfigObj(conf, configspec=configobj.ConfigObj(application_spec))

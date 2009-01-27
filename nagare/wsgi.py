@@ -38,13 +38,15 @@ class MIMEAcceptWithoutWildcards(acceptparse.Accept):
 # ---------------------------------------------------------------------------
 
 class WSGIApp(object):
-    def __init__(self, root_factory):
+    def __init__(self, root_factory, metadata=None):
         """Initialization
 
         In:
-          -  ``root_factory`` -- function to create the application root component
+          - ``metadata`` -- the SQLAlchemy metadata object
+          - ``root_factory`` -- function to create the application root component
         """
         self.root_factory = root_factory
+        self.metadata = metadata
 
         self.static_url = ''
         self.static_path = ''
@@ -53,20 +55,20 @@ class WSGIApp(object):
 
         self.security = dummy_manager.Manager()
 
-    def set_config(self, config_filename, config, error, static_url, static_path, publisher):
+    def set_config(self, config_filename, config, error, static_path, static_url, publisher):
         """Read the configuration parameters
 
         In:
-          -  ``config_filename`` -- the path to the configuration file
+          - ``config_filename`` -- the path to the configuration file
           - ``config`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
-          - ``static_url`` -- the url of the static contents of the application
           - ``static_path`` -- the directory where the static contents of the application
             are located
+          - ``static_url`` -- the url of the static contents of the application
           - ``publisher`` -- the publisher of the application
         """
-        self.static_url = static_url
         self.static_path = static_path
+        self.static_url = static_url
 
         self.redirect_after_post = config['application']['redirect_after_post']
         self.always_html = config['application']['always_html']
@@ -368,7 +370,7 @@ class WSGIApp(object):
 
 # ---------------------------------------------------------------------------
 
-def create_WSGIApp(app, with_component=True):
+def create_WSGIApp(app, metadata=None, with_component=True):
     """Helper function to create a WSGIApp
 
     If ``app`` is not a ``WSGIApp``, it's wrap into a ``WSGIApp``. And, if
@@ -388,6 +390,6 @@ def create_WSGIApp(app, with_component=True):
                 return o
             app = lambda app=app: wrap_in_component(app)
 
-        app = WSGIApp(app)
+        app = WSGIApp(app, metadata)
 
     return app
