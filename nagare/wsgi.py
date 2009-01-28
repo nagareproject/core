@@ -38,15 +38,15 @@ class MIMEAcceptWithoutWildcards(acceptparse.Accept):
 # ---------------------------------------------------------------------------
 
 class WSGIApp(object):
-    def __init__(self, root_factory, metadata=None):
+    def __init__(self, root_factory, metadatas=None):
         """Initialization
 
         In:
-          - ``metadata`` -- the SQLAlchemy metadata object
+          - ``metadatas`` -- the SQLAlchemy metadata objects
           - ``root_factory`` -- function to create the application root component
         """
         self.root_factory = root_factory
-        self.metadata = metadata
+        self.metadatas = metadatas or []
 
         self.static_url = ''
         self.static_path = ''
