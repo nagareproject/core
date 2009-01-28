@@ -66,7 +66,9 @@ def read_publisher_options(parser, options):
         parser.error('Configuration file "%s" doesn\'t exit' % options.conf)
 
     configspec = configobj.ConfigObj(publisher_options_spec)
-    configspec.merge({ 'here' : 'string(default="%s")' % os.path.abspath(os.path.dirname(options.conf)) })
+    
+    if options.conf:
+        configspec.merge({ 'here' : 'string(default="%s")' % os.path.abspath(os.path.dirname(options.conf)) })
 
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.publishers')])
     configspec.merge({ 'publisher' : { 'type' : 'option(%s, default="standalone")' % choices } })
