@@ -18,6 +18,7 @@ import operator, types, urllib, imghdr
 
 from lxml import etree as ET
 import peak.rules
+import webob
 
 from nagare import security, ajax, presentation
 
@@ -685,24 +686,28 @@ def add_attribute(next_method, self, name, value):
 class Img(_HTMLActionTag):
     """ ``<img>`` tags
     """    
-    def _set_content_type(self, response, img):
-        """Guess the image format and set the ``Content-Type`` of the response
+    def _set_content_type(self, action):
+        """Generate the image and guess its format
         
         In:
-          - ``reponse`` -- the response object
-          - ``img`` -- the image data
+          - ``action`` -- function to call to generate the image data
           
         Return:
-          - ``img``
+          - new response object raised
         """
-        if not response.content_type:
+        e = webob.exc.HTTPOk()
+        e.body = action(e)
+        
+        content_type = e.content_type
+        if not content_type:
             # If no ``Content-Type`` is already set, use the ``imghdr`` module
             # to guess the format of the image
             img_type = imghdr.what(None, img[:32])
             if img_type is not None:
-                response.content_type = 'image/'+(img_type or '*') 
+                content_type = 'image/'+(img_type or '*') 
 
-        return img
+        e.content_type = content_type
+        raise e
         
     def sync_action(self, renderer, action, permissions, subject):
         """Register a synchronous action
@@ -713,7 +718,7 @@ class Img(_HTMLActionTag):
           - ``renderer`` -- the current renderer
           - ``action`` -- the action
         """        
-        self.set('src', renderer.add_sessionid_in_url(sep=';') + ';' + renderer.register_callback(6, None, lambda h: self._set_content_type(h.response, action(h))))
+        self.set('src', renderer.add_sessionid_in_url(sep=';') + ';' + renderer.register_callback(2, None, lambda h: self._set_content_type(action)))
     async_action = sync_action
   
     def add_child(self, child):
