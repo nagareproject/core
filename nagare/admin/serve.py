@@ -195,7 +195,7 @@ def run(parser, options, args):
         if options.conf:
             filenames.append(options.conf)
 
-        watcher = reloader.install(pconf['reloader']['interval'], files=filenames)
+        watcher = reloader.install(pconf['reloader']['interval'], filenames, (pkg_resources.get_default_cache(),))
     else:
         watcher = None
 

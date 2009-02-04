@@ -80,15 +80,15 @@ def restart_with_monitor():
         print '-'*20, 'Restarting', '-'*20
 
 class Monitor(object):
-    def __init__(self, poll_interval, dirnames, files):
+    def __init__(self, poll_interval, included_files, excluded_directories):
         self.poll_interval = poll_interval
-        self.dirnames = dirnames
-        self.files = list(files)
+        self.included_files = list(included_files)
+        self.excluded_directories = [d + ('' if d.endswith(os.sep) else os.sep) for d in excluded_directories]
 
         self.mtimes = {}
 
     def watch_file(self, filename):
-        self.files.append(filename)
+        self.included_files.append(filename)
 
     def periodic_reload(self):
         while not self.check_modifications():
@@ -107,7 +107,7 @@ class Monitor(object):
         return r
 
     def check_modifications(self):
-        for filename in self.files:
+        for filename in self.included_files:
             if self.check_modification(filename):
                 print >> sys.stderr, 'File %s changed; reloading...' % filename
                 return True
@@ -118,8 +118,9 @@ class Monitor(object):
             
             filename = m.__file__
              
-            if (self.dirnames is not None) and not filename.startswith(self.dirnames):
-                continue
+            for directory in self.excluded_directories:
+                if filename.startswith(directory):
+                    continue
             
             if filename.endswith(('.pyc', '.pyo')) and os.path.exists(filename[:-1]):
                 filename = filename[:-1]
@@ -136,8 +137,8 @@ class Monitor(object):
         return False
 
 
-def install(poll_interval=1, dirnames=None, files=None):
-    mon = Monitor(poll_interval, dirnames, files or [])
+def install(poll_interval=1, included_files=(), excluded_directories=()):
+    mon = Monitor(poll_interval, included_files, excluded_directories)
     t = threading.Thread(target=mon.periodic_reload)
     t.setDaemon(True)
     t.start()

@@ -88,7 +88,7 @@ def run(parser, options, args):
         return reloader.restart_with_monitor()
     
     # With the ``serve-module`` command, the automatic reloader is always activated
-    watcher = reloader.install()
+    watcher = reloader.install(excluded_directories=(pkg_resources.get_default_cache(),))
 
     # Load the object
     if os.path.sep in args[0]:
