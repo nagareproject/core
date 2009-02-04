@@ -92,7 +92,6 @@ class Callbacks:
             - 3 : <form>.post_action
             - 4 : action with continuation and without value (<a>, submit button ...)
             - 5 : action with continuation and with value (special case for >input type='image'>)
-            - 6 : no action, no value (<img> ...)
 
           - ``callback`` -- the action function or method
           - ``render`` -- the render function or method
@@ -176,7 +175,6 @@ class Callbacks:
             # 3 : <form>.post_action
             # 4 : action with continuation and without value (<a>, submit button ...)
             # 5 : action with continuation and with value (special case for >input type='image'>)
-            # 6 : no action, no value (<img> ...)
             
             if callback_type == 1:
                 f(value)
@@ -184,7 +182,7 @@ class Callbacks:
                 call_wrapper(f, param[-1]=='x', int(value))
             elif callback_type == 4:
                 call_wrapper(f)
-            else: # 0, 2, 3, 6
+            else: # 0, 2, 3
                 f()
 
-        return (render, callback_type != 6)
+        return render

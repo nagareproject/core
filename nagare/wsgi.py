@@ -177,7 +177,7 @@ class WSGIApp(object):
         # As the XHR requests use the same continuation, a callback
         # can be not found (i.e deleted by a previous XHR)
         # In this case, do nothing                     
-        return (lambda h: '', False)
+        return lambda h: ''
     
     # -----------------------------------------------------------------------
 
@@ -320,9 +320,9 @@ class WSGIApp(object):
                         callbacks = Callbacks()
     
                     try:
-                        (render, store_session) = self._phase1(request.params, callbacks)
+                        render = self._phase1(request.params, callbacks)
                     except CallbackLookupError:
-                        (render, store_session) = self.on_callback_lookuperror(xhr_request, request, response)
+                        render = self.on_callback_lookuperror(xhr_request, request, response)
 
                 # If the ``redirect_after_post`` parameter of the ``[application``
                 # section is `True`` (the default), conform to the PRG__ pattern
@@ -354,13 +354,12 @@ class WSGIApp(object):
     
             self._phase2(request, response, output, render is not None)
     
+            if not xhr_request:
+                callbacks.clear_not_used(renderer._rendered)
+
             # Store the session
-            if store_session:
-                if not xhr_request:
-                    callbacks.clear_not_used(renderer._rendered)
-    
-                session.data = (root, callbacks)
-                self.sessions.set(session, not xhr_request)
+            session.data = (root, callbacks)
+            self.sessions.set(session, not xhr_request)
     
             callbacks.end_rendering()
         finally:
