@@ -642,7 +642,8 @@ class A(_HTMLActionTag):
             # Wrapper the ``action`` into a wrapper that will check the user permissions
             action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
-        self.set('href', renderer.add_sessionid_in_url( self.get('href', ''), (renderer.register_callback(4, action),)))
+        href = self.get('href', '').partition('#')
+        self.set('href', renderer.add_sessionid_in_url(href[0], (renderer.register_callback(4, action),))+href[1]+href[2])
     
     def _async_action(self, renderer, action, permissions, subject):
         """Register an asynchronous action
