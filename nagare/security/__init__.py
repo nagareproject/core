@@ -18,13 +18,22 @@ _current = threading.local()
 
 # API to access the security context
 
-def get_user():
+def _get_user():
     """Return the current user
     
     Return:
       - the user object (created by the security manager)
     """
     return _current.user
+
+def get_user():
+    """Return the current user
+    
+    Return:
+      - the user object (created by the security manager) if not expired
+    """
+    user = _get_user()
+    return user if user is not None and not user.expired else None
 
 def set_user(user):
     """Change the user

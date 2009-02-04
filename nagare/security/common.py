@@ -70,14 +70,19 @@ class Denial(Exception):
 # --------------------------------------------------------------
 
 class User(object):
-    """Base class for the users object
-    
-    .. note::    
-        An application can used anything for the users object but it's easier to
-        inherit from this base class because some pre-defined generic methods
-        already use it.
+    """Base class for the user objects
     """
-    pass
+    def __init__(self, id=None, *args):
+        self.id = id
+        self.credentials = args
+        self.expired = False
+    
+    def set_id(self, id, *args):
+        self.id = id
+        self.credentials = args
+
+    def get_id(self):
+        return (self.id,)+self.credentials
 
 # ---------------------------------------------------------------------------
 
@@ -157,7 +162,10 @@ class Authentication(object):
             username = None
         
         # Create the user object
-        return self._create_user(username)
+        user = self._create_user(username)
+        if user:
+            self.set_user_id(user, username, **ids)
+        return user
 
     def check_password(self, username, password, **kw):
         """Authentication
@@ -185,6 +193,16 @@ class Authentication(object):
           - A tuple with the id of the user and a dictionary of its data
         """
         return (None, {})
+
+    def set_user_id(self, user, id, **kw):
+        """Set the credentials of the user
+        
+        In:
+          - ``user`` -- the user
+          - ``id`` -- the user id
+          - ``**kw`` -- the user credentials
+        """
+        user._set_id(id)
 
     def logout(self):
         """Deconnection of the current user
@@ -220,3 +238,14 @@ class Authentication(object):
           - the user object
         """
         return None
+    
+    def end_rendering(self, request, response, sessions, session):
+        """End of the request processing
+        
+        In:
+          - ``request`` -- the request object
+          - ``response`` -- the response object
+          - ``sessions`` -- the sessions manager
+          - ``session`` -- the session
+        """
+        pass

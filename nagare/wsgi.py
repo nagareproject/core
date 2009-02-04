@@ -362,6 +362,7 @@ class WSGIApp(object):
             self.sessions.set(session, not xhr_request)
     
             callbacks.end_rendering()
+            security.get_manager().end_rendering(request, response, self.sessions, session)
         finally:
             session.lock.release()
 

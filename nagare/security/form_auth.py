@@ -22,28 +22,10 @@ sent back on each request by the browser.
    clear into the cookie. So this authentication manager is as secure as
    the HTTP basic authentication. 
 """
-
 import webob
 
+from nagare import security
 from nagare.security import basic_auth
-
-class HTTPRefresh(webob.exc.HTTPMovedPermanently):
-    """An HTTP exception that refreshs the current page
-    """
-    def __call__(self, environ, start_response):
-        """Act as a WSGI application
-        
-        In:
-          - ``environ`` -- the WSGI environment
-          - ``start_response`` -- the WSGI response call-back
-        """
-        location = webob.Request(environ).url
-        i = location.find('&_action')
-        self.location = location[:(i if i != -1 else None)]
-        
-        # Return an empty response with a redirect header
-        return super(HTTPRefresh, self).__call__(environ, start_response)
-
 
 class Authentication(basic_auth.Authentication):
     """Simple from based authentication"""
@@ -74,8 +56,7 @@ class Authentication(basic_auth.Authentication):
         self.httponly = httponly
         self.version = version
         self.comment = comment
-        self.expires = expires
-        
+        self.expires = expires        
 
     def get_ids_from_params(self, params):
         """Search the data associated with the connected user into the request
@@ -148,11 +129,34 @@ class Authentication(basic_auth.Authentication):
             if not all(ids) and self.realm:
                 # Third, if a realm is set, look into the basic authentication header
                 ids = super(Authentication, self)._get_ids(request, response)
-                
-        if all(ids):
-            # Copy the user id and the password into a cookie
-            response.set_cookie(
-                                self.key, self.cookie_encode(*ids),            
+
+        return ids
+    
+    def set_user_id(self, user, id, password):
+        """Set the credentials of the user
+        
+        In:
+          - ``user`` -- the user
+          - ``id`` -- the user id
+          - ``passwor`` -- the user password
+        """        
+        user.set_id(id, password)
+
+    def end_rendering(self, request, response, sessions, session):
+        """End of the request processing
+        
+        In:
+          - ``request`` -- the request object
+          - ``response`` -- the response object
+          - ``sessions`` -- the sessions manager
+          - ``session`` -- the session
+        """        
+        user = security._get_user()
+
+        if user:
+            if not user.expired:
+                response.set_cookie(
+                                self.key, self.cookie_encode(*user.get_id()),            
                                 max_age=self.max_age,
                                 path=self.path,
                                 domain=self.domain,
@@ -161,9 +165,22 @@ class Authentication(basic_auth.Authentication):
                                 version=self.version, 
                                 comment=self.comment, 
                                 expires=self.expires
-                               )
-        return ids
-    
+                            )
+            else:
+                response.delete_cookie(self.key, self.path, self.domain)
+
+                if user.delete_session:
+                    sessions.delete(session)
+                
+                location = user.logout_location
+                if location is not None:
+                    if not location.startswith(('http', '/')):
+                        location = request.application_url + '/' + location
+
+                    response.status = 301
+                    response.location = location
+                    response.body = ''
+
     def denies(self, detail):
         """Method called when a permission is denied
         
@@ -175,11 +192,17 @@ class Authentication(basic_auth.Authentication):
 
         raise webob.exc.HTTPForbidden(str(detail)) 
 
-    def logout(self):
+    def logout(self, location='', delete_session=True):
         """Deconnection of the current user
         
-        Delete the cookie
+        Mark the user object as expired
+        
+        In:
+          - ``location`` -- location to redirect to
+          - ``delete_session`` -- is the session expired too ?
         """
-        exc = HTTPRefresh()
-        exc.delete_cookie(self.key, self.path, self.domain)
-        raise exc
+        user = security.get_user()
+        
+        user.logout_location = location
+        user.delete_session = delete_session
+        user.expired = True
