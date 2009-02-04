@@ -20,11 +20,11 @@ class Lock(object):
         """Distributed lock in memcache
         
         In:
-          - `connection` -- connection object to the memcache server
-          - `lock_id` -- unique lock identifier
-          - `ttl` -- session locks timeout, in seconds (0 = no timeout)
-          - `poll_time` -- wait time between two lock acquisition tries, in seconds
-          - `max_wait_time` -- maximum time to wait to acquire the lock, in seconds
+          - ``connection`` -- connection object to the memcache server
+          - ``lock_id`` -- unique lock identifier
+          - ``ttl`` -- session locks timeout, in seconds (0 = no timeout)
+          - ``poll_time`` -- wait time between two lock acquisition tries, in seconds
+          - ``max_wait_time`` -- maximum time to wait to acquire the lock, in seconds
         """
         self.connection = connection
         self.lock = '%slock_%s' % (KEY_PREFIX, lock_id)
@@ -59,14 +59,14 @@ class Sessions(common.Sessions):
         """Initialization
 
         In:
-          - `host` -- address of the memcache server
-          - `port` -- port of the memcache server
-          - `ttl` -- sessions and continuations timeout, in seconds (0 = no timeout)
-          - `lock_ttl` -- session locks timeout, in seconds (0 = no timeout)
-          - `lock_poll_time` -- wait time between two lock acquisition tries, in seconds
-          - `lock_max_wait_time` -- maximum time to wait to acquire the lock, in seconds
-          - `reset` -- do a reset of all the sessions on startup ?
-          - `debug` -- display the memcache requests / responses 
+          - ``host`` -- address of the memcache server
+          - ``port`` -- port of the memcache server
+          - ``ttl`` -- sessions and continuations timeout, in seconds (0 = no timeout)
+          - ``lock_ttl`` -- session locks timeout, in seconds (0 = no timeout)
+          - ``lock_poll_time`` -- wait time between two lock acquisition tries, in seconds
+          - ``lock_max_wait_time`` -- maximum time to wait to acquire the lock, in seconds
+          - ``reset`` -- do a reset of all the sessions on startup ?
+          - ``debug`` -- display the memcache requests / responses 
         """        
         self.host = '%s:%d' % (host, port)
         self.ttl = ttl
@@ -151,12 +151,12 @@ class Sessions(common.Sessions):
         """Memorize the session data
         
         In:
-          - `session_id` -- id of the current session
-          - `cont_id` -- id of the current continuation
-          - `secure_id` -- the secure number associated to the session           
-          - `inc_cont_id` -- is the continuation id to increment ? 
-          - `externals` -- pickle of shared objects across the continuations                    
-          - `data` -- pickle of the objects in the continuation
+          - ``session_id`` -- id of the current session
+          - ``cont_id`` -- id of the current continuation
+          - ``secure_id`` -- the secure number associated to the session           
+          - ``inc_cont_id`` -- is the continuation id to increment ? 
+          - ``externals`` -- pickle of shared objects across the continuations                    
+          - ``data`` -- pickle of the objects in the continuation
         """
         if inc_cont_id:
             self._get_connection().incr(KEY_PREFIX+session_id+'_cont')
@@ -165,6 +165,15 @@ class Sessions(common.Sessions):
             KEY_PREFIX+session_id : (secure_id, externals),
             KEY_PREFIX+session_id+'%05d' % cont_id : data
         }, self.ttl)
+        
+        
+    def _delete(self, session_id):
+        """Delete the session
+        
+        In:
+          - ``session_id`` -- id of the session to delete
+        """
+        self._get_connection().delete(KEY_PREFIX+session_id)
  
  
 class SessionsFactory(common.SessionsFactory):

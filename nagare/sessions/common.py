@@ -128,6 +128,14 @@ class Sessions(object):
                   inc_cont_id
                  )
     
+    def delete(self, session):
+        """Delete the session
+        
+        In:
+          - ``session`` -- the session to delete
+        """
+        self._delete(session.session_id)
+
     def _get_ids(self, request):
         """Search the session id and the continuation id into the request parameters
 

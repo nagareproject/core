@@ -96,6 +96,15 @@ class LRUDict(object):
                 
             del self.items[self.age_to_items.pop(self.oldest)]
 
+    def __delitem__(self, k):
+        """Delete a key.
+
+        In:
+          - ``k`` -- the key
+        """
+        (age, item) = self.items.pop(k)
+        del self.age_to_items[age]
+
     def debug(self):
         print self.oldest, self.newest, self.age_to_items, self.items
 

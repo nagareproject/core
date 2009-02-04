@@ -51,7 +51,7 @@ class Sessions(common.Sessions):
         
         In:
           - ``session_id`` -- id of the session
-          - `secure_id` -- the secure number associated to the session
+          - ``secure_id`` -- the secure number associated to the session
           
         Return:
           - tuple (session_id, cont_id, new_cont_id, lock, secure_id)
@@ -92,18 +92,26 @@ class Sessions(common.Sessions):
         """Memorize the session data
         
         In:
-          - `session_id` -- id of the current session
-          - `cont_id` -- id of the current continuation
-          - `secure_id` -- the secure number associated to the session          
-          - `inc_cont_id` -- is the continuation id to increment ? 
-          - `externals` -- pickle of shared objects across the continuations                    
-          - `data` -- pickle of the objects in the continuation
+          - ``session_id`` -- id of the current session
+          - ``cont_id`` -- id of the current continuation
+          - ``secure_id`` -- the secure number associated to the session          
+          - ``inc_cont_id`` -- is the continuation id to increment ? 
+          - ``externals`` -- pickle of shared objects across the continuations                    
+          - ``data`` -- pickle of the objects in the continuation
         """        
         session = self._sessions[session_id]
         
         session[0] += inc_cont_id
         session[3] = externals
         session[4][cont_id] = data
+
+    def _delete(self, session_id):
+        """Delete the session
+        
+        In:
+          - ``session_id`` -- id of the session to delete
+        """        
+        del self._sessions[session_id]
 
 
 class SessionsFactory(common.SessionsFactory):
