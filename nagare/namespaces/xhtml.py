@@ -686,7 +686,7 @@ def add_attribute(next_method, self, name, value):
 
 class Img(_HTMLActionTag):
     """ ``<img>`` tags
-    """    
+    """
     def _set_content_type(self, action):
         """Generate the image and guess its format
         
@@ -709,7 +709,7 @@ class Img(_HTMLActionTag):
 
         e.content_type = content_type
         raise e
-        
+    
     def sync_action(self, renderer, action, permissions, subject):
         """Register a synchronous action
         
@@ -719,9 +719,9 @@ class Img(_HTMLActionTag):
           - ``renderer`` -- the current renderer
           - ``action`` -- the action
         """        
-        self.set('src', renderer.add_sessionid_in_url(sep=';') + ';' + renderer.register_callback(2, None, lambda h: self._set_content_type(action)))
+        self.set('src', renderer.add_sessionid_in_url(sep=';') + ';' + renderer.register_callback(2, lambda: self._set_content_type(action)))
     async_action = sync_action
-  
+
     def add_child(self, child):
         """Add attributes to the image
         
