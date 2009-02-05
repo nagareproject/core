@@ -96,7 +96,7 @@ class Sessions(common.Sessions):
         
         In:
           - ``session_id`` -- id of the session
-          - `secure_id` -- the secure number associated to the session
+          - ``secure_id`` -- the secure number associated to the session
           
         Return:
           - tuple (session_id, cont_id, new_cont_id, lock, secure_id)

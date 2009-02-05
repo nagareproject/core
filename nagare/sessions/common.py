@@ -26,12 +26,12 @@ class Session(object):
         """Initialization
         
         In:
-          - `session_id` -- id of the current session
-          - `cont_id` -- id of the current continuation
-          - `new_cont_id` -- id of the next continuation
-          - `lock` -- session thread lock
-          - `secure_id` -- the secure number associated to the session          
-          - `data` -- data of the session
+          - ``session_id`` -- id of the current session
+          - ``cont_id` -- id of the current continuation
+          - ``new_cont_id`` -- id of the next continuation
+          - ``lock`` -- session thread lock
+          - ``secure_id`` -- the secure number associated to the session
+          - ``data`` -- data of the session
         """
         self.session_id = session_id
         self.cont_id = cont_id
@@ -119,8 +119,8 @@ class Sessions(object):
         """Memorize the session data
         
         In:
-          - `session` -- the session object
-          - `inc_cont_id` -- is the continuation id to increment ?
+          - ``session`` -- the session object
+          - ``inc_cont_id`` -- is the continuation id to increment ?
         """
         self._set(
                   session.session_id, session.new_cont_id,
@@ -152,7 +152,7 @@ class Sessions(object):
         """Create a new session
         
         In:
-          - `secure_id` -- the secure number associated to the session
+          - ``secure_id`` -- the secure number associated to the session
           
         Return:
           - tuple (session_id, cont_id, new_cont_id, lock)
@@ -193,11 +193,11 @@ class Sessions(object):
         """Memorize the session data
         
         In:
-          - `session_id` -- id of the current session
-          - `cont_id` -- id of the current continuation
-          - `secure_id` -- the secure number associated to the session          
-          - `data` -- data of the session
-          - `inc_cont_id` -- is the continuation id to increment ?          
+          - ``session_id`` -- id of the current session
+          - ``cont_id`` -- id of the current continuation
+          - ``secure_id`` -- the secure number associated to the session
+          - ``data`` -- data of the session
+          - ``inc_cont_id`` -- is the continuation id to increment ?
         """
         f = cStringIO.StringIO()
         p = cPickle.Pickler(f, protocol=-1)
@@ -226,7 +226,7 @@ class Sessions(object):
         
         In:
           - ``session_id`` -- id of the session
-          - `secure_id` -- the secure number associated to the session
+          - ``secure_id`` -- the secure number associated to the session
           
         Return:
           - tuple (session_id, cont_id, new_cont_id, lock)
@@ -249,12 +249,12 @@ class Sessions(object):
         """Memorize the session data
         
         In:
-          - `session_id` -- id of the current session
-          - `cont_id` -- id of the current continuation
-          - `secure_id` -- the secure number associated to the session            
-          - `inc_cont_id` -- is the continuation id to increment ? 
-          - `externals` -- pickle of shared objects across the continuations                    
-          - `data` -- pickle of the objects in the continuation
+          - ``session_id`` -- id of the current session
+          - ``cont_id`` -- id of the current continuation
+          - ``secure_id`` -- the secure number associated to the session
+          - ``inc_cont_id`` -- is the continuation id to increment ?
+          - ``externals`` -- pickle of shared objects across the continuations
+          - ``data`` -- pickle of the objects in the continuation
         """
         pass
     
