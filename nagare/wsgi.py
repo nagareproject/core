@@ -331,6 +331,7 @@ class WSGIApp(object):
                 if (request.method == 'POST') and not xhr_request and self.redirect_after_post:
                     session.data = (root, callbacks)
                     self.sessions.set(session, False)
+                    security.get_manager().end_rendering(request, response, self.sessions, session)
                     return self.on_after_post(request, response, session.sessionid_in_url(request, response))(environ, start_response)
     
                 # Phase 2
