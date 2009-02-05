@@ -19,7 +19,7 @@ In both cases:
   - the metadata of the applications are activated
 """
 
-import sys, os, code, atexit, fileinput
+import sys, os, code, atexit, fileinput, __builtin__
 
 from nagare import database
 from nagare.admin import util
@@ -165,7 +165,9 @@ def batch(parser, options, args):
     del sys.argv[:i+3]
 
     ns = create_globals(args[:1], options.debug, parser.error)
-    exec(''.join(fileinput.input(args[1:]))) in ns
+    __builtin__.__dict__.update(ns)
+
+    exec(''.join(fileinput.input(args[1:])))
     
 class Batch(util.Command):
     desc = 'Execute Python statements from files'
