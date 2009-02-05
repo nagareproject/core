@@ -89,11 +89,13 @@ class WSGIApp(wsgi.WSGIApp):
         conf = configobj.ConfigObj(conf, configspec=configobj.ConfigObj(application_spec))
         config.validate(config_filename, conf, error)
 
-        if conf['application']['as_root']:
-            publisher.register_application(conf['application']['path'], '', self, self)
+        if publisher:
+            self.apps = publisher.apps
+
+            if conf['application']['as_root']:
+                publisher.register_application(conf['application']['path'], '', self, self)
         
         super(WSGIApp, self).set_config(config_filename, conf, error, static_path, static_url, publisher)
-        self.apps = publisher.apps
         
     def create_root(self):
         """
