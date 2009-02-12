@@ -38,6 +38,73 @@ except ImportError:
 session.configure(autoflush=True, expire_on_commit=True, autocommit=True)
 query = session.query
 
+# -----------------------------------------------------------------------------
+
+def entity_getstate(entity):
+    """Return the state of an SQLAlchemy entity
+
+    In:
+      - ``entity`` -- the SQLAlchemy entity
+
+    Return:
+      - the state dictionary
+    """
+    state = entity._sa_instance_state   # SQLAlchemy managed state
+    attrs = state.manager.local_attrs   # SQLAlchemy managed attributes
+
+    # ``d`` is the dictionary of the _not_ SQLAlchemy managed attributes
+    d = dict([(k, v) for (k, v) in entity.__dict__.items() if k not in attrs])
+
+    # Keep only the primary key from the SQLAlchemy state
+    if state.key is not None:
+        d['_sa_key'] = state.key[1]
+        del d['_sa_instance_state']
+
+    return d
+
+
+def entity_setstate(entity, d):
+    """Set the state of an SQLAlchemy entity
+
+    In:
+      - ``entity`` -- the newly created and not yet initialized SQLAlchemy entity
+      - ``d`` -- the state dictionary (created by ``entity_getstate()``)
+    """
+    # Copy the _not_ SQLAlchemy managed attributes to our entity
+    key = d.pop('_sa_key', None)
+    entity.__dict__.update(d)
+
+    if key is not None:
+        # Fetch a new and initialized SQLAlchemy from the database
+        x = session.query(entity.__class__).get(key)
+        session.expunge(x)
+
+        # Copy its state to our entity
+        entity.__dict__.update(x.__dict__)
+
+        # Adjust the entity SQLAlchemy state
+        state = x._sa_instance_state.__getstate__()
+        state['instance'] = entity
+        entity._sa_instance_state.__setstate__(state)
+
+        # Add the entity to the current database session
+        session.add(entity)
+
+
+class Mapper(sqlalchemy.orm.Mapper):
+    def __init__(self, cls, *args, **kw):
+        super(Mapper, self).__init__(cls, *args, **kw)
+
+        # Dynamically add a ``__getstate__()`` and ``__setstate__()`` method
+        # to the SQLAlchemy entities
+        cls.__getstate__ = entity_getstate
+        cls.__setstate__ = entity_setstate
+
+# Hot-patching the SQLAlchemy ``Mapper`` class
+sqlalchemy.orm.Mapper = Mapper
+
+# -----------------------------------------------------------------------------
+
 # Cache of the already created database engines
 # dictionary: database uri -> database engine
 _engines = {}
