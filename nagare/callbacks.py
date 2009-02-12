@@ -14,7 +14,6 @@ Manage:
   - list of the callbacks registered for a componant
 """
 
-import stackless
 import random
 
 from nagare.component import call_wrapper
@@ -56,17 +55,6 @@ class Callbacks:
         """
         self.callbacks = [x for x in self.callbacks if x[0] in components]
         
-    def end_rendering(self):
-        """End of the rendering phase for a request
-        
-        Garbage collect the tasklet not used
-        """
-        current = stackless.current
-
-        for task in stackless.uncollectables:
-            if task is not current:
-                task.kill()
-
     def unregister_callbacks(self, component):
         """Clear all the callbacks of a component
         
