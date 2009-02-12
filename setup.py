@@ -65,15 +65,15 @@ setup(
       namespace_packages = ('nagare',),
       zip_safe = False,
       dependency_links = ('http://www.nagare.org/download/',),
-      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.1.3', 'WebOb', 'Paste', 'flup', 'python-memcached'),
+      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.1.5', 'WebOb', 'Paste', 'flup', 'python-memcached'),
       extras_require = {
         'debug' : ('WebError',),
-        'database' : ('SQLAlchemy==0.4.8', 'Elixir==0.6.1'),
+        'database' : ('SQLAlchemy==0.5.2', 'Elixir==0.6.1'),
         'doc' : ('Pygments', 'docutils', 'RstDoc==0.9.0'),
         'test' : ('nose',),
         'full' : (
                   'WebError',
-                  'SQLAlchemy==0.4.8', 'Elixir==0.6.1',
+                  'SQLAlchemy==0.5.2', 'Elixir==0.6.1',
                   'Pygments', 'docutils', 'RstDoc',
                   'nose'
                  ),

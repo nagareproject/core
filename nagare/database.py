@@ -7,26 +7,36 @@
 # this distribution.
 #--
 
+# -----------------------------------------------------------------------------
+
+# If the framework haven't the SQLAlchemy or Elixir packages installed,
+# the default database session is a dummy one
+class DummySession(object):
+    def begin(self):
+        return self
+
+    __enter__ = __exit__ = clear = query = remove = close = configure = lambda *args, **kw: None
+
+session = DummySession()
+
+def setup_all():
+    pass
+
 try:
     import sqlalchemy
-    def setup_all(): pass
+    from sqlalchemy import orm
+
+    session = orm.scoped_session(orm.sessionmaker())
 except ImportError:
     pass
 
 try:
     from elixir import setup_all, session
-    session.configure(autoflush=True, transactional=False)
-    query = session.query
 except ImportError:
-    # If the framework haven't the SQLAlchemy or Elixir packages installed,
-    # the default database session is a dummy one
-    class DummySession(object):
-        def begin(self):
-            return self
-        
-        __enter__ = __exit__ = clear = query = remove = close = lambda *args, **kw: None
-        
-    session = DummySession()
+    pass
+    
+session.configure(autoflush=True, expire_on_commit=True, autocommit=True)
+query = session.query
 
 # Cache of the already created database engines
 # dictionary: database uri -> database engine

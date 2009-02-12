@@ -40,7 +40,9 @@ def create_globals(cfgfiles, debug, error):
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
         apps[aconf['application']['name']] = util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[0]
 
-    return dict(session=database.session, apps=apps)
+    session = database.session
+    session.begin()
+    return dict(session=session, apps=apps)
 
 # -----------------------------------------------------------------------------
 
@@ -167,7 +169,7 @@ def batch(parser, options, args):
     ns = create_globals(args[:1], options.debug, parser.error)
     __builtin__.__dict__.update(ns)
 
-    exec(''.join(fileinput.input(args[1:])))
+    exec(''.join(fileinput.input(args[1:]))) in globals(), locals()
     
 class Batch(util.Command):
     desc = 'Execute Python statements from files'
