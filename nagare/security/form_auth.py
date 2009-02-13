@@ -28,7 +28,7 @@ from nagare import security
 from nagare.security import basic_auth
 
 class Authentication(basic_auth.Authentication):
-    """Simple from based authentication"""
+    """Simple form based authentication"""
 
     def __init__(self, prefix='__ac', key=None, max_age=None,
                  path='/', domain=None, secure=None, httponly=False,
@@ -42,7 +42,7 @@ class Authentication(basic_auth.Authentication):
           - ``realm`` -- is the form based authentication completed by a
             basic HTTP authentication ?
           - all the other keyword parameters are passed to the ``set_cookie()``
-            method of the WebOb response object
+            method of the ``WebOb`` response object
             (see http://pythonpaste.org/webob/reference.html#id5)
         """        
         super(Authentication, self).__init__(realm)        
@@ -63,7 +63,7 @@ class Authentication(basic_auth.Authentication):
         parameter
         
         In:
-          - ``params`` -- the request parameter
+          - ``params`` -- the request parameters
           
         Return:
           - A tuple with the id of the user and its password
@@ -91,7 +91,7 @@ class Authentication(basic_auth.Authentication):
           - A list with the id of the user and its password
         """                
         data = cookies.get(self.key)
-        if data is None:
+        if not data:
             return (None, None)
         
         return self.cookie_decode(data) 
@@ -138,7 +138,7 @@ class Authentication(basic_auth.Authentication):
         In:
           - ``user`` -- the user
           - ``id`` -- the user id
-          - ``passwor`` -- the user password
+          - ``password`` -- the user password
         """        
         user.set_id(id, password)
 
