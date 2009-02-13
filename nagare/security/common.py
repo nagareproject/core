@@ -40,7 +40,7 @@ public = Public()
 
 # ---------------------------------------------------------------------------
 
-class Denial(Exception):
+class Denial(BaseException):
     """Type of the objects return when an access is denied
     
     In a boolean context, it is evaluated to ``False``
@@ -51,7 +51,7 @@ class Denial(Exception):
         In:
           - ``message`` -- denial description
         """
-        self.message = message
+        super(Denial, self).__init__(message)
 
     def __nonzero__(self):
         """Evaluated to ``False`` in a boolean context
@@ -59,13 +59,7 @@ class Denial(Exception):
         return False
 
     def __str__(self):
-        return str(self.message)
-
-    def __unicode__(self):
-        return unicode(self.message)
-
-    def __repr__(self):
-        return 'security.Denial(%r)' % self.message
+        return 'security.Denial(%s)' % str(self)
 
 # --------------------------------------------------------------
 

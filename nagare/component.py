@@ -20,7 +20,7 @@ from peak.rules import when
 
 from nagare import presentation
 
-class AnswerWithoutCall(Exception):
+class AnswerWithoutCall(BaseException):
     pass
 
 
@@ -245,7 +245,7 @@ class Task:
         comp.answer(self.go(comp))
 
     def go(self, comp):
-        raise Exception('AbstractMethod')
+        raise BaseException('AbstractMethod')
                         
 @presentation.render_for(Task)
 def render(self, renderer, comp, *args):
