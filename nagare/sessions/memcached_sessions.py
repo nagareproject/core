@@ -192,6 +192,6 @@ class SessionsFactory(common.SessionsFactory):
     def __init__(self, filename, conf, error):
         super(SessionsFactory, self).__init__(filename, conf, error)
 
-        if conf['reset']:
+        if self.conf['reset']:
             memcached = memcache.Client(['%s:%d' % (self.conf['host'], self.conf['port'])], debug=self.conf['debug'])
             memcached.flush_all()
