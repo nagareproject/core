@@ -1132,7 +1132,7 @@ class AsyncRenderer(Renderer):
         self.async_root = True;
         self.wrapper_to_generate = False    # Add a ``<div>`` around the rendering ?
 
-    def javascript_url(url):
+    def javascript_url(self, url):
         self.head.javascript_url(url)
         
     def _javascript(self, js):
