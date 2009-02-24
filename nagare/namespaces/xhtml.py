@@ -695,8 +695,9 @@ class Img(_HTMLActionTag):
         Return:
           - new response object raised
         """
-        e = webob.exc.HTTPOk()
-        e.body = action(e)
+        e = webob.exc.HTTPOk(headerlist=[('Content-Type', '')])
+        img = action(e)
+        e.body = img
         
         content_type = e.content_type
         if not content_type:
@@ -705,8 +706,8 @@ class Img(_HTMLActionTag):
             img_type = imghdr.what(None, img[:32])
             if img_type is not None:
                 content_type = 'image/'+(img_type or '*') 
-
         e.content_type = content_type
+        
         raise e
     
     def sync_action(self, renderer, action, permissions, subject):
