@@ -247,18 +247,17 @@ def render(self, h, *args):
         head = self.head(head[:], dict(head.attrib))
     else:
         head = self.head(head)
-    
+
+    head.extend([self.link(rel='stylesheet', type='text/css', href=url) for url in self._get_css_url()])    
+    head.extend([self.script(type='text/javascript', src=url) for url in self._get_javascript_url()])
+
     css = [css for (name, css) in self._get_named_css()]
     if css:
         head.append(self.style('\n'.join(css), type='text/css'))
 
-    head.extend([self.link(rel='stylesheet', type='text/css', href=url) for url in self._get_css_url()])
-    
     javascript = [js for (name, js) in self._get_named_javascript()]
     if javascript:
-        head.append(self.script('\n'.join(javascript), type='text/javascript'))
-
-    head.extend([self.script(type='text/javascript', src=url) for url in self._get_javascript_url()])
+        head.append(self.script(';\n'.join(javascript), type='text/javascript'))
 
     return head
 
@@ -403,8 +402,8 @@ class TextInput(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
 
     def __call__(self, *children, **attrib):
@@ -426,8 +425,8 @@ class TextArea(_HTMLActionTag):
     """
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
     
     def action(self, action, permissions=None, subject=None):
@@ -451,8 +450,8 @@ class PasswordInput(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
 
 
@@ -462,9 +461,9 @@ class RadioInput(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
-    _actions = (2, 'value', 'onchange')
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
+    _actions = (2, 'value', 'onclick')
 
     def selected(self, flag):
         """(de)Select the tag
@@ -489,8 +488,8 @@ class CheckboxInput(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
 
     def selected(self, flag):
@@ -516,8 +515,8 @@ class SubmitInput(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (4, 'name', 'onclick')
     
     def async_action(self, renderer, action, permissions, subject):
@@ -529,8 +528,8 @@ class HiddenInput(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
 
 
@@ -540,8 +539,8 @@ class FileInput(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
 
     def init(self, renderer):
@@ -565,8 +564,8 @@ class ImageInput(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (5, 'name', 'onclick')
 
 # ----------------------------------------------------------------------------------
@@ -601,8 +600,8 @@ class Select(_HTMLActionTag):
 
     # Tuple:
     #   - action type
-    #   - name of the attribute for the synchronous actions
-    #   - name of the attribute for then asynchronous actions
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
     
     def action(self, action, permissions=None, subject=None):
@@ -1111,7 +1110,7 @@ def render(self, h, *args):
                                                          ajax.py2js(r'\n'.join(self._get_anonymous_css()), h),
                                                          ajax.py2js(self._get_css_url(), h),
                                                          ajax.py2js(self._get_named_javascript(), h),
-                                                         ajax.py2js(r'\n'.join(self._get_anonymous_javascript()), h),
+                                                         ajax.py2js(';'.join(self._get_anonymous_javascript()), h),
                                                          ajax.py2js(self._get_javascript_url(), h)
                                                       )
 
