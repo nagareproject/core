@@ -68,7 +68,7 @@ class Update(object):
     Send a XHR request that can do an action, render a component and finally
     update the HTML with the rendered view
     """
-    def __init__(self, render=None, action=lambda *args: None, component_to_update=None):
+    def __init__(self, render='', action=lambda *args: None, component_to_update=None):
         """Initialisation
         
         In:
@@ -133,13 +133,13 @@ class Update(object):
             component_to_update = id
 
         render = self.render
-        if render is None:
-            render = lambda r: ''
-        elif callable(render):
+        if callable(render):
             render = lambda r, render=render: ViewToJs(js, component_to_update, r, render(r))
         else:
             async_root = renderer.get_async_root()
-            render = lambda r, comp=async_root.component, render=async_root.model: ViewToJs(js, component_to_update, r, comp.render(r, model=render))
+
+            render = render if render != '' else async_root.model
+            render = lambda r, comp=async_root.component, render=render: ViewToJs(js, component_to_update, r, comp.render(r, model=render))
         
         return render
     
