@@ -490,7 +490,7 @@ class CheckboxInput(_HTMLActionTag):
     #   - action type
     #   - name of the attribute for the synchronous action
     #   - name of the attribute for the asynchronous action
-    _actions = (1, 'name', 'onchange')
+    _actions = (1, 'name', 'onclick')
 
     def selected(self, flag):
         """(de)Select the tag
