@@ -142,10 +142,7 @@ class WSGIApp(object):
         Return:
           - a WSGI object, used to generate the response to the browser
         """
-        return exc.HTTPSeeOther(
-                                  headers=response.headers,
-                                  location=request.path_url + '?' + '&'.join(ids)
-                               )
+        return exc.HTTPSeeOther(location=request.path_url + '?' + '&'.join(ids))
 
     def on_back(self, request, response, h, output):
         """The user used the back button
