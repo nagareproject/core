@@ -42,7 +42,7 @@ def call(o1, o2, model=None):
     
         
 def test1():
-    """ MVC - form - validation OK """
+    """ Form - validation OK """
     o = MyApp()
 
     app = component.Component(o, model=None)
@@ -64,7 +64,7 @@ def test1():
 
 
 def test2():
-    """ MVC - form - validation KO """
+    """ Form - validation KO """
     o = MyApp()
 
     app = component.Component(o, model=None)
@@ -88,7 +88,7 @@ def test2():
 
 
 def test3():
-    """ MVC - form - validation KO & Cancel """
+    """ Form - validation KO & Cancel """
     o = MyApp()
 
     app = component.Component(o, model=None)
@@ -138,7 +138,7 @@ class MyStringEditor1(MyStringEditor):
     
     
 def test4():
-    """ MVC - form - test string validators - not_empty """
+    """ Form - test string validators - not_empty """
     o = MyApp()
 
     app = component.Component(o, model=None)
@@ -163,7 +163,7 @@ class MyStringEditor2(MyStringEditor):
    
    
 def test5():
-    """ MVC - form - test string validators - match """
+    """ Form - test string validators - match """
     o = MyApp()
 
     app = component.Component(o, model=None)
@@ -187,7 +187,7 @@ class MyStringEditor3(MyStringEditor):
    
    
 def test6():
-    """ MVC - form - test string validators - shorter_than """
+    """ Form - test string validators - shorter_than """
     o = MyApp()
 
     app = component.Component(o, model=None)
@@ -211,7 +211,7 @@ class MyStringEditor4(MyStringEditor):
    
    
 def test7():
-    """ MVC - form - test string validators - length_equal  """
+    """ Form - test string validators - length_equal  """
     o = MyApp()
 
     app = component.Component(o, model=None)
@@ -238,7 +238,7 @@ class MyStringEditor5(MyStringEditor):
    
    
 def test8():
-    """ MVC - form - test string validators - multiple validators """
+    """ Form - test string validators - multiple validators """
     o = MyApp()
 
     app = component.Component(o, model=None)
@@ -262,4 +262,33 @@ def test8():
     editor.setValues('123456', app)
     assert editor.name.error is None
 
+def test9():
+    p = editor.Property()
+    assert (p.input is None) and (p.value is None) and (p.error is None)
 
+def test10():
+    p = editor.Property(5)
+    assert (p.input == p.value == 5) and (p.error is None)
+
+def check(v):
+    if v > 10:
+        raise ValueError('invalid')
+    return v
+
+def test11():
+    p = editor.Property(5).validate(check)
+    assert (p.input == p.value == 5) and (p.error is None)
+
+def test12():
+    p = editor.Property(15).validate(check)
+    assert (p.input == 15) and (p.value is None) and (p.error == 'invalid')
+
+def test13():
+    p = editor.Property().validate(check)
+    p.set(5)
+    assert (p.input == p.value == 5) and (p.error is None)
+
+def test14():
+    p = editor.Property().validate(check)
+    p.set(15)
+    assert (p.input == 15) and (p.value is None) and (p.error == 'invalid')

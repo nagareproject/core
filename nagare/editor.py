@@ -32,8 +32,8 @@ class Property(object):
           - ``self.value`` -- the last valid value
           - ``self.error`` -- the last error message
         """
-        self.input = self.value = v
-        self.error = None
+        self.input = self.value = self.error = None
+        self.set(v)
     
     def _validate(self, input):
         """Default validation function
@@ -59,6 +59,9 @@ class Property(object):
           - ``self``
         """
         self._validate = f
+        self.value = None
+
+        self.set(self.input)
         return self
         
     def set(self, input):
