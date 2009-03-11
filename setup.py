@@ -65,7 +65,7 @@ setup(
       namespace_packages = ('nagare',),
       zip_safe = False,
       dependency_links = ('http://www.nagare.org/download/',),
-      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.1.5', 'WebOb', 'Paste', 'flup', 'python-memcached'),
+      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.1.5', 'WebOb>=0.9.6.1', 'Paste', 'flup', 'python-memcached'),
       extras_require = {
         'debug' : ('WebError',),
         'database' : ('SQLAlchemy==0.5.2', 'Elixir==0.6.1'),
