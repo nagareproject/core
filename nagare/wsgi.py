@@ -41,8 +41,8 @@ class WSGIApp(object):
         """Initialization
 
         In:
-          - ``metadatas`` -- the SQLAlchemy metadata objects
           - ``root_factory`` -- function to create the application root component
+          - ``metadatas`` -- the SQLAlchemy metadata objects
         """
         self.root_factory = root_factory
         self.metadatas = metadatas or []
@@ -90,21 +90,21 @@ class WSGIApp(object):
           - ``response`` -- the web response object
 
         Return:
-          - a WSGI object, used to generate the response to the browser
+          - raise a ``webob.exc`` object, used to generate the response to the browser
         """
-        return exc.HTTPMethodNotAllowed()
+        raise exc.HTTPMethodNotAllowed()
 
     def on_not_found(self, request, response):
-        """A incorrect URL was received
+        """An incorrect URL was received
 
         In:
           - ``request`` -- the web request object
           - ``response`` -- the web response object
 
         Return:
-          - a WSGI object, used to generate the response to the browser
+          - raise a ``webob.exc`` object, used to generate the response to the browser
         """
-        return exc.HTTPNotFound()
+        raise exc.HTTPNotFound()
 
     def on_incomplete_url(self, request, response):
         """An URL without an application name was received
@@ -114,9 +114,9 @@ class WSGIApp(object):
           - ``response`` -- the web response object
 
         Return:
-          - a WSGI object, used to generate the response to the browser
+          - raise a ``webob.exc`` object, used to generate the response to the browser
         """
-        return exc.HTTPMovedPermanently(add_slash=True)
+        raise exc.HTTPMovedPermanently(add_slash=True)
 
     def on_session_expired(self, request, response):
         """The session id received is invalid
@@ -126,23 +126,9 @@ class WSGIApp(object):
           - ``response`` -- the web response object
 
         Return:
-          - a WSGI object, used to generate the response to the browser
+          - raise a ``webob.exc`` object, used to generate the response to the browser
         """
-        #print 'Warning: expired session, creating a new one'
-        return exc.HTTPMovedPermanently()
-
-    def on_after_post(self, request, response, ids):
-        """Generate a redirection after a POST
-
-        In:
-          - ``request`` -- the web request object
-          - ``response`` -- the web response object
-          - ``ids`` -- identifiers to put into the generated redirection URL
-
-        Return:
-          - a WSGI object, used to generate the response to the browser
-        """
-        return exc.HTTPSeeOther(location=request.path_url + '?' + '&'.join(ids))
+        raise exc.HTTPMovedPermanently()
 
     def on_back(self, request, response, h, output):
         """The user used the back button
@@ -156,7 +142,6 @@ class WSGIApp(object):
         Return:
           - a tree
         """
-        #print 'Warning: back used'
         return output
     
     def on_callback_lookuperror(self, async, request, response):
@@ -175,17 +160,20 @@ class WSGIApp(object):
         # In this case, do nothing                     
         return lambda h: ''
     
-    # -----------------------------------------------------------------------
-
-    def start_request(self, request, response):
-        """A new request is received, set up its dedicated environment
+    def on_after_post(self, request, response, ids):
+        """Generate a redirection after a POST
 
         In:
           - ``request`` -- the web request object
           - ``response`` -- the web response object
+          - ``ids`` -- identifiers to put into the generated redirection URL
+
+        Return:
+          - a ``webob.exc`` object, used to generate the response to the browser
         """
-        security.set_manager(self.security) # Set the security manager
-        security.set_user(self.security.create_user(request, response)) # Create the User object
+        return exc.HTTPSeeOther(location=request.path_url + '?' + '&'.join(ids))
+
+    # -----------------------------------------------------------------------
 
     def create_root(self):
         """Create the application root component
@@ -196,7 +184,7 @@ class WSGIApp(object):
         return self.root_factory()
 
     def create_renderer(self, async, session, request, response, callbacks):
-        """Create the initial renderer (the root of all the renderers used)
+        """Create the initial renderer (the root of all the used renderers)
 
         In:
           - ``async`` -- is an XHR request ?
@@ -215,6 +203,17 @@ class WSGIApp(object):
                                 request.script_name
                                )
 
+    def start_request(self, root, request, response):
+        """A new request is received, setup its dedicated environment
+
+        In:
+          - ``root`` -- the application root component
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
+        """
+        security.set_manager(self.security) # Set the security manager
+        security.set_user(self.security.create_user(request, response)) # Create the User object
+
     # Processing phase
     def _phase1(self, params, callbacks):
         """Phase 1 of the request processing:
@@ -227,9 +226,7 @@ class WSGIApp(object):
           - ``callbacks`` -- the registered callbacks
 
         Return:
-          - a tuple:
-            - function to render the objects graph or ``None``
-            - is the objects graph modified ?
+          - function to render the objects graph or ``None``
         """
         return callbacks.process_response(params)
 
@@ -264,7 +261,6 @@ class WSGIApp(object):
         Return:
           - the content to send back to the browser
         """
-
         # Create the ``WebOb`` request and response objects
         # -------------------------------------------------
 
@@ -276,91 +272,90 @@ class WSGIApp(object):
 
         xhr_request = request.is_xhr or ('_a' in request.params)
 
-        # Test the request validity
-        # -------------------------
+        session = None
 
-        if request.method not in ('GET', 'POST'):
-            return self.on_bad_http_method(request, response)(environ, start_response)
-
-        if len(request.path_info) == 0:
-            return self.on_incomplete_url(request, response)(environ, start_response)
-
-        try:
-            session = self.sessions.get(request, response)
-        except ExpirationError:
-            return self.on_session_expired(request, response)(environ, start_response)
-
-        try:
+        # Create a database transaction for each request
+        with database.session.begin():
             try:
                 # Phase 1
                 # -------
-                
-                # Create a database transaction for each request
-                with database.session.begin():
-                    self.start_request(request, response)
-    
-                    if not session.is_new:
-                        # An existing session is used, retrieve the application root component
-                        # and the callbacks registry
-                        (root, callbacks) = session.data
-                    else:
-                        # A new session is created, create a new application root component too
-                        root = self.create_root()
-            
-                        # If a URL is given, initialize the objects graph with it
-                        url = request.path_info.strip('/')
-                        if url and presentation.init(root, [u.decode('utf-8') for u in url.split('/')], request, None) == presentation.NOT_FOUND:
-                            return self.on_not_found(request, response)(environ, start_response)
-            
-                        # Create a new callbacks registry
-                        callbacks = Callbacks()
-    
-                    try:
-                        render = self._phase1(request.params, callbacks)
-                    except CallbackLookupError:
-                        render = self.on_callback_lookuperror(xhr_request, request, response)
+
+                # Test the request validity
+                if request.method not in ('GET', 'POST'):
+                    self.on_bad_http_method(request, response)
+
+                if len(request.path_info) == 0:
+                    self.on_incomplete_url(request, response)
+
+                try:
+                    session = self.sessions.get(request, response)
+                except ExpirationError:
+                    self.on_session_expired(request, response)
+
+                if session.is_new:
+                    # A new session is created
+                    root = self.create_root()   # Create a new application root component
+                    callbacks = Callbacks()     # Create a new callbacks registry
+                else:
+                    # An existing session is used, retrieve the application root component
+                    # and the callbacks registry
+                    (root, callbacks) = session.data
+
+                self.start_request(root, request, response)
+
+                if session.is_new:
+                    # If a URL is given, initialize the objects graph with it
+                    url = request.path_info.strip('/')
+                    if url and presentation.init(root, [u.decode('utf-8') for u in url.split('/')], request, None) == presentation.NOT_FOUND:
+                        self.on_not_found(request, response)
+
+                try:
+                    render = self._phase1(request.params, callbacks)
+                except CallbackLookupError:
+                    render = self.on_callback_lookuperror(xhr_request, request, response)
+            except exc.HTTPException, response:
+                # When a ``webob.exc`` object is raised during phase 1, skip the
+                # phase 2 and use it as the response object
+                pass
+            else:
+                # Phase 2
+                # -------
 
                 # If the ``redirect_after_post`` parameter of the ``[application``
                 # section is `True`` (the default), conform to the PRG__ pattern
                 #
                 # __ http://en.wikipedia.org/wiki/Post/Redirect/GetPRG
                 if (request.method == 'POST') and not xhr_request and self.redirect_after_post:
-                    session.data = (root, callbacks)
-                    self.sessions.set(session, False)
-                    security.get_manager().end_rendering(request, response, self.sessions, session)
-                    return self.on_after_post(request, response, session.sessionid_in_url(request, response))(environ, start_response)
-    
-                # Phase 2
-                # -------
-    
-                # Create a new renderer
-                renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
-                # If the phase 1 has returned a render function, use it
-                # else, start the rendering by the application root component
-                output = render(renderer) if render else root.render(renderer)
-            except exc.HTTPException, e:
-                return e(environ, start_response)
-            finally:
-                database.session.remove()
-    
-            if session.back_used:
-                output = self.on_back(request, response, renderer, output)
-    
-            if not xhr_request:
-                output = top.wrap(response.content_type, renderer, output)
-    
-            self._phase2(request, response, output, render is not None)
-    
-            if not xhr_request:
-                callbacks.clear_not_used(renderer._rendered)
+                    store_new_cont = False
+                    response = self.on_after_post(request, response, session.sessionid_in_url(request, response))
+                else:
+                    store_new_cont = not xhr_request
 
-            # Store the session
-            session.data = (root, callbacks)
-            self.sessions.set(session, not xhr_request)
-    
-            security.get_manager().end_rendering(request, response, self.sessions, session)
-        finally:
-            session.lock.release()
+                    # Create a new renderer
+                    renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
+                    # If the phase 1 has returned a render function, use it
+                    # else, start the rendering by the application root component
+                    output = render(renderer) if render else root.render(renderer)
+
+                    if session.back_used:
+                        output = self.on_back(request, response, renderer, output)
+
+                    if not xhr_request:
+                        output = top.wrap(response.content_type, renderer, output)
+
+                    self._phase2(request, response, output, render is not None)
+
+                    if not xhr_request:
+                        callbacks.clear_not_used(renderer._rendered)
+
+                # Store the session
+                session.data = (root, callbacks)
+                self.sessions.set(session, store_new_cont)
+
+                security.get_manager().end_rendering(request, response, self.sessions, session)
+            finally:
+                if session:
+                    session.lock.release()
 
         return response(environ, start_response)
 
