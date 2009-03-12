@@ -32,7 +32,7 @@ class ViewToJs(object):
             DOM element
           - ``id`` -- id of the DOM element to replace on the client
           - ``renderer`` -- the current renderer
-          - ``output`` -- the view
+          - ``output`` -- the view (or ``None``)
         """
         self.js = js
         self.id = id
@@ -51,12 +51,16 @@ def serialize(self, request, response, declaration):
     Return:
       - Javascript to evaluate on the client
     """
+    response.content_type = 'text/plain'
+
+    if self.output is None:
+        return ''
+
     # Get the javascript for the header
     head = presentation.render(self.renderer.head, self.renderer, None, None)
     
     # Get the HTML or XHTML of the view
     body = serializer.serialize(self.output, request, response, False)
-    response.content_type = 'text/plain'
 
     # Wrap all into a javascript code
     return "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head)
