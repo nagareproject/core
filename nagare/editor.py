@@ -32,8 +32,8 @@ class Property(object):
           - ``self.value`` -- the last valid value
           - ``self.error`` -- the last error message
         """
-        self.input = self.value = self.error = None
-        self.set(v)
+        self.input = self.value = v
+        self.error = None
     
     def _validate(self, input):
         """Default validation function
@@ -52,16 +52,13 @@ class Property(object):
         In:
           - ``f`` -- the validating function. Called with the value to
             validate. Raise the exception ``ValueError`` is the value is
-            invalid. Return the value to be set (i.e: a validation function
-            can do conversion too)
+            invalid. Return the value to be set (i.e a validation function
+            can do conversions too)
         
         Return:
           - ``self``
         """
         self._validate = f
-        self.value = None
-
-        self.set(self.input)
         return self
         
     def set(self, input):
