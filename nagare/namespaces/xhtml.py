@@ -654,7 +654,7 @@ class A(_HTMLActionTag):
           - ``subject`` -- subject to test the permissions on
         """
         if callable(action):
-            action = ajax.Update(renderer.model, action, None)
+            action = ajax.Update(action=action)
         
         self.set('href', '#')
         self.set('onclick', action.generate_action(41, renderer))
