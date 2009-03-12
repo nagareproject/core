@@ -175,7 +175,7 @@ class Update(object):
         elif priority == 4:
             return 'return nagare_postAndEval(this.form, "%s")' % self._generate_replace(4, renderer)
         elif priority == 41:
-            return 'nagare_getAndEval("%s;_a;%s")' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(4, renderer))
+            return 'return nagare_getAndEval("%s;_a;%s")' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(4, renderer))
         elif priority == 2:
             return 'nagare_getAndEval("%s;_a;%s")' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(2, renderer))
         else:
