@@ -53,6 +53,7 @@ class Sessions(common.Sessions):
                  host='127.0.0.1', port=11211,
                  ttl=0,
                  lock_ttl=0, lock_poll_time=0.1, lock_max_wait_time=5,
+                 min_compress_len=0,
                  reset=True,
                  debug=True
                 ):
@@ -65,6 +66,7 @@ class Sessions(common.Sessions):
           - ``lock_ttl`` -- session locks timeout, in seconds (0 = no timeout)
           - ``lock_poll_time`` -- wait time between two lock acquisition tries, in seconds
           - ``lock_max_wait_time`` -- maximum time to wait to acquire the lock, in seconds
+          - ``min_compress_len`` -- data longer than this value are sent compressed
           - ``reset`` -- do a reset of all the sessions on startup ?
           - ``debug`` -- display the memcache requests / responses 
         """        
@@ -73,6 +75,7 @@ class Sessions(common.Sessions):
         self.lock_ttl = lock_ttl
         self.lock_poll_time = lock_poll_time
         self.lock_max_wait_time = lock_max_wait_time
+        self.min_compress_len = min_compress_len
         self.debug = debug
         self.memcached = threading.local()
 
@@ -106,10 +109,10 @@ class Sessions(common.Sessions):
         lock.acquire()
         
         connection.set_multi({
-            KEY_PREFIX+session_id : (secure_id, None),
-            KEY_PREFIX+session_id+'_cont' : '0',
-            KEY_PREFIX+session_id+'00000' : {}
-        })
+            '' : (secure_id, None),
+            '_cont' : '0',
+            '00000' : {}
+        }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
         
         return (session_id, 0, 0, lock, secure_id)
     
@@ -123,27 +126,19 @@ class Sessions(common.Sessions):
         Return:
             - tuple (session_id, cont_id, last_cont_id, lock, secure_id, externals, data)        
         """        
-        try:
-            id = session_id + '%05d' % int(cont_id)
-        except TypeError:
-            raise common.ExpirationError()
-        
         connection = self._get_connection()
         lock = Lock(connection, session_id, self.lock_ttl, self.lock_poll_time, self.lock_max_wait_time)
         lock.acquire()
-        
-        session = connection.get_multi((
-                      KEY_PREFIX+session_id,
-                      KEY_PREFIX+session_id+'_cont',
-                      KEY_PREFIX+id
-        ))
+
+        id = cont_id.zfill(5)
+        session = connection.get_multi(('', '_cont', id), KEY_PREFIX+session_id)
 
         if len(session) != 3:
             raise common.ExpirationError()
-        
-        last_cont_id = int(session[KEY_PREFIX+session_id+'_cont'])
-        (secure_id, externals) = session[KEY_PREFIX+session_id]
-        data = session[KEY_PREFIX+id]
+
+        last_cont_id = int(session['_cont'])
+        (secure_id, externals) = session['']
+        data = session[id]
 
         return (session_id, int(cont_id), last_cont_id, lock, secure_id, externals, data)
     
@@ -162,9 +157,9 @@ class Sessions(common.Sessions):
             self._get_connection().incr(KEY_PREFIX+session_id+'_cont')
         
         self._get_connection().set_multi({
-            KEY_PREFIX+session_id : (secure_id, externals),
-            KEY_PREFIX+session_id+'%05d' % cont_id : data
-        }, self.ttl)
+            '' : (secure_id, externals),
+            '%05d' % cont_id : data
+        }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
         
         
     def _delete(self, session_id):
@@ -183,7 +178,8 @@ class SessionsFactory(common.SessionsFactory):
                 ttl='integer(default=0)',
                 lock_ttl='float(default=0.)',
                 lock_poll_time='float(default=0.1)',
-                lock_max_wait_time='float(default=5.)',                
+                lock_max_wait_time='float(default=5.)',
+                min_compress_len='integer(default=0)',
                 reset='boolean(default=True)',
                 debug='boolean(default=False)',
                )
