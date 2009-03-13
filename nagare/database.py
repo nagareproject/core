@@ -97,8 +97,11 @@ class Mapper(sqlalchemy.orm.Mapper):
 
         # Dynamically add a ``__getstate__()`` and ``__setstate__()`` method
         # to the SQLAlchemy entities
-        cls.__getstate__ = entity_getstate
-        cls.__setstate__ = entity_setstate
+        if not hasattr(cls, '__getstate__'):
+            cls.__getstate__ = entity_getstate
+
+        if not hasattr(cls, '__setstate__'):
+            cls.__setstate__ = entity_setstate
 
 # Hot-patching the SQLAlchemy ``Mapper`` class
 sqlalchemy.orm.Mapper = Mapper
