@@ -78,7 +78,7 @@ class Property(object):
             self.value = self._validate(input) # Call the validating function
             self.error = None
         except ValueError, data:
-            self.error = unicode(data)
+            self.error = data[0]
         
     def __call__(self, v=_marker):
         """Return or set the values of the property
