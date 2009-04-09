@@ -301,14 +301,14 @@ class _HTMLActionTag(xhtml_base._HTMLTag):
     async_action = sync_action
     
     def _async_action(self, renderer, action, permissions, subject):
-        """Register a asynchronous action
+        """Register an asynchronous action
         
         In:
           - ``renderer`` -- the current renderer
           - ``action`` -- the action
         """
         if callable(action):
-            action = ajax.Update(renderer.model, action, None)
+            action = ajax.Update(action=action)
         
         self.set(self._actions[2], action.generate_action(self._actions[0], renderer))
 
@@ -627,6 +627,13 @@ class Select(_HTMLActionTag):
 class A(_HTMLActionTag):
     """ ``<a>`` tags
     """
+
+    # Tuple:
+    #   - action type
+    #   - name of the attribute for the synchronous action
+    #   - name of the attribute for the asynchronous action
+    _actions = (41, None, 'onclick')
+
     def sync_action(self, renderer, action, permissions, subject):
         """Register a synchronous action
         
@@ -653,11 +660,8 @@ class A(_HTMLActionTag):
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
         """
-        if callable(action):
-            action = ajax.Update(action=action)
-        
+        super(A, self)._async_action(renderer, action, permissions, subject)
         self.set('href', '#')
-        self.set('onclick', action.generate_action(41, renderer))
     async_action = _async_action
     
     """
