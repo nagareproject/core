@@ -19,7 +19,7 @@ In both cases:
   - the metadata of the applications are activated
 """
 
-import sys, os, code, atexit, fileinput, __builtin__
+import sys, os, code, atexit, __builtin__
 
 from nagare import database
 from nagare.admin import util
@@ -152,14 +152,14 @@ def batch(parser, options, args):
 
     The arguments are the name of a registered applications, or the path to
     an applications configuration file, followed by the paths of a file to
-    execute (`-` for stdin)
+    execute
     """
     if len(args)==0:
         parser.error('No application given')
 
     if len(args)==1:
         parser.error('No file given')
-    
+
     for (i, option) in enumerate(sys.argv[3:]):
         if not option.startswith('-'):
             break
@@ -169,10 +169,10 @@ def batch(parser, options, args):
     ns = create_globals(args[:1], options.debug, parser.error)
     __builtin__.__dict__.update(ns)
 
-    exec(''.join(fileinput.input(args[1:]))) in globals(), locals()
+    util.load_file(args[1], None)
     
 class Batch(util.Command):
-    desc = 'Execute Python statements from files'
+    desc = 'Execute Python statements from a file'
     
     set_options = staticmethod(set_batch_options)
     run = staticmethod(batch)
