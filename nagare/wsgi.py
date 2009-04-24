@@ -325,34 +325,40 @@ class WSGIApp(object):
                 # section is `True`` (the default), conform to the PRG__ pattern
                 #
                 # __ http://en.wikipedia.org/wiki/Post/Redirect/GetPRG
-                if (request.method == 'POST') and not xhr_request and self.redirect_after_post:
-                    store_new_cont = False
-                    response = self.on_after_post(request, response, session.sessionid_in_url(request, response))
-                else:
-                    store_new_cont = not xhr_request
 
-                    # Create a new renderer
-                    renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
-                    # If the phase 1 has returned a render function, use it
-                    # else, start the rendering by the application root component
-                    output = render(renderer) if render else root.render(renderer)
+                try:
+                    if (request.method == 'POST') and not xhr_request and self.redirect_after_post:
+                        store_new_cont = False
+                        response = self.on_after_post(request, response, session.sessionid_in_url(request, response))
+                    else:
+                        store_new_cont = not xhr_request
 
-                    if session.back_used:
-                        output = self.on_back(request, response, renderer, output)
+                        # Create a new renderer
+                        renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
+                        # If the phase 1 has returned a render function, use it
+                        # else, start the rendering by the application root component
+                        output = render(renderer) if render else root.render(renderer)
 
-                    if not xhr_request:
-                        output = top.wrap(response.content_type, renderer, output)
+                        if session.back_used:
+                            output = self.on_back(request, response, renderer, output)
 
-                    self._phase2(request, response, output, render is not None)
+                        if not xhr_request:
+                            output = top.wrap(response.content_type, renderer, output)
 
-                    if not xhr_request:
-                        callbacks.clear_not_used(renderer._rendered)
+                        self._phase2(request, response, output, render is not None)
 
-                # Store the session
-                session.data = (root, callbacks)
-                self.sessions.set(session, store_new_cont)
+                        if not xhr_request:
+                            callbacks.clear_not_used(renderer._rendered)
 
-                security.get_manager().end_rendering(request, response, self.sessions, session)
+                    # Store the session
+                    session.data = (root, callbacks)
+                    self.sessions.set(session, store_new_cont)
+
+                    security.get_manager().end_rendering(request, response, self.sessions, session)
+                except exc.HTTPException, response:
+                    # When a ``webob.exc`` object is raised during phase 2, stop immediatly
+                    # use it as the response object
+                    pass
             finally:
                 if session:
                     session.lock.release()
