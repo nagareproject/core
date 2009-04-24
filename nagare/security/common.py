@@ -59,7 +59,7 @@ class Denial(BaseException):
         return False
 
     def __str__(self):
-        return 'security.Denial(%s)' % str(self)
+        return 'security.Denial(%s)' % str(self.args[0])
 
 # --------------------------------------------------------------
 
@@ -196,7 +196,7 @@ class Authentication(object):
           - ``id`` -- the user id
           - ``**kw`` -- the user credentials
         """
-        user._set_id(id)
+        user.set_id(id)
 
     def logout(self):
         """Deconnection of the current user
