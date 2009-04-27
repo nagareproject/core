@@ -30,10 +30,10 @@ def create_empty_file(path, name):
 
 def run(parser, options, args):
     if len(args) == 0:
-        parser.error('an application name must be provide')
+        parser.error('an application name must be provided')
 
     if len(args) > 1:
-        parser.error('only one application name must be provide')
+        parser.error('only one application name must be provided')
 
     root = args[0]
     app_name = os.path.basename(root)
@@ -74,7 +74,7 @@ def run(parser, options, args):
                   install_requires = ('nagare',),
                   entry_points = """
                   [nagare.applications]
-                  %(id)s = %(id)s.%(id)s:app
+                  %(id)s = %(id)s.app:app
                   """
                  )
         ''' % params))
@@ -83,7 +83,7 @@ def run(parser, options, args):
 
     create_empty_file(os.path.join(root, app_id), '__init__.py')
 
-    with open(os.path.join(root, app_id, app_id+'.py'), 'w') as f:
+    with open(os.path.join(root, app_id, 'app.py'), 'w') as f:
         f.write(textwrap.dedent('''\
             from __future__ import with_statement
 
@@ -137,6 +137,8 @@ def run(parser, options, args):
             from sqlalchemy import MetaData
 
             __metadata__ = MetaData()
+
+            # Here, put the definition of your Elixir or SQLAlchemy models
         '''))
 
     os.mkdir(os.path.join(root, 'static'))
