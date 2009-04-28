@@ -9,8 +9,6 @@
 
 import sys
 
-import pkg_resources
-
 try:
     import stackless
 except ImportError:
@@ -22,4 +20,17 @@ if sys.version_info < (2, 5, 2):
     print 'The version of Stackless Python must be 2.5.2 or more'
     sys.exit(-2)
 
+# -----------------------------------------------------------------------------
+
+import pkg_resources
+
 pkg_resources.declare_namespace('nagare')
+
+# -----------------------------------------------------------------------------
+
+import mimetypes
+
+# Fix issue 5868 in Python 2.6.2 (http://bugs.python.org/issue5868)
+mimetypes.init()
+
+print "Ici"
