@@ -26,6 +26,21 @@ try:
     import sqlalchemy
     from sqlalchemy import orm
 
+    class Mapper(sqlalchemy.orm.Mapper):
+        def __init__(self, cls, *args, **kw):
+            super(Mapper, self).__init__(cls, *args, **kw)
+
+            # Dynamically add a ``__getstate__()`` and ``__setstate__()`` method
+            # to the SQLAlchemy entities
+            if not hasattr(cls, '__getstate__'):
+                cls.__getstate__ = entity_getstate
+
+            if not hasattr(cls, '__setstate__'):
+                cls.__setstate__ = entity_setstate
+
+    # Hot-patching the SQLAlchemy ``Mapper`` class
+    sqlalchemy.orm.Mapper = Mapper
+
     session = orm.scoped_session(orm.sessionmaker())
 except ImportError:
     pass
@@ -89,22 +104,6 @@ def entity_setstate(entity, d):
 
         # Add the entity to the current database session
         session.add(entity)
-
-
-class Mapper(sqlalchemy.orm.Mapper):
-    def __init__(self, cls, *args, **kw):
-        super(Mapper, self).__init__(cls, *args, **kw)
-
-        # Dynamically add a ``__getstate__()`` and ``__setstate__()`` method
-        # to the SQLAlchemy entities
-        if not hasattr(cls, '__getstate__'):
-            cls.__getstate__ = entity_getstate
-
-        if not hasattr(cls, '__setstate__'):
-            cls.__setstate__ = entity_setstate
-
-# Hot-patching the SQLAlchemy ``Mapper`` class
-sqlalchemy.orm.Mapper = Mapper
 
 # -----------------------------------------------------------------------------
 
