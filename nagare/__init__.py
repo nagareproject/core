@@ -32,5 +32,3 @@ import mimetypes
 
 # Fix issue 5868 in Python 2.6.2 (http://bugs.python.org/issue5868)
 mimetypes.init()
-
-print "Ici"
