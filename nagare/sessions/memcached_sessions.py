@@ -109,7 +109,7 @@ class Sessions(common.Sessions):
         lock.acquire()
         
         connection.set_multi({
-            '' : (secure_id, None),
+            '_sess' : (secure_id, None),
             '_cont' : '0',
             '00000' : {}
         }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
@@ -131,13 +131,13 @@ class Sessions(common.Sessions):
         lock.acquire()
 
         id = cont_id.zfill(5)
-        session = connection.get_multi(('', '_cont', id), KEY_PREFIX+session_id)
+        session = connection.get_multi(('_sess', '_cont', id), KEY_PREFIX+session_id)
 
         if len(session) != 3:
             raise common.ExpirationError()
 
         last_cont_id = int(session['_cont'])
-        (secure_id, externals) = session['']
+        (secure_id, externals) = session['_sess']
         data = session[id]
 
         return (session_id, int(cont_id), last_cont_id, lock, secure_id, externals, data)
@@ -157,7 +157,7 @@ class Sessions(common.Sessions):
             self._get_connection().incr(KEY_PREFIX+session_id+'_cont')
         
         self._get_connection().set_multi({
-            '' : (secure_id, externals),
+            '_sess' : (secure_id, externals),
             '%05d' % cont_id : data
         }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
         
