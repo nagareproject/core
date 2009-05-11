@@ -221,7 +221,7 @@ def head_render_render_test8():
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.javascript('test', js_method)
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head lang="lang" profile="profile" id="id" dir="dir"><script type="text/javascript">function nagare_namespaces_test_test_xhtmlns_js_method(arg1) {    return true;}</script><script src="/static/nagare/pyjslib.js" type="text/javascript"></script></head>'
+    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head lang="lang" profile="profile" id="id" dir="dir"><script src="/static/nagare/pyjslib.js" type="text/javascript"></script><script type="text/javascript">function nagare_namespaces_test_test_xhtmlns_js_method(arg1) {    return true;}</script></head>'
 
 
 def head_render_render_test9():
@@ -298,7 +298,7 @@ def html_render_parse_html_test5():
     """ XHTML namespace unit test - HTMLRender - parse_html - get html from an URL """
     try:
         h = xhtml.Renderer()
-        root = h.parse_html('http://www.google.fr')
+        root = h.parse_html('http://www.google.fr/')
     except:
         assert False
     else:
@@ -518,7 +518,7 @@ def html_render_select_test2():
     options = h.root.xpath('.//option')
     for option in options:
         option.selected('option2')
-        
+
     assert options[1].attrib['selected'] == 'selected'
 
 
