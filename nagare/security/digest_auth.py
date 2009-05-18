@@ -26,7 +26,7 @@ class Authentication(common.Authentication):
           - ``realm`` -- authentication realm
           - ``private_key`` -- will be hashed to generate the digest
         """        
-        self.realm = realm
+        self.realm = str(realm)
         self.private_key = private_key
     
     def get_ids(self, request, response):
