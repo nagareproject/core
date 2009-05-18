@@ -9,9 +9,9 @@
 
 """Helpers to validate form datum"""
 
-_marker = object()
+from nagare import var
 
-class Property(object):
+class Property(var.Var):
     """An editor property
     
     An editor property has:
@@ -32,7 +32,9 @@ class Property(object):
           - ``self.value`` -- the last valid value
           - ``self.error`` -- the last error message
         """
-        self.input = self.value = v
+        super(Property, self).__init__(v)
+
+        self.value = v
         self.error = None
     
     def _validate(self, input):
@@ -72,33 +74,15 @@ class Property(object):
         """
         
         if not hasattr(input, 'file'):
-            self.input = input
+            super(Property, self).set(input)
         
         try:
             self.value = self._validate(input) # Call the validating function
+            if callable(self.value):
+                self.value = self.value()
             self.error = None
         except ValueError, data:
             self.error = data[0]
-        
-    def __call__(self, v=_marker):
-        """Return or set the values of the property
-        
-        Same behaviour than ``var.var()``:
-        
-          - ``my_prop()`` -- return the current value
-          - ``my_prop(v)`` -- set the current value and if valid, the valid
-            value 
-        
-        In:
-          - ``v`` -- the value to set
-        
-        Return:
-          - the current valye
-        """
-        if id(v) != id(_marker):
-            self.set(v)
-        
-        return self.input
 
     def commit(self, o, name):
         """Set the attribute ``name`` of the object ``o`` with the valid value

@@ -30,7 +30,23 @@ class Var(object):
         In:
           - ``v`` -- initial value
         """
-        self.value = v
+        self.input = v
+
+    def get(self):
+        """Return the value
+
+        Return:
+          - the value
+        """
+        return self.input
+
+    def set(self, v):
+        """Set the value
+
+        Return:
+          - the value
+        """
+        self.input = v
 
     def __call__(self, v=_marker):
         """Return or set the value
@@ -42,12 +58,12 @@ class Var(object):
           - the variable value
         """
         if id(v) != id(_marker):
-            self.value = v
+            self.set(v)
         
-        return self.value
+        return self.get()
     
     def render(self, renderer):
-        """Directly put into a tree, render its value
+        """When directly put into a XML tree, render its value
         
         In:
           - ``renderer`` -- the current renderer
@@ -55,7 +71,7 @@ class Var(object):
         Return:
           - the variable value
         """
-        return self.value
+        return self.get()
     
     def __str__(self):
-        return str(self.value)
+        return str(self.get())
