@@ -124,39 +124,42 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
         self._order = 0             # Memorize the order of the javascript and css
 
-    def css(self, name, style):
+    def css(self, name, style, **kw):
         """Memorize an in-line named css style
         
         In:
           - ``name`` -- unique name of this css style (to prevent double definition)
           - ``style`` -- the css style
+          - ``kw`` -- attributes of the generated ``<style>`` tag
           
         Return:
           - ``()``
         """
-        self._named_css.setdefault(name, (self._order, style))
+        self._named_css.setdefault(name, (self._order, style, kw))
         self._order += 1
         return ()
 
-    def css_url(self, url):
+    def css_url(self, url, **kw):
         """Memorize a css style URL
         
         In:
           - ``url`` -- the css style URL
+          - ``kw`` -- attributes of the generated ``<link>`` tag
           
         Return:
           - ``()``
         """
-        self._css_url.setdefault(absolute_url(url, self.static_url), self._order)
+        self._css_url.setdefault(absolute_url(url, self.static_url), (self._order, kw))
         self._order += 1
         return ()
 
-    def javascript(self, name, script):
+    def javascript(self, name, script, **kw):
         """Memorize an in-line named javascript code
         
         In:
           - ``name`` -- unique name of this javascript code (to prevent double definition)
           - ``script`` -- the javascript code
+          - ``kw`` -- attributes of the generated ``<script>`` tag
           
         Return:
           - ``()``
@@ -170,20 +173,21 @@ class HeadRenderer(xhtml_base.HeadRenderer):
             self.javascript_url('/static/nagare/pyjslib.js')
             script = script.javascript
 
-        self._named_javascript.setdefault(name, (self._order, script))
+        self._named_javascript.setdefault(name, (self._order, script, kw))
         self._order += 1
         return ()
 
-    def javascript_url(self, url):
+    def javascript_url(self, url, **kw):
         """Memorize a javascript URL
         
         In:
           - ``url`` -- the javascript URL
+          - ``kw`` -- attributes of the the generated ``<script>`` tag
           
         Return:
           - ``()``
         """
-        self._javascript_url.setdefault(absolute_url(url, self.static_url), self._order)
+        self._javascript_url.setdefault(absolute_url(url, self.static_url), (self._order, kw))
         self._order += 1
         return ()
 
@@ -197,34 +201,34 @@ class HeadRenderer(xhtml_base.HeadRenderer):
         """Return the list of the in-line named css styles, sorted by order of insertion
         
         Return:
-          - list of (name, css style)
+          - list of (name, css style, attributes)
         """
         
-        return [(name, style) for (name, (order, style)) in sorted(self._named_css.items(), key=operator.itemgetter(1))]
+        return [(name, style, attributes) for (name, (order, style, attributes)) in sorted(self._named_css.items(), key=operator.itemgetter(1))]
 
     def _get_css_url(self):
         """Return the list of css URLs, sorted by order of insertion
         
         Return:
-          - list of css URLs
+          - list of css (URLs, attributes)
         """
-        return [url for (url, order) in sorted(self._css_url.items(), key=operator.itemgetter(1))]
+        return [(url, attributes) for (url, (order, attributes)) in sorted(self._css_url.items(), key=operator.itemgetter(1))]
 
     def _get_named_javascript(self):
         """Return the list of named javascript codes, sorted by order of insertion
         
         Return:
-          - list of (name, javascript code)
+          - list of (name, javascript code, attributes)
         """
-        return [(name, js) for (name, (order, js)) in sorted(self._named_javascript.items(), key=operator.itemgetter(1))]
+        return [(name, js, attributes) for (name, (order, js, attributes)) in sorted(self._named_javascript.items(), key=operator.itemgetter(1))]
 
     def _get_javascript_url(self):
         """Return the list of javascript URLs, sorted by order of insertion
         
         Return:
-          - list of javascript URLs
+          - list of javascript (URLs, attributes)
         """
-        return [url for (url, order) in sorted(self._javascript_url.items(), key=operator.itemgetter(1))]
+        return [(url, attributes) for (url, (order, attributes)) in sorted(self._javascript_url.items(), key=operator.itemgetter(1))]
 
 @presentation.render_for(HeadRenderer)
 def render(self, h, *args):
@@ -248,16 +252,11 @@ def render(self, h, *args):
     else:
         head = self.head(head)
 
-    head.extend([self.link(rel='stylesheet', type='text/css', href=url) for url in self._get_css_url()])    
-    head.extend([self.script(type='text/javascript', src=url) for url in self._get_javascript_url()])
+    head.extend([self.link(rel='stylesheet', type='text/css', href=url, **attributes) for (url, attributes) in self._get_css_url()])
+    head.extend([self.script(type='text/javascript', src=url, **attributes) for (url, attributes) in self._get_javascript_url()])
 
-    css = [css for (name, css) in self._get_named_css()]
-    if css:
-        head.append(self.style('\n'.join(css), type='text/css'))
-
-    javascript = [js for (name, js) in self._get_named_javascript()]
-    if javascript:
-        head.append(self.script(';\n'.join(javascript), type='text/javascript'))
+    head.extend([self.style(css, type='text/css', **attributes) for (name, css, attributes) in self._get_named_css()])
+    head.extend([self.script(js, type='text/javascript', **attributes) for (name, js, attributes) in self._get_named_javascript()])
 
     return head
 
