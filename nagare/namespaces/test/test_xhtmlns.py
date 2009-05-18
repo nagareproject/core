@@ -66,7 +66,7 @@ def head_render_css_url_test1():
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.css_url('css')
 
-    assert h._css_url == {'/tmp/static_directory/css':0}
+    assert h._css_url == {'/tmp/static_directory/css' : (0, {})}
 
 
 def head_render_javascript_css_test2():
@@ -75,7 +75,7 @@ def head_render_javascript_css_test2():
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.css_url('/css')
 
-    assert h._css_url == {'/css':0}
+    assert h._css_url == {'/css' : (0, {})}
 
 
 def head_render_css_url_test3():
@@ -85,8 +85,8 @@ def head_render_css_url_test3():
         h << h.css_url('/css')
         h << h.css_url('css')
 
-    assert h._css_url['/css'] == 0
-    assert h._css_url['/tmp/static_directory/css'] == 1
+    assert h._css_url['/css'] == (0, {})
+    assert h._css_url['/tmp/static_directory/css'] == (1, {})
 
 
 def head_render_javascript_url_test1():
@@ -95,7 +95,7 @@ def head_render_javascript_url_test1():
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.javascript_url('test.js')
 
-    assert h._javascript_url == {'/tmp/static_directory/test.js':0}
+    assert h._javascript_url == {'/tmp/static_directory/test.js' : (0, {})}
 
 
 def head_render_javascript_url_test2():
@@ -103,7 +103,7 @@ def head_render_javascript_url_test2():
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.javascript_url('/test.js')
-    assert h._javascript_url == {'/test.js':0}
+    assert h._javascript_url == {'/test.js' : (0, {})}
 
 
 def head_render_javascript_url_test3():
@@ -113,8 +113,8 @@ def head_render_javascript_url_test3():
         h << h.javascript_url('/test.js')
         h << h.javascript_url('test.js')
 
-    assert h._javascript_url['/test.js'] == 0
-    assert h._javascript_url['/tmp/static_directory/test.js'] == 1
+    assert h._javascript_url['/test.js'] == (0, {})
+    assert h._javascript_url['/tmp/static_directory/test.js'] == (1, {})
 
 
 def head_render_javascript_url_test4():
@@ -124,7 +124,7 @@ def head_render_javascript_url_test4():
         h << h.javascript_url('test.js')
         h << h.javascript_url('test.js')
 
-    assert h._javascript_url == {'/tmp/static_directory/test.js':0}
+    assert h._javascript_url == {'/tmp/static_directory/test.js' : (0, {})}
 
 
 def head_render_javascript_test1():
@@ -133,7 +133,7 @@ def head_render_javascript_test1():
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.javascript('test', 'function test(arg1) { return true }')
 
-    assert h._named_javascript == {'test': (0, 'function test(arg1) { return true }')}
+    assert h._named_javascript == {'test': (0, 'function test(arg1) { return true }', {})}
 
 
 def head_render_javascript_test2():
@@ -146,7 +146,7 @@ def head_render_javascript_test2():
     with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
         h << h.javascript('test', js_method)
 
-    assert h._javascript_url == {'/static/nagare/pyjslib.js':0}
+    assert h._javascript_url == {'/static/nagare/pyjslib.js' : (0, {})}
     assert h._named_javascript.has_key('test')
 
 
@@ -157,7 +157,7 @@ def head_render_javascript_test3():
         h << h.javascript('test', 'function test(arg1) { return true }')
         h << h.javascript('test', 'function test(arg1) { return true }')
 
-    assert h._named_javascript == {'test': (0, 'function test(arg1) { return true }')}
+    assert h._named_javascript == {'test' : (0, 'function test(arg1) { return true }', {})}
 
 
 def head_render_render_test1():
