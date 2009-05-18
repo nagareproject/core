@@ -67,6 +67,7 @@ class IntValidator(Validator):
           - the integer value
         """
         return self.value
+    __call__ = to_int
     
     def lesser_than(self, max, msg='Must be lesser than %(max)d'):
         """Check that the value is lesser than a limit
@@ -139,6 +140,7 @@ class StringValidator(Validator):
           - the string value
         """
         return self.value
+    __call__ = to_string
     
     def to_int(self, base=10):
         """Return the value, converted to an integer
