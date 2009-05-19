@@ -18,6 +18,7 @@ with the ``--help`` or ``-h`` options:
    Usage : nagare-admin <command>
 
    with <command> :
+    - batch       : Execute Python statements from a file
     - create-app  : Create an application skeleton
     - create-db   : Create the database of an application
     - create-rules: Create the rewrite rules
@@ -35,6 +36,26 @@ And you can get an help about a specific command by entering :
    
 Full commands reference
 -----------------------
+
+batch
+~~~~~
+
+The ``batch`` command executes a python file.
+
+.. code-block:: sh
+
+   <NAGARE_HOME>/bin/nagare-admin batch <application> <batch.py> [batch options ...]
+
+Once launched, two variables are available:
+
+  - `apps` is a dictionary that associates the name of an application to its
+    activated application object.
+  - `session` is the SQLAlchemy session (don't forget the ``session.commit()``
+    statement at the end of your batch if database entities are manipulated)
+
+The available options are:
+
+  -d, --debug       display the generated SQL requests
 
 create-app
 ~~~~~~~~~~
@@ -76,10 +97,11 @@ The available options are:
 create-rules
 ~~~~~~~~~~~~
 
-The ``create-rules`` command generates rewrite rules for the ``lighttpd`` or ``nginx``
-web servers. These rules associate the URL ``/static/<application>`` to the
-directory path of the static contents of the application. With such rules
-activated, the web server will deliver the static contents instead of Nagare.
+The ``create-rules`` command generates rewrite rules for the ``apache``,
+``lighttpd`` or ``nginx`` web servers. These rules associate the URL
+``/static/<application>`` to the directory path of the static contents of the
+application. With such rules activated, the web server will deliver the static
+contents instead of Nagare.
 
 .. code-block:: sh
 
@@ -91,8 +113,9 @@ applications are generated.
 
 The available options are:
 
-  -l                create rules for lighttpd (default)
-  -n                create rules for nginx
+  -a, --apache      create rules for Apache (default)
+  -l, --lighttpd    create rules for Lighttpd
+  -n, --nginx       create rules for Nginx
 
 drop-db
 ~~~~~~~
@@ -210,8 +233,9 @@ interpreter:
 Once launched, two variables are available:
 
   - `apps` is a dictionary that associates the name of an application to its
-    root component factory.
-  - `session` is the SQLAlchemy session
+    activated application object.
+  - `session` is the SQLAlchemy session (don't forget the ``session.commit()``
+    statement if database entities are manipulated)
 
 The available options are:
 
