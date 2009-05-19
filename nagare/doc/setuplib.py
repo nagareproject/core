@@ -41,7 +41,7 @@ class GenerateHTML(distutils.cmd.Command):
     
     The command accepts a list of ReStructuredText to convert.
     """    
-    description = __doc__.strip()
+    description = 'generate HTML from ReStructuredText'
     user_options = [
                     ('path=', 'p', 'Path to docs directory'),
                     ('trac=', None, 'The Trac project URL'),
