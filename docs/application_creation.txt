@@ -52,7 +52,7 @@ In your application directory, edit the `setup.py` file:
           install_requires = ('nagare',),
           entry_points = """
           [nagare.applications]
-          my_app = my_app.my_app:app
+          my_app = my_app.app:app
           """
          )
 
