@@ -706,9 +706,7 @@ class Img(_HTMLActionTag):
         if not content_type:
             # If no ``Content-Type`` is already set, use the ``imghdr`` module
             # to guess the format of the image
-            img_type = imghdr.what(None, img[:32])
-            if img_type is not None:
-                content_type = 'image/'+(img_type or '*') 
+            content_type = 'image/'+(imghdr.what(None, img[:32]) or '*')
         e.content_type = content_type
         
         raise e
