@@ -22,7 +22,7 @@ class Authentication(common.Authentication):
         In:
           - ``realm`` -- authentication realm
         """
-        self.realm = str(realm)
+        self.realm = str(realm) if realm is not None else None
 
     def _get_ids(self, request, response):
         """Return the data associated with the connected user
