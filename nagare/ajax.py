@@ -51,8 +51,6 @@ def serialize(self, request, response, declaration):
     Return:
       - Javascript to evaluate on the client
     """
-    response.content_type = 'text/plain'
-
     if self.output is None:
         return ''
 
@@ -63,6 +61,8 @@ def serialize(self, request, response, declaration):
     body = serializer.serialize(self.output, request, response, False)
 
     # Wrap all into a javascript code
+    response.content_type = 'text/plain'
+
     return "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head)
 
 
