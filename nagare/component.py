@@ -13,8 +13,9 @@ This model is inspired by the Seaside one. With the possibility to embed,
 replace and call a component. It's described in `ComponentModel`
 """
 
-import stackless
+import sys
 import types
+import stackless
 
 from peak.rules import when
 
@@ -125,6 +126,8 @@ class Component(object):
         Return:
           - the answer of the called object        
         """
+        sys.exc_clear()
+
         if isinstance(o, Component):
             o = o()
 
