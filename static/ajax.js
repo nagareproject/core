@@ -68,10 +68,22 @@ function nagare_filter(items, filter) {
 	return not_in_filter;
 }
 
-function nagare_loadCSS(css) {
+
+function nagare_itemgetter(l, x) {
+    var r = new Array();
+    for(var i=0; i<l.length; i++) r[r.length] = l[i][x];
+    return r
+}
+
+function nagare_loadCSS(css, attrs) {
 	if(css.length) {
 		var style = document.createElement('style');
-		style.setAttribute("type", "text/css");
+
+        style.setAttribute("type", "text/css");
+        for (var name in attrs) {
+            style.setAttribute(name, attrs[name]);
+        }
+
 		if(style.styleSheet) style.styleSheet.cssText = css;
 		else style.appendChild(document.createTextNode(css));
 	
@@ -82,11 +94,11 @@ function nagare_loadCSS(css) {
 function nagare_loadAll(named_css, anon_css, css_urls, named_js, anon_js, js_urls) {
 	var named_css = nagare_filter(named_css, nagare_loaded_named_css)
 	for(var i=0; i<named_css.length; i++) {
-		nagare_loadCSS(named_css[i][1]);
+		nagare_loadCSS(named_css[i][1], named_css[i][2]);
 		nagare_loaded_named_css[named_css[i][0]] = 1;
 	}
 
-	nagare_loadCSS(anon_css);
+	nagare_loadCSS(anon_css, {});
 
 	var named_js = nagare_filter(named_js, nagare_loaded_named_js)
 	for(var i=0; i<named_js.length; i++) {
@@ -96,8 +108,8 @@ function nagare_loadAll(named_css, anon_css, css_urls, named_js, anon_js, js_url
 	
 	setTimeout(anon_js);
 	
-	YAHOO.util.Get.css(css_urls, { onSuccess: function (o) {
-		YAHOO.util.Get.script(js_urls, { onSuccess: function(o) { o.purge() } })
+	YAHOO.util.Get.css(nagare_itemgetter(css_urls, 0), { onSuccess: function (o) {
+		YAHOO.util.Get.script(nagare_itemgetter(js_urls, 0), { onSuccess: function(o) { o.purge() } })
 	} });
 }
 
