@@ -66,6 +66,15 @@ class _Tag(ET.ElementBase):
 
         return ET.tostring(self, encoding=encoding, method='xml', **kw)
 
+    def xpath(self, *args, **kw):
+        nodes = super(_Tag, self).xpath(*args, **kw)
+
+        renderer = self.renderer
+        for node in nodes:
+            node._renderer = renderer
+
+        return nodes
+
     def findmeld(self, id, default=None):
         """Find a tag with a given ``meld:id`` value
 
@@ -80,9 +89,7 @@ class _Tag(ET.ElementBase):
 
         if len(nodes) != 0:
             # Return only the first tag found
-            node = nodes[0]
-            node._renderer = self.renderer
-            return node
+            return nodes[0]
 
         return default
 
