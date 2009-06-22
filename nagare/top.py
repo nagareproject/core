@@ -41,6 +41,11 @@ def wrap(content_type, h, body):
             body = h.html(body)
         
         head1 = presentation.render(h.head, None, None, None) # The automatically generated ``<head>``
+
+        url = h.request.path_info.strip('/')
+        if url:
+            head1.append(h.head.link(rel='canonical', href=h.request.script_name+'/'+url))
+
         head2 = body[0]
     
         if not head2.tag.endswith('head'):
@@ -51,5 +56,5 @@ def wrap(content_type, h, body):
             # generated ``<head>`` to it
             head2.attrib.update(head1.attrib.items())
             head2.add_child(head1[:])
-    
+
     return body
