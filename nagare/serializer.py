@@ -10,6 +10,7 @@
 """Generate the content to return to the browser"""
 
 import peak.rules
+import lxml.html
 
 from nagare.namespaces import xml, xhtml_base
 
@@ -59,6 +60,7 @@ def serialize(output, request, response, declaration):
     else:
         # The browser accepts HTML only
         response.content_type = 'text/html'
+        lxml.html.xhtml_to_html(output)
 
         r = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">\n' if declaration else ''
         return r + output.write_htmlstring(pretty_print=True)
