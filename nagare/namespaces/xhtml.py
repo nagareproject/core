@@ -861,7 +861,7 @@ class Renderer(xhtml_base.Renderer):
           - ``static_url`` -- url of the static contents of the application
           - ``static_path`` -- path of the static contents of the application
           - ``url`` -- url prefix of the application
-        """        
+        """
         super(Renderer, self).__init__(parent, static_url=static_url)
 
         if parent is None:
@@ -1026,7 +1026,8 @@ class Renderer(xhtml_base.Renderer):
         Return:
           - the completed url
         """
-        if not u.startswith('/'):
+        i = u.find(':')
+        if ((i == -1) or not u[:i].isalpha()) and u and (u[0] != '/'):
             u = self.url + '/' + u
         
         if params is None:
