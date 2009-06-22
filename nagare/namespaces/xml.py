@@ -22,7 +22,7 @@ from nagare.namespaces import common
 
 CHECK_ATTRIBUTES = False
 
-# Namespace for the ``meld:id`` attribute 
+# Namespace for the ``meld:id`` attribute
 _MELD_NS = 'http://www.plope.com/software/meld3'
 _MELD_ID = '{%s}id' % _MELD_NS
 
@@ -33,7 +33,7 @@ class _Tag(ET.ElementBase):
     """
     def init(self, renderer):
         """Each tag keeps track of the renderer that created it
-        
+
         Return:
            - ``self``
         """
@@ -43,7 +43,7 @@ class _Tag(ET.ElementBase):
     @property
     def renderer(self):
         """Return the renderer that created this tag
-        
+
         Return:
           - the renderer
         """
@@ -52,11 +52,11 @@ class _Tag(ET.ElementBase):
 
     def write_xmlstring(self, encoding='utf-8', pipeline=True, **kw):
         """Serialize in XML the tree beginning at this tag
-        
+
         In:
           - ``encoding`` -- encoding of the XML
           - ``pipeline`` -- if False, the ``meld:id`` attributes are deleted
-          
+
         Return:
           - the XML
         """
@@ -68,11 +68,11 @@ class _Tag(ET.ElementBase):
 
     def findmeld(self, id, default=None):
         """Find a tag with a given ``meld:id`` value
-        
+
         In:
           - ``id`` -- value of the ``meld:id`` attribute to search
           - ``default`` -- value returned if the tag is not found
-          
+
         Return:
           - the tag found, else the ``default`` value
         """
@@ -80,13 +80,15 @@ class _Tag(ET.ElementBase):
 
         if len(nodes) != 0:
             # Return only the first tag found
-            return nodes[0]
+            node = nodes[0]
+            node._renderer = self.renderer
+            return node
 
         return default
 
     def append_text(self, text):
         """Append a text to this tag
-        
+
         In:
           - ``text`` -- text to add
         """
@@ -97,7 +99,7 @@ class _Tag(ET.ElementBase):
 
     def add_child(self, child):
         """Append a child to this tag
-        
+
         In:
           - ``child`` -- child to add
         """
@@ -106,10 +108,10 @@ class _Tag(ET.ElementBase):
 
     def meld_id(self, id):
         """Set the value of the attribute ``meld:id`` of this tag
-        
+
         In:
           - ``id`` - value of the ``meld;id`` attribute
-          
+
         Return:
           - ``self``
         """
@@ -118,11 +120,11 @@ class _Tag(ET.ElementBase):
 
     def fill(self, *children, **attrib):
         """Change all the child and append attributes of this tag
-        
+
         In:
           - ``children`` -- list of the new children of this tag
           - ``attrib`` -- dictionnary of attributes of this tag
-          
+
         Return:
           - ``self``
         """
@@ -133,31 +135,31 @@ class _Tag(ET.ElementBase):
 
     def replace(self, *children):
         """Replace this tag by others
-        
+
         In:
-          - ``children`` -- list of tags to replace this tag          
+          - ``children`` -- list of tags to replace this tag
         """
         parent = self.getparent()
-        
+
         # We can not replace the root of the tree
         if parent is not None:
             tail = self.tail
             l = len(parent)
-            
+
             i = parent.index(self)
             parent.fill(parent.text or '', parent[:i], children, self.tail or '', parent[i+1:])
 
             if len(parent) >= l:
                 parent[i-l].tail = tail
-    
+
     def repeat(self, iterable, childname=None):
         """Iterate over a sequence, cloning a new child each time
-        
+
         In:
           - ``iterable`` -- the sequence
           - ``childname`` -- If ``None``, clone this tag each time else
             clone each time the tag that have ``childname`` as ``meld:id`` value
-            
+
         Return:
           - list of tuples (cloned child, item of the sequence)
         """
@@ -178,11 +180,11 @@ class _Tag(ET.ElementBase):
 
     def __call__(self, *children, **attrib):
         """Append child and attributes to this tag
-        
+
         In:
           - ``children`` -- children to add
           - ``attrib`` -- attributes to add
-          
+
         Return:
           - ``self``
         """
@@ -214,11 +216,11 @@ class _Tag(ET.ElementBase):
 
 def add_child(self, o):
     """Default method to add an object to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``o`` -- object to add
-      
+
     Try to add the result of ``o.render()`` to the tag
     """
     render = getattr(o, 'render', None)
@@ -230,7 +232,7 @@ def add_child(self, o):
 @peak.rules.when(add_child, (_Tag, basestring))
 def add_child(self, s):
     """Add a string to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``s`` - str or unicode string to add
@@ -240,11 +242,11 @@ def add_child(self, s):
 @peak.rules.when(add_child, (_Tag, tuple))
 def add_child(self, t):
     """Add a tuple to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``t`` -- tuple to add
-      
+
     Add each items of the tuple
     """
     for child in t:
@@ -253,11 +255,11 @@ def add_child(self, t):
 @peak.rules.when(add_child, (_Tag, list))
 def add_child(self, l):
     """Add a list to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``l`` -- list to add
-      
+
     Add each items of the list
     """
     for child in l:
@@ -266,11 +268,11 @@ def add_child(self, l):
 @peak.rules.when(add_child, (_Tag, types.GeneratorType))
 def add_child(self, g):
     """Add a generator to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``l`` -- generator to add
-      
+
     Add each items produced
     """
     for child in g:
@@ -279,43 +281,43 @@ def add_child(self, g):
 @peak.rules.when(add_child, (_Tag, int))
 def add_child(self, i):
     """Add an integer to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``i`` -- integer to add
-      
-    Convert the integer to string and then add it 
+
+    Convert the integer to string and then add it
     """
     self.append_text(str(i))
 
 @peak.rules.when(add_child, (_Tag, long))
 def add_child(self, l):
     """Add a long integer to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``l`` -- long integer to add
-      
-    Convert the long integer to string and then add it 
+
+    Convert the long integer to string and then add it
     """
     self.append_text(str(l))
 
 @peak.rules.when(add_child, (_Tag, float))
 def add_child(self, f):
     """Add a float to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``f`` -- float to add
-      
-    Convert the float to string and then add it 
+
+    Convert the float to string and then add it
     """
     self.append_text(str(f))
 
 @peak.rules.when(add_child, (_Tag, ET.ElementBase))
 def add_child(self, element):
     """Add a tag to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``element`` -- the tag to add
@@ -328,7 +330,7 @@ def add_child(self, element):
 @peak.rules.when(add_child, (_Tag, ET._Comment))
 def add_child(self, element):
     """Add a comment element to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``element`` -- the comment to add
@@ -341,11 +343,11 @@ def add_child(self, element):
 @peak.rules.when(add_child, (_Tag, ET._ProcessingInstruction))
 def add_child(self, element):
     """Add a PI element to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``element`` -- the PI to add
-      
+
     Do nothing
     """
     pass
@@ -353,13 +355,13 @@ def add_child(self, element):
 @peak.rules.when(add_child, (_Tag, dict))
 def add_child(self, d):
     """Add a dictionary to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``element`` -- the dictionary to add
-      
+
     Each key/value becomes an attribute of the tag
-    
+
     Attribute name can end with a '_' which is removed
     """
     for (name, value) in d.items():
@@ -375,7 +377,7 @@ def add_child(self, d):
 
 def add_attribute(self, name, value):
     """Default method to add an attribute to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``name`` -- name of the attribute to add
@@ -391,12 +393,12 @@ def add_attribute(self, name, value):
 
 class TagProp(object):
     """Tag factory with a behavior of an object attribute
-    
+
     Each time this attribute is read, a new tag is created
     """
     def __init__(self, name, authorized_attribs, factory=None):
         """Initialization
-        
+
         In:
           - ``name`` -- name of the tags to create
           - ``authorized_attribs`` -- names of the valid attributes
@@ -410,11 +412,11 @@ class TagProp(object):
 
     def __get__(self, renderer, cls):
         """Create a new tag each time this attribute is read
-        
+
         In:
           - ``renderer`` -- the object that has this attribute
           - ``cls`` -- *not used*
-          
+
         Return:
           - a new tag
         """
@@ -428,25 +430,25 @@ class TagProp(object):
 
 class RendererMetaClass(type):
     """Meta class for the renderer class
-    
+
     Discover the tags that have a special factory and pass them to the
     ``class_init()`` method of the class
     """
     def __new__(self, cls_name, bases, ns):
         """Creation of the class
-        
+
         In:
           - ``cls_name`` -- name of the class to create
           - ``bases`` -- tuple of the base classes of the class to create
           - ``ns`` -- namespace of the class to create
-          
+
         Return:
           - the new class
         """
         cls = super(RendererMetaClass, self).__new__(self, cls_name, bases, ns)
 
         special_tags = {}
-        
+
         for (k, v) in ns.items():
             if isinstance(v, TagProp):
                 if v._factory is not None:
@@ -467,7 +469,7 @@ class XmlRenderer(common.Renderer):
     @classmethod
     def class_init(cls, special_tags):
         """Class initialisation
-        
+
         In:
           -- ``special_tags`` -- tags that have a special factory
         """
@@ -477,7 +479,7 @@ class XmlRenderer(common.Renderer):
 
     def __init__(self, parent=None):
         """Renderer initialisation
-        
+
         In:
           - ``parent`` -- parent renderer
         """
@@ -495,28 +497,28 @@ class XmlRenderer(common.Renderer):
         # The stack, contening the last tag push by a ``with`` statement
         # Initialized with a dummy root
         self._stack = [self.makeelement('_renderer_root_')]
-        
+
         # Each renderer created has a unique id
         self.id = self.generate_id('id')
 
     def _get_default_namespace(self):
         """Return the default_namespace
-        
+
         Return:
           - the default namespace or ``None`` if no default namespace was set
         """
         return self._default_namespace
-    
+
     def _set_default_namespace(self, namespace):
         """Change the default namespace
 
         The namespace must be a key of the ``self.namespaces`` dictionary or be
         ``None``
-        
+
         For example:
-        
+
         .. code-block:: python
-        
+
           x.namespaces = { 'xsl' : 'http://www.w3.org/1999/XSL/Transform' }
           x.set_default_namespace('xsl')
         """
@@ -531,30 +533,30 @@ class XmlRenderer(common.Renderer):
     @property
     def root(self):
         """Return the first tag(s) sent to the renderer
-        
+
         .. warning::
             A list of tags can be returned
-        
+
         Return:
           - the tag(s)
         """
         children = self._stack[0].getchildren()
-        
+
         text = self._stack[0].text
         if text is not None:
             children.insert(0, text)
-        
+
         if len(children) == 1:
             children = children[0]
-        
+
         return children
 
     def enter(self, current):
         """A new tag is pushed by a ``with`` statement
-        
+
         In:
           - ``current`` -- the tag
-          
+
         Return:
           - ``current``
         """
@@ -570,11 +572,11 @@ class XmlRenderer(common.Renderer):
 
     def _makeelement(self, tag, parser):
         """Make a tag, in the default namespace set
-        
+
         In:
           - ``tag`` -- name of the tag to create
           - ``parser`` -- parser used to create the tag
-          
+
         Return:
           - the new tag
         """
@@ -585,10 +587,10 @@ class XmlRenderer(common.Renderer):
 
     def makeelement(self, tag):
         """Make a tag, in the default namespace set
-        
+
         In:
           - ``tag`` -- name of the tag to create
-          
+
         Return:
           - the new tag
         """
@@ -597,10 +599,10 @@ class XmlRenderer(common.Renderer):
 
     def __lshift__(self, current):
         """Add a tag tag the last tag pushed by a ``with`` statement
-        
+
         In:
           - ``current`` -- tag to add
-        
+
         Return:
           - ``self``, the renderer
         """
@@ -609,10 +611,10 @@ class XmlRenderer(common.Renderer):
 
     def comment(self, text=''):
         """Create a comment element
-        
+
         In:
           - ``text`` -- text of the comment
-          
+
         Return:
           - the new comment element
         """
@@ -620,7 +622,7 @@ class XmlRenderer(common.Renderer):
 
     def parse_xml(self, source, fragment=False, no_leading_text=False, **kw):
         """Parse a XML file
-        
+
         In:
           - ``source`` -- can be a filename or a file object
           - ``fragment`` -- if ``True``, can parse a XML fragment i.e a XML without
@@ -628,20 +630,20 @@ class XmlRenderer(common.Renderer):
           - ``no_leading_text`` -- if ``fragment`` is ``True``, ``no_leading_text``
             is ``False`` and the XML to parsed begins by a text, this text is keeped
           - ``kw`` -- keywords parameters are passed to the XML parser
-          
+
         Return:
           - the root element of the parsed XML, if ``fragment`` is ``False``
-          - a list of XML elements, if ``fragment`` is ``True`` 
+          - a list of XML elements, if ``fragment`` is ``True``
         """
         # Create a dedicated XML parser with the ``kw`` parameter
         parser = ET.XMLParser(**kw)
         # This parser will generate nodes of type ``_Tag``
         parser.setElementClassLookup(ET.ElementDefaultClassLookup(element=_Tag))
-        
+
         if not fragment:
             # Parse a XML file
             # ----------------
-            
+
             root = ET.parse(source, parser).getroot()
             # Attach the renderer to the root
             root._renderer = self
@@ -649,21 +651,21 @@ class XmlRenderer(common.Renderer):
 
         # Parse a XML fragment
         # --------------------
-        
+
         # Create a dummy root
         source = cStringIO.StringIO('<dummy>%s</dummy>' % source.read())
         root = ET.parse(source, parser).getroot()
-        
+
         for e in root[:]:
             # Attach the renderer to each roots
             e._renderer = self
-        
-        # Return the children of the dummy root    
+
+        # Return the children of the dummy root
         return ([root.text] if root.text and not no_leading_text else []) + root[:]
 
     def parse_xmlstring(self, text, fragment=False, no_leading_text=False, **kw):
         """Parse a XML string
-        
+
         In:
           - ``text`` -- can be a ``str`` or ``unicode`` string
           - ``fragment`` -- if ``True``, can parse a XML fragment i.e a XML without
@@ -671,35 +673,35 @@ class XmlRenderer(common.Renderer):
           - ``no_leading_text`` -- if ``fragment`` is ``True``, ``no_leading_text``
             is ``False`` and the XML to parsed begins by a text, this text is keeped
           - ``kw`` -- keywords parameters are passed to the XML parser
-          
+
         Return:
           - the root element of the parsed XML, if ``fragment`` is ``False``
-          - a list of XML elements, if ``fragment`` is ``True`` 
+          - a list of XML elements, if ``fragment`` is ``True``
         """
         if type(text) == unicode:
             text = text.encode(kw.setdefault('encoding', 'utf-8'))
-        
+
         return self.parse_xml(cStringIO.StringIO(text), fragment, no_leading_text, **kw)
 
 # ---------------------------------------------------------------------------
 
 class Renderer(XmlRenderer):
     """The XML Renderer
-    
+
     This renderer generate any tags you give
-    
+
     .. code-block:: pycon
-    
+
        >>> xml = xml.Renderer()
        >>> xml.foo(xml.bar).write_xmlstring()
        '<foo><bar/></foo>'
     """
     def __getattr__(self, name):
         """Any attribute access becomes a tag generation
-        
+
         In:
           - ``name`` -- name of the tag to generate
-          
+
         Return:
           - the generated tag
         """
@@ -719,14 +721,14 @@ if __name__ == '__main__':
 
     print x.root.write_xmlstring(xml_declaration=True, pretty_print=True)
     print
-    
+
     for (e, (name, addr)) in x.root.repeat((('bill', 'seatle'), ('steve', 'cupertino')), 'contact'):
          e.findmeld('name').text = name
          e.findmeld('addr').text = addr
-    
+
     print x.root.write_xmlstring(pretty_print=True)
     print
-    
+
     # -----------------------------------------------------------------------
 
     x = Renderer()
@@ -735,19 +737,19 @@ if __name__ == '__main__':
 
     print x.all(x.root).write_xmlstring(xml_declaration=True, pretty_print=True)
     print
-    
+
     # -----------------------------------------------------------------------
-    
+
     t1 = x.parse_xmlstring('''
     <a>avant<x>kjkjkl</x>#<b b='b'>hello</b>apres</a>
     ''')
-    
+
     t2 = x.parse_xmlstring('''
     <toto>xxx<titi a='a'>world</titi>yyy</toto>
     ''')
-    
+
     t1[1].replace(t2[0])
     #t1[1].replace('new')
     #t1[1].replace()
-    
+
     print t1.write_xmlstring()
