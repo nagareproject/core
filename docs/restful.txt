@@ -1,0 +1,375 @@
+Significative "RESTful" URLs
+============================
+
+Nagare doesn't force you to explicitly map URLs to controllers. With Nagare you
+can develop your application and run it without them and, afterwards, set
+significative URL only for the resources you want to be able to bookmark.
+
+Principle
+---------
+
+An URL representes a well-defined state of the application components. The mapping
+of significative URL to the components state (the URL scheme) is made in 2 steps:
+
+  1. Give an URL to pages (i.e a omponents state)
+  2. When an URL is received, initialize the components state from it
+
+To illustrate these steps, we will use a timezone-aware clock example. First,
+install the require ``pytz`` python module:
+
+.. code-block:: sh
+
+  <NAGARE_HOME>/bin/easy_install pytz
+
+Then we can define our ``Clock`` component with two associated views, the default
+view which displays the local time and a view called ``timezone`` to display
+its timezone offset:
+
+.. code-block:: python
+   :linenos:
+
+    import datetime
+    import pytz
+    from nagare import presentation, component
+
+    class Clock(object):
+        # A ``Clock`` object is initialized with a timezone name
+        def __init__(self, timezone):
+            self.tz = pytz.timezone(timezone) # Create a timezone object
+
+
+    # The default view of a ``Clock`` object displays the local time
+    @presentation.render_for(Clock)
+    def render(self, h, comp, *args):
+        # Retrieve the current UTC time, convert it to local time and display it
+        dt = datetime.datetime.now(pytz.utc).astimezone(self.tz)
+        h << h.div(dt.strftime('%H:%M'), style='font-size: 150%')
+
+        # When the ``Time Zone`` link is clicked, change to the ``timezone`` view of this object
+        h << h.a('Time Zone').action(lambda: comp.becomes(self, model='timezone'))
+
+        return h.root
+
+    # The ``timezone`` view of a ``Clock`` object displays its timezone offset
+    @presentation.render_for(Clock, model='timezone')
+    def render(self, h, comp, *args):
+        # Retrieve the current UTC time, convert it to local time and display its timezone
+        dt = datetime.datetime.now(pytz.utc).astimezone(self.tz)
+        h << h.div(dt.strftime('%z %Z'), style='font-size: 150%')
+
+        # When the ``Time`` link is clicked, change back to the default view of this object
+        h << h.a('Time').action(lambda: comp.becomes(self, model=None))
+
+        return h.root
+
+To test this component, we define a factory:
+
+.. code-block:: python
+
+    def test1():
+        return Clock('America/New_York')
+
+and then launch it with:
+
+.. code-block:: sh
+
+    <NAGARE_HOME>/bin/nagare-admin module-serve clock.py:test1 test1
+
+Browsing to http://localhost:8080/test1 gives:
+
+.. class:: htmlscreen
+
+    .. raw:: html
+
+        <div style="font-size: 150%">08:15</div>
+        <a href="?_s=6428714020224300&amp;_c=00014&amp;_action414144870">Time Zone</a>
+
+and after a click on the ``Time Zone`` link:
+
+.. class:: htmlscreen
+
+    .. raw:: html
+
+        <div style="font-size: 150%">-0400 EDT</div>
+        <a href="?_s=6428714020224300&amp;_c=00015&amp;_action465356083">Time</a>
+
+The ``Clock`` component was developped in straight pure Python, without thinking
+about a URL scheme. You can see that switching between the ``Time Zone`` and
+``Time`` views don't change the URL path http://localhost:8080/test1/.
+
+1. Adding URL
+~~~~~~~~~~~~~
+
+It's easy to change the URL path when a link is clicked. Just add a normal relative
+``href`` attribut to the link definition.
+
+In our example, we modify the lines #18 and #30:
+
+.. code-block:: python
+    :hl_lines: 3, 8
+
+    ...
+    # When the ``Time zone`` link is clicked, change to the ``timezone`` view of this object
+    h << h.a('Time Zone', href='timezone').action(lambda: comp.becomes(self, model='timezone'))
+    ...
+
+    ...
+    # When the ``Time`` link is clicked, change back to the default view of this object
+    h << h.a('Time', href='time').action(lambda: comp.becomes(self, model=None))
+        ...
+
+Now, when you click on the links, the URL path is changed to
+http://localhost:8080/test1/time or http://localhost:8080/test1/timezone.
+
+But if you directly enter the URL ``http://localhost:8080/test1/timezone`` in your
+browser, the default view if displayed, not the ``timezone`` one. The following
+chapter describes how to initialize the components state with the received URL.
+
+2. Components initialization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When an URL is received, without a session and a continuation parameters or when
+the session is expired, Nagare tries to initialized the application components
+from the URL path by calling the generic method ``presentation.init_for()`` on
+the application root component, with the parameters:
+
+  1. ``self`` -- the root object
+  2. ``url`` -- a tuple of the unicode parts of the URL path (starting after the application name)
+  3. ``comp`` -- the component wrapping the root object
+  4. ``http_method`` -- the HTTP method (``GET``, ``POST``, ``PUT`` ...)
+  5. ``request`` -- the HTTP `webob request <http://pythonpaste.org/webob/reference.html#id1>`_ object
+
+It's up to the developper to implement the generic methods to initialize the
+root component.
+
+A ``presentation.HTTPNotFound()`` exception can be raised to
+send a ``404 Not Found`` result to the client.
+
+.. note::
+
+   - If no generic method matches, Nagare automatically raises the
+     ``presentation.HTTPNotFound()`` exception
+
+   - Any ``webob.exc`` exception can also be raised (``HTTPMethodNotAllowed``,
+     ``HTTPForbidden`` ...)
+
+In our example, we implement 2 conditions:
+
+.. code-block:: python
+
+    # If no URL is given or url is 'time', set the default view
+    @presentation.init_for(Clock, 'not url or url == (u"time",)')
+    def init(self, url, comp, http_method, request):
+        comp.becomes(self, model=None)
+
+    # If the url is 'timezone', set the ``timezone`` view
+    @presentation.init_for(Clock, 'url == (u"timezone",)')
+    def init(self, url, comp, http_method, request):
+        comp.becomes(self, model='timezone')
+
+Note these 2 methods do the exact same actions than when the links are manually
+clicked.
+
+.. note::
+
+   If you want to set the state of a component as if it was called, don't directly
+   do:
+
+   .. code-block:: python
+
+      comp.call(o)
+   
+   but use the ``component.call_wrapper()`` function:
+
+   .. code-block:: python
+
+      from nagare import component
+
+      component.call_wrapper(lambda: comp.call(o))
+
+You can now directly enter the ``http://localhost:8080/test1/time`` or
+``http://localhost:8080/test1/timezone`` URL. Of course, you can also bookmark
+them, send them in an email ...
+
+Components composition
+----------------------
+
+The example is now enhanced with a ``Clocks`` component that can display several
+``Clock`` components:
+
+.. code-block:: python
+   :linenos:
+
+    class Clocks:
+        # A ``Clocks`` has several ``Clock`` objects and a ``content`` component
+        def __init__(self):
+            # The ``Clock`` objects, each associated to a city name
+            self.cities = {
+                            'New-York' : Clock('America/New_York'),
+                            'Paris' : Clock('Europe/Paris'),
+                            'Sydney' : Clock('Australia/Sydney')
+                          }
+
+            # The ``content`` component, when created, wraps the ``None`` object
+            self.content = component.Component(None)
+
+            # The ``change_city()`` method change the ``content`` component to
+            # the ``Clock`` object of the city
+            self.change_city('New-York')
+
+        def change_city(self, name):
+            # The ``content`` component now wraps an other ``Clock`` object,
+            # which will be rendered with its default view
+            self.content.becomes(self.cities[name], model=None)
+
+
+    # The default view of the ``Clocks`` objects
+    @presentation.render_for(Clocks)
+    def render(self, h, *args):
+        # A bit of CSS to display a tabbed panel
+        h.head.css('clocks_css', '''
+            .clocks { display: inline-block }
+            .clocks .tab { padding: 0 5px 0 5px; border: 1px solid gray; background-color: #aaa }
+            .clocks .selected_tab { padding-top: 5px; border-bottom: none; background-color: #eee }
+            .clocks .content { border: 1px solid gray; border-top: none; background-color: #eee; text-align: center; padding: 10px }
+        ''')
+
+        with h.span(class_='clocks'):
+            # Display all the city names
+            for (name, city) in sorted(self.cities.items()):
+                if city is self.content():	# ``self.content()`` returns the current wrapped object
+                    # The selected city name is no more clickable
+                    h << h.span(name, class_='tab selected_tab')
+                else:
+                    # The others city names, when clicked, invoke the ``change_city()`` method
+                    link = h.a(name).action(lambda name=name: self.change_city(name))
+                    h << h.span(link, class_='tab')
+
+            # Delegate the rendering to the ``content`` component
+            h << h.div(self.content, class_='content')
+
+        return h.root
+
+Once again, this component is developed without taking care about the URL management
+and can be launched with:
+
+.. code-block:: sh
+
+    <NAGARE_HOME>/bin/nagare-admin module-serve clock.py:Clocks test2
+
+Browsing to http://localhost:8080/test2 gives:
+
+.. class:: htmlscreen
+
+    .. raw:: html
+
+        <style type="text/css">
+                .clocks { display: inline-block }
+                .clocks .tab { padding: 0 5px 0 5px; border: 1px solid gray; background-color: #aaa }
+                .clocks .selected_tab { padding-top: 5px; border-bottom: none; background-color: #eee }
+                .clocks .content { border: 1px solid gray; border-top: none; background-color: #eee; text-align: center; padding: 10px }
+            </style>
+        <link href="/test/New-York" rel="canonical">
+        </head>
+        <body><span class="clocks"><span class="tab selected_tab">New-York</span><span class="tab"><a href="/test/Paris?_s=7058172496804938&amp;_c=00005&amp;_action415566362">Paris</a></span><span class="tab"><a href="/test/Sydney?_s=7058172496804938&amp;_c=00005&amp;_action434466943">Sydney</a></span><div class="content">
+        <div style="font-size: 150%">08:15</div>
+        <a href="?_s=7058172496804938&amp;_c=00005&amp;_action452866309">Time Zone</a>
+        </div></span>
+
+and the navigation between the tabs and the time/timezone views is totally
+operational:
+
+.. class:: htmlscreen
+
+    .. raw:: html
+
+        <style type="text/css">
+                .clocks { display: inline-block }
+                .clocks .tab { padding: 0 5px 0 5px; border: 1px solid gray; background-color: #aaa }
+                .clocks .selected_tab { padding-top: 5px; border-bottom: none; background-color: #eee }
+                .clocks .content { border: 1px solid gray; border-top: none; background-color: #eee; text-align: center; padding: 10px }
+            </style>
+        <link href="/test/Paris" rel="canonical">
+        </head>
+        <body><span class="clocks"><span class="tab"><a href="/test/New-York?_s=7058172496804938&amp;_c=00007&amp;_action417751206">New-York</a></span><span class="tab selected_tab">Paris</span><span class="tab"><a href="/test/Sydney?_s=7058172496804938&amp;_c=00007&amp;_action422642801">Sydney</a></span><div class="content">
+        <div style="font-size: 150%">+0200 CEST</div>
+        <a href="?_s=7058172496804938&amp;_c=00007&amp;_action435022084">Time</a>
+        </div></span>
+
+1. Adding URL
+~~~~~~~~~~~~~
+
+A Nagare application is made of a dynamic tree of components. A parent component
+can fix the URL prefix their children will use for their links, by using the ``url``
+parameter of:
+
+  - ``component.Component(o, url='...')``
+  - ``comp.becomes(o, url='...')``
+  - ``comp.call(o, url='...')``
+
+In our example, we decide that the URL of the links generated by the ``Clock``
+views will began by the name of the city. So we add the parameter ``url=<city name>``
+line #21 and ``href=<city_name>`` line #43:
+
+.. code-block:: python
+    :hl_lines: 3, 8
+
+        ...
+        def select_city(self, name):
+            self.content.becomes(self.cities[name], model=None, url=name)
+        ...
+
+        ...
+        # The others city names, when clicked, invoke the ``change_city()`` method
+        link = h.a(name, href=name).action(lambda name=name: self.change_city(name))
+        ...
+
+Now, the URL path changes to http://localhost:8080/test2/Paris/time or
+http://localhost:8080/test2/Sydney/timezone ... Where the first part (``Paris``,
+``Sydney`` ...) is set by the ``Clocks`` component and the last part (``time``
+or ``timezone``) is set by the ``Clock`` component.
+
+2. Components initialization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+First a parent component initializes itself with parts of the received URL. Then
+it delegates the initialization to their children by calling their ``init()``
+method with the parameters:
+
+  1. ``url`` -- the rest of the URL parts
+  2. ``http_method`` -- the HTTP method (``GET``, ``POST``, ``PUT`` ...)
+  3. ``request`` -- the HTTP `webob request <http://pythonpaste.org/webob/reference.html#id1>`_ object
+
+So, we add a ``presentation.init_for()`` implementation for the ``Clocks``
+component that uses the first part of the URL (the city name) to initialize
+itself. Then we delegate the finalisation of the initialization to the ``content``
+component, passing it the rest of the URL:
+
+.. code-block:: python
+
+    @presentation.init_for(Clocks, 'len(url) >= 1') # The url must have at least 1 part
+    def init(self, url, comp, http_method, request):
+        city = url[0]   # The first part of the url is the city name
+        if city not in self.cities: # Check if the city name is valid
+            raise presentation.HTTPNotFound() # Else, send back a ``404``
+
+        self.select_city(city)  # Set the ``content`` component
+
+        # The ``content`` component is initialized with the rest of the URL
+        self.content.init(url[1:], http_method, request)
+
+RESTful URL
+-----------
+
+You may have noticed the ``presentation.init_for()`` also received the ``http_method``
+parameter (typically ``GET``, ``POST``, ``PUT`` and ``DELETE``) and the full
+``request`` `webob object <http://pythonpaste.org/webob/reference.html#id1>`_.
+In true RESTful style, both these parameters can be used to initialized the
+components tree.
+
+.. Note::
+
+  The HTTP method can also be sent by the client though the ``_method`` parameter,
+  using GET or POST requests.
+
+.. wikiname: RestfulUrl
