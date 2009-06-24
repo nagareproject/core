@@ -67,6 +67,8 @@ class _Tag(ET.ElementBase):
         return ET.tostring(self, encoding=encoding, method='xml', **kw)
 
     def xpath(self, *args, **kw):
+        """Override ``xpath()`` to associate a renderer to all the returned nodes
+        """
         nodes = super(_Tag, self).xpath(*args, **kw)
 
         renderer = self.renderer

@@ -12,6 +12,8 @@
 import types
 
 from peak.rules import when
+from webob.exc import HTTPNotFound
+
 
 class ModelError(LookupError):
     pass
@@ -58,29 +60,24 @@ def render(self, renderer, comp, model):
 
 # ---------------------------------------------------------------------------
 
-FOUND = None        # Value to return when an URLs is valid
-NOT_FOUND = True    # Value to return when an URLs is not valid
-
-def init(self, url, request, comp):
+def init(self, url, comp, http_method, request):
     """Generic method to initialized an object from a URL
     
     In:
       - ``self`` -- the object
       - ``url`` -- the URL
-      - ``request`` -- the web request object
       - ``comp`` -- the component
-      
-    Return:
-      - ``NOT_FOUND``
+      - ``http_method`` -- the HTTP method
+      - ``request`` -- the web request object
     """
-    return NOT_FOUND
+    raise HTTPNotFound()
 
 def init_for(cls, cond=None):
     """Decorator helper to register an URL for a class of objects
     
     In:
       - ``cls`` -- the class
-      - ``cond`` -- generic condition
+      - ``cond`` -- a generic condition
       
     Return:
       - a closure 

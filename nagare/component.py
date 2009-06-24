@@ -80,15 +80,15 @@ class Component(object):
         """Rendering method of a component
         
         Forward the call to the generic method of the ``presentation`` service
-        """    
+        """
         return presentation.render(self, renderer, self, model)
 
-    def init(self, url, request):
+    def init(self, url, http_method, request):
         """Initialisation from an url
         
         Forward the call to the generic method of the ``presentation`` service
         """
-        return presentation.init(self, url, request, self)
+        return presentation.init(self, url, self, http_method, request)
 
     def becomes(self, o, model=0, url=None):
         """Replace a component by an object or an other component
@@ -205,7 +205,7 @@ def render(self, renderer, comp, model):
     """
     renderer = renderer.new()   # Create a new renderer of the same class than the current renderer
     renderer.start_rendering(self, model)
-    
+
     if model == 0:
         model = self.model
         
@@ -213,18 +213,19 @@ def render(self, renderer, comp, model):
     return renderer.end_rendering(output)
 
 @presentation.init_for(Component)
-def init_for(self, url, request, comp):
+def init_for(self, url, comp, http_method, request):
     """Initialisation from an url
     
     In:
       - ``url`` -- rest of the url to process
-      - ``request`` -- the complete Request object
       - ``comp`` -- the component
+      - ``http_method`` -- the HTTP method
+      - ``request`` -- the complete Request object
       
     Return:
       - ``presentation.NOT_FOUND`` if the url is invalid, else ``None``
     """    
-    return presentation.init(self(), url, request, self)
+    presentation.init(self(), url, self, http_method, request)
 
 # -----------------------------------------------------------------------------------------------------
 

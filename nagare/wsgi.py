@@ -94,18 +94,6 @@ class WSGIApp(object):
         """
         raise exc.HTTPMethodNotAllowed()
 
-    def on_not_found(self, request, response):
-        """An incorrect URL was received
-
-        In:
-          - ``request`` -- the web request object
-          - ``response`` -- the web response object
-
-        Return:
-          - raise a ``webob.exc`` object, used to generate the response to the browser
-        """
-        raise exc.HTTPNotFound()
-
     def on_incomplete_url(self, request, response):
         """An URL without an application name was received
 
@@ -144,12 +132,12 @@ class WSGIApp(object):
         """
         return output
     
-    def on_callback_lookuperror(self, async, request, response):
+    def on_callback_lookuperror(self, request, response, async):
         """
-        In:e
-          - ``async`` -- is an XHR request ?
+        In:
           - ``request`` -- the web request object
           - ``response`` -- the web response object
+          - ``async`` -- is an XHR request ?
           
         """
         if not async:
@@ -281,10 +269,7 @@ class WSGIApp(object):
                 # -------
 
                 # Test the request validity
-                if request.method not in ('GET', 'POST'):
-                    self.on_bad_http_method(request, response)
-
-                if len(request.path_info) == 0:
+                if not request.path_info:
                     self.on_incomplete_url(request, response)
 
                 try:
@@ -301,18 +286,21 @@ class WSGIApp(object):
                     # and the callbacks registry
                     (root, callbacks) = session.data
 
+                request.method = request.params.get('_method', request.method)
+                if not session.is_new and request.method not in ('GET', 'POST'):
+                    self.on_bad_http_method(request, response)
+
                 self.start_request(root, request, response)
 
-                if session.is_new:
+                url = request.path_info.strip('/')
+                if session.is_new and url:
                     # If a URL is given, initialize the objects graph with it
-                    url = request.path_info.strip('/')
-                    if url and presentation.init(root, [u.decode('utf-8') for u in url.split('/')], request, None) == presentation.NOT_FOUND:
-                        self.on_not_found(request, response)
+                    presentation.init(root, tuple([u.decode('utf-8') for u in url.split('/')]), None, request.method, request)
 
                 try:
                     render = self._phase1(request.params, callbacks)
                 except CallbackLookupError:
-                    render = self.on_callback_lookuperror(xhr_request, request, response)
+                    render = self.on_callback_lookuperror(request, response, xhr_request)
             except exc.HTTPException, response:
                 # When a ``webob.exc`` object is raised during phase 1, skip the
                 # phase 2 and use it as the response object

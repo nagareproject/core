@@ -67,11 +67,6 @@ def process_request(app=None, environ={}, **kw):
     app(env, r)
     return r
 
-def test_request_validity1():
-    """Request - invalid method"""
-    r = process_request(REQUEST_METHOD='DELETE')
-    assert r.status_code == 405
-
 def test_request_validity2():
     """Request - invalid url"""
     r = process_request(PATH_INFO='')
