@@ -943,7 +943,7 @@ def html_render_action_test2():
             a = h.a(href='http://www.google.com').action(lambda x: None)
             h << a
 
-    assert a.attrib['href'] != 'http://www.google.com'
+    assert a.attrib['href'] == 'http://www.google.com'
 
 
 def html_render_action_test3():
