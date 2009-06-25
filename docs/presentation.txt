@@ -14,8 +14,8 @@ With Nagare, to generate a HTML text, you always build a tree of objects in
 memory, a Document Objects Model (not the DOM version of the W3C), that you
 can serialize in a (X)HTML text.
 
-One of the benefic effect of this serialization is that the HTML or XHTML
-generated is always valid.
+One of the benefic effect of this serialization is that the generated HTML or
+XHTML is always valid.
 
 The framework offers to you three ways to generate the DOM:
 
@@ -183,7 +183,7 @@ The templating system in Nagare follows the idea of the
 `meld family <http://plope.com/software/meld3/>`_: the
 designer who creates the XHTML template only gives identifiers to nodes.
 Then the developer can parse the template into a DOM tree, search for the DOM
-objects given their identifiers and manipulates them, in Python.
+objects given their identifiers and manipulates them in Python.
 
 1. Creating the template
 ++++++++++++++++++++++++
