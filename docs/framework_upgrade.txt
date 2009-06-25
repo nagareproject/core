@@ -1,0 +1,51 @@
+Nagare upgrade
+==============
+
+1. Virtual environment installation
+-----------------------------------
+
+If the Nagare installation you want to upgrade is located into a virtual
+environment, execute the followings commands:
+
+on Linux:
+
+.. code-block:: sh
+
+    <NAGARE_HOME>/bin/easy_install -U 'nagare[full]'
+
+on Windows:
+
+.. code-block:: sh
+
+    <NAGARE_HOME>\Scripts\easy_install.exe -U nagare[full]
+
+2. System-wide installation
+---------------------------
+
+If the Nagare installation was installed system-wide, execute:
+
+on Linux:
+
+.. code-block:: sh
+
+    <STACKLESS_HOME>/bin/easy_install -U 'nagare[full]'
+
+on Windows:
+
+.. code-block:: sh
+
+    <STACKLESS_HOME>\Scripts\easy_install.exe -U nagare[full]
+
+3. Developer installation
+-------------------------
+
+If your Nagare installation was directly a checkout from the SVN repository,
+execute:
+
+.. code-block:: sh
+
+    cd nagare/core
+    svn update
+    <NAGARE_HOME>/bin/easy_install setup.py develop
+
+.. wikiname: NagareUpgrade
