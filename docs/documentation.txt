@@ -6,6 +6,7 @@ Nagare documentation
   - :wiki:`NagareDescription`
   - :wiki:`NagareFeatures`
   - :wiki:`NagareLicence`
+  - :wiki:`NagareChangelog`
   - :wiki:`NagareDependencies`
   - :wiki:`DocumentationGeneration`
 
