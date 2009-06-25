@@ -1,0 +1,52 @@
+Nagare Changelog
+================
+
+0.2.0
+-----
+
+Python Stackless 2.6.2 is now the recommanded Python version.
+
+New features
+~~~~~~~~~~~~
+
+  - When an AJAX update contains CSS or Javascript urls, they are correctly fetched.
+  - Multiple AJAX updates object added
+  - Session lock added (distributed lock when memcached is used)
+  - A session can now contains SQLAlchemy (and Elixir) entities
+  - LRU management of the sessions and continuations
+  - ``nagare-admin create-rules`` administrative command added.
+    Generation of the Apache / lighttpd / ngnix rewrite rules to serve the statics
+    contents. See :wiki:`NagareAdmin`
+  - ``nagare-admin batch`` administrative command added. To execute Python
+    statements. See :wiki:`NagareAdmin`
+  - Easy WSGI pipe creation
+  - An application can now be registered under several urls
+  - The automatic reloader can be configured with a list of files to watch
+  - API to logout and change the user identity/password added
+  - automatic generation of a ``link(rel="canonical" ...)`` in the page header
+    as an alias without the session and continuation parameters
+  - ``min_compress_len`` parameter added in the memcached configuration
+  - YUI AJAX modules updated to 2.7.0
+  - SQLAlchemy updated to 0.5.x
+
+Changes
+~~~~~~~
+
+  - Complete refactoring of the AJAX communication. The "wire" format is now Javascript.
+  - ``component.Component.init()`` and ``presentation.init_for()`` API changes.
+    See :wiki:`RestfulUrl`
+
+Bugs fixed
+~~~~~~~~~~
+
+  - #19, #23, #26: race condition in the sessions management
+  - #22: don't clear the registered callbacks when an image is served
+  - #21: set the security context at the beginning of the request handling
+  - #13, #14: python to javascript translation updated
+
+0.1.0
+-----
+
+Initial release
+
+.. wikiname: NagareChangelog
