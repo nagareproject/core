@@ -8,6 +8,9 @@ The :wiki:`NagareInstallation` guide details the various ways and options to
 install the framework under Linux and Windows. Especially, read this guide if you
 want a developer installation of the framework.
 
+The :wiki:`NagareUpgrade` guide describes how to upgrade an existing Nagare
+installation.
+
 Then, if you want to install the demonstration follow the :wiki:`DemoInstallation`
 documentation.
 
