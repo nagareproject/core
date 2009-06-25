@@ -34,5 +34,6 @@ Nagare documentation
 * Examples
 
   - :wiki:`DemoInstallation`
+  - :wiki:`DemoUpgrade`
 
 .. wikiname: WikiStart
