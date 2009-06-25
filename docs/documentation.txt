@@ -13,6 +13,7 @@ Nagare documentation
 
   - :wiki:`QuickStart`
   - :wiki:`NagareInstallation`
+  - :wiki:`NagareUpgrade`
   - :wiki:`NagareAdmin`
   - :wiki:`ApplicationConfiguration`
   - :wiki:`PublisherConfiguration`
