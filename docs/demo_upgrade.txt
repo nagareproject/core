@@ -11,11 +11,11 @@ on Linux:
 
 .. code-block:: sh
 
-    <NAGARE_HOME>/bin/easy_install -U 'nagare.examples'
+    <NAGARE_HOME>/bin/easy_install -U nagare.examples
 
 on Windows:
 
-.. code-block:: sh
+.. code-block:: cmd
 
     <NAGARE_HOME>\Scripts\easy_install.exe -U nagare.examples
 
@@ -32,7 +32,7 @@ on Linux:
 
 on Windows:
 
-.. code-block:: sh
+.. code-block:: cmd
 
     <STACKLESS_HOME>\Scripts\easy_install.exe -U nagare.examples
 
