@@ -50,11 +50,11 @@ that append the new messages to the list of the existing ones:
    from nagare.namespaces import xhtml
 
    class GuestBook:
-   def __init__(self):
-       self.msgs = []
+       def __init__(self):
+           self.msgs = []
 
-   def add_message(self, msg):
-       self.msgs.append(msg)
+       def add_message(self, msg):
+           self.msgs.append(msg)
 
    @presentation.render_for(GuestBook)
    def render(self, h, *args):
@@ -104,11 +104,13 @@ Element                      Callback registration      Callback parameters
 ``h.select``                 ``.action(callback)``      the selected option value
 ``h.select(multiple=1)``     ``.action(callback)``      a tuple of the selected options value (even if
                                                         only one option is selected)
-``h.img``                    ``.action(callback)``      the image data (the callback will be called when
-                                                        the browser requests the image).
-                                                        If no ``h.response.content_type`` is set by the
-                                                        callback then Nagare will try to guess the image
-                                                        type. 
+``h.img``                    ``.action(callback)``      *no parameter*
+                                                        The callback is called when the browser requests
+                                                        the image. The callback is called with the response
+                                                        object as parameter and must return the image data.
+                                                        If the ``content_type`` attribut of the response
+                                                        object is not set by the callback, Nagare will try
+                                                        to guess the image type.
 ============================ ========================== ==================================================
 
 .. note::
@@ -153,7 +155,7 @@ Checkboxes reset
 The callbacks of the ``h.input(type='checkbox')`` are only called for the
 selected checkboxes. So, you need to reset the attributes that keep the current
 selected checkboxes before to process the callbacks. This reset method is
-typically the ```pre_action`` callback of ``h.form``: 
+typically the ```pre_action`` callback of the ``h.form``:
    
 .. code-block:: python
 
@@ -206,7 +208,7 @@ The ``var.Var()`` objects
 The instances of the ``Var`` class in :apidoc:`nagare.var#var.Var` are
 variable-like objects that provide a "functional" interface:
 
-  - calling the object with a value, set the variable value
+  - calling the object with a value, set the variable value and return the value
   - calling the object without a value, return the variable value
 
 They can be usefull to directly get / set variables in a lambda expression
@@ -237,7 +239,7 @@ Form validation
 Erroneous element
 ~~~~~~~~~~~~~~~~~
 
-Calling the ``.error(msg)`` method on an element wrap it into styled ``div``,
+Calling the ``.error(msg)`` method on an element wrap it into styled ``div``
 if ``msg`` is not ``None``:
 
 .. code-block:: pycon
@@ -355,7 +357,7 @@ suitable to be used as a validating function of a ``editor.Property`` object:
    # The validating function, first creates a ``IntValidator()``, then checks
    # the value is lesser than 10 and positive, and, finally, convert it to an
    # integer before to return it
-   >>> number.validate(lambda v: IntValidator(v).lesser_than(10).greater_than(0).to_int())
+   >>> number.validate(lambda v: IntValidator(v).lesser_than(10).greater_than(0))
 
    >>> number(2)
    2
@@ -426,10 +428,10 @@ attributes with a web form:
 
            # We use a string validator to check that the name is not empty i.e
            # the name is required
-           self.name.validate(lambda name: StringValidator(name).not_empty().to_string())
+           self.name.validate(lambda name: StringValidator(name).not_empty())
            
            # We use an integer validator to check the age is positive 
-           self.age.validate(lambda age: IntValidator(age).greater_than(0).to_int())              
+           self.age.validate(lambda age: IntValidator(age).greater_than(0))              
 
        # This ``commit`` method will write back the values of the ``name`` and
        # ``age`` attributes to the target object is they are valid
