@@ -173,7 +173,7 @@ A head renderer has also the following method:
            return h.div(h.h1('Hello world !'), class_='main')
 
 After the rendering phase, Nagare generates a ``<head>`` section which is the
-concatenation of all the DOM objects the different views have put into their
+concatenation of all the DOM objects the different views have put into the
 Head renderer.
 
 XML renderer
