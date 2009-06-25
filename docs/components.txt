@@ -16,7 +16,7 @@ or temporary.
 How to create a component ?
 ---------------------------
 
-With a lots of components based framework, you need to make your classes inherit
+With a lots of components based frameworks, you need to make your classes inherit
 from a ``Component`` class. Nagare is using composition instead of inheritance so
 you only need to wrap your python object into a ``Component`` instance to obtain
 a component. That's mean you can make a component from a "Plain Old Python
