@@ -176,8 +176,9 @@ and, when you want to update the sources from the repository, do:
 
   .. code-block:: sh
   
-     cd <NAGARE_HOME>/nagare
+     cd <NAGARE_HOME>/nagare/core
      svn update
+     <NAGARE_HOME>/bin/python setup.py develop
      
 5. Testing the installation
 ---------------------------
