@@ -1,10 +1,7 @@
-Mailing Lists
-=============
+Mailing List
+============
 
 For help and announcements, you can subscribe to the
 `users group <http://groups.google.com/group/nagare-users>`_.
-
-To discuss about Nagare core development, subscribe to the
-`developers group <http://groups.google.com/group/nagare-dev>`_.
 
 .. wikiname: MailingLists
