@@ -19,10 +19,10 @@ on Linux:
   .. code-block:: sh
   
      cd /tmp
-     wget http://www.stackless.com/binaries/stackless-252-export.tar.bz2
-     tar jxvf stackless-252-export.tar.bz2
+     wget http://www.stackless.com/binaries/stackless-262-export.tar.bz2
+     tar jxvf stackless-262-export.tar.bz2
      
-     cd stackless-2.5.2*
+     cd stackless-2.6.2*
      ./configure --prefix=<STACKLESS_HOME>
      make all
      make install 
@@ -42,10 +42,10 @@ directory **with Stackless Python**:
   .. code-block:: sh
 
      cd /tmp
-     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.3.1.tar.gz
-     tar zxvf virtualenv-1.3.1.tar.gz
+     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.3.3.tar.gz
+     tar zxvf virtualenv-1.3.3.tar.gz
      
-     <STACKLESS_HOME>/bin/python virtualenv-1.3.1/virtualenv.py <NAGARE_HOME>
+     <STACKLESS_HOME>/bin/python virtualenv-1.3.3/virtualenv.py <NAGARE_HOME>
 
 2.2 Install the framework
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +82,7 @@ To create the application ``my_first_app``, in the current directory:
 
 Congratulations your first application is available at http://localhost:8080/my_first_app.
 
-The source code of your application is in ``my_first_app/my_first_app/my_first_app.py``, ready to
-be modified !
+The source code of your application is in ``my_first_app/my_first_app/app.py``,
+ready to be modified !
 
 .. wikiname: QuickStart
