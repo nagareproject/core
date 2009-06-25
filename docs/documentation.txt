@@ -26,6 +26,7 @@ Nagare documentation
   - :wiki:`DatabaseTier`
   - :wiki:`CallbacksAndForms`
   - :wiki:`RendererObjects`
+  - :wiki:`RestfullUrl`
   - :wiki:`EntryPoints`
     
 * Examples
