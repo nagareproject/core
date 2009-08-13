@@ -15,24 +15,28 @@ var nagare_callbacks = {
 
     success : function (o) { setTimeout(o.responseText, 0) },
     failure : function (o) {
-    	                       var url = o.getResponseHeader['X-Debug-URL'];
+    	                       var url = o.getResponseHeader["X-Debug-URL"];
     						   if(url) {
     					           window.location = url;
     						   } else {
-    							   alert('XHR Error');
+    							   alert("XHR Error");
     					       }
                            },
     upload  : function (o) {
-                        	   if(o.responseText.substring(0, 5) != "URL: ") {                            	   
-                                   setTimeout(o.responseXML.firstChild.lastChild.firstChild.firstChild.data, 0);
+                        	   if(o.responseText.substring(0, 5) != "URL: ") {
+                                   var js = "";
+                                   var js_fragments = o.responseXML.firstChild.lastChild.firstChild;
+                                   for(var i=0; i<js_fragments.childNodes.length; i++)
+                                       js += js_fragments.childNodes[i].data;
+                                   setTimeout(js, 0);
                         	   } else {
-                        	       alert('XHR Error');
+                        	       alert("XHR Error");
                         	   }
                            }
 };
 
 function nagare_getAndEval(href) {
-	YAHOO.util.Connect.initHeader('ACCEPT', NAGARE_CONTENT_TYPE);
+	YAHOO.util.Connect.initHeader("ACCEPT", NAGARE_CONTENT_TYPE);
     YAHOO.util.Connect.asyncRequest("GET", href, nagare_callbacks);
     return false;
 }
@@ -46,7 +50,7 @@ function nagare_hasUpload(f) {
 }
 
 function nagare_postAndEval(f, action) {
-	YAHOO.util.Connect.initHeader('ACCEPT', NAGARE_CONTENT_TYPE);	
+	YAHOO.util.Connect.initHeader("ACCEPT", NAGARE_CONTENT_TYPE);
     YAHOO.util.Connect.setForm(f, nagare_hasUpload(f));
     YAHOO.util.Connect.asyncRequest("POST", "?_a&"+action, nagare_callbacks);
     return false;
@@ -77,7 +81,7 @@ function nagare_itemgetter(l, x) {
 
 function nagare_loadCSS(css, attrs) {
 	if(css.length) {
-		var style = document.createElement('style');
+		var style = document.createElement("style");
 
         style.setAttribute("type", "text/css");
         for (var name in attrs) {
