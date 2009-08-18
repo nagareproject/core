@@ -19,13 +19,7 @@ from __future__ import with_statement
 
 import sys, os
 import distutils
-
-from nagare.doc import code_block
-
 from setuptools import find_packages
-import docutils
-from rstdoc.setuplib import rstdocs
-from rstdoc.rstlib.astdoc import documentPackages, documentFile
 
 settings = {
             'stylesheet' : 'doc.css',
@@ -47,7 +41,13 @@ class GenerateHTML(distutils.cmd.Command):
                     ('trac=', None, 'The Trac project URL'),
                    ]
     command_consumes_arguments = True
-    
+
+    def __init__(self, *args):
+        if 'rstdoc' in sys.modules:
+            del sys.modules['rstdoc']
+
+        distutils.cmd.Command.__init__(self, *args)
+
     def initialize_options(self):
         """Default options values
         
@@ -65,6 +65,9 @@ class GenerateHTML(distutils.cmd.Command):
         pass
 
     def run(self):
+        import docutils
+        from nagare.doc import code_block
+
         if not self.args:
             raise distutils.errors.DistutilsOptionError('No file to convert')
 
@@ -90,18 +93,40 @@ class GenerateHTML(distutils.cmd.Command):
                                       )
         
 
-class GenerateAPI(rstdocs):
+class GenerateAPI(distutils.cmd.Command):
     """API generation
     
     The ``generate_api`` command accepts a list of Python files to analyse.
     
     If no files are given, it generates the API documentation for all the
     Python files of the distribution.
-    """        
-    def run (self):
+    """
+    description =  'generate python documentation from module sources'
+    user_options = [
+        ('path=', 'p', 'Path to docs directory'),
+        ('title=', None, 'The title of the Package index'),
+        ('trac=', None, 'The Trac project URL'),
+        ('no-status', None, 'Supress status messages'),
+        ]
+    boolean_options = ['no-status']
+    command_consumes_arguments = True
+
+    def __init__(self, *args):
+        if 'rstdoc' in sys.modules:
+            del sys.modules['rstdoc']
+
+        from rstdoc.setuplib import rstdocs
+        self.__class__.__bases__ = (rstdocs,)
+        rstdocs.__init__(self, *args)
+
+    def run(self):
         if self.dry_run:
             return
-    
+
+        import docutils
+        from nagare.doc import code_block
+        from rstdoc.rstlib.astdoc import documentPackages, documentFile
+
         code_block.register_directive()
 
         docPath = os.path.abspath(self.path)
