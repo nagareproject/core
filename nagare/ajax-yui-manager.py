@@ -61,9 +61,12 @@ def serialize(self, request, response, declaration):
     body = serializer.serialize(self.output, request, response, False)
 
     # Wrap all into a javascript code
+    #return "%s('%s', %s); %s; YAHOO.util.History.navigate('_c', '%05d')" % (self.js, self.id, py2js(body, self.renderer), head, self.renderer.session.new_cont_id)
+    #return "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head)
     response.content_type = 'text/plain'
 
-    return "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head)
+    body = py2js(body, self.renderer) #.replace('"', r'\"')
+    return "%s('%s', %s);" % (self.js, self.id, body)
 
 
 class Update(object):
@@ -72,7 +75,7 @@ class Update(object):
     Send a XHR request that can do an action, render a component and finally
     update the HTML with the rendered view
     """
-    def __init__(self, render='', action=lambda *args: None, component_to_update=None, with_request=False):
+    def __init__(self, render='', action=lambda *args: None, component_to_update=None):
         """Initialisation
         
         In:
@@ -84,18 +87,15 @@ class Update(object):
               back to the client
             
           - ``action`` -- action to call
-
+          
           - ``component_to_update`` -- can be:
           
             - ``None`` -- the current view will be updated
             - a string -- the DOM id of the HTML to update
             - a tag -- this tag will be updated
-            
-          - ``with_request`` -- will the request and response objects be passed to the action ?
         """
         self.render = render
         self.action = action
-        self.with_request = with_request
         self.component_to_update = component_to_update
 
     def _generate_render(self, renderer):
@@ -120,6 +120,8 @@ class Update(object):
                                 
                 head.javascript('_nagare_content_type_', 'NAGARE_CONTENT_TYPE="%s"' % ('application/xhtml+xml' if renderer.response.xhtml_output else 'text/html'))
                 head.javascript_url('/static/nagare/ajax.js')
+
+                #head.javascript('cont_id', 'cont_id="%05d"' % renderer.session.cont_id)
 
         js = 'nagare_updateNode'
         component_to_update = self.component_to_update
@@ -165,7 +167,7 @@ class Update(object):
             - name of the javascript function to call on the client
             - id of the tag to update on the client
         """
-        return renderer.register_callback(priority, self.action, self.with_request, self._generate_render(renderer))
+        return renderer.register_callback(priority, self.action, self._generate_render(renderer))
 
     def generate_action(self, priority, renderer):
         """Generate the javascript action
@@ -183,6 +185,7 @@ class Update(object):
             return 'return nagare_postAndEval(this.form, "%s")' % self._generate_replace(4, renderer)
         elif priority == 41:
             return 'return nagare_getAndEval("%s;_a;%s")' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(4, renderer))
+            #return 'return nagare_getAndEval("?_s=%s;_a;%s;_c="+cont_id)' % (renderer.session.session_id, self._generate_replace(4, renderer))
         elif priority == 2:
             return 'nagare_getAndEval("%s;_a;%s")' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(2, renderer))
         else:

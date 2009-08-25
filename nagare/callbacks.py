@@ -67,7 +67,7 @@ class Callbacks:
             # Clear the dictionary
             callbacks.clear()
 
-    def register_callback(self, component, priority, callback, render):
+    def register_callback(self, component, priority, callback, with_request, render):
         """Register a callback
         
         In:
@@ -82,6 +82,7 @@ class Callbacks:
             - 5 : action with continuation and with value (special case for >input type='image'>)
 
           - ``callback`` -- the action function or method
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``render`` -- the render function or method
           
         Return:
@@ -96,8 +97,8 @@ class Callbacks:
             callbacks = {}
             self.callbacks.append((component, callbacks))
         
-        # Remember the action and render functions                          
-        callbacks[id] = (callback, render)
+        # Remember the action and render functions                 
+        callbacks[id] = (callback, with_request, render)
 
         return '_action%d%08d' % (priority, id)
 
@@ -118,21 +119,21 @@ class Callbacks:
 
         raise CallbackLookupError(name)
 
-    def process_response(self, request):
+    def process_response(self, request, response):
         """Call the actions associated to the callback identifiers received
         
         In:
-          - ``request`` -- the web request parameters received
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
         
         Return:
-          - tuple (render function, has the action function possibly modify the
-            components ?) 
+          - the render function
         """
         # The structure of a callback identifier is
         # '_action<priority on 1 char><key into the callbacks dictionary>'
         
         actions = {}
-        for (name, value) in request.items():
+        for (name, value) in request.params.items():
             if isinstance(value, basestring) and value.startswith('_action'):
                 # For the radio buttons, the callback identifier is the value,
                 # not the name
@@ -151,7 +152,7 @@ class Callbacks:
         callback_type = 0
 
         for ((callback_type, _), name, param, value) in sorted(actions.values()):
-            (f, render) = self._search_by_callback_name(name)
+            (f, with_request, render) = self._search_by_callback_name(name)
             if f is None:
                 continue
 
@@ -163,14 +164,24 @@ class Callbacks:
             # 3 : <form>.post_action
             # 4 : action with continuation and without value (<a>, submit button ...)
             # 5 : action with continuation and with value (special case for >input type='image'>)
-            
-            if callback_type == 1:
-                f(value)
-            elif callback_type == 5:
-                call_wrapper(f, param[-1]=='x', int(value))
-            elif callback_type == 4:
-                call_wrapper(f)
-            else: # 0, 2, 3
-                f()
+           
+	    if with_request:
+                if callback_type == 1:
+                    f(request, response, value)
+                elif callback_type == 5:
+                    call_wrapper(f, request, response, param[-1]=='x', int(value))
+                elif callback_type == 4:
+                    call_wrapper(f, request, response)
+                else: # 0, 2, 3
+                    f(request, response)
+	    else:
+                if callback_type == 1:
+                    f(value)
+                elif callback_type == 5:
+                    call_wrapper(f, param[-1]=='x', int(value))
+                elif callback_type == 4:
+                    call_wrapper(f)
+                else: # 0, 2, 3
+                    f()
 
         return render

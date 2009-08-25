@@ -203,20 +203,21 @@ class WSGIApp(object):
         security.set_user(self.security.create_user(request, response)) # Create the User object
 
     # Processing phase
-    def _phase1(self, params, callbacks):
+    def _phase1(self, request, response, callbacks):
         """Phase 1 of the request processing:
 
           - The callbacks are processed
           - The objects graph can be modified
 
         In:
-          - ``params`` -- parameters received into the request
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
           - ``callbacks`` -- the registered callbacks
 
         Return:
           - function to render the objects graph or ``None``
         """
-        return callbacks.process_response(params)
+        return callbacks.process_response(request, response)
 
     # Rendering phase
     def _phase2(self, request, response, output, is_xhr):
@@ -228,8 +229,8 @@ class WSGIApp(object):
           - No modification of the objects is allowed
 
         In:
-          - ``session`` -- the session
           - ``request`` -- the web request object
+          - ``response`` -- the web response object
           - ``output`` -- the rendered tree
           - ``is_xhr`` -- is the request a XHR request ?
 
@@ -254,7 +255,7 @@ class WSGIApp(object):
 
         request = webob.Request(environ, charset='utf-8')
         response = webob.Response(headerlist=[])
-        
+
         accept = MIMEAcceptWithoutWildcards('Accept', 'text/html' if self.always_html else str(request.accept))
         response.xhtml_output = accept.best_match(('text/html', 'application/xhtml+xml')) == 'application/xhtml+xml'
 
@@ -298,7 +299,7 @@ class WSGIApp(object):
                     presentation.init(root, tuple([u.decode('utf-8') for u in url.split('/')]), None, request.method, request)
 
                 try:
-                    render = self._phase1(request.params, callbacks)
+                    render = self._phase1(request, response, callbacks)
                 except CallbackLookupError:
                     render = self.on_callback_lookuperror(request, response, xhr_request)
             except exc.HTTPException, response:

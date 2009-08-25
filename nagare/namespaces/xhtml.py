@@ -265,11 +265,12 @@ def render(self, h, *args):
 class _HTMLActionTag(xhtml_base._HTMLTag):
     """Base class of all the tags with a ``.action()`` method
     """
-    def action(self, action, permissions=None, subject=None):
+    def action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action
         
         In:
           - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
           
@@ -277,37 +278,43 @@ class _HTMLActionTag(xhtml_base._HTMLTag):
           - ``self``
         """
         if isinstance(action, ajax.Update):
-            self._async_action(self.renderer, action, permissions, subject)
+            self._async_action(self.renderer, action, with_request, permissions, subject)
         else:
             # Double dispatch with the renderer
-            self.renderer.action(self, action, permissions, subject)
+            self.renderer.action(self, action, with_request, permissions, subject)
         
         return self
 
-    def sync_action(self, renderer, action, permissions, subject):
+    def sync_action(self, renderer, action, with_request, permissions, subject):
         """Register a synchronous action
         
         In:
           - ``renderer`` -- the current renderer
-          - ``action`` -- the action
+          - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
+          - ``permissions`` -- permissions needed to execute the action
+          - ``subject`` -- subject to test the permissions on
         """
         if permissions is not None:
-            # Wrapper the ``action`` into a wrapper that will check the user permissions
+            # Wrap the ``action`` into a wrapper that will check the user permissions
             action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
-        self.set(self._actions[1], renderer.register_callback(self._actions[0], action))
+        self.set(self._actions[1], renderer.register_callback(self._actions[0], action, with_request))
 
     async_action = sync_action
     
-    def _async_action(self, renderer, action, permissions, subject):
+    def _async_action(self, renderer, action, with_request, permissions, subject):
         """Register an asynchronous action
         
         In:
           - ``renderer`` -- the current renderer
-          - ``action`` -- the action
+          - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
+          - ``permissions`` -- permissions needed to execute the action
+          - ``subject`` -- subject to test the permissions on
         """
         if callable(action):
-            action = ajax.Update(action=action)
+            action = ajax.Update(action=action, with_request=with_request)
         
         self.set(self._actions[2], action.generate_action(self._actions[0], renderer))
 
@@ -353,12 +360,13 @@ class Form(xhtml_base._HTMLTag):
 
         super(Form, self).add_child(child)
 
-    def pre_action(self, action, permissions=None, subject=None):
+    def pre_action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action that will be executed **before** the actions of the
         form elements
         
         In:
           - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
           
@@ -366,19 +374,20 @@ class Form(xhtml_base._HTMLTag):
           - ``self``
         """
         if permissions is not None:
-            # Wrapper the ``action`` into a wrapper that will check the user permissions            
+            # Wrap the ``action`` into a wrapper that will check the user permissions            
             action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
         # Generate a hidden field with the action attached
-        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(0, action))))
+        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(0, action, with_request))))
         return self
         
-    def post_action(self, action, permissions=None, subject=None):
+    def post_action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action that will be executed **after** the actions of the
         form elements
         
         In:
           - ``action`` -- action
+          - ``with_request`` -- will the request and response object be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
           
@@ -386,11 +395,11 @@ class Form(xhtml_base._HTMLTag):
           - ``self``
         """
         if permissions is not None:
-             # Wrapper the ``action`` into a wrapper that will check the user permissions
+             # Wrap the ``action`` into a wrapper that will check the user permissions
              action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
         # Generate a hidden field with the action attached
-        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(3, action))))
+        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(3, action, with_request))))
         return self
     
 # ----------------------------------------------------------------------------------
@@ -428,11 +437,12 @@ class TextArea(_HTMLActionTag):
     #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
     
-    def action(self, action, permissions=None, subject=None):
+    def action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action
         
         In:
           - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
 
@@ -440,7 +450,12 @@ class TextArea(_HTMLActionTag):
           - ``self``
         """
         # The content sent to the action will have the '\r' characters deleted
-        return super(TextArea, self).action(lambda v: action(v.replace('\r', '')), permissions, subject)
+        if with_request:
+            f = lambda request, response, v: action(request, response, v.replace('\r', ''))
+        else:
+            f = lambda v: action(v.replace('\r', ''))
+
+        return super(TextArea, self).action(f, with_request, permissions, subject)
 
 
 class PasswordInput(_HTMLActionTag):
@@ -518,8 +533,17 @@ class SubmitInput(_HTMLActionTag):
     #   - name of the attribute for the asynchronous action
     _actions = (4, 'name', 'onclick')
     
-    def async_action(self, renderer, action, permissions, subject):
-        return self._async_action(renderer, action, permissions, subject)
+    def async_action(self, renderer, action, with_request, permissions, subject):
+        """Register an asynchronous action
+
+        In:
+          - ``renderer`` -- the current renderer
+          - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
+          - ``permissions`` -- permissions needed to execute the action
+          - ``subject`` -- subject to test the permissions on
+        """
+        return self._async_action(renderer, action, with_request, permissions, subject)
 
 class HiddenInput(_HTMLActionTag):
     """ ``<input>`` tags with ``type=hidden`` attributes
@@ -603,11 +627,12 @@ class Select(_HTMLActionTag):
     #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
     
-    def action(self, action, permissions=None, subject=None):
+    def action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action
         
         In:
           - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
 
@@ -617,49 +642,53 @@ class Select(_HTMLActionTag):
         if self.get('multiple') is not None:
             # If this is a multiple select, the value sent to the action will
             # always be a list, even if only 1 item was selected
-            action = lambda v, action=action: action(v if isinstance(v, (list, tuple)) else (v,))
+            if with_request:
+                action = lambda request, response, v, action=action: action(request, response, v if isinstance(v, (list, tuple)) else (v,))
+            else:
+                action = lambda v, action=action: action(v if isinstance(v, (list, tuple)) else (v,))
             
-        return super(Select, self).action(action, permissions, subject)
+        return super(Select, self).action(action, with_request, permissions, subject)
 
 # ----------------------------------------------------------------------------------
 
 class A(_HTMLActionTag):
     """ ``<a>`` tags
     """
-
     # Tuple:
     #   - action type
     #   - name of the attribute for the synchronous action
     #   - name of the attribute for the asynchronous action
     _actions = (41, None, 'onclick')
 
-    def sync_action(self, renderer, action, permissions, subject):
+    def sync_action(self, renderer, action, with_request, permissions, subject):
         """Register a synchronous action
         
         In:
           - ``renderer`` -- the current renderer
           - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
 
         """
         if permissions is not None:
-            # Wrapper the ``action`` into a wrapper that will check the user permissions
+            # Wrap the ``action`` into a wrapper that will check the user permissions
             action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
         href = self.get('href', '').partition('#')
-        self.set('href', renderer.add_sessionid_in_url(href[0], (renderer.register_callback(4, action),))+href[1]+href[2])
+        self.set('href', renderer.add_sessionid_in_url(href[0], (renderer.register_callback(4, action, with_request),))+href[1]+href[2])
     
-    def _async_action(self, renderer, action, permissions, subject):
+    def _async_action(self, renderer, action, with_request, permissions, subject):
         """Register an asynchronous action
         
         In:
           - ``renderer`` -- the current renderer
           - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
         """
-        super(A, self)._async_action(renderer, action, permissions, subject)
+        super(A, self)._async_action(renderer, action, with_request, permissions, subject)
         self.set('href', '#')
     async_action = _async_action
     
@@ -689,38 +718,48 @@ def add_attribute(next_method, self, name, value):
 class Img(_HTMLActionTag):
     """ ``<img>`` tags
     """
-    def _set_content_type(self, action):
+    def _set_content_type(self, request, action, with_request):
         """Generate the image and guess its format
-        
+
         In:
+          - ``request`` -- the web request object
           - ``action`` -- function to call to generate the image data
-          
+          - ``with_request`` -- will the request and response objects be passed to the action ?
+
         Return:
           - new response object raised
         """
         e = webob.exc.HTTPOk(headerlist=[('Content-Type', '')])
-        img = action(e)
+        img = action(request, e) if with_request else action()
         e.body = img
-        
+
         content_type = e.content_type
         if not content_type:
             # If no ``Content-Type`` is already set, use the ``imghdr`` module
             # to guess the format of the image
             content_type = 'image/'+(imghdr.what(None, img[:32]) or '*')
         e.content_type = content_type
-        
+
         raise e
-    
-    def sync_action(self, renderer, action, permissions, subject):
+
+    def sync_action(self, renderer, action, with_request, permissions, subject):
         """Register a synchronous action
         
         The action will have to return the image data
         
         In:
           - ``renderer`` -- the current renderer
-          - ``action`` -- the action
-        """        
-        self.set('src', renderer.add_sessionid_in_url(sep=';') + ';' + renderer.register_callback(2, lambda: self._set_content_type(action)))
+          - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
+          - ``permissions`` -- permissions needed to execute the action
+          - ``subject`` -- subject to test the permissions on
+        """
+        if permissions is not None:
+            # Wrap the ``action`` into a wrapper that will check the user permissions
+            action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
+
+        f = lambda request, response, action=action: self._set_content_type(request, action, with_request)
+        self.set('src', renderer.add_sessionid_in_url(sep=';') + ';' + renderer.register_callback(2, f, with_request=True))
     async_action = sync_action
 
     def add_child(self, child):
@@ -736,7 +775,6 @@ class Img(_HTMLActionTag):
         src = self.get('src')
         if src is not None:
             self.set('src', absolute_url(src, self.renderer.head.static_url))
-
 
 # ----------------------------------------------------------------------------------
 
@@ -960,19 +998,20 @@ class Renderer(xhtml_base.Renderer):
         # Memorize all the rendered components
         self._rendered.add(component)
 
-    def action(self, tag, action, permissions, subject):
+    def action(self, tag, action, with_request, permissions, subject):
         """Register a synchronous action on a tag
         
         In:
           - ``tag`` -- the tag
           - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
 
         """
-        tag.sync_action(self, action, permissions, subject)
+        tag.sync_action(self, action, with_request, permissions, subject)
 
-    def register_callback(self, priority, f, render=None):
+    def register_callback(self, priority, f, with_request, render=None):
         """Register an action
         
         Forward the call to the ``callbacks`` object
@@ -980,10 +1019,10 @@ class Renderer(xhtml_base.Renderer):
         In:
           - ``priority`` - -priority of the action
           - ``f`` -- the action
-          - ``render`` -- render method to generate the view after
-            the ``f`` action will be called
+          - ``with_request`` -- will the request and response objects be passed to the action ?
+          - ``render`` -- render method to generate the view after the ``f`` action will be called
         """
-        return self._callbacks.register_callback(self.component, priority, f, render)
+        return self._callbacks.register_callback(self.component, priority, f, with_request, render)
 
 
     def decorate_error(self, element, error):
@@ -1143,17 +1182,18 @@ class AsyncRenderer(Renderer):
     def _css(self, style):
         self.head._css(style)
 
-    def action(self, tag, action, permissions, subject):
+    def action(self, tag, action, with_request, permissions, subject):
         """Register an asynchronous action on a tag
         
         In:
           - ``tag`` -- the tag
           - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
 
         """
-        tag.async_action(self, action, permissions, subject)
+        tag.async_action(self, action, with_request, permissions, subject)
 
     def start_rendering(self, component, model):
         super(AsyncRenderer, self).start_rendering(component, model)
