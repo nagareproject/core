@@ -219,17 +219,27 @@ class Updates(Update):
         In:
           - ``updates`` -- the list of ``Update`` objects
           - ``action`` -- global action to execute (set by keyword call)
+          - ``with_request`` -- will the request and response objects be passed to the global action ? (set by keyword call)
         """
         self._updates = updates
-        self._action = kw['action'] if kw else lambda *args: None
+        self._with_request = kw.get('with_request', False)
+        self._action = kw.get('action', lambda *args: None)
+
+        super(Updates, self).__init__(action=self.action, with_request=True)
     
-    def action(self, *args):
+    def action(self, request, response, *args):
         """Execute all the actions of the ``Update`` objects
         """
-        self._action(*args)
+        if self._with_request:
+            self._action(request, response, *args)
+        else:
+            self._action(*args)
 
         for update in self._updates:
-            update.action(*args)
+            if update.with_request:
+                update.action(request, response, *args)
+            else:
+                update.action(*args)
 
     def _generate_render(self, renderer):
         """Generate the rendering function
