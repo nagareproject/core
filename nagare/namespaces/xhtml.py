@@ -591,6 +591,18 @@ class ImageInput(_HTMLActionTag):
     #   - name of the attribute for the asynchronous action
     _actions = (5, 'name', 'onclick')
 
+    def async_action(self, renderer, action, with_request, permissions, subject):
+        """Register an asynchronous action
+
+        In:
+          - ``renderer`` -- the current renderer
+          - ``action`` -- action
+          - ``with_request`` -- will the request and response objects be passed to the action ?
+          - ``permissions`` -- permissions needed to execute the action
+          - ``subject`` -- subject to test the permissions on
+        """
+        return self._async_action(renderer, action, with_request, permissions, subject)
+
 # ----------------------------------------------------------------------------------
 
 class Option(xhtml_base._HTMLTag):

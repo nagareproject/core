@@ -185,6 +185,10 @@ class Update(object):
             return 'return nagare_getAndEval("%s;_a;%s")' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(4, renderer))
         elif priority == 2:
             return 'nagare_getAndEval("%s;_a;%s")' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(2, renderer))
+        elif priority == 5:
+            r = 'return nagare_imageInputSubmit(event, this, "%s")' % self._generate_replace(5, renderer)
+            renderer.head.javascript_url(YUI_PREFIX+'/dom/dom-min.js')
+            return r
         else:
             return ''
 

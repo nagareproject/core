@@ -131,7 +131,6 @@ class Callbacks:
         """
         # The structure of a callback identifier is
         # '_action<priority on 1 char><key into the callbacks dictionary>'
-        
         actions = {}
         for (name, value) in request.params.items():
             if isinstance(value, basestring) and value.startswith('_action'):
@@ -163,24 +162,26 @@ class Callbacks:
             # 2 : action without value (radio button)
             # 3 : <form>.post_action
             # 4 : action with continuation and without value (<a>, submit button ...)
-            # 5 : action with continuation and with value (special case for >input type='image'>)
+            # 5 : action with continuation and with value (special case for <input type='image'>)
            
 	    if with_request:
                 if callback_type == 1:
                     f(request, response, value)
-                elif callback_type == 5:
-                    call_wrapper(f, request, response, param[-1]=='x', int(value))
                 elif callback_type == 4:
                     call_wrapper(f, request, response)
+                elif callback_type == 5:
+                    if param.endswith(('.x', '.y')):
+                        call_wrapper(f, request, response, param.endswith('.y'), int(value))
                 else: # 0, 2, 3
                     f(request, response)
 	    else:
                 if callback_type == 1:
                     f(value)
-                elif callback_type == 5:
-                    call_wrapper(f, param[-1]=='x', int(value))
                 elif callback_type == 4:
                     call_wrapper(f)
+                elif callback_type == 5:
+                    if param.endswith(('.x', '.y')):
+                        call_wrapper(f, param.endswith('.y'), int(value))
                 else: # 0, 2, 3
                     f()
 
