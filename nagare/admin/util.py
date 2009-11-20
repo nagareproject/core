@@ -190,7 +190,10 @@ def read_application_options(cfgfile, error, default={}):
     """    
     spec = configobj.ConfigObj(default)
     spec.merge(application_options_spec)
-    
+
+    choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
+    spec.merge({ 'sessions' : { 'type' : 'option(%s, default="")' % (choices + ', ""') } })
+
     conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)    
     config.validate(cfgfile, conf, error)
     
@@ -202,6 +205,9 @@ def read_application_options(cfgfile, error, default={}):
                            ))
     conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)
     config.validate(cfgfile, conf, error)
+
+    if not conf['sessions']['type']:
+        del conf['sessions']['type']
     
     return conf
 
@@ -278,7 +284,7 @@ def set_metadata(conf, debug):
         return metadata
 
 
-def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=None, p=None, debug=False):
+def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=None, publisher=None, sessions_factory=None, debug=False):
     """
     
     In:
@@ -290,6 +296,7 @@ def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=No
         are located
       - ``static_url`` -- the url of the static contents of the application
       - ``publisher`` -- the publisher of the application
+      - ``session_factory`` -- the sessions managare factory
       - ``debug`` -- flag to display the generated SQL statements
       
     Return:
@@ -313,7 +320,13 @@ def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=No
         metadatas.append(metadata)
         populates.append(aconf['database']['populate'])
 
-    app = wsgi.create_WSGIApp(app, metadatas)
-    app.set_config(cfgfile, aconf, error, static_path, static_url, p)
+    app = wsgi.create_WSGIApp(app)
+
+    app.set_config(cfgfile, aconf, error)
+    app.set_static_path(static_path)
+    app.set_static_url(static_url)
+    app.set_publisher(publisher)
+    app.set_sessions_factory(sessions_factory)
+    app.set_metadatas(metadatas)
 
     return (app, zip(metadatas, populates))

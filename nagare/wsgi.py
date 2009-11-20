@@ -37,7 +37,7 @@ class MIMEAcceptWithoutWildcards(acceptparse.Accept):
 # ---------------------------------------------------------------------------
 
 class WSGIApp(object):
-    def __init__(self, root_factory, metadatas=None):
+    def __init__(self, root_factory):
         """Initialization
 
         In:
@@ -45,40 +45,73 @@ class WSGIApp(object):
           - ``metadatas`` -- the SQLAlchemy metadata objects
         """
         self.root_factory = root_factory
-        self.metadatas = metadatas or []
 
-        self.static_url = ''
         self.static_path = ''
+        self.static_url = ''
+        self.metadatas = []
         self.redirect_after_post = False
         self.always_html = True
+        self.sessions_factory = None
+        self.sessions = None
 
         self.security = dummy_manager.Manager()
 
-    def set_config(self, config_filename, config, error, static_path, static_url, publisher):
+    def set_config(self, config_filename, config, error):
         """Read the configuration parameters
 
         In:
           - ``config_filename`` -- the path to the configuration file
           - ``config`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
-          - ``static_path`` -- the directory where the static contents of the application
-            are located
-          - ``static_url`` -- the url of the static contents of the application
-          - ``publisher`` -- the publisher of the application
         """
-        self.static_path = static_path
-        self.static_url = static_url
-
         self.redirect_after_post = config['application']['redirect_after_post']
         self.always_html = config['application']['always_html']
 
-    def start(self, sessions):
-        """Call after each process start
+    def set_static_path(self, static_path):
+        """
 
         In:
-          - ``sessions`` -- the sessions manager for this application
+          - ``static_path`` -- the directory where the static contents of the application
+            are located
         """
-        self.sessions = sessions
+        self.static_path = static_path
+
+    def set_static_url(self, static_url):
+        """
+
+        In:
+          - ``static_url`` -- the url of the static contents of the application
+        """
+        self.static_url = static_url
+
+    def set_publisher(self, publisher):
+        """
+
+        In:
+          - ``publisher`` -- the publisher of the application
+        """
+        pass
+
+    def set_sessions_factory(self, sessions_factory):
+        """
+
+        In:
+          - ``sessions_factory`` -- the sessions managare factory
+        """
+        self.sessions_factory = sessions_factory
+
+    def set_metadatas(self, metadatas):
+        """
+
+        In:
+          - ``metadatas`` -- the SQLAlchemy metadata objects
+        """
+        self.metadatas = metadatas
+
+    def start(self):
+        """Call after each process start
+        """
+        self.sessions = self.sessions_factory()
 
     # -----------------------------------------------------------------------
 
@@ -131,23 +164,23 @@ class WSGIApp(object):
           - a tree
         """
         return output
-    
+
     def on_callback_lookuperror(self, request, response, async):
         """
         In:
           - ``request`` -- the web request object
           - ``response`` -- the web response object
           - ``async`` -- is an XHR request ?
-          
+
         """
         if not async:
             raise
 
         # As the XHR requests use the same continuation, a callback
         # can be not found (i.e deleted by a previous XHR)
-        # In this case, do nothing                     
+        # In this case, do nothing
         return lambda h: ''
-    
+
     def on_after_post(self, request, response, ids):
         """Generate a redirection after a POST
 
@@ -356,7 +389,7 @@ class WSGIApp(object):
 
 # ---------------------------------------------------------------------------
 
-def create_WSGIApp(app, metadata=None, with_component=True):
+def create_WSGIApp(app, with_component=True):
     """Helper function to create a WSGIApp
 
     If ``app`` is not a ``WSGIApp``, it's wrap into a ``WSGIApp``. And, if
@@ -376,6 +409,6 @@ def create_WSGIApp(app, metadata=None, with_component=True):
                 return o
             app = lambda app=app: wrap_in_component(app)
 
-        app = WSGIApp(app, metadata)
+        app = WSGIApp(app)
 
     return app

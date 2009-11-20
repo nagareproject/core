@@ -37,15 +37,11 @@ class Publisher(object):
     default_port = 8080     # Port to listen to
     spec = {}               # Command line options
 
-    def __init__(self, session_factory):
+    def __init__(self):
         """Initialisation
-        
-        In:
-          - ``session_factory`` -- the sessions manager
         """
         self.urls = urlmap.URLMap() # Dispatch for all the registered applications
         self.apps = {}  # List of all the registered applications
-        self.session_factory = session_factory
 
     def register_application(self, app_name, name, app, wsgi_pipe):
         """Register an application to launch
@@ -104,10 +100,9 @@ class Publisher(object):
         """
         random.seed(None)
 
+        # Notify each registered applications
         for app in self.apps:
-            # Initialize each registered application of this new process
-            # with a dedicated sessions manager
-            app.start(self.session_factory())
+            app.start()
             
     def serve(self, filename, conf, error):
         """Run the publisher

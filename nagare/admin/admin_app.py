@@ -73,7 +73,7 @@ class WSGIApp(wsgi.WSGIApp):
     If ``True``, mappes itself to the ``/`` url.
     """
 
-    def set_config(self, config_filename, conf, error, static_path, static_url, publisher):
+    def set_config(self, config_filename, conf, error):
         """Read the value of the ``as_root`` parameter and keeps the list of all
         the launched applications
         
@@ -81,21 +81,26 @@ class WSGIApp(wsgi.WSGIApp):
           - ``config_filename`` -- the path to the configuration file
           - ``config`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
-          - ``static_path`` -- the directory where the static contents of the application
-            are located
-          - ``static_url`` -- the url of the static contents of the application
-          - ``publisher`` -- the publisher of the application
         """
         conf = configobj.ConfigObj(conf, configspec=configobj.ConfigObj(application_spec))
         config.validate(config_filename, conf, error)
 
-        if publisher:
-            self.apps = publisher.apps
+        self.as_root = conf['application']['as_root']
+        self.application_path = conf['application']['path']
 
-            if conf['application']['as_root']:
-                publisher.register_application(conf['application']['path'], '', self, self)
-        
-        super(WSGIApp, self).set_config(config_filename, conf, error, static_path, static_url, publisher)
+        super(WSGIApp, self).set_config(config_filename, conf, error)
+
+    def set_publisher(self, publisher):
+        """Read the value of the ``as_root`` parameter and keeps the list of all
+        the launched applications
+
+        In:
+          - ``publisher`` -- the publisher of the application
+        """
+        self.apps = publisher.apps
+
+        if self.as_root:
+            publisher.register_application(self.application_path, '', self, self)
         
     def create_root(self):
         """

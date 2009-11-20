@@ -25,10 +25,10 @@ import os
 
 def create_FixtureApp(app):
     app = wsgi.create_WSGIApp(app)
-    app.start(threaded_sessions.SessionsFactory('', {}, lambda x: None)())
+    app.set_sessions_factory(lambda: threaded_sessions.SessionsFactory('', {}, lambda x: None)())
+    app.start()
 
     return TestApp(app)
-
 
 # Test for XHTML namespace
 

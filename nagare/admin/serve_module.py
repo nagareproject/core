@@ -110,7 +110,8 @@ def run(parser, options, args):
 
     wsgi_pipe = debugged_app(app) if options.debug else app
     p.register_application(args[0], args[1], app, wsgi_pipe)
-    app.set_config('', { 'application' : { 'redirect_after_post' : False, 'name' : args[1], 'always_html' : True } }, None, '', '', p)
+    app.set_config('', { 'application' : { 'redirect_after_post' : False, 'name' : args[1], 'always_html' : True } }, None)
+    app.set_publisher(p)
     
     # The static contents of the framework are served by the standalone server
     p.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))

@@ -199,19 +199,14 @@ def run(parser, options, args):
     else:
         watcher = None
 
-    # Load the session manager
-    sessions = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
-    t = pconf['sessions'].pop('type')
-    s = sessions[t].load()(options.conf, pconf['sessions'], parser.error)
-    
     # Load the publisher
     publishers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.publishers')])
     t = pconf['publisher']['type']
-    p = publishers[t].load()(s)
+    publisher = publishers[t].load()()
 
     # If no port is given, set the port number according to the used publisher
     if pconf['publisher']['port'] == -1:
-        pconf['publisher']['port'] = p.default_port
+        pconf['publisher']['port'] = publisher.default_port
 
     # Configure each application and register it to the publisher
     for cfgfile in args:
@@ -237,23 +232,40 @@ def run(parser, options, args):
                 static = pkg_resources.resource_filename(requirement, '/static')
 
         # Register the function to serve the static contents of the application
-        static_url = p.register_static(aconf['application']['name'], get_file)
+        static_url = publisher.register_static(aconf['application']['name'], get_file)
 
-        (app, metadatas) = util.activate_WSGIApp(app, cfgfile, aconf, parser.error, static, static_url, p)
+        # Load the sessions manager factory
+        sessions = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
+        conf = pconf['sessions'].dict()
+        conf.update(aconf['sessions'].dict())
+        t = conf.pop('type')
+
+        sessions_factory = sessions[t].load()(options.conf, conf, parser.error)
+
+        (app, metadatas) = util.activate_WSGIApp(
+                                                    app,
+                                                    cfgfile, aconf, parser.error,
+                                                    static, static_url,
+                                                    publisher,
+                                                    sessions_factory
+                                                )
 
         # Register the application to the publisher
-        p.register_application(
-                               aconf['application']['path'],
-                               aconf['application']['name'],
-                               app,
-                               create_wsgi_pipe(app, options, cfgfile, aconf, parser.error)
-                              )
+        publisher.register_application(
+                                       aconf['application']['path'],
+                                       aconf['application']['name'],
+                                       app,
+                                       create_wsgi_pipe(app, options, cfgfile, aconf, parser.error)
+                                      )
 
     # Register the function to serve the static contents of the framework
-    p.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))
+    publisher.register_static(
+                                'nagare',
+                                lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path)
+                             )
 
     # Launch all the applications
-    p.serve(options.conf, pconf['publisher'], parser.error)
+    publisher.serve(options.conf, pconf['publisher'], parser.error)
 
 # ---------------------------------------------------------------------------
 
