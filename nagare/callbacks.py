@@ -164,7 +164,7 @@ class Callbacks:
             # 4 : action with continuation and without value (<a>, submit button ...)
             # 5 : action with continuation and with value (special case for <input type='image'>)
            
-	    if with_request:
+            if with_request:
                 if callback_type == 1:
                     f(request, response, value)
                 elif callback_type == 4:
@@ -174,7 +174,7 @@ class Callbacks:
                         call_wrapper(f, request, response, param.endswith('.y'), int(value))
                 else: # 0, 2, 3
                     f(request, response)
-	    else:
+            else:
                 if callback_type == 1:
                     f(value)
                 elif callback_type == 4:
