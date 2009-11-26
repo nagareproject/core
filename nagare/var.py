@@ -73,5 +73,5 @@ class Var(object):
         """
         return self.get()
     
-    def __str__(self):
-        return str(self.get())
+    def __unicode__(self):
+        return unicode(self.get())
