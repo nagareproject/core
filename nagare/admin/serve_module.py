@@ -100,24 +100,25 @@ def run(parser, options, args):
     # Wrap it into a WSGIApp
     app = wsgi.create_WSGIApp(app)
 
-    # Always use the standalone session manager (in memory sessions)
-    sessions = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
-    s = sessions['standalone'].load()(None, {}, None)
-    
     # Always use the standalone publisher (Python HTTP server)
     publishers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.publishers')])
-    p = publishers['standalone'].load()(s)
+    publisher = publishers['standalone'].load()()
 
     wsgi_pipe = debugged_app(app) if options.debug else app
-    p.register_application(args[0], args[1], app, wsgi_pipe)
+    publisher.register_application(args[0], args[1], app, wsgi_pipe)
     app.set_config('', { 'application' : { 'redirect_after_post' : False, 'name' : args[1], 'always_html' : True } }, None)
-    app.set_publisher(p)
+    app.set_publisher(publisher)
+
+    # Always use the standalone session manager (in memory sessions)
+    sessions = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
+    sessions_factory = sessions['standalone'].load()(None, {}, None)
+    app.set_sessions_factory(sessions_factory)
     
     # The static contents of the framework are served by the standalone server
-    p.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))
+    publisher.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))
     
     # Launch the object
-    p.serve(None, dict(host=options.host, port=options.port), None)
+    publisher.serve(None, dict(host=options.host, port=options.port), None)
 
 # ---------------------------------------------------------------------------
 
