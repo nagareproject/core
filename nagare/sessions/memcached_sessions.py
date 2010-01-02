@@ -18,7 +18,7 @@ KEY_PREFIX = 'nagare_'
 class Lock(object):
     def __init__(self, connection, lock_id, ttl, poll_time, max_wait_time):
         """Distributed lock in memcache
-        
+
         In:
           - ``connection`` -- connection object to the memcache server
           - ``lock_id`` -- unique lock identifier
@@ -31,7 +31,7 @@ class Lock(object):
         self.ttl = ttl
         self.poll_time = poll_time
         self.max_wait_time = max_wait_time
-        
+
     def acquire(self):
         """Acquire the lock
         """
@@ -55,7 +55,8 @@ class Sessions(common.Sessions):
                  lock_ttl=0, lock_poll_time=0.1, lock_max_wait_time=5,
                  min_compress_len=0,
                  reset=True,
-                 debug=True
+                 debug=True,
+                 **kw
                 ):
         """Initialization
 
@@ -68,8 +69,10 @@ class Sessions(common.Sessions):
           - ``lock_max_wait_time`` -- maximum time to wait to acquire the lock, in seconds
           - ``min_compress_len`` -- data longer than this value are sent compressed
           - ``reset`` -- do a reset of all the sessions on startup ?
-          - ``debug`` -- display the memcache requests / responses 
-        """        
+          - ``debug`` -- display the memcache requests / responses
+        """
+        super(Sessions, self).__init__(**kw)
+
         self.host = '%s:%d' % (host, port)
         self.ttl = ttl
         self.lock_ttl = lock_ttl
@@ -81,51 +84,51 @@ class Sessions(common.Sessions):
 
     def _get_connection(self):
         """Get the connection to the memcache server
-        
+
         Return:
           - the connection
         """
         # The connection objects are thread local
         connection = self.memcached.__dict__.get('connection')
-        
+
         if connection is None:
             connection = memcache.Client([self.host], debug=self.debug)
             self.memcached.connection = connection
-            
+
         return connection
-            
+
     def _create(self, session_id, secure_id):
         """Create a new session
-        
+
         In:
           - ``session_id`` -- id of the session
           - ``secure_id`` -- the secure number associated to the session
-          
+
         Return:
           - tuple (session_id, cont_id, new_cont_id, lock, secure_id)
         """
         connection = self._get_connection()
         lock = Lock(connection, session_id, self.lock_ttl, self.lock_poll_time, self.lock_max_wait_time)
         lock.acquire()
-        
+
         connection.set_multi({
             '_sess' : (secure_id, None),
             '_cont' : '0',
             '00000' : {}
         }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
-        
+
         return (session_id, 0, 0, lock, secure_id)
-    
+
     def __get(self, session_id, cont_id):
         """Return the raw data associated to a session
-        
+
         In:
           - ``session_id`` -- id of the session
           - ``cont_id`` -- id of the continuation
-          
+
         Return:
-            - tuple (session_id, cont_id, last_cont_id, lock, secure_id, externals, data)        
-        """        
+            - tuple (session_id, cont_id, last_cont_id, lock, secure_id, externals, data)
+        """
         connection = self._get_connection()
         lock = Lock(connection, session_id, self.lock_ttl, self.lock_poll_time, self.lock_max_wait_time)
         lock.acquire()
@@ -141,36 +144,36 @@ class Sessions(common.Sessions):
         data = session[id]
 
         return (session_id, int(cont_id), last_cont_id, lock, secure_id, externals, data)
-    
+
     def __set(self, session_id, cont_id, secure_id, inc_cont_id, externals, data):
         """Memorize the session data
-        
+
         In:
           - ``session_id`` -- id of the current session
           - ``cont_id`` -- id of the current continuation
-          - ``secure_id`` -- the secure number associated to the session           
-          - ``inc_cont_id`` -- is the continuation id to increment ? 
-          - ``externals`` -- pickle of shared objects across the continuations                    
+          - ``secure_id`` -- the secure number associated to the session
+          - ``inc_cont_id`` -- is the continuation id to increment ?
+          - ``externals`` -- pickle of shared objects across the continuations
           - ``data`` -- pickle of the objects in the continuation
         """
         if inc_cont_id:
             self._get_connection().incr(KEY_PREFIX+session_id+'_cont')
-        
+
         self._get_connection().set_multi({
             '_sess' : (secure_id, externals),
             '%05d' % cont_id : data
         }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
-        
-        
+
+
     def _delete(self, session_id):
         """Delete the session
-        
+
         In:
           - ``session_id`` -- id of the session to delete
         """
         self._get_connection().delete(KEY_PREFIX+session_id)
- 
- 
+
+
 class SessionsFactory(common.SessionsFactory):
     spec = dict(
                 host='string(default="127.0.0.1")',
@@ -183,6 +186,7 @@ class SessionsFactory(common.SessionsFactory):
                 reset='boolean(default=True)',
                 debug='boolean(default=False)',
                )
+    spec.update(common.SessionsFactory.spec)
     sessions = Sessions
 
     def __init__(self, filename, conf, error):

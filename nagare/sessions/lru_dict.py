@@ -10,7 +10,7 @@
 """A LRU dictionary is a dictionary with a fixed maximum number of keys.
 
 When this maximum is reached, the last recently used key is deleted when a new
-key is added. 
+key is added.
 """
 
 from __future__ import with_statement
@@ -19,7 +19,7 @@ import threading
 
 class LRUDict(object):
     """A LRU dictionary is a dictionary with a fixed maximum number of keys"""
-    
+
     def __init__(self, size):
         """Initialization
 
@@ -27,7 +27,7 @@ class LRUDict(object):
           -  ``size`` -- maximum number of keys
         """
         self.size = size
-        
+
         self.oldest = self.newest = 0 # Age of the oldest key / age of the last recently used key
         self.age_to_items = {}        # Dict: key_age -> key
         self.items = {}               # Dict: key -> (key_age, value)
@@ -37,7 +37,7 @@ class LRUDict(object):
 
         In:
           -  ``k`` -- the key
-          
+
         Return:
           - a boolean
         """
@@ -45,37 +45,37 @@ class LRUDict(object):
 
     def _set_newest(self, k, o):
         """Insert a key as the last recently used
-        
+
         In:
            - ``k`` -- the key
            -- ``o`` -- the value
         """
         self.age_to_items[self.newest] = k
-        self.items[k] = (self.newest, o) 
+        self.items[k] = (self.newest, o)
         self.newest += 1
 
     def __getitem__(self, k):
         """Return the value of a key.
-        
+
         The key becomes the most recently used key.
-        
+
         In:
           - ``k`` -- the key
-          
+
         Return:
           - the value
-        """ 
+        """
         (age, item) = self.items[k]
         del self.age_to_items[age]
-    
+
         self._set_newest(k, item)
         return item
-        
+
     def __setitem__(self, k, o):
         """Set the value of a key.
-        
+
         The key becomes the most recently used key.
-        
+
         In:
           - ``k`` -- the key
           - ``o`` -- the value
@@ -85,15 +85,15 @@ class LRUDict(object):
             del self.age_to_items[age]
         except KeyError:
             pass
-        
+
         self._set_newest(k, o)
-       
+
         if len(self.items) > self.size:
             # Maximum number of keys reached
             # Delete the last recently used key
             while not self.oldest in self.age_to_items:
                 self.oldest += 1
-                
+
             del self.items[self.age_to_items.pop(self.oldest)]
 
     def __delitem__(self, k):
@@ -121,17 +121,17 @@ class ThreadSafeLRUDict(LRUDict):
 
         In:
           -  ``k`` -- the key
-          
+
         Return:
           - a boolean
         """
         with self.lock:
             return k in self.items
-    
+
     def __getitem__(self, k):
         with self.lock:
             return super(ThreadSafeLRUDict, self).__getitem__(k)
-        
+
     def __setitem__(self, k, o):
         with self.lock:
             super(ThreadSafeLRUDict, self).__setitem__(k, o)
@@ -161,6 +161,6 @@ if __name__ == '__main__':
 
     cache['b'] = 'b'
     cache.debug()
-    
+
     cache['e'] = 'e'
     cache.debug()
