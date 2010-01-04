@@ -42,14 +42,14 @@ setup(
       long_description = """
       Description
       ^^^^^^^^^^^
-      
+
       %s
-      
+
       Installation
       ============
-      
+
       For a standard installation, read the ``docs/quickstart.txt`` document.
-      
+
       Read ``docs/framework_installation.txt`` to install the latest development
       version from the
       `Nagare subversion repository <svn://www.nagare.org/trunk/nagare/core#egg=nagare-dev>`_
@@ -65,7 +65,7 @@ setup(
       namespace_packages = ('nagare',),
       zip_safe = False,
       dependency_links = ('http://www.nagare.org/download/',),
-      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.2.2', 'WebOb>=0.9.6.1', 'Paste', 'flup', 'python-memcached'),
+      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.2.2', 'WebOb==0.9.7', 'Paste', 'flup', 'python-memcached'),
       extras_require = {
         'debug' : ('WebError',),
         'database' : ('SQLAlchemy==0.5.2', 'Elixir==0.6.1'),
