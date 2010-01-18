@@ -16,7 +16,7 @@ from nagare.namespaces.xml import TagProp
 
 # ----------------------------------------------------------------------------------
 
-class Renderer(xml.Renderer):
+class Renderer(xml.XmlRenderer):
     """ The XSL renderer
     """
     

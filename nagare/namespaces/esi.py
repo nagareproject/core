@@ -17,7 +17,7 @@ from nagare.namespaces.xml import TagProp
 # Official ESI namespace
 NS = 'http://www.edge-delivery.org/esi/1.0'
 
-class Renderer(xml.Renderer):
+class Renderer(xml.XmlRenderer):
     """ The ESI renderer
     """
     
