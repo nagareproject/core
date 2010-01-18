@@ -61,10 +61,8 @@ def create_rules(app_names, error):
 
         static = aconf['application'].get('static', os.path.join(dist.location, 'static') if dist else None)
 
-        if static and not os.path.isdir(static):
-            static = None
-
-        apps.append((app_name, static))
+        if static and os.path.isdir(static):
+            apps.append((aconf['application']['name'], static))
 
     return sorted(apps, key=lambda x: len(x[0]))
 
