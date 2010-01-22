@@ -21,7 +21,7 @@ In both cases:
 
 import sys, os, code, atexit, __builtin__
 
-from nagare import database
+from nagare import database, log
 from nagare.admin import util
 
 def create_globals(cfgfiles, debug, error):
@@ -35,10 +35,16 @@ def create_globals(cfgfiles, debug, error):
     
     apps = {}
              
-    # For each application given, activate its metadata
+    # For each application given, activate its metadata and its logger
     for cfgfile in cfgfiles:
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
-        apps[aconf['application']['name']] = util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[0]
+
+        name = aconf['application']['name']
+        apps[name] = util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[0]
+        log.configure(aconf['logging'].dict(), name)
+
+    log.activate()
+    log.set_logger('nagare.application.'+name)
 
     session = database.session
     session.begin()

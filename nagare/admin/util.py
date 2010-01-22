@@ -14,7 +14,7 @@ import sys, os
 import pkg_resources
 import configobj
 
-from nagare import wsgi, database, config
+from nagare import wsgi, database, config, log
 
 # ---------------------------------------------------------------------------
 
@@ -164,6 +164,7 @@ application_options_spec = {
         always_html = 'boolean(default=True)', # Don't generate xhtml, even if it's a browser capability ?
         wsgi_pipe = 'string(default="")' # Method to create the WSGI middlewares pipe
     ),
+
     'database' : dict(
         activated = 'boolean(default=False)', # Activate the database engine ?
         uri = 'string(default="")', # Database connection string
@@ -174,7 +175,9 @@ application_options_spec = {
             activated = 'boolean(default=False)',
             populate = 'string(default="")'
         )
-    )
+    ),
+
+    'logging' : dict()
 }
 
 def read_application_options(cfgfile, error, default={}):
@@ -203,7 +206,7 @@ def read_application_options(cfgfile, error, default={}):
                             metadata = 'string(default=%s)' % str(conf['database']['metadata']),
                             debug = 'boolean(default=%s)' % str(conf['database']['debug']),
                            ))
-    conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)
+    conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None, list_values=False)
     config.validate(cfgfile, conf, error)
 
     if not conf['sessions']['type']:
@@ -323,6 +326,7 @@ def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=No
     app = wsgi.create_WSGIApp(app)
 
     app.set_config(cfgfile, aconf, error)
+    log.configure(aconf['logging'].dict(), aconf['application']['name'])
 
     if static_path is not None:
         app.set_static_path(static_path)

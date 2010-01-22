@@ -19,7 +19,7 @@ from __future__ import with_statement
 import webob
 from webob import exc, acceptparse
 
-from nagare import component, presentation, serializer, database, top, security
+from nagare import component, presentation, serializer, database, top, security, log
 from nagare.security import dummy_manager
 from nagare.callbacks import Callbacks, CallbackLookupError
 from nagare.namespaces import xhtml
@@ -49,6 +49,7 @@ class WSGIApp(object):
         self.static_path = ''
         self.static_url = ''
         self.metadatas = []
+        self.name = ''
         self.redirect_after_post = False
         self.always_html = True
         self.sessions_factory = None
@@ -64,6 +65,7 @@ class WSGIApp(object):
           - ``config`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
         """
+        self.name = config['application']['name']
         self.redirect_after_post = config['application']['redirect_after_post']
         self.always_html = config['application']['always_html']
 
@@ -295,6 +297,8 @@ class WSGIApp(object):
         xhr_request = request.is_xhr or ('_a' in request.params)
 
         session = None
+
+        log.set_logger('nagare.application.'+self.name) # Set the dedicated application logger
 
         # Create a database transaction for each request
         with database.session.begin():
