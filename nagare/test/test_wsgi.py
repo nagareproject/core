@@ -70,9 +70,10 @@ def process_request(app=None, environ={}, **kw):
 def test_request_validity2():
     """Request - invalid url"""
     r = process_request(PATH_INFO='')
-    assert (r.status_code == 301) and r['location'] == 'http://localhost:8080/app/?_s=10&_c=42'
+    print r.keys()
+    assert (r.status_code == 301) and r['Location'] == 'http://localhost:8080/app/?_s=10&_c=42'
 
 def test_bad_session():
     """Request - session expired"""
     r = process_request(App(session_manager=ExpiredSessionManager()))
-    assert (r.status_code == 301) and r['location'] == 'http://localhost:8080/app/'
+    assert (r.status_code == 301) and r['Location'] == 'http://localhost:8080/app/'
