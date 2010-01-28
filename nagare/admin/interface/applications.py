@@ -17,15 +17,15 @@ from nagare import presentation
 
 class Admin(object):
     priority = 100        # Order of the default view, into the administrative interface
-    
+
     def __init__(self, apps):
         """Initialization
-        
+
         In;
           - ``apps`` -- a dictionary where the keys are the application objects
             and the keys a tuple (application name, application urls)
         """
-        self.apps = sorted(apps.values(), key=operator.itemgetter(1))
+        self.apps = sorted(apps)
 
 
 @presentation.render_for(Admin)
