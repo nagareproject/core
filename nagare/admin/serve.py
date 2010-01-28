@@ -12,7 +12,7 @@
 Launch one or more applications.
 """
 
-import sys, os
+import os
 
 import pkg_resources
 import configobj
@@ -30,7 +30,7 @@ publisher_options_spec = {
         host = 'string(default="127.0.0.1")', # Listen only on the loopback interface
         port = 'integer(default=-1)' # The default port depends of the publisher used
     ),
-    
+
     'reloader' : dict(
         activated = 'boolean(default=False)', # No automatic reload
         interval = 'integer(default=1)',
@@ -52,27 +52,27 @@ def set_options(optparser):
 
 def read_publisher_options(parser, options):
     """Read the configuration file for the publisher
-    
+
     This configuration file is given with the ``-c``or ``--config`` option
-    
+
     In:
       - ``parser`` -- the ``optparse.OptParser`` object used to parse the configuration file
       - ``options`` -- options in the command line
-      
+
     Return:
-      - a ``ConfigObj`` with the publisher parameters    
+      - a ``ConfigObj`` with the publisher parameters
     """
     if options.conf and not os.path.isfile(options.conf):
         parser.error('Configuration file "%s" doesn\'t exit' % options.conf)
 
     configspec = configobj.ConfigObj(publisher_options_spec)
-    
+
     if options.conf:
         configspec.merge({ 'here' : 'string(default="%s")' % os.path.abspath(os.path.dirname(options.conf)) })
 
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.publishers')])
     configspec.merge({ 'publisher' : { 'type' : 'option(%s, default="standalone")' % choices } })
-    
+
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
     configspec.merge({ 'sessions' : { 'type' : 'option(%s, default="standalone")' % choices } })
 
@@ -88,29 +88,29 @@ def read_publisher_options(parser, options):
                                 ):
         option = getattr(options, name)
         if option is not None:
-            conf[section][key] = option 
+            conf[section][key] = option
 
     return conf
-        
+
 # ---------------------------------------------------------------------------
 
 try:
     from weberror.evalexception import EvalException
-    
+
     debugged_app = lambda app: EvalException(app, xmlhttp_key='_a')
 except ImportError:
     debugged_app = lambda app: app
 
 def create_wsgi_pipe(app, options, config_filename, config, error):
     """Wrap the application into one or more WSGI "middlewares" to create a WSGI pipe
-    
+
     In:
       - ``app`` -- the application
       - ``options`` -- options in the command line
       - ``config_filename`` -- the path to the configuration file
       - ``config`` -- the ``ConfigObj`` object, created from the configuration file
       - ``error`` -- the function to call in case of configuration errors
-      
+
     Return:
       - the wsgi pipe
     """
@@ -120,65 +120,65 @@ def create_wsgi_pipe(app, options, config_filename, config, error):
     wsgi_pipe = config['application']['wsgi_pipe']
     if not wsgi_pipe:
         return app
-    
+
     return util.load_object(wsgi_pipe)[0](app, options, config_filename, config, error)
-   
+
 # ---------------------------------------------------------------------------
 
 def get_file_from_root(root, path):
     """
     Return the path of a static content, from a filesystem root
-    
+
     In:
       - ``root`` -- the path of the root
       - ``path`` -- the url path of the wanted static content
-      
+
     Return:
       - the path of the static content
-    """    
+    """
     filename = os.path.join(root, path[1:])
 
     if not os.path.exists(filename) or os.path.isdir(filename):
         return None
- 
+
     return filename
 
 
 def get_file_from_package(package, path):
     """
     Return the path of a static content, from a setuptools package
-    
+
     In:
       - ``package`` -- the setuptools package of a registered application
       - ``path`` -- the url path of the wanted static content
-      
+
     Return:
       - the path of the static content
-    """    
+    """
     path = os.path.join('static', path[1:])
-    
+
     if not pkg_resources.resource_exists(package, path) or pkg_resources.resource_isdir(package, path):
         return None
-    
+
     return pkg_resources.resource_filename(package, path)
 
 # ---------------------------------------------------------------------------
 
 def run(parser, options, args):
     """Launch one or more applications
-    
+
     In:
       - ``parser`` -- the ``optparse.OptParser`` object used to parse the configuration file
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines
-      
+
     The arguments are a list of names of registered applications
     or paths to application configuration files.
-    """    
+    """
     # If no argument are given, display the list of the registered applications
     if len(args) == 0:
         print 'Available applications:'
-        
+
         # The applications are registered under the ``nagare.applications`` entry point
         applications = pkg_resources.iter_entry_points('nagare.applications')
         for name in sorted([application.name for application in applications]):
@@ -212,14 +212,14 @@ def run(parser, options, args):
     for cfgfile in args:
         # Read the configuration file of the application
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, parser.error)
-        
+
         if watcher:
             watcher.watch_file(aconf.filename)
-        
+
         # Create the function to get the static contents of the application
         static = aconf['application'].get('static')
         get_file = None
-        if static is not None and os.path.isdir(static): 
+        if static is not None and os.path.isdir(static):
             # If a ``static`` parameter exists, under the ``[application]`` section,
             # serve the static contents from this root
             get_file = lambda path, static=static: get_file_from_root(static, path)
@@ -235,19 +235,21 @@ def run(parser, options, args):
         static_url = publisher.register_static(aconf['application']['name'], get_file)
 
         # Load the sessions manager factory
-        sessions = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
+        sessions_managers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
         conf = pconf['sessions'].dict()
         conf.update(aconf['sessions'].dict())
         t = conf.pop('type')
 
-        sessions_factory = sessions[t].load()(options.conf, conf, parser.error)
+        sessions_manager = sessions_managers[t].load()()
+        sessions_manager.set_config(options.conf, conf, parser.error)
 
         (app, metadatas) = util.activate_WSGIApp(
                                                     app,
                                                     cfgfile, aconf, parser.error,
+                                                    '' if not dist else dist.project_name,
                                                     static, static_url,
                                                     publisher,
-                                                    sessions_factory
+                                                    sessions_manager
                                                 )
 
         # Register the application to the publisher
