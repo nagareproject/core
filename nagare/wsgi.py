@@ -40,10 +40,10 @@ class WSGIApp(object):
     def __init__(self, root_factory):
         """Initialization
 
-        In:
-          - ``root_factory`` -- function to create the application root component
-          - ``metadatas`` -- the SQLAlchemy metadata objects
-        """
+       In:
+         - ``root_factory`` -- function to create the application root component
+         - ``metadatas`` -- the SQLAlchemy metadata objects
+       """
         self.root_factory = root_factory
 
         self.static_path = ''
@@ -52,7 +52,6 @@ class WSGIApp(object):
         self.name = ''
         self.redirect_after_post = False
         self.always_html = True
-        self.sessions_factory = None
         self.sessions = None
 
         self.security = dummy_manager.Manager()
@@ -94,13 +93,13 @@ class WSGIApp(object):
         """
         pass
 
-    def set_sessions_factory(self, sessions_factory):
+    def set_sessions_manager(self, sessions_manager):
         """
 
         In:
-          - ``sessions_factory`` -- the sessions managare factory
+          - ``sessions_manager`` -- the sessions manager
         """
-        self.sessions_factory = sessions_factory
+        self.sessions = sessions_manager
 
     def set_metadatas(self, metadatas):
         """
@@ -113,7 +112,15 @@ class WSGIApp(object):
     def start(self):
         """Call after each process start
         """
-        self.sessions = self.sessions_factory()
+        pass
+
+    def set_project(self, name):
+        """The application distribution name
+
+        In:
+          - ``project_name`` -- name of the distutils distribution where the app is located
+        """
+        self.project_name = name
 
     # -----------------------------------------------------------------------
 

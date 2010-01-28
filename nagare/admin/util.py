@@ -214,7 +214,6 @@ def read_application_options(cfgfile, error, default={}):
 
     return conf
 
-
 def read_application(cfgfile, error):
     """Read the configuration file for the application and create the application object
 
@@ -287,7 +286,7 @@ def set_metadata(conf, debug):
         return metadata
 
 
-def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=None, publisher=None, sessions_factory=None, debug=False):
+def activate_WSGIApp(app, cfgfile, aconf, error, project_name='', static_path=None, static_url=None, publisher=None, sessions_manager=None, debug=False):
     """
 
     In:
@@ -295,11 +294,12 @@ def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=No
       - ``cfgfile`` -- the path to the configuration file
       - ``aconf`` -- the ``ConfigObj`` object, created from the configuration file
       - ``error`` -- the function to call in case of configuration errors
+      - ``project_name`` -- name of the distutils distribution where the app is located
       - ``static_path`` -- the directory where the static contents of the application
         are located
       - ``static_url`` -- the url of the static contents of the application
       - ``publisher`` -- the publisher of the application
-      - ``session_factory`` -- the sessions managare factory
+      - ``session_manager`` -- the sessions manager
       - ``debug`` -- flag to display the generated SQL statements
 
     Return:
@@ -337,11 +337,14 @@ def activate_WSGIApp(app, cfgfile, aconf, error, static_path=None, static_url=No
     if publisher:
         app.set_publisher(publisher)
 
-    if sessions_factory:
-        app.set_sessions_factory(sessions_factory)
+    if sessions_manager:
+        app.set_sessions_manager(sessions_manager)
 
     if metadatas:
         app.set_metadatas(metadatas)
+
+    if project_name:
+        app.set_project(project_name)
 
     return (app, zip(metadatas, populates))
 
