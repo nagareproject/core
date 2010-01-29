@@ -18,18 +18,18 @@ from nagare.namespaces import xhtml_base
 
 def wrap(content_type, h, body):
     """Add the tags is they don't exist or merge them into the existing ones
-    
+
     In:
       - ``content_type`` -- the content type to send to the browser
       - ``h`` -- the current renderer
       - ``body`` -- the rendered tree
-      
+
     Return:
       - new tree with ``<html>``, ``<head>`` and ``<body>``
     """
     if (content_type is None) or ('html' in content_type):
         # Add the tags only for a (x)html content
-        
+
         if not isinstance(body, xhtml_base._HTMLTag) or not body.tag.endswith('html'):
             # No ``<html>`` found, add it
             if h.response.xhtml_output:
@@ -39,7 +39,7 @@ def wrap(content_type, h, body):
                 # No ``<body>`` found, add it
                 body = h.body(body)
             body = h.html(body)
-        
+
         head1 = presentation.render(h.head, None, None, None) # The automatically generated ``<head>``
 
         url = h.request.path_info.strip('/')
@@ -47,7 +47,7 @@ def wrap(content_type, h, body):
             head1.append(h.head.link(rel='canonical', href=h.request.script_name+'/'+url))
 
         head2 = body[0]
-    
+
         if not head2.tag.endswith('head'):
             # No ``<head>`` found, add the automatically generated ``<head>``
             body.insert(0, head1)

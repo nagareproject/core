@@ -68,10 +68,10 @@ def create_rules(app_names, error):
 
 def commonprefix(filenames):
     """Return the common prefix of a list of filenames
-    
+
     In:
       - ``filenames`` -- the list of filenames
-      
+
     Return:
       - the common prefix
     """
@@ -127,7 +127,7 @@ def generate_apache_rules(app_names, error):
     """
     apps = create_rules(app_names, error)
     document_root = commonprefix([static for (name, static) in apps])
-    
+
     yield 'DocumentRoot %s' % document_root
     yield ''
 

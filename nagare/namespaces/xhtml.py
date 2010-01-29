@@ -34,7 +34,7 @@ from nagare.namespaces import xhtml_base
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, ajax.Update))
 def add_attribute(self, name, value):
     """Add an attribute with a ``ajax.Update`` value
-    
+
     In:
       - ``self`` -- the tag
       - ``name`` -- name of the attribute
@@ -46,7 +46,7 @@ def add_attribute(self, name, value):
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.FunctionType))
 def add_attribute(self, name, value):
     """Add an attribute with a function value
-    
+
     In:
       - ``self`` -- the tag
       - ``name`` -- name of the attribute
@@ -58,7 +58,7 @@ def add_attribute(self, name, value):
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.MethodType))
 def add_attribute(self, name, value):
     """Add an attribute with a method value
-    
+
     In:
       - ``self`` -- the tag
       - ``name`` -- name of the attribute
@@ -70,7 +70,7 @@ def add_attribute(self, name, value):
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, ajax.JS))
 def add_attribute(self, name, value):
     """Add an attribute with a ``ajax.JS`` value
-    
+
     In:
       - ``self`` -- the tag
       - ``name`` -- name of the attribute
@@ -82,11 +82,11 @@ def add_attribute(self, name, value):
 
 def absolute_url(url, static):
     """Convert a relative URL of a static content to an absolute one
-    
+
     In:
       - ``url`` -- url to convert
       - ``static`` -- URL prefix of the static contents
-      
+
     Return:
       - an absolute URL
     """
@@ -97,18 +97,18 @@ def absolute_url(url, static):
             url = static + '/' + url
         else:
             url = static + url
-        
+
     return url
 
 
 class HeadRenderer(xhtml_base.HeadRenderer):
     """The XHTML head Renderer
-    
+
     This renderer knows about the static contents of the application
     """
     def __init__(self, static_url):
         """Renderer initialisation
-        
+
         The ``HeadRenderer`` keeps track of the javascript and css used by every views,
         to be able to concatenate them into the ``<head>`` section.
         """
@@ -116,7 +116,7 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
         # Directory where are located the static contents of the application
         self.static_url = static_url
-        
+
         self._named_css = {}        # CSS code
         self._css_url = {}          # CSS URLs
         self._named_javascript = {} # Javascript code
@@ -126,12 +126,12 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
     def css(self, name, style, **kw):
         """Memorize an in-line named css style
-        
+
         In:
           - ``name`` -- unique name of this css style (to prevent double definition)
           - ``style`` -- the css style
           - ``kw`` -- attributes of the generated ``<style>`` tag
-          
+
         Return:
           - ``()``
         """
@@ -141,11 +141,11 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
     def css_url(self, url, **kw):
         """Memorize a css style URL
-        
+
         In:
           - ``url`` -- the css style URL
           - ``kw`` -- attributes of the generated ``<link>`` tag
-          
+
         Return:
           - ``()``
         """
@@ -155,12 +155,12 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
     def javascript(self, name, script, **kw):
         """Memorize an in-line named javascript code
-        
+
         In:
           - ``name`` -- unique name of this javascript code (to prevent double definition)
           - ``script`` -- the javascript code
           - ``kw`` -- attributes of the generated ``<script>`` tag
-          
+
         Return:
           - ``()``
         """
@@ -179,11 +179,11 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
     def javascript_url(self, url, **kw):
         """Memorize a javascript URL
-        
+
         In:
           - ``url`` -- the javascript URL
           - ``kw`` -- attributes of the the generated ``<script>`` tag
-          
+
         Return:
           - ``()``
         """
@@ -193,22 +193,22 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
     def _style(self, append, tag, style):
         append(tag, style)
-    
+
     def _script(self, append, tag, script):
         append(tag, script)
 
     def _get_named_css(self):
         """Return the list of the in-line named css styles, sorted by order of insertion
-        
+
         Return:
           - list of (name, css style, attributes)
         """
-        
+
         return [(name, style, attributes) for (name, (order, style, attributes)) in sorted(self._named_css.items(), key=operator.itemgetter(1))]
 
     def _get_css_url(self):
         """Return the list of css URLs, sorted by order of insertion
-        
+
         Return:
           - list of css (URLs, attributes)
         """
@@ -216,7 +216,7 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
     def _get_named_javascript(self):
         """Return the list of named javascript codes, sorted by order of insertion
-        
+
         Return:
           - list of (name, javascript code, attributes)
         """
@@ -224,7 +224,7 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 
     def _get_javascript_url(self):
         """Return the list of javascript URLs, sorted by order of insertion
-        
+
         Return:
           - list of javascript (URLs, attributes)
         """
@@ -234,14 +234,14 @@ class HeadRenderer(xhtml_base.HeadRenderer):
 def render(self, h, *args):
     """
     Generate the ``<head>`` tree
-    
+
     In:
       - ``h`` -- *not used*
-      
+
     Return:
       - the ``<head>`` tree
     """
-    
+
     # Create the tags to include the CSS styles and the javascript codes
 
     head = self.root
@@ -267,13 +267,13 @@ class _HTMLActionTag(xhtml_base._HTMLTag):
     """
     def action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action
-        
+
         In:
           - ``action`` -- action
           - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
-          
+
         Return:
           - ``self``
         """
@@ -282,12 +282,12 @@ class _HTMLActionTag(xhtml_base._HTMLTag):
         else:
             # Double dispatch with the renderer
             self.renderer.action(self, action, with_request, permissions, subject)
-        
+
         return self
 
     def sync_action(self, renderer, action, with_request, permissions, subject):
         """Register a synchronous action
-        
+
         In:
           - ``renderer`` -- the current renderer
           - ``action`` -- action
@@ -302,10 +302,10 @@ class _HTMLActionTag(xhtml_base._HTMLTag):
         self.set(self._actions[1], renderer.register_callback(self._actions[0], action, with_request))
 
     async_action = sync_action
-    
+
     def _async_action(self, renderer, action, with_request, permissions, subject):
         """Register an asynchronous action
-        
+
         In:
           - ``renderer`` -- the current renderer
           - ``action`` -- action
@@ -315,7 +315,7 @@ class _HTMLActionTag(xhtml_base._HTMLTag):
         """
         if callable(action):
             action = ajax.Update(action=action, with_request=with_request)
-        
+
         self.set(self._actions[2], action.generate_action(self._actions[0], renderer))
 
 # ----------------------------------------------------------------------------------
@@ -325,10 +325,10 @@ class Form(xhtml_base._HTMLTag):
     """
     def init(self, renderer):
         """Initialisation
-        
+
         In:
           - ``renderer`` -- the current renderer
-          
+
         Return:
           - ``self``
         """
@@ -348,7 +348,7 @@ class Form(xhtml_base._HTMLTag):
 
     def add_child(self, child):
         """Add a child to this ``<form>`` tag
-        
+
         Delete the existing ``<form>`` tags in the child tree
         """
         if isinstance(child, ET.ElementBase):
@@ -363,34 +363,34 @@ class Form(xhtml_base._HTMLTag):
     def pre_action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action that will be executed **before** the actions of the
         form elements
-        
+
         In:
           - ``action`` -- action
           - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
-          
+
         Return:
           - ``self``
         """
         if permissions is not None:
-            # Wrap the ``action`` into a wrapper that will check the user permissions            
+            # Wrap the ``action`` into a wrapper that will check the user permissions
             action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
         # Generate a hidden field with the action attached
         self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(0, action, with_request))))
         return self
-        
+
     def post_action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action that will be executed **after** the actions of the
         form elements
-        
+
         In:
           - ``action`` -- action
           - ``with_request`` -- will the request and response object be passed to the action ?
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
-          
+
         Return:
           - ``self``
         """
@@ -401,7 +401,7 @@ class Form(xhtml_base._HTMLTag):
         # Generate a hidden field with the action attached
         self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(3, action, with_request))))
         return self
-    
+
 # ----------------------------------------------------------------------------------
 
 class TextInput(_HTMLActionTag):
@@ -436,10 +436,10 @@ class TextArea(_HTMLActionTag):
     #   - name of the attribute for the synchronous action
     #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
-    
+
     def action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action
-        
+
         In:
           - ``action`` -- action
           - ``with_request`` -- will the request and response objects be passed to the action ?
@@ -481,10 +481,10 @@ class RadioInput(_HTMLActionTag):
 
     def selected(self, flag):
         """(de)Select the tag
-        
+
         In:
           - ``flag`` -- boolean to deselect / select the tag
-          
+
         Return:
           - ``self``
         """
@@ -508,10 +508,10 @@ class CheckboxInput(_HTMLActionTag):
 
     def selected(self, flag):
         """(de)Select the tag
-        
+
         In:
           - ``flag`` -- boolean to deselect / select the tag
-          
+
         Return:
           - ``self``
         """
@@ -532,7 +532,7 @@ class SubmitInput(_HTMLActionTag):
     #   - name of the attribute for the synchronous action
     #   - name of the attribute for the asynchronous action
     _actions = (4, 'name', 'onclick')
-    
+
     def async_action(self, renderer, action, with_request, permissions, subject):
         """Register an asynchronous action
 
@@ -568,10 +568,10 @@ class FileInput(_HTMLActionTag):
 
     def init(self, renderer):
         """Initialisation
-       
+
         In:
           - ``renderer`` -- the current renderer
-          
+
         Return:
           - ``self``
         """
@@ -607,28 +607,28 @@ class ImageInput(_HTMLActionTag):
 
 class Option(xhtml_base._HTMLTag):
     """ ``<options>`` tags
-    """    
+    """
     def selected(self, values):
         """(de)Select the tags
-        
+
         In:
           - ``values`` -- name or list of names of the tags to select
-          
+
         Return:
           - ``self``
-        """        
+        """
         if not isinstance(values, (list, tuple)):
             values = (values,)
 
         if 'selected' in self.attrib:
             del self.attrib['selected']
-        
+
         if self.get('value') in values:
             self.set('selected', 'selected')
-            
+
         return self
 
-    
+
 class Select(_HTMLActionTag):
     """ ``<select>`` tags
     """
@@ -638,10 +638,10 @@ class Select(_HTMLActionTag):
     #   - name of the attribute for the synchronous action
     #   - name of the attribute for the asynchronous action
     _actions = (1, 'name', 'onchange')
-    
+
     def action(self, action, with_request=False, permissions=None, subject=None):
         """Register an action
-        
+
         In:
           - ``action`` -- action
           - ``with_request`` -- will the request and response objects be passed to the action ?
@@ -650,7 +650,7 @@ class Select(_HTMLActionTag):
 
         Return:
           - ``self``
-        """        
+        """
         if self.get('multiple') is not None:
             # If this is a multiple select, the value sent to the action will
             # always be a list, even if only 1 item was selected
@@ -658,7 +658,7 @@ class Select(_HTMLActionTag):
                 action = lambda request, response, v, action=action: action(request, response, v if isinstance(v, (list, tuple)) else (v,))
             else:
                 action = lambda v, action=action: action(v if isinstance(v, (list, tuple)) else (v,))
-            
+
         return super(Select, self).action(action, with_request, permissions, subject)
 
 # ----------------------------------------------------------------------------------
@@ -674,7 +674,7 @@ class A(_HTMLActionTag):
 
     def sync_action(self, renderer, action, with_request, permissions, subject):
         """Register a synchronous action
-        
+
         In:
           - ``renderer`` -- the current renderer
           - ``action`` -- action
@@ -689,10 +689,10 @@ class A(_HTMLActionTag):
 
         href = self.get('href', '').partition('#')
         self.set('href', renderer.add_sessionid_in_url(href[0], (renderer.register_callback(4, action, with_request),))+href[1]+href[2])
-    
+
     def _async_action(self, renderer, action, with_request, permissions, subject):
         """Register an asynchronous action
-        
+
         In:
           - ``renderer`` -- the current renderer
           - ``action`` -- action
@@ -703,13 +703,13 @@ class A(_HTMLActionTag):
         super(A, self)._async_action(renderer, action, with_request, permissions, subject)
         self.set('href', '#')
     async_action = _async_action
-    
+
     """
     def url(self, *args):
         url = '/'.join([urllib.quote_plus(unicode(u).encode('utf-8'), '') for u in args])
-            
+
         href = self.get('href', '')
-        
+
         if not href.startswith(('#', '?')):
             href = ''
 
@@ -756,9 +756,9 @@ class Img(_HTMLActionTag):
 
     def sync_action(self, renderer, action, with_request, permissions, subject):
         """Register a synchronous action
-        
+
         The action will have to return the image data
-        
+
         In:
           - ``renderer`` -- the current renderer
           - ``action`` -- action
@@ -776,7 +776,7 @@ class Img(_HTMLActionTag):
 
     def add_child(self, child):
         """Add attributes to the image
-        
+
         In:
           - ``child`` -- attributes dictionary
         """
@@ -792,16 +792,16 @@ class Img(_HTMLActionTag):
 
 class Label(xhtml_base._HTMLTag):
     """ ``<label>`` tags
-    """        
+    """
     def init(self, renderer):
         """Initialisation
-        
+
         In:
           - ``renderer`` -- the current renderer
-          
+
         Return:
           - ``self``
-        """        
+        """
         super(Label, self).init(renderer)
 
         # Generate a unique value for the ``for`` attribute
@@ -816,7 +816,7 @@ class Script(xhtml_base._HTMLTag):
 @peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, Script))
 def add_child(next_method, self, script):
     """Add a <script> to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``script`` -- the script to add
@@ -831,7 +831,7 @@ class Style(xhtml_base._HTMLTag):
 @peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, Style))
 def add_child(next_method, self, style):
     """Add a <style> to a tag
-    
+
     In:
       - ``self`` -- the tag
       - ``style`` -- the style to add
@@ -845,7 +845,7 @@ def add_child(next_method, self, style):
 class Renderer(xhtml_base.Renderer):
     """The XHTML synchronous renderer
     """
-    
+
     head_renderer_factory = HeadRenderer
 
     # Redefinition of the he HTML tags with actions
@@ -866,7 +866,7 @@ class Renderer(xhtml_base.Renderer):
 
     script = TagProp('script', set(('id', 'charset', 'type', 'language', 'src', 'defer')), Script)
     style = TagProp('style', set(xhtml_base.i18nattrs+('id', 'type', 'media', 'title')), Style)
-    
+
     _specialTags = dict(
                     text_input     = TextInput,
                     radio_input    = RadioInput,
@@ -881,7 +881,7 @@ class Renderer(xhtml_base.Renderer):
     @classmethod
     def class_init(cls, specialTags):
         """Class initialisation
-        
+
         In:
           -- ``special_tags`` -- tags that have a special factory
         """
@@ -898,10 +898,10 @@ class Renderer(xhtml_base.Renderer):
         cls._custom_lookup = CustomLookup(cls._specialTags, ET.ElementDefaultClassLookup(element=xhtml_base._HTMLTag))
         cls._html_parser = ET.HTMLParser()
         cls._html_parser.setElementClassLookup(cls._custom_lookup)
-        
+
     def __init__(self, parent=None, session=None, request=None, response=None, callbacks=None, static_url='', static_path='', url='/'):
         """Renderer initialisation
-        
+
         In:
           - ``parent`` -- parent renderer
           - ``session`` -- the session object
@@ -930,24 +930,24 @@ class Renderer(xhtml_base.Renderer):
             self.static_path = parent.static_path
             self.url = parent.url
             self._rendered = parent._rendered
-        
+
         self.component = None
         self.model = None
 
     def makeelement(self, tag):
         """Make a tag
-        
+
         In:
           - ``tag`` -- name of the tag to create
-          
+
         Return:
           - the new tag
-        """                
+        """
         return self._makeelement(tag, self._html_parser)
 
     def parse_xml(self, source, fragment=False, no_leading_text=False, **kw):
         """Parse a XML file
-        
+
         In:
           - ``source`` -- can be a filename or a file object
           - ``fragment`` -- if ``True``, can parse a XML fragment i.e a XML without
@@ -955,10 +955,10 @@ class Renderer(xhtml_base.Renderer):
           - ``no_leading_text`` -- if ``fragment`` is ``True``, ``no_leading_text``
             is ``False`` and the XML to parsed begins by a text, this text is keeped
           - ``kw`` -- keywords parameters are passed to the XML parser
-          
+
         Return:
           - the root element of the parsed XML, if ``fragment`` is ``False``
-          - a list of XML elements, if ``fragment`` is ``True`` 
+          - a list of XML elements, if ``fragment`` is ``True``
         """
         if isinstance(source, basestring):
             source = absolute_url(source, self.static_path)
@@ -967,7 +967,7 @@ class Renderer(xhtml_base.Renderer):
 
     def parse_html(self, source, fragment=False, no_leading_text=False, xhtml=False, **kw):
         """Parse a (X)HTML file
-        
+
         In:
           - ``source`` -- can be a filename or a file object
           - ``fragment`` -- if ``True``, can parse a HTML fragment i.e a HTML without
@@ -976,23 +976,23 @@ class Renderer(xhtml_base.Renderer):
             is ``False`` and the HTML to parsed begins by a text, this text is keeped
           - ``xhtml`` -- is the HTML to parse a valid XHTML ?
           - ``kw`` -- keywords parameters are passed to the HTML parser
-          
+
         Return:
           - the root element of the parsed HTML, if ``fragment`` is ``False``
-          - a list of HTML elements, if ``fragment`` is ``True`` 
+          - a list of HTML elements, if ``fragment`` is ``True``
         """
         if isinstance(source, basestring):
             source = absolute_url(source, self.static_path)
 
         parser = ET.XMLParser(**kw) if xhtml else ET.HTMLParser(**kw)
         parser.setElementClassLookup(self._custom_lookup)
-        
+
         return self._parse_html(parser, source, fragment, no_leading_text, **kw)
 
 
     def start_rendering(self, component, model):
         """Method called before to render a component
-        
+
         In:
           - ``component`` -- component to render
           - ``model`` -- name of the view to use
@@ -1006,13 +1006,13 @@ class Renderer(xhtml_base.Renderer):
         # Delete all the previous callbacks registered by this component
         if self._callbacks and (component not in self._rendered):
             self._callbacks.unregister_callbacks(component)
-        
+
         # Memorize all the rendered components
         self._rendered.add(component)
 
     def action(self, tag, action, with_request, permissions, subject):
         """Register a synchronous action on a tag
-        
+
         In:
           - ``tag`` -- the tag
           - ``action`` -- action
@@ -1025,9 +1025,9 @@ class Renderer(xhtml_base.Renderer):
 
     def register_callback(self, priority, f, with_request, render=None):
         """Register an action
-        
+
         Forward the call to the ``callbacks`` object
-        
+
         In:
           - ``priority`` - -priority of the action
           - ``f`` -- the action
@@ -1039,10 +1039,10 @@ class Renderer(xhtml_base.Renderer):
 
     def decorate_error(self, element, error):
         """During the rendering, highlight an element that has an error
-        
+
         In:
           - ``element`` -- the element in error
-          - ``error`` -- the error text 
+          - ``error`` -- the error text
         """
         if error is None:
             return element
@@ -1056,7 +1056,7 @@ class Renderer(xhtml_base.Renderer):
 
     def add_sessionid_in_form(self, form):
         """Add the session and continuation ids into a ``<form>``
-        
+
         Forward this call to the sessions manager
 
         In:
@@ -1067,20 +1067,20 @@ class Renderer(xhtml_base.Renderer):
 
     def add_sessionid_in_url(self, u='', params=None, sep='&'):
         """Add the session and continuation ids into an url
-        
+
         Forward this call to the sessions manager
 
         In:
           - ``u`` -- the url
           - ``params`` -- query string of the url
-          
+
         Return:
           - the completed url
         """
         i = u.find(':')
         if ((i == -1) or not u[:i].isalpha()) and u and (u[0] != '/'):
             u = self.url + '/' + u
-        
+
         if params is None:
             params = ()
 
@@ -1093,18 +1093,18 @@ class Renderer(xhtml_base.Renderer):
 class AsyncHeadRenderer(HeadRenderer):
     def __init__(self, static_url):
         """Renderer initialisation
-        
+
         The ``HeadRenderer`` keeps track of the javascript and css used by every views,
         to be able to concatenate them into the ``<head>`` section.
         """
         super(AsyncHeadRenderer, self).__init__(static_url=static_url)
-                
+
         self._anonymous_css = []         # CSS
         self._anonymous_javascript = []  # Javascript code
 
     def _css(self, style):
         """Memorize an in-line anonymous css style
-        
+
         In:
           - ``style`` -- the css style
         """
@@ -1113,7 +1113,7 @@ class AsyncHeadRenderer(HeadRenderer):
 
     def _javascript(self, script):
         """Memorize an in-line anonymous javascript code
-        
+
         In:
           - ``script`` -- the javascript code
         """
@@ -1122,10 +1122,10 @@ class AsyncHeadRenderer(HeadRenderer):
 
     def _style(self, append, tag, style):
         self._css(style.text or '')
-    
-    def _script(self, append, tag, script):    
+
+    def _script(self, append, tag, script):
         url = script.get('src')
-        
+
         if url:
             self.javascript_url(url)
         else:
@@ -1133,29 +1133,29 @@ class AsyncHeadRenderer(HeadRenderer):
 
     def _get_anonymous_css(self):
         """Return the list of the in-line anonymous css styles, sorted by order of insertion
-        
+
         Return:
           - list of css styles
         """
         return [css for (order, css) in sorted(self._anonymous_css)]
-        
+
 
     def _get_anonymous_javascript(self):
         """Return the list of anonymous javascript codes, sorted by order of insertion
-        
+
         Return:
           - list of javascript codes
         """
         return [js for (order, js) in sorted(self._anonymous_javascript)]
 
-    
+
 @presentation.render_for(AsyncHeadRenderer)
 def render(self, h, *args):
     """Generate a javascript view of the head
-    
+
     In:
       - ``h`` -- the current renderer
-      
+
     Return:
       - a javascript string
     """
@@ -1176,7 +1176,7 @@ class AsyncRenderer(Renderer):
 
     def __init__(self, *args, **kw):
         """Renderer initialisation
-        
+
         In:
           - ``parent`` -- parent renderer
         """
@@ -1187,16 +1187,16 @@ class AsyncRenderer(Renderer):
 
     def javascript_url(self, url):
         self.head.javascript_url(url)
-        
+
     def _javascript(self, js):
         self.head._javascript(js)
-        
+
     def _css(self, style):
         self.head._css(style)
 
     def action(self, tag, action, with_request, permissions, subject):
         """Register an asynchronous action on a tag
-        
+
         In:
           - ``tag`` -- the tag
           - ``action`` -- action
@@ -1213,10 +1213,10 @@ class AsyncRenderer(Renderer):
 
     def end_rendering(self, output):
         """Method called after a component is rendered
-        
+
         In:
           - ``output`` -- rendered tree
-          
+
         Out:
           - rendered tree
         """
@@ -1225,14 +1225,14 @@ class AsyncRenderer(Renderer):
 
         return output
 
-    def get_async_root(self):        
+    def get_async_root(self):
         if not isinstance(self.parent, AsyncRenderer):
             #return None
             return self
-        
+
         if self.parent.async_root:
             return self
-        
+
         return self.parent.get_async_root()
 
 # ---------------------------------------------------------------------------

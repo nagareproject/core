@@ -24,7 +24,7 @@ from nagare.admin import util
 def usage(commands):
     """
     Display the usage of ``nagare-admin``
-    
+
     In:
       - ``commands`` -- list of the classes implementing the commands
     """
@@ -41,10 +41,10 @@ def usage(commands):
 
 def main():
     """Dispatcher for the ``nagare-admin`` commands
-    
+
     The commands are classed, registered under the ``nagare.commands`` entry point
     """
-    
+
     # Load all the commands
     commands = {}
     for entry_point in pkg_resources.iter_entry_points('nagare.commands'):
@@ -53,13 +53,13 @@ def main():
         except ImportError:
             print "Warning: the command '%s' can't be imported" % entry_point.name
             raise
-        
+
     parser = optparse.OptionParser(usage='\n'.join(usage(commands)))
 
     if (len(sys.argv) == 1) or (sys.argv[1] == '-h') or (sys.argv[1] == '--help'):
         parser.print_usage(sys.stderr)
         parser.exit()
-    
+
     command_name = sys.argv[1]
     command = commands.get(command_name)
     if command is None:

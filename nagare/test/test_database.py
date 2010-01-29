@@ -21,13 +21,13 @@ from nagare.namespaces import xml
 from nagare import presentation
 from nagare import component
 from nagare import wsgi
-from nagare.sessions import threaded_sessions
+from nagare.sessions.memory_sessions import SessionsWithPickledStates
 
 from exceptions import Exception
 
 def create_FixtureApp(app):
     app = wsgi.create_WSGIApp(app)
-    app.set_sessions_factory(lambda: threaded_sessions.SessionsFactory('', {}, lambda x: None)())
+    app.set_sessions_manager(SessionsWithPickledStates())
     app.start()
 
     return TestApp(app)

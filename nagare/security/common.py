@@ -22,14 +22,14 @@ class Permission(object):
 
 class Private(Permission):
     """To define the ``private`` permission singleton
-    
+
     Nobody has access to objects protected with this permission
     """
     pass
 
 class Public(Permission):
     """To define the ``public`` permission singleton
-    
+
     Every body has access to objects protected with this permission
     """
     pass
@@ -42,12 +42,12 @@ public = Public()
 
 class Denial(BaseException):
     """Type of the objects return when an access is denied
-    
+
     In a boolean context, it is evaluated to ``False``
     """
     def __init__(self, message='Access forbidden'):
         """Initialisation
-        
+
         In:
           - ``message`` -- denial description
         """
@@ -70,7 +70,7 @@ class User(object):
         self.id = id
         self.credentials = args
         self.expired = False
-    
+
     def set_id(self, id, *args):
         self.id = id
         self.credentials = args
@@ -82,19 +82,19 @@ class User(object):
 
 class Rules(object):
     """Pre-defined security rules
-    
+
     A rule is an implementation of the ``security.common.Rules.has_permission()``
     generic method.
     """
     def has_permission(self, user, perm, subject):
         """The ``has_permission()`` generic method
         and default implementation: by default all accesses are denied
-        
+
         In:
           - ``user`` -- user to check the permission for
           - ``perm`` -- permission(s) to check
           - ``subject`` -- object to check the permission on
-          
+
         Return:
           - True if the access is granted
           - Else a ``security.common.denial`` object
@@ -112,7 +112,7 @@ class Rules(object):
         """Everybody has access to an object protected with the ``public`` permission
         """
         return True
-    
+
     @when(has_permission, (User, tuple))
     def check_access(self, user, perms, subject):
         """If several permissions are to be checked, the access must be granted
@@ -139,7 +139,7 @@ class Rules(object):
 class Authentication(object):
     """An ``Authentication`` object identify, authenticate and create the
     user objects
-    
+
     .. note::
         By definition, the user object ``None`` is the anonymous user
     """
@@ -154,7 +154,7 @@ class Authentication(object):
         if not self.check_password(username, password, **ids):
             # Bad authentication of the user, create an anonymous user
             username = None
-        
+
         # Create the user object
         user = self._create_user(username)
         if user:
@@ -163,12 +163,12 @@ class Authentication(object):
 
     def check_password(self, username, password, **kw):
         """Authentication
-        
+
         In:
           - ``username`` -- the user id
           - ``password`` -- the real password of the user
           - ``kw`` -- other data for the user
-          
+
         Return:
           - a boolean
         """
@@ -178,11 +178,11 @@ class Authentication(object):
 
     def get_ids(self, request, response):
         """Return the data associated with the connected user
-        
+
         In:
           - ``request`` -- the web request object
           - ``response`` -- the web response object
-          
+
         Return:
           - A tuple with the id of the user and a dictionary of its data
         """
@@ -190,7 +190,7 @@ class Authentication(object):
 
     def set_user_id(self, user, id, **kw):
         """Set the credentials of the user
-        
+
         In:
           - ``user`` -- the user
           - ``id`` -- the user id
@@ -210,32 +210,32 @@ class Authentication(object):
           - ``detail`` -- a ``security.common.denial`` object
         """
         raise webob.exc.HTTPForbidden(str(detail))
-    
+
     def get_password(self, username):
         """Return the real password of the user
-        
+
         In:
           - ``username`` -- the user id
-          
+
         Return:
           - the password
         """
         return None
-    
+
     def _create_user(self, username):
         """The user is validated, create the user object
-        
+
         In:
           - ``username`` -- the user id
-          
+
         Return:
           - the user object
         """
         return None
-    
+
     def end_rendering(self, request, response, sessions, session):
         """End of the request processing
-        
+
         In:
           - ``request`` -- the request object
           - ``response`` -- the response object

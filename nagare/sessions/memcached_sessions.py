@@ -11,7 +11,7 @@ import threading, time
 
 import memcache
 
-from nagare.sessions import common
+from nagare.sessions import ExpirationError, common
 
 KEY_PREFIX = 'nagare_'
 
@@ -46,8 +46,21 @@ class Lock(object):
 
 
 class Sessions(common.Sessions):
-    """Sessions manager for sessions kept in an external memcache server
+    """Sessions manager for sessions kept in an external memcached server
     """
+    spec = dict(
+                host='string(default="127.0.0.1")',
+                port='integer(default=11211)',
+                ttl='integer(default=0)',
+                lock_ttl='float(default=0.)',
+                lock_poll_time='float(default=0.1)',
+                lock_max_wait_time='float(default=5.)',
+                min_compress_len='integer(default=0)',
+                reset='boolean(default=True)',
+                debug='boolean(default=False)',
+               )
+    spec.update(common.Sessions.spec)
+
     def __init__(
                  self,
                  host='127.0.0.1', port=11211,
@@ -73,7 +86,7 @@ class Sessions(common.Sessions):
         """
         super(Sessions, self).__init__(**kw)
 
-        self.host = '%s:%d' % (host, port)
+        self.host = ['%s:%d' % (host, port)]
         self.ttl = ttl
         self.lock_ttl = lock_ttl
         self.lock_poll_time = lock_poll_time
@@ -81,6 +94,28 @@ class Sessions(common.Sessions):
         self.min_compress_len = min_compress_len
         self.debug = debug
         self.memcached = threading.local()
+
+        if reset:
+            memcached = memcache.Client(self.host, debug=debug)
+            memcached.flush_all()
+
+    def set_config(self, filename, conf, error):
+        """Read the configuration parameters
+
+        In:
+          - ``filename`` -- the path to the configuration file
+          - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
+          - ``error`` -- the function to call in case of configuration errors
+        """
+        # Let's the super class validate the configuration file
+        conf = super(Sessions, self).set_config(filename, conf, error)
+
+        args = [conf[arg_name] for arg_name in (
+                    'host', 'port', 'ttl', 'lock_ttl', 'lock_poll_time',
+                    'lock_max_wait_time', 'min_compress_len', 'reset', 'debug'
+                )]
+
+        self.__init__(*args)
 
     def _get_connection(self):
         """Get the connection to the memcache server
@@ -92,7 +127,7 @@ class Sessions(common.Sessions):
         connection = self.memcached.__dict__.get('connection')
 
         if connection is None:
-            connection = memcache.Client([self.host], debug=self.debug)
+            connection = memcache.Client(self.host, debug=self.debug)
             self.memcached.connection = connection
 
         return connection
@@ -105,7 +140,9 @@ class Sessions(common.Sessions):
           - ``secure_id`` -- the secure number associated to the session
 
         Return:
-          - tuple (session_id, cont_id, new_cont_id, lock, secure_id)
+          - the tuple:
+            - id of this state,
+            - session lock
         """
         connection = self._get_connection()
         lock = Lock(connection, session_id, self.lock_ttl, self.lock_poll_time, self.lock_max_wait_time)
@@ -113,55 +150,64 @@ class Sessions(common.Sessions):
 
         connection.set_multi({
             '_sess' : (secure_id, None),
-            '_cont' : '0',
+            '_state' : '0',
             '00000' : {}
         }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
 
-        return (session_id, 0, 0, lock, secure_id)
+        return (0, lock)
 
-    def __get(self, session_id, cont_id):
-        """Return the raw data associated to a session
+    def _get(self, session_id, state_id, use_same_state):
+        """Retrieve the state
 
         In:
-          - ``session_id`` -- id of the session
-          - ``cont_id`` -- id of the continuation
+          - ``session_id`` -- session id of this state
+          - ``state_id`` -- id of this state
+          - ``use_same_state`` -- is a copy of this state to create ?
 
         Return:
-            - tuple (session_id, cont_id, last_cont_id, lock, secure_id, externals, data)
+          - the tuple:
+            - id of this state,
+            - session lock,
+            - secure number associated to the session,
+            - data keept into the session
+            - data keept into the state
         """
         connection = self._get_connection()
         lock = Lock(connection, session_id, self.lock_ttl, self.lock_poll_time, self.lock_max_wait_time)
         lock.acquire()
 
-        id = cont_id.zfill(5)
-        session = connection.get_multi(('_sess', '_cont', id), KEY_PREFIX+session_id)
+        state_id = state_id.zfill(5)
+        session = connection.get_multi(('_sess', '_state', state_id), KEY_PREFIX+session_id)
 
         if len(session) != 3:
-            raise common.ExpirationError()
+            raise ExpirationError()
 
-        last_cont_id = int(session['_cont'])
-        (secure_id, externals) = session['_sess']
-        data = session[id]
+        (secure_id, session_data) = session['_sess']
+        last_state_id = int(session['_state'])
+        state_data = session[state_id]
 
-        return (session_id, int(cont_id), last_cont_id, lock, secure_id, externals, data)
+        if not use_same_state:
+            state_id = last_state_id
 
-    def __set(self, session_id, cont_id, secure_id, inc_cont_id, externals, data):
-        """Memorize the session data
+        return (int(state_id), lock, secure_id, session_data, state_data)
+
+    def _set(self, session_id, state_id, secure_id, use_same_state, session_data, state_data):
+        """Store the state
 
         In:
-          - ``session_id`` -- id of the current session
-          - ``cont_id`` -- id of the current continuation
+          - ``session_id`` -- session id of this state
+          - ``state_id`` -- id of this state
           - ``secure_id`` -- the secure number associated to the session
-          - ``inc_cont_id`` -- is the continuation id to increment ?
-          - ``externals`` -- pickle of shared objects across the continuations
-          - ``data`` -- pickle of the objects in the continuation
+          - ``use_same_state`` -- is this state to be stored in the previous snapshot ?
+          - ``session_data`` -- data keept into the session
+          - ``state_data`` -- data keept into the state
         """
-        if inc_cont_id:
-            self._get_connection().incr(KEY_PREFIX+session_id+'_cont')
+        if not use_same_state:
+            self._get_connection().incr(KEY_PREFIX+session_id+'_state')
 
         self._get_connection().set_multi({
-            '_sess' : (secure_id, externals),
-            '%05d' % cont_id : data
+            '_sess' : (secure_id, session_data),
+            '%05d' % state_id : state_data
         }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
 
 
@@ -173,25 +219,27 @@ class Sessions(common.Sessions):
         """
         self._get_connection().delete(KEY_PREFIX+session_id)
 
+    def serialize(self, data):
+        """Pickle an objects graph
 
-class SessionsFactory(common.SessionsFactory):
-    spec = dict(
-                host='string(default="127.0.0.1")',
-                port='integer(default=11211)',
-                ttl='integer(default=0)',
-                lock_ttl='float(default=0.)',
-                lock_poll_time='float(default=0.1)',
-                lock_max_wait_time='float(default=5.)',
-                min_compress_len='integer(default=0)',
-                reset='boolean(default=True)',
-                debug='boolean(default=False)',
-               )
-    spec.update(common.SessionsFactory.spec)
-    sessions = Sessions
+        In:
+          - ``data`` -- the objects graphs
 
-    def __init__(self, filename, conf, error):
-        super(SessionsFactory, self).__init__(filename, conf, error)
+        Return:
+          - the tuple:
+            - data to keep into the session
+            - data to keep into the state
+        """
+        return self.pickle(data)
 
-        if self.conf['reset']:
-            memcached = memcache.Client(['%s:%d' % (self.conf['host'], self.conf['port'])], debug=self.conf['debug'])
-            memcached.flush_all()
+    def deserialize(self, session_data, state_data):
+        """Unpickle an objects graph
+
+        In:
+          - ``session_data`` -- data from the session
+          - ``state_data`` -- data from the state
+
+        Out:
+          - the objects graph
+        """
+        return self.unpickle(session_data, state_data)

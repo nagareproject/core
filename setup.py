@@ -1,7 +1,7 @@
 #!/bin/env python
 
 #--
-# Copyright (c) 2008, 2009 Net-ng.
+# Copyright (c) 2008, 2009, 2010 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -101,13 +101,16 @@ setup(
 
       [nagare.publishers]
       standalone = nagare.publishers.standalone_publisher:Publisher
+      threaded = nagare.publishers.standalone_publisher:Publisher
       fastcgi = nagare.publishers.fcgi_publisher:Publisher
       fapws2 = nagare.publishers.fapws_publisher:Publisher
       eventlet = nagare.publishers.eventlet_publisher:Publisher
 
       [nagare.sessions]
-      standalone = nagare.sessions.threaded_sessions:SessionsFactory
-      memcache = nagare.sessions.memcached_sessions:SessionsFactory
+      standalone = nagare.sessions.memory_sessions:SessionsWithPickledStates
+      pickle = nagare.sessions.memory_sessions:SessionsWithPickledStates
+      memory = nagare.sessions.memory_sessions:SessionsWithMemoryStates
+      memcache = nagare.sessions.memcached_sessions:Sessions
 
       [nagare.applications]
       admin = nagare.admin.admin_app:app

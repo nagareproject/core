@@ -8,7 +8,7 @@
 #--
 
 """Empty security manager"""
- 
+
 from nagare.security import common
 
 class Manager(common.Authentication, common.Rules):

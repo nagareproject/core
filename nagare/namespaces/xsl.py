@@ -19,10 +19,10 @@ from nagare.namespaces.xml import TagProp
 class Renderer(xml.XmlRenderer):
     """ The XSL renderer
     """
-    
+
     # The XSL tags
     # ------------
-    
+
     apply_imports = TagProp('apply-imports', set())
     apply_templates = TagProp('apply-templates', set(('select', 'mode')))
     attribute = TagProp('attribute', set(('name', 'namespace')))
@@ -84,27 +84,27 @@ class Renderer(xml.XmlRenderer):
 
 if __name__ == '__main__':
     from nagare.namespaces import xhtml
-    
+
     x = Renderer()
     x.namespaces = { 'xsl' : 'http://www.w3.org/1999/XSL/Transform' }
     x.default_namespace = 'xsl'
-    
+
     xsl = x.stylesheet(
         x.output(encoding="utf-8"),
         x.template(
-            x.copy_of(select="."), match="/"       
+            x.copy_of(select="."), match="/"
         )
     )
 
     print xsl.write_xmlstring(xml_declaration=True, pretty_print=True)
 
     h = xhtml.Renderer()
-    
+
     page = h.html(h.h1('Hello'), h.h2('world'))
-    
+
     print page.write_xmlstring(pretty_print=True)
 
     r = page.getroottree().xslt(xsl)
-    
+
     print str(r)
     print

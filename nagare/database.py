@@ -49,7 +49,7 @@ try:
     from elixir import setup_all, session
 except ImportError:
     pass
-    
+
 session.configure(autoflush=True, expire_on_commit=True, autocommit=True)
 query = session.query
 
@@ -118,7 +118,7 @@ _engines = {}
 
 def set_metadata(metadata, database_uri, database_debug, **kw):
     """Activate the metadatas (bind them to a database engine)
-    
+
     In:
       - ``metadata`` -- the metadatas
       - ``database_uri`` -- connection string for the database engine

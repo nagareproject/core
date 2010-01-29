@@ -489,7 +489,7 @@ def parse_xmlstring_test5():
     root = x.parse_xmlstring(xml_tree_1)
     assert type(root) == xml._Tag
 
-    
+
 def parse_xml_test1():
     """ XML namespace unit test - parse_xmlstring - good encoding """
     try:

@@ -16,10 +16,10 @@ from nagare import component, presentation
 
 class Admin(object):
     priority = 1        # Order of the default view, into the administrative interface
-    
+
     def __init__(self, apps):
         """Initialisation
-        
+
         In:
           - ``apps`` -- a dictionary where the keys are the application objects
             and the keys a tuple (application name, application urls)
@@ -31,7 +31,7 @@ def render(self, h, *args):
     """Display informations about the running framework environment"""
     return h.div(
         h.h2('Informations'),
-        
+
         h.p('Nagare - version %s - %s -' % (pkg_resources.get_distribution('nagare').version, time.strftime('%c'))),
         # h.p('Installed options: ', ', '.join(pkg_resources.get_distribution('fw-ng').extras)),
 

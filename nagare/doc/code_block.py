@@ -12,7 +12,7 @@
 Add:
 
   - the ``code-block`` directive that highlight a piece of core
-  - the Trac roles ``:wiki:``, ``:ticket:``, ``:report:`` ... 
+  - the Trac roles ``:wiki:``, ``:ticket:``, ``:report:`` ...
 """
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
@@ -26,7 +26,7 @@ from rstdoc.rstlib.astdoc import setDocStringFilter
 
 def code_block_directive(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine):
     """The ``code-block`` directive uses Pygment to highlight a piece of code
-    
+
     It accepts the ``:linenos:`` option that adds line numbers
     """
     try:
@@ -66,7 +66,7 @@ def tracRef(f, *path, **query):
     path = list(path)
     if path[0] in (u'browser', u'rstdoc'):
         path[1:1] = [u'trunk', u'nagare']
-        
+
     return f(*path, **query)
 
 def apidoc_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
@@ -77,11 +77,11 @@ def apidoc_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
     else:
         path = text[:i]
         anchor = text[i:]
-        
+
     if role == 'apidoc':
         role = 'rstdoc'
-        text = 'core/' + path.replace('.', '/') + '.py' + anchor 
-        
+        text = 'core/' + path.replace('.', '/') + '.py' + anchor
+
     r = roles.trac_role(role, rawtext, text, lineno, inliner, options, content)
 
     r[0][0][0].data = path
@@ -90,7 +90,7 @@ def apidoc_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
 def register_role(trac_url):
     roles.roles.register_local_role('apidoc', apidoc_role)
     roles.roles.register_local_role('wiki', apidoc_role)
-        
+
     trac_ref = roles.tracRef(trac_url)
     roles.setTracRef(lambda *path, **query: tracRef(trac_ref, *path, **query))
     roles.setTracRef = lambda f: None

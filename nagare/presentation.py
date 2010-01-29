@@ -20,11 +20,11 @@ class ModelError(LookupError):
 
 def render(self, renderer, comp, model):
     """Generic method to associate views to an object
-    
+
     The views are implementation functions of this generic method
-    
+
     This default implementation raises an exception
-    
+
     In:
       - ``self`` -- the object
       - ``renderer`` -- the renderer
@@ -38,20 +38,20 @@ def render(self, renderer, comp, model):
 
 def render_for(cls, model=None):
     """Decorator helper to register a view for a class of objects
-    
+
     In:
       - ``cls`` -- the class
       - ``model`` -- the name of the view
-      
+
     Return:
-      - a closure 
+      - a closure
     """
     if model is not None:
         cond = 'isinstance(self, %s) and (model=="%s")' % (cls.__name__, model)
     else:
         # No name give, dispatch only on the arguments type
         cond = (cls, object, object, types.NoneType)
-        
+
     return when(render, cond)
 
 @when(render, (object, object, object, int))
@@ -62,7 +62,7 @@ def render(self, renderer, comp, model):
 
 def init(self, url, comp, http_method, request):
     """Generic method to initialized an object from a URL
-    
+
     In:
       - ``self`` -- the object
       - ``url`` -- the URL
@@ -74,18 +74,18 @@ def init(self, url, comp, http_method, request):
 
 def init_for(cls, cond=None):
     """Decorator helper to register an URL for a class of objects
-    
+
     In:
       - ``cls`` -- the class
       - ``cond`` -- a generic condition
-      
+
     Return:
-      - a closure 
+      - a closure
     """
     if cond is not None:
         cond = "isinstance(self, %s) and (%s)" % (cls.__name__, cond)
     else:
         # No condition given, dispatch on the class
-        cond = (cls,) 
- 
+        cond = (cls,)
+
     return when(init, cond)

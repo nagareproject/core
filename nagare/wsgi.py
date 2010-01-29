@@ -24,7 +24,7 @@ from nagare.security import dummy_manager
 from nagare.callbacks import Callbacks, CallbackLookupError
 from nagare.namespaces import xhtml
 
-from nagare.sessions.common import ExpirationError
+from nagare.sessions import ExpirationError
 
 # ---------------------------------------------------------------------------
 
@@ -50,6 +50,7 @@ class WSGIApp(object):
         self.static_url = ''
         self.metadatas = []
         self.name = ''
+        self.project_name = ''
         self.redirect_after_post = False
         self.always_html = True
         self.sessions = None
@@ -318,7 +319,7 @@ class WSGIApp(object):
                     self.on_incomplete_url(request, response)
 
                 try:
-                    session = self.sessions.get(request, response)
+                    session = self.sessions.get(request, response, xhr_request)
                 except ExpirationError:
                     self.on_session_expired(request, response)
 
@@ -361,10 +362,10 @@ class WSGIApp(object):
 
                 try:
                     if (request.method == 'POST') and not xhr_request and self.redirect_after_post:
-                        store_new_cont = False
+                        use_same_state = True
                         response = self.on_after_post(request, response, session.sessionid_in_url(request, response))
                     else:
-                        store_new_cont = not xhr_request
+                        use_same_state = xhr_request
 
                         # Create a new renderer
                         renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
@@ -384,8 +385,7 @@ class WSGIApp(object):
                             callbacks.clear_not_used(renderer._rendered)
 
                     # Store the session
-                    session.data = (root, callbacks)
-                    self.sessions.set(session, store_new_cont)
+                    session.set(use_same_state, (root, callbacks))
 
                     security.get_manager().end_rendering(request, response, self.sessions, session)
                 except exc.HTTPException, response:

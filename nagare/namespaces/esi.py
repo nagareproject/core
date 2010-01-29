@@ -20,7 +20,7 @@ NS = 'http://www.edge-delivery.org/esi/1.0'
 class Renderer(xml.XmlRenderer):
     """ The ESI renderer
     """
-    
+
     # The ESI tags
     # ------------
 
@@ -35,27 +35,27 @@ class Renderer(xml.XmlRenderer):
     comment = TagProp('comment', set(('text',)))
     remove = TagProp('remove', set())
     vars = TagProp('vars', set())
-    
+
     def esi(self, text):
         """Generate a ``esi`` comment element
-        
+
         In:
           - ``text`` -- comment text
-          
+
         Return:
           - the comment element
         """
         return ET.Comment('esi ' + text)
-    
+
 if __name__ == '__main__':
     from nagare.namespaces import xhtml
-    
+
     h = xhtml.Renderer()
     s = Renderer()
     s.namespaces= { 'esi' : NS }
     s.default_namespace = 'esi'
-    
+
     html = h.html(h.body(h.h1('hello'), s.include(dict(src='http://www.net-ng.com'), s.include(src='http://www.net-ng.com')), h.p('world')))
-    
+
     print html.write_xmlstring(pretty_print=True)
 

@@ -35,7 +35,7 @@ from nagare.admin import util, reloader
 
 try:
     from weberror.evalexception import EvalException
-    
+
     debugged_app = lambda app: EvalException(app, xmlhttp_key='_a')
 except ImportError:
     debugged_app = lambda app: app
@@ -44,19 +44,19 @@ except ImportError:
 def get_file_from_package(package, path):
     """
     Return the path of a static content, located into a setuptools package
-    
+
     In:
       - ``package`` -- the setuptools package of a registered application
       - ``path`` -- the url path of the wanted static content
-      
+
     Return:
       - the path of the static content
     """
     path = os.path.join('static', path[1:])
-    
+
     if not pkg_resources.resource_exists(package, path) or pkg_resources.resource_isdir(package, path):
         return None
-    
+
     return pkg_resources.resource_filename(package, path)
 
 
@@ -70,23 +70,23 @@ def set_options(optparser):
 
 def run(parser, options, args):
     """launch an object
-    
+
     In:
       - ``parser`` -- the ``optparse.OptParser`` object used to parse the configuration file
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines
-      
+
     The unique argument is the path of the object to launch. The path syntax is described
     into the module ``nagare.admin.util``. For example, ``/tmp/counter.py:Counter``
     is the path to the class ``Counter`` of the module ``tmp.counter.py``
-     
-    """    
+
+    """
     if len(args) != 2:
         parser.error('Bad number of arguments')
 
     if 'nagare_reloaded' not in os.environ:
         return reloader.restart_with_monitor()
-    
+
     # With the ``serve-module`` command, the automatic reloader is always activated
     reloader.install(excluded_directories=(pkg_resources.get_default_cache(),))
 
@@ -96,7 +96,7 @@ def run(parser, options, args):
     else:
         path = 'python ' + args[0]
     app = util.load_object(path)[0]
-    
+
     # Wrap it into a WSGIApp
     app = wsgi.create_WSGIApp(app)
 
@@ -113,7 +113,7 @@ def run(parser, options, args):
     sessions = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
     sessions_factory = sessions['standalone'].load()(None, {}, None)
     app.set_sessions_factory(sessions_factory)
-    
+
     # The static contents of the framework are served by the standalone server
     publisher.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))
 

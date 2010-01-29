@@ -21,18 +21,18 @@ from nagare.admin import util
 
 def read_options(debug, args, error):
     """Activate all the database metadata objects of an application
-    
+
     Several metadata objects can be activated if there are sub-sections into
     the [database] section.
-    
+
     In:
       - ``debug`` -- flag to display the generated SQL statements
       - ``args`` -- arguments in the command lines: application to activate
       - ``error`` -- the function to call in case of configuration errors
-      
+
     Return:
       - tuples (metadata object, populate function)
-    """
+   """
     # If no application name is given, display the list of the registered applications
     if len(args) == 0:
         print 'Available applications:'
@@ -51,12 +51,12 @@ def read_options(debug, args, error):
 
 def create(parser, options, args):
     """Create the database tables of the application
-    
+
     If the ``--drop`` option is on, delete the existing tables before to re-create them
-    
+
     If the ``--no-populate`` option is off, call the populate function (if it exists)
     after the creation of the tables
-    
+
     In:
       - ``parser`` -- the optparse.OptParser object used to parse the configuration file
       - ``options`` -- options in the command lines
@@ -66,16 +66,16 @@ def create(parser, options, args):
         with database.session.begin():
             if options.drop:
                 metadata.drop_all()
-                
+
             metadata.create_all()
 
             if options.populate and populate:
                 util.load_object(populate)[0]()
-            
+
 
 def drop(parser, options, args):
     """Delete the database tables of the application
-    
+
     In:
       - ``parser`` -- the optparse.OptParser object used to parse the configuration file
       - ``options`` -- options in the command lines
@@ -93,7 +93,7 @@ class DBCreate(util.Command):
     @staticmethod
     def set_options(optparser):
         optparser.usage += ' <application>'
-    
+
         optparser.add_option('-d', '--debug', action='store_const', const=True, default=False, dest='debug', help='debug mode for the database engine')
         optparser.add_option('--drop', action='store_const', const=True, default=False, dest='drop', help='drop the database tables before to re-create them')
         optparser.add_option('--no-populate', action='store_const', const=False, default=True, dest='populate', help='populate the database tables')
@@ -107,7 +107,7 @@ class DBDrop(util.Command):
     @staticmethod
     def set_options(optparser):
         optparser.usage += ' <application>'
-    
+
         optparser.add_option('-d', '--debug', action='store_const', const=True, default=False, dest='debug', help='debug mode for the database engine')
 
     run = staticmethod(drop)

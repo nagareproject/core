@@ -26,7 +26,7 @@ YUI_PREFIX = YUI_INTERNAL_PREFIX
 class ViewToJs(object):
     def __init__(self, js, id, renderer, output):
         """Wrap a view into a javascript code
-        
+
         In:
           - ``js`` -- name of the function to call, on the client, to change the
             DOM element
@@ -45,9 +45,9 @@ def serialize(self, request, response, declaration):
 
     In:
       - ``request`` -- the web request object
-      - ``response`` -- the web response object      
+      - ``response`` -- the web response object
       - ``declaration`` -- has the declaration to be outputed ?
-      
+
     Return:
       - Javascript to evaluate on the client
     """
@@ -56,7 +56,7 @@ def serialize(self, request, response, declaration):
 
     # Get the javascript for the header
     head = presentation.render(self.renderer.head, self.renderer, None, None)
-    
+
     # Get the HTML or XHTML of the view
     body = serializer.serialize(self.output, request, response, False)
 
@@ -68,29 +68,29 @@ def serialize(self, request, response, declaration):
 
 class Update(object):
     """Asynchronous updater object
-    
+
     Send a XHR request that can do an action, render a component and finally
     update the HTML with the rendered view
     """
     def __init__(self, render='', action=lambda *args: None, component_to_update=None, with_request=False):
         """Initialisation
-        
+
         In:
           - ``render`` -- can be:
-          
+
             - a string -- name of the view that will be rendered on the current
               component
             - a function -- this function will be called and the result sent
               back to the client
-            
+
           - ``action`` -- action to call
 
           - ``component_to_update`` -- can be:
-          
+
             - ``None`` -- the current view will be updated
             - a string -- the DOM id of the HTML to update
             - a tag -- this tag will be updated
-            
+
           - ``with_request`` -- will the request and response objects be passed to the action ?
         """
         self.render = render
@@ -100,7 +100,7 @@ class Update(object):
 
     def _generate_render(self, renderer):
         """Generate the rendering function
-        
+
         In:
           - ``renderer`` -- the current renderer
 
@@ -108,16 +108,16 @@ class Update(object):
           - the rendering function
         """
         request = renderer.request
-        
+
         if request:
             if not request.is_xhr and ('_a' not in request.params):
                 head = renderer.head
-                
+
                 head.javascript_url(YUI_PREFIX+'/yahoo/yahoo-min.js')
                 head.javascript_url(YUI_PREFIX+'/event/event-min.js')
                 head.javascript_url(YUI_PREFIX+'/connection/connection-min.js')
                 head.javascript_url(YUI_PREFIX+'/get/get-min.js')
-                                
+
                 head.javascript('_nagare_content_type_', 'NAGARE_CONTENT_TYPE="%s"' % ('application/xhtml+xml' if renderer.response.xhtml_output else 'text/html'))
                 head.javascript_url('/static/nagare/ajax.js')
 
@@ -125,7 +125,7 @@ class Update(object):
         component_to_update = self.component_to_update
         if component_to_update is None:
             async_root = renderer.get_async_root()
-        
+
             # Remember to wrap the root view into a ``<div>``
             component_to_update = async_root.id
             async_root.wrapper_to_generate = True
@@ -147,20 +147,20 @@ class Update(object):
 
             render = render if render != '' else async_root.model
             render = lambda r, comp=async_root.component, render=render: ViewToJs(js, component_to_update, r, comp.render(r, model=render))
-        
+
         return render
-    
+
     def _generate_replace(self, priority, renderer):
-        """Register the action on the server and generate the javascript to 
+        """Register the action on the server and generate the javascript to
         the client
-        
+
         In:
           - ``priority`` -- type of the action (see ``callbacks.py``)
           - ``renderer`` -- the current renderer
 
         Return:
           - a tuple:
-          
+
             - id of the action registered on the server
             - name of the javascript function to call on the client
             - id of the tag to update on the client
@@ -169,11 +169,11 @@ class Update(object):
 
     def generate_action(self, priority, renderer):
         """Generate the javascript action
-        
+
         In:
           - ``priority`` -- type of the action (see ``callbacks.py``)
           - ``renderer`` -- the current renderer
-          
+
         Return:
           - the javascript code
         """
@@ -198,16 +198,16 @@ class ViewsToJs(list):
     """A list of ``ViewToJS`` objects
     """
     pass
-        
+
 @peak.rules.when(serializer.serialize, (ViewsToJs,))
 def serialize(self, request, response, declaration):
     """Wrap all the views into a javascript code
 
     In:
       - ``request`` -- the web request object
-      - ``response`` -- the web response object      
+      - ``response`` -- the web response object
       - ``declaration`` -- has the declaration to be outputed ?
-      
+
     Return:
       - Javascript to evaluate on the client
     """
@@ -219,7 +219,7 @@ class Updates(Update):
     """
     def __init__(self, *updates, **kw):
         """Initialization
-        
+
         In:
           - ``updates`` -- the list of ``Update`` objects
           - ``action`` -- global action to execute (set by keyword call)
@@ -230,7 +230,7 @@ class Updates(Update):
         self._action = kw.get('action', lambda *args: None)
 
         super(Updates, self).__init__(action=self.action, with_request=True)
-    
+
     def action(self, request, response, *args):
         """Execute all the actions of the ``Update`` objects
         """
@@ -247,13 +247,13 @@ class Updates(Update):
 
     def _generate_render(self, renderer):
         """Generate the rendering function
-        
+
         In:
           - ``renderer`` -- the current renderer
 
         Return:
           - the rendering function
-        """        
+        """
         renders = [update._generate_render(renderer) for update in self._updates]
         return lambda r: ViewsToJs([render(r) for render in renders])
 
@@ -264,7 +264,7 @@ class JS(object):
     """
     def __init__(self, f):
         """Transcode the Python function
-        
+
         In:
           - ``f`` -- Python function to transcode
         """
@@ -295,11 +295,11 @@ class JS(object):
 
     def generate_action(self, priority, renderer):
         """Include the transcoded javascript into ``<head>``
-        
+
         In:
            - ``priority`` -- *not used*
            - ``renderer`` -- the current renderer
-           
+
         Return:
           - javascript fragment of the call to the transcoded function
         """
@@ -320,7 +320,7 @@ def py2js(value, h):
 @peak.rules.when(py2js, (types.NoneType,))
 def py2js(value, h=None):
     """Generic method to transcode ``None``
-    
+
     In:
       - ``value`` -- ``None``
       - ``h`` -- the current renderer
@@ -333,7 +333,7 @@ def py2js(value, h=None):
 @peak.rules.when(py2js, (bool,))
 def py2js(value, h=None):
     """Generic method to transcode a boolean
-    
+
     In:
       - ``value`` -- a boolean
       - ``h`` -- the current renderer
@@ -346,7 +346,7 @@ def py2js(value, h=None):
 @peak.rules.when(py2js, (int,))
 def py2js(value, h=None):
     """Generic method to transcode an integer
-    
+
     In:
       - ``value`` -- an integer
       - ``h`` -- the current renderer
@@ -359,7 +359,7 @@ def py2js(value, h=None):
 @peak.rules.when(py2js, (long,))
 def py2js(value, h=None):
     """Generic method to transcode a long integer
-    
+
     In:
       - ``value`` -- a long integer
       - ``h`` -- the current renderer
@@ -372,7 +372,7 @@ def py2js(value, h=None):
 @peak.rules.when(py2js, (float,))
 def py2js(value, h=None):
     """Generic method to transcode a float
-    
+
     In:
       - ``value`` -- a float
       - ``h`` -- the current renderer
@@ -385,27 +385,27 @@ def py2js(value, h=None):
 @peak.rules.when(py2js, (dict,))
 def py2js(d, h=None):
     """Generic method to transcode a dictionary
-    
+
     In:
       - ``value`` -- a dictionary
       - ``h`` -- the current renderer
 
     Return:
       - transcoded javascript
-    """    
+    """
     return '{' + ', '.join(['%s : %s' % (py2js(name, h), py2js(value, h)) for (name, value) in d.items()]) + '}'
 
 @peak.rules.when(py2js, (types.FunctionType,))
 def py2js(value, h=None):
     """Generic method to transcode a function
-    
+
     In:
       - ``value`` -- a fonction
       - ``h`` -- the current renderer
 
     Return:
       - transcoded javascript
-    """    
+    """
     if h is not None:
         h.head.javascript_url('/static/nagare/pyjslib.js')
 
@@ -414,20 +414,20 @@ def py2js(value, h=None):
 @peak.rules.when(py2js, (JS,))
 def py2js(value, h=None):
     """Generic method to transcode an already transcoded function
-    
+
     In:
       - ``value`` -- a transcoded fonction
       - ``h`` -- the current renderer
 
     Return:
       - transcoded javascript
-    """    
+    """
     return value.javascript
 
 @peak.rules.when(py2js, (unicode,))
 def py2js(value, h=None):
     """Generic method to transcode an unicode string
-    
+
     In:
       - ``value`` -- an unicode string
       - ``h`` -- the current renderer
@@ -442,7 +442,7 @@ not_ascii = re.compile(r'\\x(..)')
 @peak.rules.when(py2js, (str,))
 def py2js(value, h=None):
     """Generic method to transcode a string
-    
+
     In:
       - ``value`` -- a string
       - ``h`` -- the current renderer
@@ -455,27 +455,27 @@ def py2js(value, h=None):
 @peak.rules.when(py2js, (list,))
 def py2js(l, h=None):
     """Generic method to transcode a list
-    
+
     In:
       - ``value`` -- a list
       - ``h`` -- the current renderer
 
     Return:
       - transcoded javascript
-    """    
+    """
     return '[' + ', '.join([py2js(value, h) for value in l]) + ']'
 
 @peak.rules.when(py2js, (tuple,))
 def py2js(value, h=None):
     """Generic method to transcode a tuple
-    
+
     In:
       - ``value`` -- a tuple
       - ``h`` -- the current renderer
 
     Return:
       - transcoded javascript
-    """    
+    """
     return py2js(list(value), h)
 
 class js(str):
@@ -486,12 +486,12 @@ class js(str):
 @peak.rules.when(py2js, (js,))
 def render(self, h):
     """Generic method to transcode a javascript code
-    
+
     In:
       - ``value`` -- a javascript code
       - ``h`` -- the current renderer
 
     Return:
       - transcoded javascript
-    """    
+    """
     return str(self)

@@ -20,7 +20,7 @@ _current = threading.local()
 
 def _get_user():
     """Return the current user
-    
+
     Return:
       - the user object (created by the security manager)
     """
@@ -28,7 +28,7 @@ def _get_user():
 
 def get_user():
     """Return the current user
-    
+
     Return:
       - the user object (created by the security manager) if not expired
     """
@@ -37,7 +37,7 @@ def get_user():
 
 def set_user(user):
     """Change the user
-    
+
     In:
       - ``user`` -- the current user
     """
@@ -46,9 +46,9 @@ def set_user(user):
 
 def get_manager():
     """Return the security manager
-    
+
     Each application has a dedicated security manager
-    
+
     Return:
       - the security manager
     """
@@ -56,7 +56,7 @@ def get_manager():
 
 def set_manager(manager):
     """Change the security manager
-    
+
     In:
       - ``manager`` -- the new security manager
     """
@@ -71,19 +71,19 @@ def set_manager(manager):
 def has_permissions(perm, subject=None):
     """Check that the current user has the permissions ``perm``
     on the object ``subject``
-    
+
     Forward the call to the generic method ``has_permission()`` of the
     current security manager
-    
+
     .. note::
 
       The default generic method can check a single permission or a list of
       permissions
-      
+
     In:
       - ``perm`` -- permission(s)
       - ``subject`` -- object to check the permissions on
-      
+
     Return:
       - True if the access is granted
       - Else a ``security.common.denial`` object
@@ -94,21 +94,21 @@ def has_permissions(perm, subject=None):
 def check_permissions(perm, subject=None):
     """Control that the current user has the permissions ``perm``
     on the object ``subject``
-    
+
     Forward the call to the generic method ``has_permission()`` of the
     current security manager.
-    
+
     Then let the security manager acts if the permission is denied.
-    
+
     .. note::
 
       The default generic method can check a single permission or a list of
       permissions
-      
+
     In:
       - ``perm`` -- permission(s)
       - ``subject`` -- object to check the permissions on
-      
+
     Return:
       - True if the access is granted
       - Else a ``security.common.denial`` object
@@ -123,14 +123,14 @@ def check_permissions(perm, subject=None):
 
 def permissions(perm):
     """Decorator to check the permissions of the current user
-    
+
     The ``subject`` will be the first argument of the decorated method
 
     In:
       - ``perm`` -- permission(s)
     """
     #permissions = flatten(permissions)
-    
+
     def _(f):
         def _(*args, **kw):
             check_permissions(perm, *args[:1])
@@ -141,7 +141,7 @@ def permissions(perm):
 
 def permissions_with_subject(perm, subject):
     """Decorator to check the permissions of the current user
-    
+
     In:
       - ``perm`` -- permission(s)
       - ``subject`` -- object to check the permissions on

@@ -32,9 +32,9 @@ def create_globals(cfgfiles, debug, error):
       - ``debug`` -- enable the display of the generated SQL statements
       - ``error`` -- the function to call in case of configuration errors
     """
-    
+
     apps = {}
-             
+
     # For each application given, activate its metadata and its logger
     for cfgfile in cfgfiles:
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
@@ -176,9 +176,9 @@ def batch(parser, options, args):
     __builtin__.__dict__.update(ns)
 
     util.load_file(args[1], None)
-    
+
 class Batch(util.Command):
     desc = 'Execute Python statements from a file'
-    
+
     set_options = staticmethod(set_batch_options)
     run = staticmethod(batch)

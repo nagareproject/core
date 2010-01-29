@@ -8,7 +8,7 @@
 #--
 
 from nagare import wsgi
-from nagare.sessions import common
+from nagare.sessions import ExpirationError, common
 
 def create_environ():
     return {
@@ -46,9 +46,9 @@ class SessionManager(common.Sessions):
         assert self._get_ids(request) == ('10', '42')
 
 class ExpiredSessionManager(common.Sessions):
-    def get(self, request, response):
+    def get(self, request, response, use_same_state):
         assert self._get_ids(request) == ('10', '42')
-        raise common.ExpirationError()
+        raise ExpirationError()
 
 class App(wsgi.WSGIApp):
     def __init__(self, session_manager=SessionManager()):

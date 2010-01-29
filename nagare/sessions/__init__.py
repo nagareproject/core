@@ -7,3 +7,7 @@
 # this distribution.
 #--
 
+class ExpirationError(LookupError):
+    """Raised when a session or a state is no longer valid
+    """
+    pass

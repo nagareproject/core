@@ -29,12 +29,12 @@ settings = {
 
 class GenerateHTML(distutils.cmd.Command):
     """ReStructuredText to HTML converter
-    
+
     The ``generate_html`` command can generate HTML from ReStructuredText
     containing ``code-block`` directive and Trac roles.
-    
+
     The command accepts a list of ReStructuredText to convert.
-    """    
+    """
     description = 'generate HTML from ReStructuredText'
     user_options = [
                     ('path=', 'p', 'Path to docs directory'),
@@ -50,10 +50,10 @@ class GenerateHTML(distutils.cmd.Command):
 
     def initialize_options(self):
         """Default options values
-        
+
         The ``-p`` or ``--path`` option is the directory where the HTML pages
         will generated.
-        
+
         The ``--trac`` option is the URL to the Trac project. Used when a
         Trac role is found into the ReStructuredText.
         """
@@ -80,24 +80,24 @@ class GenerateHTML(distutils.cmd.Command):
         for filename in self.args:
             if not os.path.isfile(filename):
                 raise distutils.errors.DistutilsOptionError("The path '%s' is not a file" % filename)
-            
+
             print 'Processing:', filename
-                            
+
             out_filename = os.path.splitext(os.path.basename(filename))[0] + '.html'
             out_filename = os.path.join(docPath, out_filename)
-            
+
             docutils.core.publish_file(
                                        source_path=filename,
                                        destination_path=out_filename,
                                        writer_name='html', settings_overrides=settings
                                       )
-        
+
 
 class GenerateAPI(distutils.cmd.Command):
     """API generation
-    
+
     The ``generate_api`` command accepts a list of Python files to analyse.
-    
+
     If no files are given, it generates the API documentation for all the
     Python files of the distribution.
     """
@@ -139,26 +139,26 @@ class GenerateAPI(distutils.cmd.Command):
             docDirs = sorted(find_packages())
 
             documentPackages(
-                docPath=docPath, 
+                docPath=docPath,
                 packages=docDirs,
-                writer_name='html', 
-                output=output, 
+                writer_name='html',
+                output=output,
                 title=self.title,
                 settings=settings
                 )
         else:
             print 'Documentation directory:', docPath
-            
+
             for filename in self.args:
                 if not os.path.isfile(filename):
                     raise distutils.errors.DistutilsOptionError("The path '%s' is not a file" % filename)
-                    
+
                 print 'Processing:', filename
-                
+
                 tree = documentFile(filename).docTree()
-                
+
                 out_filename = os.path.splitext(filename.replace(os.sep, '-'))[0] + '.html'
                 out_filename = os.path.join(docPath, out_filename)
-                
+
                 with open(out_filename, 'w') as f:
                     f.write(docutils.core.publish_from_doctree(tree, writer_name='html', settings_overrides=settings))

@@ -11,15 +11,15 @@ from nagare import component, presentation, callbacks
 from nagare.namespaces import xhtml
 
 class Foo:
-    
+
     def __init__(self):
         self.myProperty_1 = "I'm foo"
-        
+
     def set_myProperty_1(self, newProperty):
         self.myProperty_1 = newProperty
-        
+
 class Bar:
-    
+
     def __init__(self):
         self.myProperty_2 = "I'm bar"
 
@@ -36,7 +36,7 @@ class Foobar:
 class App1:
     def __init__(self):
         self.foo = component.Component(Foo())
-        
+
         self.bar = component.Component(Bar())
         self.bar.on_answer(self.foo().set_myProperty_1)
 
@@ -47,7 +47,7 @@ def test1():
     assert app.foo().myProperty_1 == "I'm foo"
     assert isinstance(app.foo(), Foo)
     assert isinstance(app.foo, component.Component)
-    
+
     app.bar.answer(app.bar().myProperty_2)
     assert app.foo().myProperty_1 == "I'm bar"
 
@@ -70,38 +70,38 @@ def test2():
     assert app.myProperty.model == 'bar'
     assert not hasattr(app.myProperty(), 'myProperty_1')
     assert app.myProperty().myProperty_2 == "I'm bar"
-    
+
     app.myProperty.becomes(Foo())
     assert isinstance(app.myProperty(), Foo)
     assert not bool(app.myProperty.model)
     assert app.myProperty().myProperty_1 == "I'm foo"
     assert not hasattr(app.myProperty(), 'myProperty_2')
 
-    
+
 # -------------------------------------------------------------------------------------------------------
 
 
 def call(o1, o2, model=None):
     component.call_wrapper(lambda: o1().set_myProperty_1(o1.call(o2, model)))
 
-            
+
 def test3():
     """ MVC - call """
     app = Foobar()
-    
+
     app.myProperty.becomes(Foo(), model='foo')
     assert app.myProperty.model == 'foo'
-    
+
     call(app.myProperty, Bar(), model='bar')
     assert app.myProperty.model == 'bar'
     assert isinstance(app.myProperty(), Bar)
-    
+
     app.myProperty.answer(app.myProperty().myProperty_2)
     assert app.myProperty.model == 'foo'
     assert isinstance(app.myProperty(), Foo)
     assert app.myProperty().myProperty_1 == "I'm bar"
 
-    
+
 # -------------------------------------------------------------------------------------------------------
 
 @presentation.render_for(Bar)
@@ -117,7 +117,7 @@ def render(self, h, *args):
 def test4():
     """ MVC - render """
     app = Foobar()
-    
+
     h = xhtml.Renderer()
     try:
         app.myProperty.render(h)
@@ -125,7 +125,7 @@ def test4():
         pass
     else:
         assert False
-    
+
     app.myProperty.becomes(Bar())
     assert app.myProperty.render(h).write_htmlstring(pretty_print=True).strip() == "<table><tr><td>I'm Bar</td></tr></table>"
 

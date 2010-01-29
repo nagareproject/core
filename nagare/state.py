@@ -13,10 +13,10 @@ import random
 
 def stateless(o):
     """Mark an object as stateless
-    
+
     In:
       - ``o`` -- the object
-      
+
     Return:
       - ``o``
     """

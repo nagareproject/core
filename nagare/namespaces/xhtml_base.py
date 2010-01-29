@@ -38,11 +38,11 @@ class _HTMLTag(xml._Tag):
     """
     def write_htmlstring(self, encoding='utf-8', pipeline=True, **kw):
         """Serialize in XHTML the tree beginning at this tag
-        
+
         In:
           - ``encoding`` -- encoding of the XML
           - ``pipeline`` -- if False, the ``meld:id`` attributes are deleted
-          
+
         Return:
           - the XHTML
         """
@@ -54,12 +54,12 @@ class _HTMLTag(xml._Tag):
 
     def error(self, err):
         """Decorate this tag with an error message
-        
+
         Forward the call to the renderer ``decorate_error()`` method
-        
+
         In:
           - ``err`` -- the message
-          
+
         Return:
           - a tree
         """
@@ -68,13 +68,13 @@ class _HTMLTag(xml._Tag):
 
 class HeadRenderer(xml.XmlRenderer):
     """The XHTML head Renderer
-    
+
     This renderer knows about the possible tags of a html ``<head>``
     """
 
     # Tag factories
     # -------------
-    
+
     base = TagProp('base', set(('id', 'href', 'target')))
     head = TagProp('head', set(i18nattrs+('id', 'profile')))
     link = TagProp('link', set(allattrs+('charset', 'href', 'hreflang', 'type', 'rel', 'rev', 'media', 'target')))
@@ -86,7 +86,7 @@ class HeadRenderer(xml.XmlRenderer):
     @classmethod
     def class_init(cls, specialTags):
         """Class initialisation
-        
+
         In:
           -- ``special_tags`` -- tags that have a special factory
         """
@@ -97,7 +97,7 @@ class HeadRenderer(xml.XmlRenderer):
 
 class Renderer(xml.XmlRenderer):
     head_renderer_factory = HeadRenderer
-    
+
     componentattrs = ('id', 'class', 'style', 'title')
     i18nattrs = ('lang', 'dir')
     eventattrs = ('onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmousemove', 'onmouseover', 'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup')
@@ -108,7 +108,7 @@ class Renderer(xml.XmlRenderer):
 
     # The HTML tags
     # -------------
-    
+
     a = TagProp('a', set(allattrs+focusattrs+('charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu')))
     abbr = TagProp('abbr', set(allattrs))
     acronym = TagProp('acronym', set(allattrs))
@@ -216,7 +216,7 @@ class Renderer(xml.XmlRenderer):
     @classmethod
     def class_init(cls, specialTags):
         """Class initialisation
-        
+
         In:
           -- ``special_tags`` -- tags that have a special factory
         """
@@ -226,7 +226,7 @@ class Renderer(xml.XmlRenderer):
 
     def __init__(self, parent=None, **kw):
         """Renderer initialisation
-        
+
         In:
           - ``parent`` -- parent renderer
         """
@@ -236,21 +236,21 @@ class Renderer(xml.XmlRenderer):
             self.head = self.head_renderer_factory(**kw)
         else:
             self.head = parent.head
-        
+
     def makeelement(self, tag):
         """Make a tag
-        
+
         In:
           - ``tag`` -- name of the tag to create
-          
+
         Return:
           - the new tag
-        """        
+        """
         return self._makeelement(tag, self._html_parser)
 
     def _parse_html(self, parser, source, fragment, no_leading_text, **kw):
         """Parse a HTML file
-        
+
         In:
           - ``parser`` -- XML or HTML parser to use
           - ``source`` -- can be a filename or a file object
@@ -259,38 +259,38 @@ class Renderer(xml.XmlRenderer):
           - ``no_leading_text`` -- if ``fragment`` is ``True``, ``no_leading_text``
             is ``False`` and the HTML to parsed begins by a text, this text is keeped
           - ``kw`` -- keywords parameters are passed to the HTML parser
-          
+
         Return:
           - the root element of the parsed HTML, if ``fragment`` is ``False``
-          - a list of HTML elements, if ``fragment`` is ``True`` 
+          - a list of HTML elements, if ``fragment`` is ``True``
         """
         if not fragment:
             # Parse a HTML file
             # ----------------
-            
+
             root = ET.parse(source, parser).getroot()
-            # Attach the renderer to the root            
+            # Attach the renderer to the root
             root._renderer = self
             return root
 
         # Parse a HTML fragment
         # ---------------------
-        
+
         # Create a dummy ``<body>``
         source = cStringIO.StringIO('<html><body>%s</body></html>' % source.read())
         body = ET.parse(source, parser).getroot()[0]
-        
+
         for e in body[:]:
             if isinstance(e, _HTMLTag):
-                # Attach the renderer to each roots                
+                # Attach the renderer to each roots
                 e._renderer = self
 
-        # Return the children of the dummy ``<body>``        
+        # Return the children of the dummy ``<body>``
         return ([body.text] if body.text and not no_leading_text else []) + body[:]
 
     def parse_html(self, source, fragment=False, no_leading_text=False, xhtml=False, **kw):
         """Parse a (X)HTML file
-        
+
         In:
           - ``source`` -- can be a filename or a file object
           - ``fragment`` -- if ``True``, can parse a HTML fragment i.e a HTML without
@@ -299,21 +299,21 @@ class Renderer(xml.XmlRenderer):
             is ``False`` and the HTML to parsed begins by a text, this text is keeped
           - ``xhtml`` -- is the HTML to parse a valid XHTML ?
           - ``kw`` -- keywords parameters are passed to the HTML parser
-          
+
         Return:
           - the root element of the parsed HTML, if ``fragment`` is ``False``
-          - a list of HTML elements, if ``fragment`` is ``True`` 
+          - a list of HTML elements, if ``fragment`` is ``True``
         """
         parser = ET.XMLParser(**kw) if xhtml else ET.HTMLParser(**kw)
         parser.setElementClassLookup(ET.ElementDefaultClassLookup(element=_HTMLTag))
-        
+
         return self._parse_html(parser, source, fragment, no_leading_text, **kw)
 
     def parse_htmlstring(self, text, fragment=False, no_leading_text=False, xhtml=False, **kw):
         """Parse a (X)HTML string
-        
+
         In:
-          - ``text`` -- can be a ``str`` or ``unicode`` strings        
+          - ``text`` -- can be a ``str`` or ``unicode`` strings
           - ``source`` -- can be a filename or a file object
           - ``fragment`` -- if ``True``, can parse a HTML fragment i.e a HTML without
             a unique root
@@ -321,10 +321,10 @@ class Renderer(xml.XmlRenderer):
             is ``False`` and the HTML to parsed begins by a text, this text is keeped
           - ``xhtml`` -- is the HTML to parse a valid XHTML ?
           - ``kw`` -- keywords parameters are passed to the HTML parser
-          
+
         Return:
           - the root element of the parsed HTML, if ``fragment`` is ``False``
-          - a list of HTML elements, if ``fragment`` is ``True`` 
+          - a list of HTML elements, if ``fragment`` is ``True``
         """
         if type(text) == unicode:
             text = text.encode(kw.setdefault('encoding', 'utf-8'))
@@ -337,7 +337,7 @@ if __name__ == '__main__':
     t = ((1, 'a'), (2, 'b'), (3, 'c'))
 
     h = Renderer()
-    
+
     h.head << h.head.title('A test')
     h.head << h.head.script('function() {}')
     h.head << h.head.meta(name='meta1', content='content1')

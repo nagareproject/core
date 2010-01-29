@@ -22,7 +22,7 @@ def _turn_sigterm_into_systemexit():
 
     def handle_term(signo, frame):
         raise SystemExit
-    
+
     signal.signal(signal.SIGTERM, handle_term)
 
 
@@ -44,7 +44,7 @@ def _quote_first_command_arg(arg):
             "The executable %r contains a space, and in order to "
             "handle this issue you must have the win32api module "
             "installed" % arg)
-    
+
     return win32api.GetShortPathName(arg)
 
 
@@ -103,7 +103,7 @@ class Monitor(object):
 
         r = (self.mtimes.setdefault(filename, mtime) < mtime)
         self.mtimes[filename] = mtime
-                        
+
         return r
 
     def check_modifications(self):
@@ -111,20 +111,20 @@ class Monitor(object):
             if self.check_modification(filename):
                 print >> sys.stderr, 'File %s changed; reloading...' % filename
                 return True
-            
+
         for m in sys.modules.values():
             if not hasattr(m, '__file__'):
                 continue
-            
+
             filename = m.__file__
-             
+
             for directory in self.excluded_directories:
                 if filename.startswith(directory):
                     continue
-            
+
             if filename.endswith(('.pyc', '.pyo')) and os.path.exists(filename[:-1]):
                 filename = filename[:-1]
-                
+
             if self.check_modification(filename):
                 try:
                     reload(m)
@@ -133,7 +133,7 @@ class Monitor(object):
                 except Exception, e:
                     print >> sys.stderr, 'WARNING, module %s NOT reloaded' % filename
                     print >> sys.stderr, traceback.format_exc()
-                    
+
         return False
 
 

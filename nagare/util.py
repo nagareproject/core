@@ -13,12 +13,12 @@ from nagare import component, presentation, var
 
 class Ask(object):
     """Ask the user to enter a line of text
-    
+
     The text entered is answered
     """
     def __init__(self, msg):
         """Initialization
-        
+
         In:
           - ``msg`` -- message to display
         """
@@ -27,17 +27,17 @@ class Ask(object):
 @presentation.render_for(Ask)
 def render(self, h, comp, *args):
     """The view is a simple form with a text input control
-    
+
     In:
       - ``h`` -- the renderer
       - ``comp`` -- the component
       - ``model`` -- the name of the view
-      
+
     Return:
       - a tree
     """
     r = var.Var()
-    
+
     return h.form(
                   self.msg, ' ',
                   h.input.action(r),
@@ -50,7 +50,7 @@ class Confirm(object):
 
     def __init__(self, msg):
         """Initialization
-        
+
         In:
           - ``msg`` -- message to display
         """
@@ -59,12 +59,12 @@ class Confirm(object):
 @presentation.render_for(Confirm)
 def render(self, h, comp, *args):
     """The view is a simple form with the text and a submit button
-    
+
     In:
       - ``h`` -- the renderer
       - ``comp`` -- the component
       - ``model`` -- the name of the view
-      
+
     Return:
       - a tree
     """
@@ -76,24 +76,24 @@ def render(self, h, comp, *args):
 
 class View(object):
     """A differed view
-    
+
     Can be useful to add a view for a ``component.Task``
     """
     def __init__(self, view):
         """Initialization
-        
+
         In:
           - ``view`` -- a function that will be called to render this object
         """
         self.view = view
-        
+
 @presentation.render_for(View)
 def render(self, h, *args):
     """To render this object, call the differed view function
-    
+
     In:
       - ``h`` -- the renderer
-      
+
     Return:
       - a tree
     """

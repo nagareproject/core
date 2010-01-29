@@ -14,51 +14,237 @@ import random, cStringIO, cPickle
 import configobj
 
 from nagare import config
+from nagare.admin import util
+from nagare.sessions import ExpirationError
 
-class ExpirationError(LookupError):
-    pass
-
-
-class Session(object):
-    """Base class of the session objects
+class State(object):
+    """A state (objects graph serialized / deserialized by a sessions manager)
     """
-    def __init__(self, session_id, cont_id, new_cont_id, lock, secure_id, data=None):
+    def __init__(self, sessions_manager, session_id, state_id, use_same_state):
         """Initialization
 
         In:
-          - ``session_id`` -- id of the current session
-          - ``cont_id` -- id of the current continuation
-          - ``new_cont_id`` -- id of the next continuation
-          - ``lock`` -- session thread lock
-          - ``secure_id`` -- the secure number associated to the session
-          - ``data`` -- data of the session
+          - ``sessions_manager`` -- the session manager of this state
+          - ``session_id`` -- session id of this state
+          - ``state_id`` -- id of this state
+          - ``use_same_state`` -- is a copy of this state to create ?
         """
+        self.sessions_manager = sessions_manager
         self.session_id = session_id
-        self.cont_id = cont_id
-        self.new_cont_id = new_cont_id
-        self.lock = lock
-        self.secure_id = secure_id
-        self.data = data
+        self.state_id = state_id
+        self.use_same_state = use_same_state
 
-        self.is_new = data is None
-        self.back_used = not self.is_new and new_cont_id and (cont_id != (new_cont_id-1))
+        self.is_new = True         # Is the objects graph initialized ?
+        self.secure_id = None      # the secure number associated to the session
+        self.lock = None            # Session lock
+        self.data = None            # Objects graph
+        self.back_used = False     # Is this state a snapshot of a previous objects graph ?
 
     def sessionid_in_url(self, request, response):
-        """Return the session and continuation ids to put into an URL
+        """Return the session and states ids to put into an URL
 
         In:
           - ``request`` -- the web request object
           - ``response`` -- the web response object
 
         Return:
-          - tuple (session id, continuation id)
+          - tuple (session id paremeter, state id parameter)
         """
-        #response.set_cookie('_s', self.session_id)
-        #return ('_c=%05d' % self.new_cont_id,)
-        return ('_s='+self.session_id, '_c=%05d' % self.new_cont_id)
+        return self.sessions_manager.sessionid_in_url(self.session_id, self.state_id, request, response)
 
     def sessionid_in_form(self, h, request, response):
-        """Return the tree to merge into a form to add the session and continuation
+        """Return the DOM tree to merge into a form, to add the session and state hidden ids
+
+        In:
+          - ``h`` -- the current renderer
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
+
+        Return:
+          - the DOM tree
+        """
+        return self.sessions_manager.sessionid_in_form(self.session_id, self.state_id, h, request, response)
+
+    def create(self, secure_id):
+        """Initialized a new state, with an empty objects graph
+
+        In:
+         - ``secure_id`` -- the secure number associated to the session
+        """
+        self.secure_id = secure_id
+        (self.state_id, self.lock) = self.sessions_manager.create_state(self.session_id, secure_id)
+
+    def get(self):
+        """Retrieve the state
+
+        Return:
+         - ``secure_id`` -- the secure number associated to the session
+        """
+        (new_state_id, self.lock, self.secure_id, self.data) = self.sessions_manager.get_state(self.session_id, self.state_id, self.use_same_state)
+
+        self.back_used = not self.use_same_state and (int(self.state_id) != (new_state_id-1))
+
+        self.is_new = False
+        self.state_id = new_state_id
+
+        return self.secure_id
+
+    def set(self, use_same_state, data):
+        """Store the state
+
+        In:
+          - ``use_same_state`` -- is this state to be stored in the previous snapshot ?
+          - ``data`` -- the objects graph
+        """
+        self.sessions_manager.set_state(self.session_id, self.state_id, self.secure_id, self.use_same_state or use_same_state, data)
+
+    def delete(self):
+        """Delete this state
+        """
+        self.sessions_manager.delete(self.session_id)
+
+
+def persistent_id(o, session_data):
+    """The object with a `_persistent_id` attribut are stored into the session
+    not into the state snapshot
+
+    In:
+      - ``o`` -- object to check
+
+    Out:
+      - ``session_data`` -- dict of the objects to store into the session
+    """
+    id = getattr(o, '_persistent_id', None)
+    if id is not None:
+        session_data[id] = o
+        return str(id)
+
+
+class Sessions(object):
+    """The sessions managers
+    """
+    spec = {
+            'security_cookie_name' : 'string(default="_nagare")',
+            'states_history' : 'boolean(default=True)',
+            'pickler' : 'string(default="cPickle:Pickler")',
+            'unpickler' : 'string(default="cPickle:Unpickler")',
+           }
+
+    def __init__(
+                    self,
+                    states_history=True,
+                    pickler=cPickle.Pickler, unpickle=cPickle.Unpickler,
+                    security_cookie_name='_nagare'
+                ):
+        """Initialization
+
+        In:
+          - ``security_cookie_name`` -- name of the cookie where the session secure id is stored
+        """
+        self.states_history = True
+        self.pickler = cPickle.Pickler
+        self.unpickler = cPickle.Unpickler
+        self.security_cookie_name = security_cookie_name
+
+    def set_config(self, filename, conf, error):
+        """Read the configuration parameters
+
+        In:
+          - ``filename`` -- the path to the configuration file
+          - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
+          - ``error`` -- the function to call in case of configuration errors
+        """
+        conf = dict([(k, v) for (k, v) in conf.items() if k in self.spec])
+        conf = configobj.ConfigObj(conf, configspec=self.spec)
+        config.validate(filename, conf, error)
+
+        self.security_cookie_name = conf['security_cookie_name']
+        self.states_history = conf['states_history']
+
+        self.pickler = util.load_object(conf['pickler'])[0]
+        self.unpickler = util.load_object(conf['unpickler'])[0]
+
+        return conf
+
+    def get(self, request, response, use_same_state):
+        """Create a new state or return an existing one
+
+        In:
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
+          - ``use_same_state`` -- is a copy of the state to create ?
+
+        Return:
+          - the state object
+        """
+        (session_id, state_id) = self._get_ids(request)
+        is_new = not session_id or not state_id
+
+        if is_new:
+            # New session: create a new session id
+            while True:
+                session_id = str(random.randint(1000000000000000, 9999999999999999))
+                if not self.is_session_exist(session_id):
+                    break
+
+        state = State(self, session_id, state_id, use_same_state or not self.states_history)
+
+        if self.security_cookie_name:
+            secure_id = request.cookies.get(self.security_cookie_name) or str(random.randint(1000000000000000, 9999999999999999))
+        else:
+            secure_id = None
+
+        if is_new:
+            # New state
+            # ---------
+
+            state.create(secure_id)
+
+            if self.security_cookie_name:
+                response.set_cookie(self.security_cookie_name, secure_id, path=request.script_name + '/')
+        else:
+            # Existing state
+            # --------------
+
+            session_secure_id = state.get()
+
+            if session_secure_id != secure_id:
+                raise ExpirationError()
+
+        return state
+
+    def _get_ids(self, request):
+        """Search the session id and the state id into the request parameters
+
+        In:
+          - ``request`` -- the web request object
+
+        Return:
+          - a tuple (session id, state id) or (None, None) if no session found
+        """
+        return (
+                    request.str_params.get('_s'),
+                    request.str_params.get('_c') if self.states_history else '0'
+                )
+
+    def sessionid_in_url(self, session_id, state_id, request, response):
+        """Return the session and states ids to put into an URL
+
+        In:
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
+
+        Return:
+          - tuple (session id paremeter, state id parameter)
+        """
+        ids = ('_s='+session_id,)
+        if self.states_history:
+            ids += ('_c=%05d' % state_id,)
+
+        return ids
+
+    def sessionid_in_form(self, session_id, state_id, h, request, response):
+        """Return the DOM tree to merge into a form to add the session and state
         hidden ids
 
         In:
@@ -67,70 +253,67 @@ class Session(object):
           - ``response`` -- the web response object
 
         Return:
-          - a tree
+          - a DOM tree
         """
         return (
-                h.input(name='_s', value=self.session_id, type='hidden'),
-                h.input(name='_c', value='%05d' % self.new_cont_id, type='hidden')
-               )
+                    h.input(name='_s', value=session_id, type='hidden'),
+                    h.input(name='_c', value='%05d' % state_id, type='hidden')
+                )
 
-
-class Sessions(object):
-    """Base class of the session manager objects
-    """
-    def __init__(self, security_cookie_name='_nagare'):
-        self.security_cookie_name = security_cookie_name
-
-    def get(self, request, response):
-        """Create a new session or return an existing one
+    def get_state(self, session_id, state_id, use_same_state):
+        """Retrieve the state
 
         In:
-          - ``request`` -- the web request object
-          - ``response`` -- the web response object
+          - ``session_id`` -- session id of this state
+          - ``state_id`` -- id of this state
+          - ``use_same_state`` -- is a copy of this state to create ?
 
         Return:
-          - the session object
+          - the tuple:
+            - id of this state,
+            - session lock,
+            - secure number associated to the session,
+            - objects graph
         """
-        (session_id, cont_id) = self._get_ids(request)
+        (state_id, lock, secure_id, session_data, state_data) = self._get(session_id, state_id, use_same_state)
+        data = self.deserialize(session_data, state_data)
+        return (state_id, lock, secure_id, data)
 
-        c = request.cookies.get(self.security_cookie_name)
-
-        if session_id:
-            # Existing session
-            # ----------------
-
-            data = self._get(session_id, cont_id)
-            if self.security_cookie_name and (data[-2] != c):
-                raise ExpirationError()
-        else:
-            # New session
-            # -----------
-
-            secure_id = c or str(random.randint(1000000000000000, 9999999999999999))
-            if self.security_cookie_name:
-                response.set_cookie(self.security_cookie_name, secure_id, path=request.script_name + '/')
-            data = self.create(secure_id)
-
-        session = Session(*data)
-
-        if request.is_xhr or ('_a' in request.params):
-            # Save the data into the same session / continuation if the request is a XHR one
-            session.new_cont_id = data[1]
-
-        return session
-
-    def set(self, session, inc_cont_id):
-        """Memorize the session data
+    def create_state(self, session_id, secure_id):
+        """Initialized a new state, with an empty objects graph
 
         In:
-          - ``session`` -- the session object
-          - ``inc_cont_id`` -- is the continuation id to increment ?
+          - ``session_id`` -- session id of this state
+          - ``secure_id`` -- the secure number associated to the session
+
+        Return:
+          - the tuple:
+            - id of this state,
+            - session lock
         """
-        self._set(
-                  session.session_id, session.new_cont_id,
-                  session.secure_id, session.data,
-                  inc_cont_id
-                 )
+        return self._create(session_id, secure_id)
+
+    def set(self, state, use_same_state):
+        """Store the state
+
+        In:
+          - ``state`` -- the state object
+          - ``use_same_state`` -- is a copy of this state to create ?
+        """
+        state.set(self, use_same_state)
+
+    def set_state(self, session_id, state_id, secure_id, use_same_state, data):
+        """Store the state
+
+        In:
+          - ``session_id`` -- session id of this state
+          - ``state_id`` -- id of this state
+          - ``secure_id`` -- the secure number associated to the session
+          - ``use_same_state`` -- is this state to be stored in the previous snapshot ?
+          - ``data`` -- the objects graph
+        """
+        (session_data, state_data) = self.serialize(data)
+        self._set(session_id, state_id, secure_id, use_same_state, session_data, state_data)
 
     def delete(self, session):
         """Delete the session
@@ -138,146 +321,52 @@ class Sessions(object):
         In:
           - ``session`` -- the session to delete
         """
-        self._delete(session.session_id)
+        self._delete(self.sessions_manager)
 
-    def _get_ids(self, request):
-        """Search the session id and the continuation id into the request parameters
-
-        In:
-          - ``request`` -- the web request object
-
-        Return:
-          - a tuple (session id, continuation id) or (None, None) if no session found
-        """
-        #return (str(request.cookies.get('_s', '')), int(request.params.get('_c', 0)))
-        return (request.str_params.get('_s'), request.str_params.get('_c'))
-
-    def create(self, secure_id):
-        """Create a new session
-
-        In:
-          - ``secure_id`` -- the secure number associated to the session
-
-        Return:
-          - tuple (session_id, cont_id, new_cont_id, lock)
-        """
-        # Generate a new id for the session
-        while True:
-            session_id = str(random.randint(1000000000000000, 9999999999999999))
-            if not self._is_session_exist(session_id):
-                break
-
-        return self._create(session_id, secure_id)
-
-    def _get(self, session_id, cont_id):
-        """Return the data associated to a session
-
-        In:
-          - ``session_id`` -- id of the session
-          - ``cont_id`` -- id of the continuation
-
-        Return:
-          - tuple (session_id, cont_id, new_cont_id, lock, secure_id, data)
-        """
-        (session_id, cont_id, last_cont_id, lock, secure_id, externals, data) = self.__get(session_id, cont_id)
-
-        p = cPickle.Unpickler(cStringIO.StringIO(data))
-        if externals:
-            p.persistent_load = lambda i: externals.get(int(i))
-
-        return (session_id, cont_id, last_cont_id, lock, secure_id, p.load())
-
-    def _persistent_id(self, o, externals):
-        id = getattr(o, '_persistent_id', None)
-        if id is not None:
-            externals[id] = o
-            return str(id)
-
-    def _set(self, session_id, cont_id, secure_id, data, inc_cont_id):
-        """Memorize the session data
-
-        In:
-          - ``session_id`` -- id of the current session
-          - ``cont_id`` -- id of the current continuation
-          - ``secure_id`` -- the secure number associated to the session
-          - ``data`` -- data of the session
-          - ``inc_cont_id`` -- is the continuation id to increment ?
-        """
-        f = cStringIO.StringIO()
-        p = cPickle.Pickler(f, protocol=-1)
-
-        externals = {}
-        p.persistent_id = lambda o: self._persistent_id(o, externals)
-        p.dump(data)
-
-        self.__set(session_id, cont_id, secure_id, inc_cont_id, externals, f.getvalue())
-
-    # -------------------------------------------------------------------------
-
-    def _is_session_exist(self, session_id):
-        """Test if a session id is valid
+    def is_session_exist(self, session_id):
+        """Test if a session id is invalid
 
         In:
           - ``session_id`` -- id of the session
 
         Return:
-           - a boolean
+          - a boolean
         """
         return False
 
-    def _create(self, session_id, secure_id):
-        """Create a new session
+    def pickle(self, data):
+        """Pickle an objects graph
 
         In:
-          - ``session_id`` -- id of the session
-          - ``secure_id`` -- the secure number associated to the session
+          - ``data`` -- the objects graph
 
-        Return:
-          - tuple (session_id, cont_id, new_cont_id, lock)
+        Out:
+          - the tuple:
+            - data to keep into the session
+            - data to keep into the state
         """
-        pass
+        f = cStringIO.StringIO()
+        p = self.pickler(f, protocol=-1)
 
-    def __get(self, session_id, cont_id):
-        """Return the raw data associated to a session
+        session_data = {}
+        p.persistent_id = lambda o: persistent_id(o, session_data)
+        p.dump(data)
+
+        return (session_data, f.getvalue())
+
+    def unpickle(self, session_data, state_data):
+        """Unpickle an objects graph
 
         In:
-          - ``session_id`` -- id of the session
-          - ``cont_id`` -- id of the continuation
+          - ``session_data`` -- data from the session
+          - ``state_data`` -- data from the state
 
-        Return:
-            - tuple (session_id, cont_id, last_cont_id, lock, secure_id, externals, data)
+        Out:
+          - the objects graph
         """
-        return None
+        p = self.unpickler(cStringIO.StringIO(state_data))
+        if session_data:
+            p.persistent_load = lambda i: session_data.get(int(i))
 
-    def __set(self, session_id, cont_id, secure_id, inc_cont_id, externals, data):
-        """Memorize the session data
+        return p.load()
 
-        In:
-          - ``session_id`` -- id of the current session
-          - ``cont_id`` -- id of the current continuation
-          - ``secure_id`` -- the secure number associated to the session
-          - ``inc_cont_id`` -- is the continuation id to increment ?
-          - ``externals`` -- pickle of shared objects across the continuations
-          - ``data`` -- pickle of the objects in the continuation
-        """
-        pass
-
-
-class SessionsFactory(object):
-    spec = {
-            'security_cookie_name' : 'string(default="_nagare")'
-           }
-    sessions = None
-
-    def __init__(self, filename, conf, error):
-        self.conf = self._validate_conf(filename, conf, error)
-
-    def _validate_conf(self, filename, conf, error):
-        conf = dict([(k, v) for (k, v) in conf.items() if k in self.spec])
-        conf = configobj.ConfigObj(conf, configspec=self.spec, interpolation='Template')
-        config.validate(filename, conf, error)
-
-        return conf
-
-    def __call__(self):
-        return self.sessions(**self.conf)
