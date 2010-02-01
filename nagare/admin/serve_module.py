@@ -110,9 +110,9 @@ def run(parser, options, args):
     app.set_publisher(publisher)
 
     # Always use the standalone session manager (in memory sessions)
-    sessions = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
-    sessions_factory = sessions['standalone'].load()(None, {}, None)
-    app.set_sessions_factory(sessions_factory)
+    sessions_managers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
+    sessions_manager = sessions_managers['standalone'].load()()
+    app.set_sessions_manager(sessions_manager)
 
     # The static contents of the framework are served by the standalone server
     publisher.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))
