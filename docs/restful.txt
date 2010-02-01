@@ -11,7 +11,7 @@ Principle
 An URL representes a well-defined state of the application components. The mapping
 of significative URL to the components state (the URL scheme) is made in 2 steps:
 
-  1. Give an URL to pages (i.e a omponents state)
+  1. Give an URL to pages (i.e a components state)
   2. When an URL is received, initialize the components state from it
 
 To illustrate these steps, we will use a timezone-aware clock example. First,

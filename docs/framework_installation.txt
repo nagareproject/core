@@ -18,10 +18,10 @@ directory, do:
   .. code-block:: sh
   
      cd /tmp
-     wget http://www.stackless.com/binaries/stackless-262-export.tar.bz2
-     tar jxvf stackless-262-export.tar.bz2
+     wget http://www.stackless.com/binaries/stackless-264-export.tar.bz2
+     tar jxvf stackless-264-export.tar.bz2
      
-     cd stackless-2.6.2*
+     cd stackless-2.6.4*
      ./configure --prefix=<STACKLESS_HOME>
      make all
      make install 
@@ -43,7 +43,7 @@ directory, do:
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To install Stackless Python on Windows, download the `dedicated installer
-<http://www.stackless.com/binaries/python-2.6.2-stackless.msi>`_ and launch it.
+<http://www.stackless.com/binaries/python-2.6.4-stackless.msi>`_ and launch it.
 
 2. Nagare installation
 ----------------------
@@ -59,30 +59,31 @@ and doesn't require the root privileges.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To create a virtual environment into the *<NAGARE_HOME>* directory, download
-`virtualenv <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.3.3.tar.gz>`_ and launch it **with Stackless Python**.
+`virtualenv <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz>`_ and launch it **with Stackless Python**.
 
 On Linux:
 
   .. code-block:: sh
 
      cd /tmp
-     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.3.3.tar.gz
-     tar zxvf virtualenv-1.3.3.tar.gz
+     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz
+     tar zxvf virtualenv-1.4.5.tar.gz
      
-     <STACKLESS_HOME>/bin/python virtualenv-1.3.3/virtualenv.py <NAGARE_HOME>
+     <STACKLESS_HOME>/bin/python virtualenv-1.4.5/virtualenv.py <NAGARE_HOME>
       
 On Windows:
-    
-    Manually download
-    `http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.3.3.tar.gz <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.3.3.tar.gz>`_
+
+    Download and launch the `Python Win32 extensions <http://sourceforge.net/projects/pywin32/files/>`_
+
+    Download
+    `http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz>`_
     and extract the file ``virtualenv.py`` (you could need an archiver as ``7-zip`` or ``winrar``).
     
-    Then launch:
+    then launch:
     
     .. code-block:: cmd
     
-       <STACKLESS_HOME>\Scripts\easy_install.exe win32api
-       <STACKLESS_HOME>\Scripts\python.exe virtualenv.py <NAGARE_HOME>
+       <STACKLESS_HOME>\python.exe virtualenv.py <NAGARE_HOME>
  
 The final step is to install the framework into this newly created virtual
 environment.
@@ -151,10 +152,10 @@ and launch it **with Stackless Python**.
   .. code-block:: sh
 
      cd /tmp
-     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.3.3.tar.gz
-     tar zxvf virtualenv-1.3.3.tar.gz
+     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz
+     tar zxvf virtualenv-1.4.5.tar.gz
      
-     <STACKLESS_HOME>/bin/python virtualenv-1.3.3/virtualenv.py <NAGARE_HOME>
+     <STACKLESS_HOME>/bin/python virtualenv-1.4.5/virtualenv.py <NAGARE_HOME>
  
 Second, grab the framework sources from the repository:
 

@@ -19,10 +19,10 @@ on Linux:
   .. code-block:: sh
   
      cd /tmp
-     wget http://www.stackless.com/binaries/stackless-262-export.tar.bz2
-     tar jxvf stackless-262-export.tar.bz2
+     wget http://www.stackless.com/binaries/stackless-264-export.tar.bz2
+     tar jxvf stackless-264-export.tar.bz2
      
-     cd stackless-2.6.2*
+     cd stackless-2.6.4*
      ./configure --prefix=<STACKLESS_HOME>
      make all
      make install 
@@ -42,10 +42,10 @@ directory **with Stackless Python**:
   .. code-block:: sh
 
      cd /tmp
-     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.3.3.tar.gz
-     tar zxvf virtualenv-1.3.3.tar.gz
+     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz
+     tar zxvf virtualenv-1.4.5.tar.gz
      
-     <STACKLESS_HOME>/bin/python virtualenv-1.3.3/virtualenv.py <NAGARE_HOME>
+     <STACKLESS_HOME>/bin/python virtualenv-1.4.5/virtualenv.py <NAGARE_HOME>
 
 2.2 Install the framework
 ~~~~~~~~~~~~~~~~~~~~~~~~~
