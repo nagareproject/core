@@ -233,13 +233,12 @@ class Authentication(object):
         """
         return None
 
-    def end_rendering(self, request, response, sessions, session):
+    def end_rendering(self, request, response, session):
         """End of the request processing
 
         In:
           - ``request`` -- the request object
           - ``response`` -- the response object
-          - ``sessions`` -- the sessions manager
           - ``session`` -- the session
         """
         pass
