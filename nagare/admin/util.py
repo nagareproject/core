@@ -261,8 +261,8 @@ def read_application(cfgfile, error):
 
 # ---------------------------------------------------------------------------
 
-def set_metadata(conf, debug):
-    """Activate the database metadata object
+def get_database(conf, debug):
+    """Read the database settings
 
     The location of the metadata object is read from the configuration file
 
@@ -271,26 +271,32 @@ def set_metadata(conf, debug):
       - ``debug`` -- debug mode for the database engine
 
     Return:
-      - the metadata object
+      - the tuple:
+        - metadata object
+        - database uri
+        - database debug mode
+        - database engines settings
     """
-    metadata = conf.get('metadata', '')
+    metadata = conf.get('metadata')
 
-    if conf['activated'] and metadata:
-        metadata = load_object(metadata)[0]
+    if not conf['activated'] or not metadata:
+        return None
 
-        # All the parameters, of the [database] section, with an unknown name are
-        # given to the database engine
-        engine_conf = dict([(k, v) for (k, v) in conf.items() if k not in ('uri', 'activated', 'metadata', 'debug', 'populate')])
-        database.set_metadata(metadata, conf['uri'], debug, **engine_conf)
+    # Import the metadata object
+    metadata = load_object(metadata)[0]
 
-        return metadata
+    # All the parameters, of the [database] section, with an unknown name are
+    # given to the database engine
+    engine_conf = dict([(k, v) for (k, v) in conf.items() if k not in ('uri', 'activated', 'metadata', 'debug', 'populate')])
+
+    return (metadata, conf['uri'], debug, engine_conf)
 
 
 def activate_WSGIApp(app, cfgfile, aconf, error, project_name='', static_path=None, static_url=None, publisher=None, sessions_manager=None, debug=False):
-    """
+    """Set all the properties of a WSGIApp application
 
     In:
-      - ``app`` -- the application root object
+      - ``app`` -- the WSGIApp application or the application root object factory
       - ``cfgfile`` -- the path to the configuration file
       - ``aconf`` -- the ``ConfigObj`` object, created from the configuration file
       - ``error`` -- the function to call in case of configuration errors
@@ -305,22 +311,22 @@ def activate_WSGIApp(app, cfgfile, aconf, error, project_name='', static_path=No
     Return:
       - a tuple:
           - the ``wsgi.WSGIApp`` object
-          - tuples (application metadata object, application database populate function)
+          - tuples (application databases settings, application databases populate functions)
     """
-    metadatas = []
+    databases = []
     populates = []
-    # Activate the database metadata
+    # Get all the databases settings
     for (section, content) in aconf['database'].items():
         if isinstance(content, configobj.Section):
-            metadata = set_metadata(content, content['debug'] or debug)
-            if metadata:
-                metadatas.append(metadata)
+            database = get_database(content, content['debug'] or debug)
+            if database:
+                databases.append(database)
                 populates.append(content['populate'])
             del aconf['database'][section]
 
-    metadata = set_metadata(aconf['database'], aconf['database']['debug'] or debug)
-    if metadata:
-        metadatas.append(metadata)
+    database = get_database(aconf['database'], aconf['database']['debug'] or debug)
+    if database:
+        databases.append(database)
         populates.append(aconf['database']['populate'])
 
     app = wsgi.create_WSGIApp(app)
@@ -340,11 +346,11 @@ def activate_WSGIApp(app, cfgfile, aconf, error, project_name='', static_path=No
     if sessions_manager:
         app.set_sessions_manager(sessions_manager)
 
-    if metadatas:
-        app.set_metadatas(metadatas)
+    if databases:
+        app.set_databases(databases)
 
     if project_name:
         app.set_project(project_name)
 
-    return (app, zip(metadatas, populates))
+    return (app, zip(databases, populates))
 

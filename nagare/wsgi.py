@@ -40,15 +40,15 @@ class WSGIApp(object):
     def __init__(self, root_factory):
         """Initialization
 
-       In:
-         - ``root_factory`` -- function to create the application root component
-         - ``metadatas`` -- the SQLAlchemy metadata objects
-       """
+        In:
+          - ``root_factory`` -- function to create the application root component
+          - ``databases`` -- the SQLAlchemy metadata objects and the database engines settings
+        """
         self.root_factory = root_factory
 
         self.static_path = ''
         self.static_url = ''
-        self.metadatas = []
+        self.databases = []
         self.name = ''
         self.project_name = ''
         self.redirect_after_post = False
@@ -70,7 +70,7 @@ class WSGIApp(object):
         self.always_html = config['application']['always_html']
 
     def set_static_path(self, static_path):
-        """
+        """Register the directory of the static contents
 
         In:
           - ``static_path`` -- the directory where the static contents of the application
@@ -79,7 +79,7 @@ class WSGIApp(object):
         self.static_path = static_path
 
     def set_static_url(self, static_url):
-        """
+        """Register the url of the static contents
 
         In:
           - ``static_url`` -- the url of the static contents of the application
@@ -87,7 +87,7 @@ class WSGIApp(object):
         self.static_url = static_url
 
     def set_publisher(self, publisher):
-        """
+        """Register the publisher
 
         In:
           - ``publisher`` -- the publisher of the application
@@ -95,25 +95,26 @@ class WSGIApp(object):
         pass
 
     def set_sessions_manager(self, sessions_manager):
-        """
+        """Register the sessions manager
 
         In:
           - ``sessions_manager`` -- the sessions manager
         """
         self.sessions = sessions_manager
 
-    def set_metadatas(self, metadatas):
-        """
+    def set_databases(self, databases):
+        """Register the databases properties
 
         In:
-          - ``metadatas`` -- the SQLAlchemy metadata objects
+          - ``databases`` -- the SQLAlchemy metadata objects and the database engines settings
         """
-        self.metadatas = metadatas
+        self.databases = databases
 
     def start(self):
         """Call after each process start
         """
-        pass
+        for database_settings in self.databases:
+            database.set_metadata(*database_settings)
 
     def set_project(self, name):
         """The application distribution name
@@ -176,12 +177,12 @@ class WSGIApp(object):
         return output
 
     def on_callback_lookuperror(self, request, response, async):
-        """
+        """A callback was not found
+
         In:
           - ``request`` -- the web request object
           - ``response`` -- the web response object
           - ``async`` -- is an XHR request ?
-
         """
         if not async:
             raise

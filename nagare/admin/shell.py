@@ -40,7 +40,11 @@ def create_globals(cfgfiles, debug, error):
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
 
         name = aconf['application']['name']
-        apps[name] = util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[0]
+        (apps[name], databases) = util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)
+
+        for (database_settings, populate) in databases:
+            database.set_metadata(*database_settings)
+
         log.configure(aconf['logging'].dict(), name)
 
     log.activate()

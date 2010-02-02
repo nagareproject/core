@@ -62,12 +62,14 @@ def create(parser, options, args):
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines : application name
     """
-    for (metadata, populate) in read_options(options.debug, args, parser.error):
+    for (database_settings, populate) in read_options(options.debug, args, parser.error):
+        database.set_metadata(*database_settings)
+
         with database.session.begin():
             if options.drop:
-                metadata.drop_all()
+                database_settings[0].drop_all()
 
-            metadata.create_all()
+            database_settings[0].create_all()
 
             if options.populate and populate:
                 util.load_object(populate)[0]()
@@ -81,9 +83,11 @@ def drop(parser, options, args):
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines : application name
     """
-    for (metadata, populate) in read_options(options.debug, args, parser.error):
+    for (database_settings, populate) in read_options(options.debug, args, parser.error):
+        database.set_metadata(*database_settings)
+
         with database.session.begin():
-            metadata.drop_all()
+            database_settings[0].drop_all()
 
 # ---------------------------------------------------------------------------
 

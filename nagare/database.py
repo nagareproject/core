@@ -116,14 +116,15 @@ def entity_setstate(entity, d):
 # dictionary: database uri -> database engine
 _engines = {}
 
-def set_metadata(metadata, database_uri, database_debug, **kw):
+def set_metadata(metadata, database_uri, database_debug, engine_settings):
     """Activate the metadatas (bind them to a database engine)
 
     In:
       - ``metadata`` -- the metadatas
       - ``database_uri`` -- connection string for the database engine
       - ``database_debug`` -- debug mode for the database engine
-      - ``kw`` -- dedicated parameters for the database engine used
+      - ``engine_settings`` -- dedicated parameters for the used database engine
     """
-    metadata.bind = _engines.setdefault(database_uri, sqlalchemy.create_engine(database_uri, echo=database_debug, **kw))
-    setup_all()
+    if not metadata.bind:
+        metadata.bind = _engines.setdefault(database_uri, sqlalchemy.create_engine(database_uri, echo=database_debug, **engine_settings))
+        setup_all()
