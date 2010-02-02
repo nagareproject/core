@@ -205,6 +205,5 @@ class SessionsWithMemoryStates(SessionsBase):
         Out:
           - the objects graph
         """
-        print "States history", self.states_history
         return copy.deepcopy(state_data) if self.states_history else state_data
 
