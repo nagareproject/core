@@ -93,6 +93,7 @@ class Sessions(common.Sessions):
         self.lock_max_wait_time = lock_max_wait_time
         self.min_compress_len = min_compress_len
         self.debug = debug
+
         self.memcached = threading.local()
 
         if reset:
@@ -110,12 +111,14 @@ class Sessions(common.Sessions):
         # Let's the super class validate the configuration file
         conf = super(Sessions, self).set_config(filename, conf, error)
 
-        args = [conf[arg_name] for arg_name in (
-                    'host', 'port', 'ttl', 'lock_ttl', 'lock_poll_time',
-                    'lock_max_wait_time', 'min_compress_len', 'reset', 'debug'
-                )]
+        self.host = ['%s:%d' % (conf['host'], conf['port'])]
 
-        self.__init__(*args)
+        for arg_name in (
+                            'ttl', 'lock_ttl', 'lock_poll_time', 'lock_max_wait_time',
+                            'min_compress_len', 'reset', 'debug'
+                          ):
+            setattr(self, arg_name, conf[arg_name])
+
 
     def _get_connection(self):
         """Get the connection to the memcache server

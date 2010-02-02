@@ -54,7 +54,8 @@ class SessionsBase(common.Sessions):
         # Let's the super class validate the configuration file
         conf = super(SessionsBase, self).set_config(filename, conf, error)
 
-        self.__init__(conf['nb_sessions'], conf['nb_states'])
+        self.nb_states = conf['nb_states']
+        self._sessions = lru_dict.ThreadSafeLRUDict(conf['nb_sessions'])
 
     def is_session_exist(self, session_id):
         """Test if a session id is invalid
@@ -204,5 +205,6 @@ class SessionsWithMemoryStates(SessionsBase):
         Out:
           - the objects graph
         """
+        print "States history", self.states_history
         return copy.deepcopy(state_data) if self.states_history else state_data
 
