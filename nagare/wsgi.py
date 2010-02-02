@@ -387,7 +387,7 @@ class WSGIApp(object):
                     # Store the session
                     session.set(use_same_state, (root, callbacks))
 
-                    security.get_manager().end_rendering(request, response, self.sessions, session)
+                    security.get_manager().end_rendering(request, response, session)
                 except exc.HTTPException, response:
                     # When a ``webob.exc`` object is raised during phase 2, stop immediatly
                     # use it as the response object

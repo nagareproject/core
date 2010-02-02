@@ -142,13 +142,12 @@ class Authentication(basic_auth.Authentication):
         """
         user.set_id(id, password)
 
-    def end_rendering(self, request, response, sessions, session):
+    def end_rendering(self, request, response, session):
         """End of the request processing
 
         In:
           - ``request`` -- the request object
           - ``response`` -- the response object
-          - ``sessions`` -- the sessions manager
           - ``session`` -- the session
         """
         user = security._get_user()
@@ -170,7 +169,7 @@ class Authentication(basic_auth.Authentication):
                 response.delete_cookie(self.key, self.path, self.domain)
 
                 if user.delete_session:
-                    sessions.delete(session)
+                    session.delete()
 
                 location = user.logout_location
                 if location is not None:

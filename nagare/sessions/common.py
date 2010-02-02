@@ -315,13 +315,13 @@ class Sessions(object):
         (session_data, state_data) = self.serialize(data)
         self._set(session_id, state_id, secure_id, use_same_state, session_data, state_data)
 
-    def delete(self, session):
+    def delete(self, session_id):
         """Delete the session
 
         In:
-          - ``session`` -- the session to delete
+          - ``session_id`` -- session id of this state
         """
-        self._delete(self.sessions_manager)
+        self._delete(session_id)
 
     def is_session_exist(self, session_id):
         """Test if a session id is invalid
