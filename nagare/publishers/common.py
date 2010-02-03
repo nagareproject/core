@@ -14,7 +14,7 @@ import random
 from paste import fileapp, httpexceptions, urlmap
 import configobj
 
-from nagare import config, log
+from nagare import config
 
 def serve_file(filename):
     """Create a WSGI application that return a static file
@@ -104,8 +104,6 @@ class Publisher(object):
         """The publisher has started a new process
        """
         random.seed(None)
-
-        log.activate()
 
         # Notify each registered applications
         for app in self.apps:

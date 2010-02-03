@@ -17,7 +17,7 @@ import os
 import pkg_resources
 import configobj
 
-from nagare import config
+from nagare import config, log
 from nagare.admin import reloader, util
 
 # ---------------------------------------------------------------------------
@@ -208,10 +208,22 @@ def run(parser, options, args):
     if pconf['publisher']['port'] == -1:
         pconf['publisher']['port'] = publisher.default_port
 
-    # Configure each application and register it to the publisher
+    configs = []
+
+    # Merge all the ``[logging]]`` section of all the applications
     for cfgfile in args:
         # Read the configuration file of the application
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, parser.error)
+        configs.append((cfgfile, app, dist, aconf))
+
+        log.configure(aconf['logging'].dict(), aconf['application']['name'])
+    
+    # Configure the logging system
+    log.activate()
+
+    # Configure each application and register it to the publisher
+    for (cfgfile, app, dist, aconf) in configs:
+        log.set_logger('nagare.application.'+aconf['application']['name'])
 
         if watcher:
             watcher.watch_file(aconf.filename)

@@ -332,7 +332,6 @@ def activate_WSGIApp(app, cfgfile, aconf, error, project_name='', static_path=No
     app = wsgi.create_WSGIApp(app)
 
     app.set_config(cfgfile, aconf, error)
-    log.configure(aconf['logging'].dict(), aconf['application']['name'])
 
     if static_path is not None:
         app.set_static_path(static_path)

@@ -90,6 +90,11 @@ def run(parser, options, args):
     # With the ``serve-module`` command, the automatic reloader is always activated
     reloader.install(excluded_directories=(pkg_resources.get_default_cache(),))
 
+    # Set the application logger level to DEBUG
+    log.configure({ 'logger' : { 'level' : 'DEBUG' } }, args[1])
+    log.activate()
+    log.set_logger('nagare.application.'+args[1])
+
     # Load the object
     if os.path.sep in args[0]:
         path = 'file ' + args[0]
@@ -116,9 +121,6 @@ def run(parser, options, args):
 
     # The static contents of the framework are served by the standalone server
     publisher.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))
-
-    # Set the application logger level to DEBUG
-    log.configure({ 'logger' : { 'level' : 'DEBUG' } }, args[1])
 
     # Launch the object
     publisher.serve(None, dict(host=options.host, port=options.port), None)

@@ -33,22 +33,31 @@ def create_globals(cfgfiles, debug, error):
       - ``error`` -- the function to call in case of configuration errors
     """
 
+    configs = []
+
+    # Merge all the ``[logging]]`` section of all the applications
+    for cfgfile in cfgfiles:
+        # Read the configuration file of the application
+        (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
+        configs.append((cfgfile, app, dist, aconf))
+
+        log.configure(aconf['logging'].dict(), aconf['application']['name'])
+
+    # Configure the logging system
+    log.activate()
+
     apps = {}
 
     # For each application given, activate its metadata and its logger
-    for cfgfile in cfgfiles:
-        (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
-
+    for (cfgfile, app, dist, aconf) in configs:
         name = aconf['application']['name']
+
+        log.set_logger('nagare.application.'+name)
+
         (apps[name], databases) = util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)
 
         for (database_settings, populate) in databases:
             database.set_metadata(*database_settings)
-
-        log.configure(aconf['logging'].dict(), name)
-
-    log.activate()
-    log.set_logger('nagare.application.'+name)
 
     session = database.session
     session.begin()
