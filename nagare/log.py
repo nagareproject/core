@@ -117,16 +117,25 @@ def configure(log_conf, app_name=None):
             log_conf[section+'_app_'+app_name] = log_conf.pop(section, {})
 
     # Merge the loggers list
-    if 'keys' in log_conf.get('loggers', {}):
-        loggers.extend(log_conf['loggers']['keys'].split(','))
+    keys = log_conf.get('loggers', {}).get('keys')
+    if keys:
+        if isinstance(keys, basestring):
+            keys = [keys]
+        loggers.extend(keys)
 
     # Merge the handlers list
-    if 'keys' in log_conf.get('handlers', {}):
-        handlers.extend(log_conf['handlers']['keys'].split(','))
+    keys = log_conf.get('handlers', {}).get('keys')
+    if keys:
+        if isinstance(keys, basestring):
+            keys = [keys]
+        handlers.extend(keys)
 
     # Merge the formatters list
-    if 'keys' in log_conf.get('formatters', {}):
-        formatters.extend(log_conf['formatters']['keys'].split(','))
+    keys = log_conf.get('formatters', {}).get('keys')
+    if keys:
+        if isinstance(keys, basestring):
+            keys = [keys]
+        formatters.extend(keys)
 
     # Merge the application configuration to the default configuration
     log_conf = configobj.ConfigObj(log_conf, interpolation=False)

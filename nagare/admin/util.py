@@ -206,7 +206,7 @@ def read_application_options(cfgfile, error, default={}):
                             metadata = 'string(default=%s)' % str(conf['database']['metadata']),
                             debug = 'boolean(default=%s)' % str(conf['database']['debug']),
                            ))
-    conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None, list_values=False)
+    conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)
     config.validate(cfgfile, conf, error)
 
     if not conf['sessions']['type']:
