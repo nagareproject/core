@@ -34,7 +34,6 @@ publisher_options_spec = {
     'reloader' : dict(
         activated = 'boolean(default=False)', # No automatic reload
         interval = 'integer(default=1)',
-        files = 'string(default="")'
     ),
 }
 
@@ -191,7 +190,10 @@ def run(parser, options, args):
         if 'nagare_reloaded' not in os.environ:
             return reloader.restart_with_monitor()
 
-        filenames = filter(os.path.isfile, pconf['reloader']['files'].split())
+        filenames = pconf['reloader'].get('files', [])
+        if isinstance(filenames, basestring):
+            filenames = [filenames]
+        filenames = filter(os.path.isfile, filenames)
         if options.conf:
             filenames.append(options.conf)
 
