@@ -67,7 +67,7 @@ class Sessions(common.Sessions):
                  ttl=0,
                  lock_ttl=0, lock_poll_time=0.1, lock_max_wait_time=5,
                  min_compress_len=0,
-                 reset=True,
+                 reset=False,
                  debug=True,
                  **kw
                 ):
@@ -97,8 +97,7 @@ class Sessions(common.Sessions):
         self.memcached = threading.local()
 
         if reset:
-            memcached = memcache.Client(self.host, debug=debug)
-            memcached.flush_all()
+            self.flush_all()
 
     def set_config(self, filename, conf, error):
         """Read the configuration parameters
@@ -115,10 +114,12 @@ class Sessions(common.Sessions):
 
         for arg_name in (
                             'ttl', 'lock_ttl', 'lock_poll_time', 'lock_max_wait_time',
-                            'min_compress_len', 'reset', 'debug'
+                            'min_compress_len', 'debug'
                           ):
             setattr(self, arg_name, conf[arg_name])
 
+        if conf['reset']:
+            self.flush_all()
 
     def _get_connection(self):
         """Get the connection to the memcache server
@@ -134,6 +135,12 @@ class Sessions(common.Sessions):
             self.memcached.connection = connection
 
         return connection
+
+    def flush_all(self):
+        """Delete all the contents in the memcached server
+        """
+        memcached = memcache.Client(self.host, debug=self.debug)
+        memcached.flush_all()
 
     def _create(self, session_id, secure_id):
         """Create a new session
