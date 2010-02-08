@@ -16,6 +16,8 @@ expired session id, it creates a new root component and a new session.
 """
 from __future__ import with_statement
 
+import sys
+
 import webob
 from webob import exc, acceptparse
 
@@ -54,6 +56,7 @@ class WSGIApp(object):
         self.redirect_after_post = False
         self.always_html = True
         self.sessions = None
+        self.last_exception = None
 
         self.security = dummy_manager.Manager()
 
@@ -205,15 +208,27 @@ class WSGIApp(object):
         """
         return exc.HTTPSeeOther(location=request.path_url + '?' + '&'.join(ids))
 
+    def on_exception(self, request, response):
+        """Method called when an exception occurs
+
+        In:
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
+
+        Return:
+          - a ``webob`` response object
+        """
+        raise
+
     # -----------------------------------------------------------------------
 
-    def create_root(self):
+    def create_root(self, *args, **kw):
         """Create the application root component
 
         Return:
           - the root component
         """
-        return self.root_factory()
+        return self.root_factory(*args, **kw)
 
     def create_renderer(self, async, session, request, response, callbacks):
         """Create the initial renderer (the root of all the used renderers)
@@ -306,6 +321,7 @@ class WSGIApp(object):
         xhr_request = request.is_xhr or ('_a' in request.params)
 
         session = None
+        self.last_exception = None
 
         log.set_logger('nagare.application.'+self.name) # Set the dedicated application logger
 
@@ -352,6 +368,9 @@ class WSGIApp(object):
                 # When a ``webob.exc`` object is raised during phase 1, skip the
                 # phase 2 and use it as the response object
                 pass
+            except Exception:
+                self.last_exception = (request,  sys.exc_info())
+                response = self.on_exception(request, response)
             else:
                 # Phase 2
                 # -------
@@ -393,6 +412,9 @@ class WSGIApp(object):
                     # When a ``webob.exc`` object is raised during phase 2, stop immediatly
                     # use it as the response object
                     pass
+                except Exception:
+                    self.last_exception = (request,  sys.exc_info())
+                    response = self.on_exception(request, response)
             finally:
                 if session:
                     session.lock.release()
