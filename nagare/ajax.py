@@ -66,6 +66,17 @@ def serialize(self, request, response, declaration):
     return "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head)
 
 
+def javascript_dependencies(renderer):
+    head = renderer.head
+
+    head.javascript_url(YUI_PREFIX+'/yahoo/yahoo-min.js')
+    head.javascript_url(YUI_PREFIX+'/event/event-min.js')
+    head.javascript_url(YUI_PREFIX+'/connection/connection-min.js')
+    head.javascript_url(YUI_PREFIX+'/get/get-min.js')
+
+    head.javascript('_nagare_content_type_', 'NAGARE_CONTENT_TYPE="%s"' % ('application/xhtml+xml' if renderer.response.xhtml_output else 'text/html'))
+
+
 class Update(object):
     """Asynchronous updater object
 
@@ -111,15 +122,8 @@ class Update(object):
 
         if request:
             if not request.is_xhr and ('_a' not in request.params):
-                head = renderer.head
-
-                head.javascript_url(YUI_PREFIX+'/yahoo/yahoo-min.js')
-                head.javascript_url(YUI_PREFIX+'/event/event-min.js')
-                head.javascript_url(YUI_PREFIX+'/connection/connection-min.js')
-                head.javascript_url(YUI_PREFIX+'/get/get-min.js')
-
-                head.javascript('_nagare_content_type_', 'NAGARE_CONTENT_TYPE="%s"' % ('application/xhtml+xml' if renderer.response.xhtml_output else 'text/html'))
-                head.javascript_url('/static/nagare/ajax.js')
+                javascript_dependencies(renderer)
+                renderer.head.javascript_url('/static/nagare/ajax.js')
 
         js = 'nagare_updateNode'
         component_to_update = self.component_to_update

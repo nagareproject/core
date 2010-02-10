@@ -21,7 +21,7 @@ import sys
 import webob
 from webob import exc, acceptparse
 
-from nagare import component, presentation, serializer, database, top, security, log
+from nagare import component, presentation, serializer, database, top, security, log, comet
 from nagare.security import dummy_manager
 from nagare.callbacks import Callbacks, CallbackLookupError
 from nagare.namespaces import xhtml
@@ -317,6 +317,12 @@ class WSGIApp(object):
 
         accept = MIMEAcceptWithoutWildcards('Accept', 'text/html' if self.always_html else str(request.accept))
         response.xhtml_output = accept.best_match(('text/html', 'application/xhtml+xml')) == 'application/xhtml+xml'
+
+        channel_id = request.params.get('_channel')
+        nb = request.params.get('_nb')
+        if channel_id and nb:
+            comet.channels.connect(environ['wsgi.multiprocess'], channel_id, int(nb), response)
+            return response(environ, start_response)
 
         xhr_request = request.is_xhr or ('_a' in request.params)
 

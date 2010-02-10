@@ -116,7 +116,7 @@ function nagare_loadAll(named_css, anon_css, css_urls, named_js, anon_js, js_url
         nagare_loaded_named_js[named_js[i][0]] = 1;
     }
 
-    setTimeout(anon_js);
+    setTimeout(anon_js, 0);
 
     YAHOO.util.Get.css(nagare_itemgetter(css_urls, 0), { onSuccess: function (o) {
         YAHOO.util.Get.script(nagare_itemgetter(js_urls, 0), { onSuccess: function(o) { o.purge() } })
