@@ -263,39 +263,61 @@ class Updates(Update):
 
 # ---------------------------------------------------------------------------
 
-class JS(object):
-    """Transcode a Python function to javascript code
+def str2js(src, namespace):
+    """Translate a string with Python code to javascript
+
+    In:
+      - ``src`` -- the Python code
+      - ``namespace`` -- the namespace of this code
+
+    Return:
+      - the javascript code
     """
-    def __init__(self, f):
-        """Transcode the Python function
+    output = cStringIO.StringIO()
+    pyjs.Translator(namespace, compiler.parse(src), output)
+
+    return output.getvalue()
+
+
+class JS(object):
+    """Transcode a Python function or module to javascript code
+    """
+    def __init__(self, o):
+        """Transcode a Python function or module
 
         In:
-          - ``f`` -- Python function to transcode
+          - ``o`` -- Python function or module to transcode
         """
-        if hasattr(f, '_js_name'):
-            # Function already transcoded
-            self.name = f._js_name
-            self.javascript = f._js_code
-        else:
-            if f.__module__ == '__main__':
+        if hasattr(o, '_js_name'):
+            # Already transcoded
+            self.name = o._js_name
+            self.javascript = o._js_code
+            return
+        
+        src = inspect.getsource(o)
+
+        if isinstance(o, types.FunctionType):
+            if o.__module__ == '__main__':
                 self.name = module = ''
             else:
-                module = f.__module__.replace('.', '_')
+                module = o.__module__.replace('.', '_')
                 self.name = module + '_'
 
-            self.name += f.func_name
+            self.name += o.func_name
 
-            src = inspect.getsource(f)
             indent = inspect.indentsize(src)
             src = ''.join([s.expandtabs()[indent:] for s in src.splitlines(True)])
+        else:
+            if o.__name__ == '__main__':
+                self.name = module = ''
+            else:
+                self.name = module = o.__name__.replace('.', '_')
 
-            output = cStringIO.StringIO()
-            pyjs.Translator(module, compiler.parse(src), output)
-            self.javascript = output.getvalue()
+        self.javascript = str2js(src, module)
 
-            # Keep the transcoded javascript
-            f._js_name = self.name
-            f._js_code = self.javascript
+        # Keep the transcoded javascript
+        o._js_name = self.name
+        o._js_code = self.javascript
 
     def generate_action(self, priority, renderer):
         """Include the transcoded javascript into ``<head>``
@@ -309,6 +331,7 @@ class JS(object):
         """
         renderer.head.javascript_url('/static/nagare/pyjslib.js')
         renderer.head.javascript(self.name, self.javascript)
+
         return self.name+'(this)'
 
 javascript = JS
@@ -316,13 +339,13 @@ javascript = JS
 # ---------------------------------------------------------------------------
 
 @peak.rules.abstract
-def py2js(value, h):
+def py2js(value, h=None):
     """No default transcodage
     """
     pass
 
 @peak.rules.when(py2js, (types.NoneType,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode ``None``
 
     In:
@@ -335,7 +358,7 @@ def py2js(value, h=None):
     return 'null'
 
 @peak.rules.when(py2js, (bool,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode a boolean
 
     In:
@@ -348,7 +371,7 @@ def py2js(value, h=None):
     return str(value).lower()
 
 @peak.rules.when(py2js, (int,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode an integer
 
     In:
@@ -361,7 +384,7 @@ def py2js(value, h=None):
     return str(value)
 
 @peak.rules.when(py2js, (long,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode a long integer
 
     In:
@@ -374,7 +397,7 @@ def py2js(value, h=None):
     return str(value)
 
 @peak.rules.when(py2js, (float,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode a float
 
     In:
@@ -387,7 +410,7 @@ def py2js(value, h=None):
     return str(value)
 
 @peak.rules.when(py2js, (dict,))
-def py2js(d, h=None):
+def py2js(d, h):
     """Generic method to transcode a dictionary
 
     In:
@@ -400,7 +423,7 @@ def py2js(d, h=None):
     return '{' + ', '.join(['%s : %s' % (py2js(name, h), py2js(value, h)) for (name, value) in d.items()]) + '}'
 
 @peak.rules.when(py2js, (types.FunctionType,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode a function
 
     In:
@@ -410,13 +433,23 @@ def py2js(value, h=None):
     Return:
       - transcoded javascript
     """
-    if h is not None:
-        h.head.javascript_url('/static/nagare/pyjslib.js')
+    return py2js(JS(value), h)
 
+@peak.rules.when(py2js, (types.ModuleType,))
+def py2js(value, h):
+    """Generic method to transcode a module
+
+    In:
+      - ``value`` -- a module
+      - ``h`` -- the current renderer
+
+    Return:
+      - transcoded javascript
+    """
     return py2js(JS(value), h)
 
 @peak.rules.when(py2js, (JS,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode an already transcoded function
 
     In:
@@ -426,10 +459,13 @@ def py2js(value, h=None):
     Return:
       - transcoded javascript
     """
+    if h is not None:
+        h.head.javascript_url('/static/nagare/pyjslib.js')
+
     return value.javascript
 
 @peak.rules.when(py2js, (unicode,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode an unicode string
 
     In:
@@ -444,7 +480,7 @@ def py2js(value, h=None):
 not_ascii = re.compile(r'\\x(..)')
 
 @peak.rules.when(py2js, (str,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode a string
 
     In:
@@ -457,7 +493,7 @@ def py2js(value, h=None):
     return not_ascii.sub(lambda m: chr(int(m.group(1), 16)), `value`)
 
 @peak.rules.when(py2js, (list,))
-def py2js(l, h=None):
+def py2js(l, h):
     """Generic method to transcode a list
 
     In:
@@ -470,7 +506,7 @@ def py2js(l, h=None):
     return '[' + ', '.join([py2js(value, h) for value in l]) + ']'
 
 @peak.rules.when(py2js, (tuple,))
-def py2js(value, h=None):
+def py2js(value, h):
     """Generic method to transcode a tuple
 
     In:
