@@ -15,7 +15,7 @@ Having not dependencies to the framework make it suitable to be used in others f
 
 from __future__ import with_statement
 
-import cStringIO
+import cStringIO, urllib
 
 from lxml import etree as ET
 
@@ -264,11 +264,16 @@ class Renderer(xml.XmlRenderer):
           - the root element of the parsed HTML, if ``fragment`` is ``False``
           - a list of HTML elements, if ``fragment`` is ``True``
         """
+        if isinstance(source, basestring):
+            source = urllib.urlopen(source)
+
         if not fragment:
             # Parse a HTML file
             # ----------------
 
             root = ET.parse(source, parser).getroot()
+            source.close()
+
             # Attach the renderer to the root
             root._renderer = self
             return root
@@ -277,9 +282,10 @@ class Renderer(xml.XmlRenderer):
         # ---------------------
 
         # Create a dummy ``<body>``
-        source = cStringIO.StringIO('<html><body>%s</body></html>' % source.read())
-        body = ET.parse(source, parser).getroot()[0]
+        html = cStringIO.StringIO('<html><body>%s</body></html>' % source.read())
+        source.close()
 
+        body = ET.parse(html, parser).getroot()[0]
         for e in body[:]:
             if isinstance(e, _HTMLTag):
                 # Attach the renderer to each roots
@@ -326,7 +332,7 @@ class Renderer(xml.XmlRenderer):
           - the root element of the parsed HTML, if ``fragment`` is ``False``
           - a list of HTML elements, if ``fragment`` is ``True``
         """
-        if type(text) == unicode:
+        if isinstance(text, unicode):
             text = text.encode(kw.setdefault('encoding', 'utf-8'))
 
         return self.parse_html(cStringIO.StringIO(text), fragment, no_leading_text, xhtml, **kw)

@@ -14,6 +14,8 @@ from __future__ import with_statement
 import types
 import copy
 import cStringIO
+import urllib
+
 import peak.rules
 
 from lxml import etree as ET
@@ -644,6 +646,9 @@ class XmlRenderer(common.Renderer):
           - the root element of the parsed XML, if ``fragment`` is ``False``
           - a list of XML elements, if ``fragment`` is ``True``
         """
+        if isinstance(source, basestring):
+            source = urllib.urlopen(source)
+
         # Create a dedicated XML parser with the ``kw`` parameter
         parser = ET.XMLParser(**kw)
         # This parser will generate nodes of type ``_Tag``
@@ -654,6 +659,8 @@ class XmlRenderer(common.Renderer):
             # ----------------
 
             root = ET.parse(source, parser).getroot()
+            source.close()
+
             # Attach the renderer to the root
             root._renderer = self
             return root
@@ -662,9 +669,10 @@ class XmlRenderer(common.Renderer):
         # --------------------
 
         # Create a dummy root
-        source = cStringIO.StringIO('<dummy>%s</dummy>' % source.read())
-        root = ET.parse(source, parser).getroot()
+        xml = cStringIO.StringIO('<dummy>%s</dummy>' % source.read())
+        source.close()
 
+        root = ET.parse(xml, parser).getroot()
         for e in root[:]:
             # Attach the renderer to each roots
             e._renderer = self
