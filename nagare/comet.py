@@ -12,6 +12,8 @@
 This implementation is only working with a multi-threaded publisher
 """
 
+from __future__ import with_statement
+
 import threading
 
 from nagare import presentation, ajax
