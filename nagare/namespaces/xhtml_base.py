@@ -265,7 +265,10 @@ class Renderer(xml.XmlRenderer):
           - a list of HTML elements, if ``fragment`` is ``True``
         """
         if isinstance(source, basestring):
-            source = urllib.urlopen(source)
+            if source.startswith(('http://', 'https://', 'ftp://')):
+                source = urllib.urlopen(source)
+            else:
+                source = open(source)
 
         if not fragment:
             # Parse a HTML file

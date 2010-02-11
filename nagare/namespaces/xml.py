@@ -647,7 +647,10 @@ class XmlRenderer(common.Renderer):
           - a list of XML elements, if ``fragment`` is ``True``
         """
         if isinstance(source, basestring):
-            source = urllib.urlopen(source)
+            if source.startswith(('http://', 'https://', 'ftp://')):
+                source = urllib.urlopen(source)
+            else:
+                source = open(source)
 
         # Create a dedicated XML parser with the ``kw`` parameter
         parser = ET.XMLParser(**kw)
