@@ -17,7 +17,7 @@ import pyjs
 from nagare import presentation, namespaces, serializer
 
 YUI_INTERNAL_PREFIX = '/static/nagare/yui/build'
-YUI_EXTERNAL_PREFIX = 'http://yui.yahooapis.com/2.7.0/build'
+YUI_EXTERNAL_PREFIX = 'http://yui.yahooapis.com/2.8.0r4/build'
 
 # ---------------------------------------------------------------------------
 
