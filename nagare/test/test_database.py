@@ -32,20 +32,13 @@ def create_FixtureApp(app):
 
     return TestApp(app)
 
-dabasename = 'test_db.sqlite'
-
 __metadata__ = MetaData()
-__metadata__.bind = "sqlite:///%s" % dabasename
+__metadata__.bind = "sqlite:///:memory:"
 __metadata__.bind.echo = False
 
 # Setup / Teardown functions
 def setup():
     setup_all()
-
-
-def teardown():
-    #cleanup_all(drop_tables=True)
-    os.remove(dabasename)
 
 
 def setup_func():
@@ -203,7 +196,7 @@ def render(self, h, comp, *args):
 
 @with_setup(setup_func_2, teardown_func)
 def test5():
-    """ Test database - Get element in database """
+    """ database - Get element in database """
     myApp = My_database_app
     app = create_FixtureApp(myApp)
     res = app.get('/')
@@ -212,7 +205,7 @@ def test5():
 
 @with_setup(setup_func_2, teardown_func)
 def test6():
-    """ Test database - Add element in database """
+    """ database - Add element in database """
     myApp = My_database_app
     app = create_FixtureApp(myApp)
     res = app.get('/')
@@ -226,7 +219,7 @@ def test6():
 
 @with_setup(setup_func_2, teardown_func)
 def test7():
-    """ Test database - Add 2 elements in database """
+    """ database - Add 2 elements in database """
     myApp = My_database_app
     app = create_FixtureApp(myApp)
     res = app.get('/')
@@ -245,7 +238,7 @@ def test7():
 
 @with_setup(setup_func_2, teardown_func)
 def test8():
-    """ Test database - Add 2 elements in database and test rollback on Exception """
+    """ database - Add 2 elements in database and test rollback on Exception """
     myApp = My_database_app
     app = create_FixtureApp(myApp)
     res = app.get('/')
@@ -269,5 +262,3 @@ def test8():
     assert u"Mary Ingalls" in res
     res = res.click(linkid="get_name")
     assert u"Charles Ingalls" in res
-
-
