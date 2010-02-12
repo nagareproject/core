@@ -82,7 +82,7 @@ class Channel(object):
 
         # Send the msg to all the waiting clients
         for (event, response) in clients:
-            self._send(self.history_nb, msg, response)
+            self._send(self.history_nb+len(self.history), msg, response)
             event.set()
 
     def close(self):
