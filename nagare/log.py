@@ -7,14 +7,16 @@
 # this distribution.
 #--
 
-import StringIO
-import threading
+import os, threading, StringIO
 
 import logging
 import logging.config
-from logging import disable, shutdown
 
 import configobj
+
+# -----------------------------------------------------------------------------
+
+logging._srcfile = __file__[:-1] if __file__.endswith(('.pyc', '.pyo')) else __file__
 
 # -----------------------------------------------------------------------------
 
