@@ -8,15 +8,15 @@ New features
 ~~~~~~~~~~~~
 
   - refactoring of the sessions managers:
-    . session objects now keep track of their sessions manager
-    . no more sessions manager factories
-    . configurable pickler / unpickler objects
-    . configuration switch ``states_history`` to set if an objects graphs history must be kept
-    . new sessions manager (``type=memory``) that keeps the objects graphs in memory, without any pickling
+    - session objects now keep track of their sessions manager
+    - no more sessions manager factories
+    - configurable pickler / unpickler objects
+    - configuration switch ``states_history`` to set if an objects graphs history must be kept
+    - new sessions manager (``type=memory``) that keeps the objects graphs in memory, without any pickling
   - logging service added:
-    . one dedicated logger for each published applications is created
-    . easy configuration and use of this dedicated logger
-    . all the ``[logging]`` sections of all the published applications are merged before to configure the Python logging system
+    - one dedicated logger for each published applications is created
+    - easy configuration and use of this dedicated logger
+    - all the ``[logging]`` sections of all the published applications are merged before to configure the Python logging system
   - preliminary Comet support added (currently only working in a multi-threaded env.)
   - last exception raised kept by the ``WSGIApp`` objects and exception hook added
   - ``with_request`` parameter added to all the callback registrations and ``Update()`` objects
@@ -26,12 +26,12 @@ New features
   - ``get_registered_applications()`` added to the publisher objects
   - full YUI bundled with Nagare
   - New versions:
-    . Stackless Python 2.6.4 is now the recommanded Python version
-    . virtualenv updated to 1.4.5
-    . SQLAlchemy updated to 0.5.8
-    . Elixir updated to 0.7.1
-    . Lxml updated to 2.2.4
-    . YUI updated to 2.8.0r4
+    - Stackless Python 2.6.4 is now the recommanded Python version
+    - virtualenv updated to 1.4.5
+    - SQLAlchemy updated to 0.5.8
+    - Elixir updated to 0.7.1
+    - Lxml updated to 2.2.4
+    - YUI updated to 2.8.0r4
 
 Changes
 ~~~~~~~
