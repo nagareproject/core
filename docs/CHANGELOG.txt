@@ -1,6 +1,58 @@
 Nagare Changelog
 ================
 
+0.3.0
+-----
+
+New features
+~~~~~~~~~~~~
+
+  - refactoring of the sessions managers:
+    . session objects now keep track of their sessions manager
+    . no more sessions manager factories
+    . configurable pickler / unpickler objects
+    . configuration switch ``states_history`` to set if an objects graphs history must be kept
+    . new sessions manager (``type=memory``) that keeps the objects graphs in memory, without any pickling
+  - logging service added:
+    . one dedicated logger for each published applications is created
+    . easy configuration and use of this dedicated logger
+    . all the ``[logging]`` sections of all the published applications are merged before to configure the Python logging system
+  - preliminary Comet support added (currently only working in a multi-threaded env.)
+  - last exception raised kept by the ``WSGIApp`` objects and exception hook added
+  - ``with_request`` parameter added to all the callback registrations and ``Update()`` objects
+  - translation of Python modules to Javascript added
+  - configurable name for the security cookie (one of the post Nagare security audit actions)
+  - configuration of the ``WSGIApp`` objects split accross multiples `set_*`` methods
+  - ``get_registered_applications()`` added to the publisher objects
+  - full YUI bundled with Nagare
+  - New versions:
+    . Stackless Python 2.6.4 is now the recommanded Python version
+    . virtualenv updated to 1.4.5
+    . SQLAlchemy updated to 0.5.8
+    . Elixir updated to 0.7.1
+    . Lxml updated to 2.2.4
+    . YUI updated to 2.8.0r4
+
+Changes
+~~~~~~~
+
+  - with the YUI connection manager, a large browser response must be reassembled (Firefox only)
+  - late creation of the SQLAlchemy database engines and metadatas binding
+  - input fields ot type ``button`` now working in an Ajax submit
+  - ``Var.var()`` now working inn a unicode context
+  - ``nagare-admin create-rules`` had problems when a static directory didn't exist
+  - bad boolean expressions parenthesis translation in pyjs fixed
+  - parsing (X)HTML from URL now working under Windows
+
+Bugs fixed
+~~~~~~~~~~
+
+  - #47: ``set_publisher()`` called when using "nagare-admin create-db"
+  - #48: py2js parentheses bug
+  - #49: ``reset`` configuration ignored by the memcached sessions manager
+  - #50: [log] inferred caller is wrong
+
+
 0.2.0
 -----
 
@@ -43,6 +95,7 @@ Bugs fixed
   - #22: don't clear the registered callbacks when an image is served
   - #21: set the security context at the beginning of the request handling
   - #13, #14: python to javascript translation updated
+
 
 0.1.0
 -----
