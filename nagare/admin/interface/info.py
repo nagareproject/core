@@ -21,8 +21,7 @@ class Admin(object):
         """Initialisation
 
         In:
-          - ``apps`` -- a dictionary where the keys are the application objects
-            and the keys a tuple (application name, application urls)
+          - ``apps`` -- list of tuples (application, application name, application urls)
         """
         pass
 

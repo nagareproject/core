@@ -21,12 +21,10 @@ class Admin(object):
     def __init__(self, apps):
         """Initialization
 
-        In;
-          - ``apps`` -- a dictionary where the keys are the application objects
-            and the keys a tuple (application name, application urls)
+        In:
+          - ``apps`` -- list of tuples (application, application name, application urls)
         """
-        self.apps = sorted(apps)
-
+        self.apps = sorted([(app_name, names) for (_, app_name, names) in apps])
 
 @presentation.render_for(Admin)
 def render(self, h, *args):
@@ -34,6 +32,7 @@ def render(self, h, *args):
     """
     with h.div:
         h << h.h2('Active applications')
+
         with h.ul:
             for (app_name, names) in self.apps:
                 with h.li("Application '%s' registered as " % app_name):

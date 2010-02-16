@@ -35,27 +35,31 @@ class Admin(object):
         In:
           - ``apps`` -- list of all the applications launched
         """
-        # Load the components
-        self.components = [entry.load()(apps) for entry in pkg_resources.iter_entry_points('nagare.admin')]
+        self.apps = [(app_name, app_urls) for (app, app_name, app_urls) in apps]
+
+        # Load the admin objects
+        components = [entry.load()(apps) for entry in pkg_resources.iter_entry_points('nagare.admin')]
 
         # Sort them according to their ``priority`` attribute
-        self.components.sort(key=operator.attrgetter('priority'))
+        components.sort(key=operator.attrgetter('priority'))
+
+        # Create the components
+        self.components = map(component.Component, components)
 
 @presentation.render_for(Admin)
-def render(self, h, *args):
+def render(self, h, comp, *args):
     """Aggregates all the default views of the components"""
-
+    
     h.head.css_url('/static/nagare/application.css')
     h.head << h.head.title('Nagare Administration interface')
 
-    with h.div(class_='mybody', style='line-heught: 0px'):
-
+    with h.div(class_='mybody'):
         with h.div(id='myheader'):
             h << h.a(h.img(src='/static/nagare/img/logo.gif'), id='logo', href='http://www.nagare.org/', title='Nagare home')
             h << h.span('Administration interface', id='title')
 
         with h.div(id='main'):
-            h << [component.Component(c) for c in self.components]
+            h << [c.on_answer(comp.call) for c in self.components]
             h << h.div(u'\N{Copyright Sign} ', h.a('Net-ng', href='http://www.net-ng.com'), u'\N{no-break space}', align='right')
 
     h << h.div(' ', class_='footer')
@@ -101,11 +105,6 @@ class WSGIApp(wsgi.WSGIApp):
         if self.as_root:
             publisher.register_application(self.application_path, '', self, self)
 
-    def start(self):
-        """Keeps the list of all the launched applications
-        """
-        self.apps = [(app_name, app_urls) for (app, app_name, app_urls) in self.publisher.get_registered_applications()]
-
     def create_root(self):
         """
         Create an ``admin`` object
@@ -114,7 +113,7 @@ class WSGIApp(wsgi.WSGIApp):
           - the admin object
         """
         # Create the ``admin`` object with the list of all the launched application
-        return self.root_factory(self.apps)
+        return self.root_factory(self.publisher.get_registered_applications())
 
 # -------------------------------------------e--------------------------------
 
