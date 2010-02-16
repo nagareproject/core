@@ -8,12 +8,14 @@ New features
 ~~~~~~~~~~~~
 
   - refactoring of the sessions managers:
+
     - session objects now keep track of their sessions manager
     - no more sessions manager factories
     - configurable pickler / unpickler objects
     - configuration switch ``states_history`` to set if an objects graphs history must be kept
     - new sessions manager (``type=memory``) that keeps the objects graphs in memory, without any pickling
   - logging service added:
+
     - one dedicated logger for each published applications is created
     - easy configuration and use of this dedicated logger
     - all the ``[logging]`` sections of all the published applications are merged before to configure the Python logging system
@@ -26,6 +28,7 @@ New features
   - ``get_registered_applications()`` added to the publisher objects
   - full YUI bundled with Nagare
   - New versions:
+
     - Stackless Python 2.6.4 is now the recommanded Python version
     - virtualenv updated to 1.4.5
     - SQLAlchemy updated to 0.5.8
