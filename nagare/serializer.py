@@ -79,7 +79,8 @@ def serialize(output, request, response, declaration):
     Return:
       - the content
     """
-    response.content_type = 'text/xml'
+    if not response.content_type:
+        response.content_type = 'text/xml'
 
     r = '<?xml version="1.0" encoding="UTF-8"?>\n' if declaration else ''
     return r + output.write_xmlstring()
