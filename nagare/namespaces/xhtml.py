@@ -603,6 +603,20 @@ class ImageInput(_HTMLActionTag):
         """
         return self._async_action(renderer, action, with_request, permissions, subject)
 
+    def add_child(self, child):
+        """Add attributes to the image input
+
+        In:
+          - ``child`` -- attributes dictionary
+        """
+        super(ImageInput, self).add_child(child)
+
+        # If this is a relative URL, it's relative to the statics directory
+        # of the application
+        src = self.get('src')
+        if src is not None:
+            self.set('src', absolute_url(src, self.renderer.head.static_url))
+
 # ----------------------------------------------------------------------------------
 
 class Option(xhtml_base._HTMLTag):
