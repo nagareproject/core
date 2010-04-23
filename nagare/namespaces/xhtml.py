@@ -425,7 +425,7 @@ class TextInput(_HTMLActionTag):
         if hasattr(self, '_authorized_attribs'):
             element._authorized_attribs = self._authorized_attribs
 
-        return element(*children, **attrib)
+        return element(**self.attrib)(*children, **attrib)
 
 
 class TextArea(_HTMLActionTag):
