@@ -12,6 +12,7 @@
 import random, cStringIO, cPickle
 
 import configobj
+from stackless import tasklet
 
 from nagare import config
 from nagare.admin import util
@@ -104,7 +105,7 @@ class State(object):
         self.sessions_manager.delete(self.session_id)
 
 
-def persistent_id(o, session_data):
+def persistent_id(o, session_data, tasklets):
     """The object with a `_persistent_id` attribut are stored into the session
     not into the state snapshot
 
@@ -113,11 +114,15 @@ def persistent_id(o, session_data):
 
     Out:
       - ``session_data`` -- dict of the objects to store into the session
+      - ``tasklets`` -- set of the serialized tasklets
     """
     id = getattr(o, '_persistent_id', None)
     if id is not None:
         session_data[id] = o
         return str(id)
+
+    if type(o) == tasklet:
+        tasklets.add(o)
 
 
 class Sessions(object):
@@ -349,8 +354,13 @@ class Sessions(object):
         p = self.pickler(f, protocol=-1)
 
         session_data = {}
-        p.persistent_id = lambda o: persistent_id(o, session_data)
+        tasklets = set()
+        p.persistent_id = lambda o: persistent_id(o, session_data, tasklets)
         p.dump(data)
+
+        # Kill all the blocked tasklets, which are now serialized
+        for t in tasklets:
+            t.kill()
 
         return (session_data, f.getvalue())
 
@@ -369,4 +379,3 @@ class Sessions(object):
             p.persistent_load = lambda i: session_data.get(int(i))
 
         return p.load()
-
