@@ -208,8 +208,8 @@ class _Tag(ET.ElementBase):
                 children = children[0]
             self.add_child(children)
 
-        if CHECK_ATTRIBUTES and not frozenset(self.attrib).issubset(self._authorized_attribs):
-            raise AttributeError("Bad attributes for element <%s>: " % self.tag) + ', '.join(list(frozenset(self.attrib) - self._authorized_attribs))
+        if CHECK_ATTRIBUTES and self._authorized_attribs and not frozenset(self.attrib).issubset(self._authorized_attribs):
+            raise AttributeError("Bad attributes for element <%s>: " % self.tag + ', '.join(list(frozenset(self.attrib) - self._authorized_attribs)))
 
         return self
 
@@ -407,7 +407,7 @@ class TagProp(object):
 
     Each time this attribute is read, a new tag is created
     """
-    def __init__(self, name, authorized_attribs, factory=None):
+    def __init__(self, name, authorized_attribs=None, factory=None):
         """Initialization
 
         In:
@@ -419,7 +419,7 @@ class TagProp(object):
         self._factory = factory
 
         if CHECK_ATTRIBUTES:
-            self._authorized_attribs = frozenset(authorized_attribs)
+            self._authorized_attribs = frozenset(authorized_attribs) if authorized_attribs is not None else None
 
     def __get__(self, renderer, cls):
         """Create a new tag each time this attribute is read
