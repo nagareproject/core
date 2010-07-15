@@ -36,6 +36,17 @@ class MIMEAcceptWithoutWildcards(acceptparse.Accept):
             return False
         return super(MIMEAcceptWithoutWildcards, self)._match(item, match)
 
+
+class Response(webob.Response):
+    def __init__(self, accept):
+        super(Response, self).__init__(headerlist=[])
+
+        accept = MIMEAcceptWithoutWildcards('Accept', accept)
+        self.xml_output = accept.best_match(('text/html', 'application/xhtml+xml')) == 'application/xhtml+xml'
+
+        self.content_type = ''
+        self.doctype = None
+
 # ---------------------------------------------------------------------------
 
 class WSGIApp(object):
@@ -313,10 +324,7 @@ class WSGIApp(object):
         # -------------------------------------------------
 
         request = webob.Request(environ, charset='utf-8')
-        response = webob.Response(headerlist=[])
-
-        accept = MIMEAcceptWithoutWildcards('Accept', 'text/html' if self.always_html else str(request.accept))
-        response.xhtml_output = accept.best_match(('text/html', 'application/xhtml+xml')) == 'application/xhtml+xml'
+        response = Response('text/html' if self.always_html else str(request.accept))
 
         channel_id = request.params.get('_channel')
         nb = request.params.get('_nb')
