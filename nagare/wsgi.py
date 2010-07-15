@@ -290,7 +290,7 @@ class WSGIApp(object):
         return callbacks.process_response(request, response)
 
     # Rendering phase
-    def _phase2(self, request, response, output, is_xhr):
+    def _phase2(self, output, content_type, doctype, is_xhr, response):
         """Final step of the phase 2
 
         Phase 2 of the request processing:
@@ -299,15 +299,15 @@ class WSGIApp(object):
           - No modification of the objects is allowed
 
         In:
-          - ``request`` -- the web request object
-          - ``response`` -- the web response object
-          - ``output`` -- the rendered tree
+          - ``output`` -- the rendered content
+          - ``content_type`` -- the rendered content type
+          - ``doctype`` -- the (optional) doctype
           - ``is_xhr`` -- is the request a XHR request ?
 
-        Return:
-          - the content to send back to the browser
+        Out:
+          - ``response`` -- the response object
         """
-        response.body = serializer.serialize(output, request, response, not is_xhr)
+        (response.content_type, response.body) = serializer.serialize(output, content_type, doctype, not is_xhr)
         response.charset = 'utf-8'
 
     def __call__(self, environ, start_response):
@@ -411,9 +411,9 @@ class WSGIApp(object):
                             output = self.on_back(request, response, renderer, output)
 
                         if not xhr_request:
-                            output = top.wrap(response.content_type, renderer, output)
+                            output = top.wrap(renderer.content_type, renderer, output)
 
-                        self._phase2(request, response, output, render is not None)
+                        self._phase2(output, renderer.content_type, renderer.doctype, render is not None, response)
 
                         if not xhr_request:
                             callbacks.clear_not_used(renderer._rendered)

@@ -40,16 +40,16 @@ class ViewToJs(object):
         self.output = output
 
 @peak.rules.when(serializer.serialize, (ViewToJs,))
-def serialize(self, request, response, declaration):
+def serialize(self, content_type, doctype, declaration):
     """Wrap a view into a javascript code
 
     In:
-      - ``request`` -- the web request object
-      - ``response`` -- the web response object
-      - ``declaration`` -- has the declaration to be outputed ?
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
 
     Return:
-      - Javascript to evaluate on the client
+      - a tuple ('text/plain', Javascript to evaluate on the client)
     """
     if self.output is None:
         return ''
@@ -58,12 +58,10 @@ def serialize(self, request, response, declaration):
     head = presentation.render(self.renderer.head, self.renderer, None, None)
 
     # Get the HTML or XHTML of the view
-    body = serializer.serialize(self.output, request, response, False)
+    body = serializer.serialize(self.output, content_type, doctype, False)[1]
 
     # Wrap all into a javascript code
-    response.content_type = 'text/plain'
-
-    return "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head)
+    return ('text/plain', "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head))
 
 
 def javascript_dependencies(renderer):
@@ -74,7 +72,7 @@ def javascript_dependencies(renderer):
     head.javascript_url(YUI_PREFIX+'/connection/connection-min.js')
     head.javascript_url(YUI_PREFIX+'/get/get-min.js')
 
-    head.javascript('_nagare_content_type_', 'NAGARE_CONTENT_TYPE="%s"' % ('application/xhtml+xml' if renderer.response.xhtml_output else 'text/html'))
+    head.javascript('_nagare_content_type_', 'NAGARE_CONTENT_TYPE="%s"' % ('application/xhtml+xml' if renderer.response.xml_output else 'text/html'))
 
 
 class Update(object):
@@ -204,18 +202,18 @@ class ViewsToJs(list):
     pass
 
 @peak.rules.when(serializer.serialize, (ViewsToJs,))
-def serialize(self, request, response, declaration):
-    """Wrap all the views into a javascript code
+def serialize(self, content_type, doctype, declaration):
+    """Wrap a view into a javascript code
 
     In:
-      - ``request`` -- the web request object
-      - ``response`` -- the web response object
-      - ``declaration`` -- has the declaration to be outputed ?
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
 
     Return:
-      - Javascript to evaluate on the client
+      - a tuple ('text/plain', Javascript to evaluate on the client)
     """
-    return ';'.join(serializer.serialize(view, request, response, declaration) for view in self)
+    return ';'.join(serializer.serialize(view, content_type, doctype, declaration) for view in self)
 
 
 class Updates(Update):

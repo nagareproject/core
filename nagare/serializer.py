@@ -15,110 +15,100 @@ import lxml.html
 from nagare.namespaces import xml, xhtml_base
 
 @peak.rules.abstract
-def serialize(output, request, response, declaration):
+def serialize(output, content_type, doctype, declaration):
     """Generic method to generate the content for the browser
-
-    *no default implementation*
 
     In:
       - ``output`` -- the rendered content
-      - ``request`` -- the web request object
-      - ``response`` -- the web response object
-      - ``declaration`` -- has the declaration to be outputed ?
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
 
     Return:
-      - the content
+      - a tuple (content_type, content)
     """
-    pass
+    return (content_type, str(output))
 
 
 @peak.rules.when(serialize, (xhtml_base._HTMLTag,))
-def serialize(output, request, response, declaration):
+def serialize(next_method, output, content_type, doctype, declaration):
     """Generic method to generate (X)HTML from a tree
 
     In:
-      - ``output`` -- the tree
-      - ``request`` -- the web request object
-      - ``response`` -- the web response object
-      - ``declaration`` -- has the declaration to be outputed ?
+      - ``output`` -- the rendered content
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
 
     Return:
-      - the content
+      - a tuple (content_type, content)
     """
     if 'xmlns' in output.attrib:
         # Let ``lxml`` generate the correct namespaces
         del output.attrib['xmlns']
 
-    content_type = request.content_type
-
-    if response.xhtml_output or (content_type and content_type.startswith('application/xhtml+xml')):
+    if content_type == 'application/xhtml+xml':
         # The browser accepts XHTML
-        response.content_type = 'application/xhtml+xml'
-
-        r = '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n' if declaration else ''
-        return r + output.write_xmlstring()
+        output = next_method(output, content_type, doctype, declaration)[1]
     else:
-        # The browser accepts HTML only
-        response.content_type = 'text/html'
+        # The browser only accepts HTML
         lxml.html.xhtml_to_html(output)
 
-        r = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">\n' if declaration else ''
-        return r + output.write_htmlstring(pretty_print=True)
+        if doctype:
+            doctype += '\n'
+
+        output = (doctype if declaration else '') + output.write_htmlstring(pretty_print=True)
+
+    return (content_type, output)
 
 
 @peak.rules.when(serialize, (xml._Tag,))
-def serialize(output, request, response, declaration):
+def serialize(output, content_type, doctype, declaration):
     """Generic method to generate XML from a tree
 
     In:
-      - ``output`` -- the tree
-      - ``request`` -- the web request object
-      - ``response`` -- the web response object
-      - ``declaration`` -- has the declaration to be outputed ?
+      - ``output`` -- the rendered content
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
 
     Return:
-      - the content
+      - a tuple (content_type, content)
     """
-    if not response.content_type:
-        response.content_type = 'text/xml'
+    if doctype:
+        doctype += '\n'
 
-    r = '<?xml version="1.0" encoding="UTF-8"?>\n' if declaration else ''
-    return r + output.write_xmlstring()
+    r = ('<?xml version="1.0" encoding="UTF-8"?>\n'+doctype) if declaration else ''
+    return (content_type, r + output.write_xmlstring())
 
 
 @peak.rules.when(serialize, (str,))
-def serialize(output, request, response, declaration):
+def serialize(output, content_type, doctype, declaration):
     """Generic method to generate a text (or a binary content)
 
     In:
-      - ``output`` -- the text
-      - ``request`` -- the web request object
-      - ``response`` -- the web response object
-      - ``declaration`` -- has the declaration to be outputed ?
+      - ``output`` -- the rendered content
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
 
     Return:
-      - the content
+      - a tuple (content_type, content)
     """
-    if not response.content_type:
-        response.content_type = 'text/plain'
-
-    return output
+    return (content_type or 'text/plain', output)
 
 
 @peak.rules.when(serialize, (unicode,))
-def serialize(output, request, response, declaration):
+def serialize(output, content_type, doctype, declaration):
     """Generic method to generate a text from unicode
 
     In:
-      - ``output`` -- the text
-      - ``request`` -- the web request object
-      - ``response`` -- the web response object
-      - ``declaration`` -- has the declaration to be outputed ?
+      - ``output`` -- the rendered content
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
 
     Return:
-      - the content
+      - a tuple (content_type, content)
     """
-    if not response.content_type:
-        response.content_type = 'text/plain'
-
-    return output.encode('utf-8')
+    return serialize(output.encode('utf-8'), content_type, doctype, declaration)
