@@ -140,7 +140,7 @@ class Callbacks:
                     # not the name
                     name = value
 
-                if name.startswith('_action'):
+                if name and name.startswith('_action'):
                     v = actions.get(name)
                     if v is not None:
                         # Multiple values for the same callback are put into a tuple
