@@ -20,6 +20,8 @@ class Renderer(xml.XmlRenderer):
     """ The XSL renderer
     """
 
+    content_type = 'text/xsl'
+
     # The XSL tags
     # ------------
 

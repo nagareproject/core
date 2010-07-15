@@ -859,6 +859,8 @@ def add_child(next_method, self, style):
 class Renderer(xhtml_base.Renderer):
     """The XHTML synchronous renderer
     """
+    XML_DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
+    HTML_DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
 
     head_renderer_factory = HeadRenderer
 
@@ -1002,6 +1004,40 @@ class Renderer(xhtml_base.Renderer):
         parser.setElementClassLookup(self._custom_lookup)
 
         return self._parse_html(parser, source, fragment, no_leading_text, **kw)
+
+    @property
+    def doctype(self):
+        """Generate the DOCTYPE of the document
+
+        If a doctype was set on the response object, use it
+        Else, use the HTML ou XHTML doctypes of this renderer
+
+        Return:
+          - the doctype
+        """
+        response = self.response
+
+        if response.doctype is not None:
+            return response.doctype
+
+        return self.XML_DOCTYPE if response.xml_output else self.HTML_DOCTYPE
+
+    @property
+    def content_type(self):
+        """Generate the content type of the document
+
+        If a content type was set on the response object, use it
+        Else, use the HTML ou XHTML content type of this renderer
+
+        Return:
+          - the content type
+        """
+        response = self.response
+
+        if response.content_type:
+            return response.content_type
+
+        return 'application/xhtml+xml' if response.xml_output else 'text/html'
 
     def start_rendering(self, component, model):
         """Method called before to render a component

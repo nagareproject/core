@@ -477,6 +477,9 @@ class XmlRenderer(common.Renderer):
     """
     __metaclass__ = RendererMetaClass
 
+    doctype = ''
+    content_type = 'text/xml'
+
     @classmethod
     def class_init(cls, special_tags):
         """Class initialisation
