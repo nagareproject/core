@@ -866,7 +866,7 @@ class Renderer(xhtml_base.Renderer):
     # ---------------------------------------------
 
     a = TagProp('a', set(xhtml_base.allattrs+xhtml_base.focusattrs+('charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu')), A)
-    area =  area = TagProp('area', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('shape', 'coords', 'href', 'nohref', 'alt', 'target')), A)
+    area = TagProp('area', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('shape', 'coords', 'href', 'nohref', 'alt', 'target')), A)
     button = TagProp('button', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('name', 'value', 'type', 'disabled')), SubmitInput)
     form = TagProp('form', set(xhtml_base.allattrs + ('action', 'method', 'name', 'enctype', 'onsubmit', 'onreset', 'accept_charset', 'target')), Form)
     img = TagProp('img', set(xhtml_base.allattrs+('src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
@@ -1003,7 +1003,6 @@ class Renderer(xhtml_base.Renderer):
 
         return self._parse_html(parser, source, fragment, no_leading_text, **kw)
 
-
     def start_rendering(self, component, model):
         """Method called before to render a component
 
@@ -1092,7 +1091,7 @@ class Renderer(xhtml_base.Renderer):
           - the completed url
         """
         i = u.find(':')
-        if ((i == -1) or not u[:i].isalpha()) and u and (u[0] != '/'):
+        if ((i == -1) or not u[:i].isalpha()) and (not u or (u[0] != '/')):
             u = self.url + '/' + u
 
         if params is None:
