@@ -50,6 +50,8 @@ class Response(webob.Response):
 # ---------------------------------------------------------------------------
 
 class WSGIApp(object):
+    renderer_factory = xhtml.Renderer   # Default renderer
+
     def __init__(self, root_factory):
         """Initialization
 
@@ -251,15 +253,26 @@ class WSGIApp(object):
           - ``response`` -- the web response object
           - ``callbacks`` -- object to register the callbacks
         """
-        renderer_factory = xhtml.AsyncRenderer if async else xhtml.Renderer
-        return renderer_factory(
-                                None,
-                                session,
-                                request, response,
-                                callbacks,
-                                self.static_url, self.static_path,
-                                request.script_name
-                               )
+        renderer = self.renderer_factory(
+                                            None,
+                                            session,
+                                            request, response,
+                                            callbacks,
+                                            self.static_url, self.static_path,
+                                            request.script_name
+                                        )
+
+        if async:
+            renderer = renderer.AsyncRenderer(
+                                                None,
+                                                session,
+                                                request, response,
+                                                callbacks,
+                                                self.static_url, self.static_path,
+                                                request.script_name
+                                             )
+
+        return renderer
 
     def start_request(self, root, request, response):
         """A new request is received, setup its dedicated environment
