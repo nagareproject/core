@@ -950,6 +950,32 @@ class Renderer(xhtml_base.Renderer):
         self.component = None
         self.model = None
 
+    def SyncRenderer(self, *args, **kw):
+        """Create an associated synchronous HTML renderer
+
+        Return:
+          - a new synchronous renderer
+        """
+        # If no arguments are given, this renderer becomes the parent of the
+        # newly created renderer
+        if not args and not kw:
+            args = (self,)
+
+        return self.__class__(*args, **kw)
+
+    def AsyncRenderer(self, *args, **kw):
+        """Create an associated asynchronous HTML renderer
+
+        Return:
+          - a new asynchronous renderer
+        """
+        # If no arguments are given, this renderer becomes the parent of the
+        # newly created renderer
+        if not args and not kw:
+            args = (self,)
+
+        return AsyncRenderer(*args, **kw)
+
     def makeelement(self, tag):
         """Make a tag
 
@@ -1233,6 +1259,32 @@ class AsyncRenderer(Renderer):
 
         self.async_root = True;
         self.wrapper_to_generate = False    # Add a ``<div>`` around the rendering ?
+
+    def SyncRenderer(self, *args, **kw):
+        """Create an associated synchronous HTML renderer
+
+        Return:
+          - a new synchronous renderer
+        """
+        # If no arguments are given, this renderer becomes the parent of the
+        # newly created renderer
+        if not args and not kw:
+            args = (self,)
+
+        return Renderer(*args, **kw)
+
+    def AsyncRenderer(self, *args, **kw):
+        """Create an associated asynchronous HTML renderer
+
+        Return:
+          - a new asynchronous renderer
+        """
+        # If no arguments are given, this renderer becomes the parent of the
+        # newly created renderer
+        if not args and not kw:
+            args = (self,)
+
+        return self.__class__(*args, **kw)
 
     def javascript_url(self, url):
         self.head.javascript_url(url)
