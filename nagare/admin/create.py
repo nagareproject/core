@@ -24,8 +24,7 @@ def set_options(optparser):
 
 
 def create_empty_file(path, name):
-    f = open(os.path.join(path, name), 'w')
-    f.close()
+    open(os.path.join(path, name), 'w').close()
 
 
 def run(parser, options, args):
@@ -72,12 +71,41 @@ def run(parser, options, args):
                   package_data = {'' : ['*.cfg']},
                   zip_safe = False,
                   install_requires = ('nagare',),
+                  message_extractors = { '%(id)s' : [('**.py', 'python', None)] },
                   entry_points = """
                   [nagare.applications]
                   %(id)s = %(id)s.app:app
                   """
                  )
         ''' % params))
+
+    with open(os.path.join(root, 'setup.cfg'), 'w') as f:
+        f.write(textwrap.dedent('''\
+            [extract_messages]
+            keywords = _ , N_:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
+            output_file = data/locale/messages.pot
+
+            [init_catalog]
+            input_file = data/locale/messages.pot
+            output_dir = data/locale
+            domain = messages
+
+            [update_catalog]
+            input_file = data/locale/messages.pot
+            output_dir = data/locale
+            domain = messages
+
+            [compile_catalog]
+            directory = data/locale
+            domain = messages
+        '''))
+
+    with open(os.path.join(root, 'MANIFEST.in'), 'w') as f:
+        f.write(textwrap.dedent('''\
+            graft conf
+            graft static
+            graft data/locale
+        '''))
 
     os.mkdir(os.path.join(root, app_id))
 
@@ -107,7 +135,7 @@ def run(parser, options, args):
                 with h.div(class_='mybody'):
                     with h.div(id='myheader'):
                         h << h.a(h.img(src='/static/nagare/img/logo.gif'), id='logo', href='http://www.nagare.org/', title='Nagare home')
-                        h << h.span('Congratulations !', id='title')
+                        h << h.span('Congratulations!', id='title')
 
                     with h.div(id='main'):
                         h << h.h1('Your application is running')
@@ -120,7 +148,7 @@ def run(parser, options, args):
 
                         h << h.p('To learn more, go to the ', h.a('official website', href='http://www.nagare.org/'))
 
-                        h << "Have fun !"
+                        h << "Have fun!"
 
                 h << h.div(class_='footer')
 
@@ -146,6 +174,8 @@ def run(parser, options, args):
 
     os.mkdir(os.path.join(root, 'data'))
     create_empty_file(os.path.join(root, 'data'), '__init__.py')
+
+    os.mkdir(os.path.join(root, 'data', 'locale'))
 
     os.mkdir(os.path.join(root, 'conf'))
     create_empty_file(os.path.join(root, 'conf'), '__init__.py')

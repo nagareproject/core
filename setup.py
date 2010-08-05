@@ -11,10 +11,10 @@
 
 VERSION = '0.3.0'
 
-import sys, os
+import sys, os, textwrap
 from setuptools import setup, find_packages
 
-# ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 try:
     import stackless
@@ -27,7 +27,7 @@ if sys.version_info < (2, 5, 2):
     print 'The version of Stackless Python must be 2.5.2 or more'
     sys.exit(-2)
 
-# ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 f = open(os.path.join(os.path.dirname(__file__), 'docs', 'features.txt'))
 long_description = f.read()
@@ -39,7 +39,7 @@ setup(
       author = 'Alain Poirier',
       author_email = 'alain.poirier at net-ng.com',
       description = 'Nagare Python web framework',
-      long_description = """
+      long_description = textwrap.dedent("""
       Description
       ^^^^^^^^^^^
 
@@ -54,7 +54,7 @@ setup(
       version from the
       `Nagare subversion repository <svn://www.nagare.org/trunk/nagare/core#egg=nagare-dev>`_
       or to create a Nagare developer installation.
-      """ % long_description,
+      """) % long_description,
       license = 'BSD',
       keywords = 'web wsgi framework sqlalchemy elixir seaside continuation ajax stackless',
       url = 'http://www.nagare.org',
@@ -71,11 +71,13 @@ setup(
         'database' : ('SQLAlchemy==0.5.8', 'Elixir==0.7.1'),
         'doc' : ('Pygments', 'docutils', 'RstDoc'),
         'test' : ('nose',),
+        'i18n' : ('Babel',),
         'full' : (
                   'WebError',
                   'SQLAlchemy==0.5.8', 'Elixir==0.7.1',
                   'Pygments', 'docutils', 'RstDoc',
-                  'nose'
+                  'nose',
+                  'Babel'
                  ),
       },
       test_suite = 'nose.collector',
