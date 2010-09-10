@@ -133,7 +133,7 @@ def generate_apache_rules(app_names, error):
 
     yield 'RewriteEngine On'
     for (app_name, static) in apps:
-        yield 'RewriteRule ^/static/%s/(.*)$ %s/$1 [L]' % (app_name, static[len(document_root):])
+        yield 'RewriteRule ^/static/%s/(.*)$ %s/$1 [L,PT]' % (app_name, static[len(document_root):])
 
 def run(parser, options, args):
     print '\n'.join(options.generate(args, parser.error))
