@@ -176,9 +176,9 @@ _translations_cache = {}    # Already loaded translation objects
 class DummyTranslation(object):
     """Identity translation
     """
-    gettext = ugettext = _ = lazy_gettext = lazy_ugettext = _L = lambda msg: msg
+    gettext = ugettext = _ = lazy_gettext = lazy_ugettext = _L = lambda self, msg: msg
 
-    ngettext = ungettext = _N = lazy_ngettext = lazy_ungettext = _LN = lambda singular, plural, n: singular if n==1 else plural
+    ngettext = ungettext = _N = lazy_ngettext = lazy_ungettext = _LN = lambda self, singular, plural, n: singular if n==1 else plural
 
 
 class Locale(core.Locale):
@@ -220,14 +220,12 @@ class Locale(core.Locale):
         if isinstance(default_timezone, basestring):
             default_timezone = pytz.timezone(default_timezone)
         self.default_timezone = default_timezone
-        
-        self.previous_manager = None
 
     def _get_translation(self):
         """Load the translation object, if not already loaded
         """
         if self.language is None:
-            return DummyTranslation
+            return DummyTranslation()
 
         key = (self.dirname, self.language, self.domain)
         translation = _translations_cache.get(key)
@@ -874,24 +872,3 @@ class Locale(core.Locale):
           - a ``datetime.datetime`` object
         """
         return dates.parse_date(string, self)
-
-    def __enter__(self):
-        self.previous_manager = get_locale()
-        set_locale(self)
-        return self
-
-    def __exit__(self, *args):
-        set_locale(self.previous_manager)
-
-"""
-def NegociatedLocale(request, languages, dirname, domain=None, timezone=None):
-    return Locale(request.accept_languages.best_match(languages), dirname, domain, timezone)
-"""
-
-class NegociatedLocale(Locale):
-    def __init__(self, request, languages, dirname=None, domain=None, timezone=None, default_timezone=None):
-        super(NegociatedLocale, self).__init__(
-                                                language=request.accept_languages.best_match(languages),
-                                                dirname=dirname, domain=domain,
-                                                timezone=timezone, default_timezone=default_timezone
-                                              )
