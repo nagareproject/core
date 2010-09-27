@@ -82,7 +82,7 @@ def run(parser, options, args):
     with open(os.path.join(root, 'setup.cfg'), 'w') as f:
         f.write(textwrap.dedent('''\
             [extract_messages]
-            keywords = _ , N_:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
+            keywords = _ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
             output_file = data/locale/messages.pot
 
             [init_catalog]

@@ -71,13 +71,13 @@ setup(
         'database' : ('SQLAlchemy==0.5.8', 'Elixir==0.7.1'),
         'doc' : ('Pygments', 'docutils', 'RstDoc'),
         'test' : ('nose',),
-        'i18n' : ('Babel',),
+        'i18n' : ('Babel', 'pytz'),
         'full' : (
                   'WebError',
                   'SQLAlchemy==0.5.8', 'Elixir==0.7.1',
                   'Pygments', 'docutils', 'RstDoc',
                   'nose',
-                  'Babel'
+                  'Babel', 'pytz'
                  ),
       },
       test_suite = 'nose.collector',
