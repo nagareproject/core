@@ -182,8 +182,14 @@ class DummyTranslation(object):
 
 
 class Locale(core.Locale):
-    def __init__(self, language=None, territory=None, script=None, variant=None, dirname=None, domain=None, timezone=None, default_timezone=None):
+    def __init__(
+                    self,
+                    language=None, territory=None, script=None, variant=None,
+                    dirname=None, domain=None,
+                    timezone=None, default_timezone=None
+                ):
         """
+        A locale
 
         In:
           - ``language`` -- the language code (i.e 'en'),
@@ -872,3 +878,48 @@ class Locale(core.Locale):
           - a ``datetime.datetime`` object
         """
         return dates.parse_date(string, self)
+
+# -----------------------------------------------------------------------------
+
+class NegociatedLocale(Locale):
+    def __init__(
+                    self,
+                    request,
+                    locales, default_locale=(None, None),
+                    dirname=None, domain=None,
+                    timezone=None, default_timezone=None
+                ):
+        """
+        A locale with negociated language and territory
+
+        In:
+          - ``request`` -- the HTTP request object
+          - ``locales`` -- tuples of (language, territory) accepted by the application
+            (i.e ``[('fr', 'FR'), ('en', 'US'), ('en',)]``)
+          - ``default_locale`` -- tuple of (language, territory) to use if the
+            negociation failed
+
+          - ``dirname`` -- the directory containing the ``MO`` files
+          - ``domain`` -- the messages domain
+
+          - ``timezone`` -- the timezone (timezone object or code)
+            (i.e ``pytz.timezone('America/Los_Angeles')`` or ``America/Los_Angeles``)
+          - ``default_timezone`` -- default timezone when a ``datetime`` object has
+            no associated timezone. If no default timezone is given, the ``timezone``
+            value is used
+        """
+        locale = request.accept_language.best_match(map('-'.join, locales))
+
+        if not locale:
+            (language, territory) = default_locale
+        elif '-' not in locale:
+            language = locale
+            territory = None
+        else:
+            (language, territory) = locale.split('-')
+
+        super(NegociatedLocale, self).__init__(
+                                                language, territory,
+                                                dirname=dirname, domain=domain,
+                                                timezone=timezone, default_timezone=default_timezone
+                                              )
