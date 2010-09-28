@@ -17,11 +17,12 @@ expired session id, it creates a new root component and a new session.
 from __future__ import with_statement
 
 import sys
+import os
 
 import webob
 from webob import exc, acceptparse
 
-from nagare import component, presentation, serializer, database, top, security, log, comet
+from nagare import component, presentation, serializer, database, top, security, log, comet, i18n
 from nagare.security import dummy_manager
 from nagare.callbacks import Callbacks, CallbackLookupError
 from nagare.namespaces import xhtml
@@ -57,12 +58,12 @@ class WSGIApp(object):
 
         In:
           - ``root_factory`` -- function to create the application root component
-          - ``databases`` -- the SQLAlchemy metadata objects and the database engines settings
         """
         self.root_factory = root_factory
 
         self.static_path = ''
         self.static_url = ''
+        self.data_path = ''
         self.databases = []
         self.name = ''
         self.project_name = ''
@@ -72,6 +73,7 @@ class WSGIApp(object):
         self.last_exception = None
 
         self.security = dummy_manager.Manager()
+        self.default_locale = i18n.Locale()
 
     def set_config(self, config_filename, config, error):
         """Read the configuration parameters
@@ -102,6 +104,14 @@ class WSGIApp(object):
         """
         self.static_url = static_url
 
+    def set_data_path(self, data_path):
+        """Register the directory of the data
+
+        In:
+          - ``data_path`` -- the directory where the data of the application are located
+        """
+        self.data_path = data_path
+
     def set_publisher(self, publisher):
         """Register the publisher
 
@@ -126,12 +136,6 @@ class WSGIApp(object):
         """
         self.databases = databases
 
-    def start(self):
-        """Call after each process start
-        """
-        for database_settings in self.databases:
-            database.set_metadata(*database_settings)
-
     def set_project(self, name):
         """The application distribution name
 
@@ -139,6 +143,31 @@ class WSGIApp(object):
           - ``project_name`` -- name of the distutils distribution where the app is located
         """
         self.project_name = name
+
+    def set_default_locale(self, locale):
+        """Register the default locale
+
+        In:
+          - ``locale`` -- the default locale
+        """
+        self.default_locale = locale
+
+    def set_locale(self, locale):
+        """Set the locale of the request scope
+
+        In:
+          - ``locale`` -- the locale
+        """
+        if locale.dirname is None:
+            locale.dirname = os.path.join(self.data_path, 'locale')
+
+        i18n.set_locale(locale)
+
+    def start(self):
+        """Call after each process start
+        """
+        for database_settings in self.databases:
+            database.set_metadata(*database_settings)
 
     # -----------------------------------------------------------------------
 
@@ -284,6 +313,8 @@ class WSGIApp(object):
         """
         security.set_manager(self.security) # Set the security manager
         security.set_user(self.security.create_user(request, response)) # Create the User object
+
+        self.set_locale(self.default_locale) # Set the default Locale
 
     # Processing phase
     def _phase1(self, request, response, callbacks):

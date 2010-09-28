@@ -219,31 +219,34 @@ def run(parser, options, args):
         configs.append((cfgfile, app, dist, aconf))
 
         log.configure(aconf['logging'].dict(), aconf['application']['name'])
-    
+
     # Configure the logging system
     log.activate()
 
     # Configure each application and register it to the publisher
     for (cfgfile, app, dist, aconf) in configs:
-        log.set_logger('nagare.application.'+aconf['application']['name'])
+        #log.set_logger('nagare.application.'+aconf['application']['name'])
 
         if watcher:
             watcher.watch_file(aconf.filename)
 
+        requirement = None if not dist else pkg_resources.Requirement.parse(dist.project_name)
+
+        data_path = None if not requirement else pkg_resources.resource_filename(requirement, '/data')
+
         # Create the function to get the static contents of the application
-        static = aconf['application'].get('static')
+        static_path = aconf['application'].get('static')
         get_file = None
-        if static is not None and os.path.isdir(static):
+        if static_path is not None and os.path.isdir(static_path):
             # If a ``static`` parameter exists, under the ``[application]`` section,
             # serve the static contents from this root
-            get_file = lambda path, static=static: get_file_from_root(static, path)
+            get_file = lambda path, static_path=static_path: get_file_from_root(static_path, path)
         else:
             # Else, serve the static from the ``static`` directory
             # of the application package
-            if dist is not None:
-                requirement = pkg_resources.Requirement.parse(dist.project_name)
+            if requirement:
                 get_file = lambda path, requirement=requirement: get_file_from_package(requirement, path)
-                static = pkg_resources.resource_filename(requirement, '/static')
+                static_path = pkg_resources.resource_filename(requirement, '/static')
 
         # Register the function to serve the static contents of the application
         static_url = publisher.register_static(aconf['application']['name'], get_file)
@@ -261,7 +264,8 @@ def run(parser, options, args):
                                                     app,
                                                     cfgfile, aconf, parser.error,
                                                     '' if not dist else dist.project_name,
-                                                    static, static_url,
+                                                    static_path, static_url,
+                                                    data_path,
                                                     publisher,
                                                     sessions_manager
                                                 )

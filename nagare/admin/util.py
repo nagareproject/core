@@ -292,7 +292,15 @@ def get_database(conf, debug):
     return (metadata, conf['uri'], debug, engine_conf)
 
 
-def activate_WSGIApp(app, cfgfile, aconf, error, project_name='', static_path=None, static_url=None, publisher=None, sessions_manager=None, debug=False):
+def activate_WSGIApp(
+                        app,
+                        cfgfile, aconf, error,
+                        project_name='',
+                        static_path=None, static_url=None,
+                        data_path=None,
+                        publisher=None, sessions_manager=None,
+                        debug=False
+                    ):
     """Set all the properties of a WSGIApp application
 
     In:
@@ -304,6 +312,7 @@ def activate_WSGIApp(app, cfgfile, aconf, error, project_name='', static_path=No
       - ``static_path`` -- the directory where the static contents of the application
         are located
       - ``static_url`` -- the url of the static contents of the application
+      - ``data_path`` -- the directory where the data of the application are located
       - ``publisher`` -- the publisher of the application
       - ``session_manager`` -- the sessions manager
       - ``debug`` -- flag to display the generated SQL statements
@@ -338,6 +347,9 @@ def activate_WSGIApp(app, cfgfile, aconf, error, project_name='', static_path=No
 
     if static_url is not None:
         app.set_static_url(static_url)
+
+    if data_path is not None:
+        app.set_data_path(data_path)
 
     if publisher:
         app.set_publisher(publisher)
