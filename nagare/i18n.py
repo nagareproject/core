@@ -14,8 +14,13 @@ import os
 import threading
 import datetime
 
+from peak.rules import when
+
 from babel import core, dates, numbers, support
 import pytz
+
+from nagare.namespaces import xml
+from nagare import serializer, ajax
 
 # -----------------------------------------------------------------------------
 
@@ -33,6 +38,48 @@ def get_locale():
 
 def set_locale(locale):
     _current.locale = locale
+
+# -----------------------------------------------------------------------------
+
+@when(xml.add_child, (xml._Tag, support.LazyProxy))
+def add_child(self, lazy):
+    """Add a lazy string to a tag
+
+    In:
+      - ``self`` -- the tag
+      - ``lazy`` -- the lazy string to add
+
+    """
+    self.add_child(lazy.value)
+
+@when(ajax.py2js, (support.LazyProxy,))
+def py2js(lazy, h):
+    """Generic method to transcode a lazy string to javascript
+
+    In:
+      - ``lazy`` -- the lazy string
+      - ``h`` -- the current renderer
+
+    Return:
+      - transcoded javascript
+    """
+
+    return ajax.py2js(lazy.value, h)
+
+@when(serializer.serialize, (support.LazyProxy,))
+def serialize(lazy, content_type, doctype, declaration):
+    """Generic method to generate a text from a lazy string
+
+    In:
+      - ``lazy`` -- the lazy string
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
+
+    Return:
+      - a tuple (content_type, content)
+    """
+    return serializer.serialize(lazy.value, content_type, doctype, declaration)
 
 # -----------------------------------------------------------------------------
 
@@ -54,17 +101,17 @@ def ungettext(singular, plural, n, **kw):
 _N = ungettext
 
 def lazy_gettext(msg, **kw):
-    return get_locale().lazy_gettext(msg, **kw)
+    return support.LazyProxy(gettext, msg, **kw)
 
 def lazy_ugettext(msg, **kw):
-    return get_locale().lazy_ugettext(msg, **kw)
+    return support.LazyProxy(ugettext, msg, **kw)
 _L = lazy_ugettext
 
 def lazy_ngettext(singular, plural, n, **kw):
-    return get_locale().lazy_ngettext(singular, plural, n, **kw)
+    return support.LazyProxy(ngettext, singular, plural, n, **kw)
 
 def lazy_ungettext(singular, plural, n, **kw):
-    return get_locale().lazy_ungettext(singular, plural, n, **kw)
+    return support.LazyProxy(ungettext, singular, plural, n, **kw)
 _LN = lazy_ungettext
 
 
