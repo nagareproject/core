@@ -943,7 +943,7 @@ class NegociatedLocale(Locale):
         In:
           - ``request`` -- the HTTP request object
           - ``locales`` -- tuples of (language, territory) accepted by the application
-            (i.e ``[('fr', 'FR'), ('en', 'US'), ('en',)]``)
+            (i.e ``[('fr', 'FR'), ('de', 'DE'), ('en',)]``)
           - ``default_locale`` -- tuple of (language, territory) to use if the
             negociation failed
 
@@ -956,15 +956,23 @@ class NegociatedLocale(Locale):
             no associated timezone. If no default timezone is given, the ``timezone``
             value is used
         """
-        locale = request.accept_language.best_match(map('-'.join, locales))
+        locale = core.negotiate_locale(
+                                        request.accept_language.best_matches(),
+                                        map('-'.join, locales),
+                                        '-'
+                                      )
 
         if not locale:
             (language, territory) = default_locale
-        elif '-' not in locale:
-            language = locale
-            territory = None
         else:
-            (language, territory) = locale.split('-')
+            locale = core.LOCALE_ALIASES.get(locale, locale).replace('_', '-')
+
+            if '-' not in locale:
+                language = locale
+                territory = None
+            else:
+                (language, territory) = locale.split('-')
+                territory = territory.upper()
 
         super(NegociatedLocale, self).__init__(
                                                 language, territory,
