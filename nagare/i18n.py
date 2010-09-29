@@ -201,10 +201,10 @@ def to_utc(dt):
 def format_time(t=None, format='medium'):
     return get_locale().format_time(t, format)
 
-def format_date(d, format='medium'):
+def format_date(d=None, format='medium'):
     return get_locale().format_date(d, format)
 
-def format_datetime(dt, format='medium'):
+def format_datetime(dt=None, format='medium'):
     return get_locale().format_datetime(dt, format)
 
 def parse_time(string):
@@ -842,7 +842,7 @@ class Locale(core.Locale):
 
         return dates.format_time(t, format, locale=self, tzinfo=self.tzinfo)
 
-    def format_date(self, d, format='medium'):
+    def format_date(self, d=None, format='medium'):
         """Return a date formatted according to the given pattern
 
         >>> d = datetime.date(2007, 04, 01)
@@ -866,7 +866,7 @@ class Locale(core.Locale):
         """
         return dates.format_date(d, format, self)
 
-    def format_datetime(self, dt, format='medium'):
+    def format_datetime(self, dt=None, format='medium'):
         """Return a date formatted according to the given pattern
 
         >>> dt = datetime.datetime(2007, 04, 01, 15, 30)
@@ -887,7 +887,8 @@ class Locale(core.Locale):
         Return:
           - The formatted datetime string
         """
-        dt = self.to_timezone(dt)
+        if dt:
+            dt = self.to_timezone(dt)
         return dates.format_datetime(dt, format, locale=self, tzinfo=self.tzinfo)
 
     def parse_time(self, string):
