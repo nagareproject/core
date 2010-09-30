@@ -10,6 +10,8 @@
 from peak.rules import when
 import webob
 
+from nagare import security
+
 # ---------------------------------------------------------------------------
 
 # The application can used anything for the permission objects
@@ -71,12 +73,25 @@ class User(object):
         self.credentials = args
         self.expired = False
 
+        self._previous_user = None
+
     def set_id(self, id, *args):
         self.id = id
         self.credentials = args
 
     def get_id(self):
         return (self.id,)+self.credentials
+
+    def __enter__(self):
+        """Push this user to the stack
+        """
+        self._previous_user = security.get_user()
+        security.set_user(self)
+
+    def __exit__(self, *args, **kw):
+        """Pop this user from the stack
+        """
+        security.set_user(self._previous_user)
 
 # ---------------------------------------------------------------------------
 
