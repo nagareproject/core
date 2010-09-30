@@ -285,6 +285,8 @@ class Locale(core.Locale):
             default_timezone = pytz.timezone(default_timezone)
         self.default_timezone = default_timezone
 
+        self._previous_locale = None
+
     def _get_translation(self):
         """Load the translation object, if not already loaded
         """
@@ -937,6 +939,22 @@ class Locale(core.Locale):
           - a ``datetime.datetime`` object
         """
         return dates.parse_date(string, self)
+
+    def __enter__(self):
+        """Push this locale to the stack
+        """
+        previous_locale = get_locale()
+
+        if self.dirname is None:
+            self.dirname = previous_locale.dirname
+
+        self._previous_locale = previous_locale
+        set_locale(self)
+
+    def __exit__(self, *args, **kw):
+        """Pop this locale from the stack
+        """
+        set_locale(self._previous_locale)
 
 # -----------------------------------------------------------------------------
 
