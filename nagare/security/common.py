@@ -101,6 +101,9 @@ class Rules(object):
     A rule is an implementation of the ``security.common.Rules.has_permission()``
     generic method.
     """
+    def __init__(self):
+        self._previous_rules = None
+
     def has_permission(self, user, perm, subject):
         """The ``has_permission()`` generic method
         and default implementation: by default all accesses are denied
@@ -148,6 +151,17 @@ class Rules(object):
         for at least one permission
         """
         return self.has_permission(user, tuple(perms), subject)
+
+    def __enter__(self):
+        """Push these security rules to the stack
+        """
+        self._previous_rules = security.get_manager()
+        security.set_manager(self)
+
+    def __exit__(self, *args, **kw):
+        """Pop these security rules from the stack
+        """
+        security.set_manager(self._previous_rules)
 
 # ---------------------------------------------------------------------------
 
