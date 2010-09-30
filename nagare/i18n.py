@@ -41,7 +41,18 @@ def set_locale(locale):
 
 # -----------------------------------------------------------------------------
 
-@when(xml.add_child, (xml._Tag, support.LazyProxy))
+class LazyProxy(support.LazyProxy):
+    """Picklable ``babel.support.LazyProxy`` objects
+    """
+    def __getstate__(self):
+        return (self._func, self._args, self._kwargs)
+
+    def __setstate__(self, attrs):
+        self.__init__(attrs[0], *attrs[1], **attrs[2])
+
+# -----------------------------------------------------------------------------
+
+@when(xml.add_child, (xml._Tag, LazyProxy))
 def add_child(self, lazy):
     """Add a lazy string to a tag
 
@@ -52,7 +63,7 @@ def add_child(self, lazy):
     """
     self.add_child(lazy.value)
 
-@when(ajax.py2js, (support.LazyProxy,))
+@when(ajax.py2js, (LazyProxy,))
 def py2js(lazy, h):
     """Generic method to transcode a lazy string to javascript
 
@@ -66,7 +77,7 @@ def py2js(lazy, h):
 
     return ajax.py2js(lazy.value, h)
 
-@when(serializer.serialize, (support.LazyProxy,))
+@when(serializer.serialize, (LazyProxy,))
 def serialize(lazy, content_type, doctype, declaration):
     """Generic method to generate a text from a lazy string
 
@@ -101,17 +112,17 @@ def ungettext(singular, plural, n, **kw):
 _N = ungettext
 
 def lazy_gettext(msg, **kw):
-    return support.LazyProxy(gettext, msg, **kw)
+    return LazyProxy(gettext, msg, **kw)
 
 def lazy_ugettext(msg, **kw):
-    return support.LazyProxy(ugettext, msg, **kw)
+    return LazyProxy(ugettext, msg, **kw)
 _L = lazy_ugettext
 
 def lazy_ngettext(singular, plural, n, **kw):
-    return support.LazyProxy(ngettext, singular, plural, n, **kw)
+    return LazyProxy(ngettext, singular, plural, n, **kw)
 
 def lazy_ungettext(singular, plural, n, **kw):
-    return support.LazyProxy(ungettext, singular, plural, n, **kw)
+    return LazyProxy(ungettext, singular, plural, n, **kw)
 _LN = lazy_ungettext
 
 
@@ -363,7 +374,7 @@ class Locale(core.Locale):
           - the lazy localized translation, as a 8-bit string encoded with the
             catalog's charset encoding
         """
-        return support.LazyProxy(self.gettext, msg, **kw)
+        return LazyProxy(self.gettext, msg, **kw)
 
     def lazy_ugettext(self, msg, **kw):
         """Return the lazy localized translation of a message
@@ -375,7 +386,7 @@ class Locale(core.Locale):
         Return:
           - the lazy localized translation, as an unicode string
         """
-        return support.LazyProxy(self.ugettext, msg, **kw)
+        return LazyProxy(self.ugettext, msg, **kw)
     _L = lazy_ugettext
 
     def lazy_ngettext(self, singular, plural, n, **kw):
@@ -393,7 +404,7 @@ class Locale(core.Locale):
           - the lazy localized translation, as a 8-bit string encoded with the
             catalog's charset encoding
         """
-        return support.LazyProxy(self.ngettext, singular, plural, n, **kw)
+        return LazyProxy(self.ngettext, singular, plural, n, **kw)
 
     def lazy_ungettext(self, singular, plural, n, **kw):
         """Return the lazy plural-forms localized translation of a message
@@ -409,7 +420,7 @@ class Locale(core.Locale):
         Return:
           - the lazy localized translation, as an unicode string
         """
-        return support.LazyProxy(self.ungettext, singular, plural, n, **kw)
+        return LazyProxy(self.ungettext, singular, plural, n, **kw)
     _LN = lazy_ungettext
 
 
