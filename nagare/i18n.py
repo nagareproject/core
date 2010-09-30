@@ -44,6 +44,12 @@ def set_locale(locale):
 class LazyProxy(support.LazyProxy):
     """Picklable ``babel.support.LazyProxy`` objects
     """
+    @property
+    def value(self):
+        """Always evaluate, without any cache
+        """
+        return self._func(*self._args, **self._kwargs)
+
     def __getstate__(self):
         return (self._func, self._args, self._kwargs)
 
