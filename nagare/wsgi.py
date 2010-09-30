@@ -373,7 +373,11 @@ class WSGIApp(object):
         channel_id = request.params.get('_channel')
         nb = request.params.get('_nb')
         if channel_id and nb:
-            comet.channels.connect(environ['wsgi.multiprocess'], channel_id, int(nb), response)
+            if environ['wsgi.multiprocess']:
+                response.status = 501 # "Not Implemented"
+            else:
+                comet.channels.connect(channel_id, int(nb), environ['wsgi.input'].file.fileno(), response)
+
             return response(environ, start_response)
 
         xhr_request = request.is_xhr or ('_a' in request.params)

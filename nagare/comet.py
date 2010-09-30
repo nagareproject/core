@@ -15,8 +15,47 @@ This implementation is only working with a multi-threaded publisher
 from __future__ import with_statement
 
 import threading
+import select
 
 from nagare import presentation, ajax
+
+class Client(object):
+    """A connected client"""
+    
+    def __init__(self, fileno, response):
+        """Initialization
+
+        In:
+          - ``fileno`` -- the I/O file handle
+          - ``response`` -- ``webob`` response object
+        """
+        self._fileno = fileno
+        self._response = response
+
+        self._event = threading.Event()
+
+    def block(self):
+        self._event.wait()
+
+    def release(self):
+        self._event.set()
+
+    def is_blocked(self):
+        return self._event.is_set()
+
+    def fileno(self):
+        return self._fileno
+
+    def send(self, msg=None, status=None):
+        if status is not None:
+            self._response.status = status
+
+        if msg is not None:
+            self._response.body = msg
+
+        if not self.is_blocked():
+            self.release()
+
 
 class Channel(object):
     """A comet-style channel i.e XHR long polling channel"""
@@ -39,30 +78,44 @@ class Channel(object):
         self.history = []
 
         self.lock = threading.Lock()
-        self.clients = []
+        self.clients = set()
 
-    def connect(self, nb, response):
+    def connect(self, nb, fileno, response):
         """A browser wants to be connected to this channel
 
         In:
           - ``nb`` -- identifier of the next wanted message
+          - ``fileno`` -- the I/O file handle
           - ``response`` -- ``webob`` response object
         """
+        client = Client(fileno, response)
+
         with self.lock:
+            self.discard_disconnected_clients()
+
             # Is a msg already available to send ?
             (new_nb, msg) = self.get_old_msg(nb)
             if not msg:
-                event = threading.Event()
-                self.clients.append((event, response))
+                self.clients.add(client)
 
         if msg:
             # Msg found into the history
             # Send it directly
-            self._send(new_nb, msg, response)
+            self._send(client, new_nb, msg)
         else:
             # No msg found
             # Wait for a new msg to be sent
-            event.wait()
+            client.block()
+
+    def discard_disconnected_clients(self):
+        """Forgot about the disconnected clients
+        """
+        clients_to_discard = select.select(self.clients, [], [], 0)[0]
+
+        for client in clients_to_discard:
+            client.release()
+
+        self.clients = self.clients - set(clients_to_discard)
 
     def send(self, msg):
         """Send a message to all the connected clients
@@ -78,29 +131,32 @@ class Channel(object):
                 self.history.pop(0)
                 self.history_nb += 1
 
-            clients, self.clients = self.clients, []
+            clients, self.clients = self.clients, set()
 
         # Send the msg to all the waiting clients
-        for (event, response) in clients:
-            self._send(self.history_nb+len(self.history), msg, response)
-            event.set()
+        for client in clients:
+            self._send(client, self.history_nb+len(self.history), msg)
 
     def close(self):
         """Close a channel
         """
         with self.lock:
-            clients, self.clients = self.clients, []
+            clients, self.clients = self.clients, set()
 
         # Send a "Service Unavailable" status to all the connected clients
-        for (event, response) in clients:
-            response.status = 503   # "Service Unavailable"
-            event.set()
+        for client in clients:
+            client.send(status=503)   # "Service Unavailable"
 
-    def _send(self, nb, msg, response):
+    def _send(self, client, nb, msg):
         """Build the message to send
+
+        In:
+          - ``client`` -- client to send the message to
+          - ``nb`` -- message id
+          - ``msg`` -- the message
         """
         # The raw message sent contains the msg identifier and the data
-        response.body = '%09d%s' % (nb, msg.encode('utf-8'))
+        client.send('%09d%s' % (nb, msg.encode('utf-8')))
 
     def get_old_msg(self, nb):
         """Check if a message in the history is ready to be sent
@@ -121,6 +177,9 @@ class Channel(object):
 
         # Return only one message
         return (nb+1, self.history[nb-self.history_nb])
+
+    def __len__(self):
+        return len(self.clients)
 
 
 class TextChannel(Channel):
@@ -164,24 +223,27 @@ class Channels(dict):
         if id not in self:
             self[id] = self.channel_factory(id, *args, **kw)
 
-    def connect(self, multiprocess, id, nb, response):
+    def connect(self, id, nb, fileno, response):
         """A browser wants to be connected to a channel
 
         In:
-          - ``multiprocess`` -- are we running in a multi-processes environment ?
           - ``id`` -- the channel identifier
           - ``nb`` -- identifier of the next message wanted
+          - ``fileno`` -- the I/O file handle
           - ``response`` -- ``webob`` response object
         """
-        if multiprocess:
-            response.status = 501 # "Not Implemented"
-        else:
-            channel = self.get(id)
+        channel = self.get(id)
 
-            if channel is None:
-                response.status = 404 # "Not Found"
-            else:
-                channel.connect(nb, response)
+        if channel is None:
+            response.status = 404 # "Not Found"
+        else:
+            self.discard_disconnected_clients()
+
+            channel.connect(nb, fileno, response)
+
+    def discard_disconnected_clients(self):
+        for channel in self.values():
+            channel.discard_disconnected_clients()
 
     def send(self, id, msg):
         """Send a message to all the connected clients of a channel
@@ -191,6 +253,10 @@ class Channels(dict):
           - ``msg`` -- message to send
         """
         self[id].send(msg)
+
+    def has_clients(self, id):
+        self.discard_disconnected_clients()
+        return len(self[id])
 
     def __delitem__(self, id):
         """Close a channel
@@ -206,138 +272,3 @@ class TextChannels(Channels):
     channel_factory = TextChannel
 
 channels = TextChannels()
-
-# ----------------------------------------------------------------------------
-
-if __name__ == '__main__':
-    class Response: pass
-    response = Response()
-    response.body = None
-
-    channel = TextChannel('42', 'f')
-
-    channel.send('aaa')
-    channel.send('bbb')
-    channel.send('ccc')
-
-    channel.connect(response, 0)
-    print response.body
-
-    response.body = None
-    channel.send('ddd')
-    print response.body
-
-    channel.send('eee')
-    response.body = None
-    channel.connect(response, 4)
-    print response.body
-
-    channel.send('eee')
-    print response.body
-
-    # -----------------
-
-    channel = TextChannel('42', 'f', 3)
-
-    channel.send('aaa')
-    channel.send('bbb')
-    channel.send('ccc')
-
-    channel.connect(response, 0)
-    print response.body
-
-    channel.connect(response, 1)
-    print response.body
-
-    channel.connect(response, 2)
-    print response.body
-
-    response.body = None
-    channel.connect(response, 3)
-    print response.body
-
-    response.body = None
-    channel.connect(response, 4)
-    print response.body
-
-    channel = TextChannel('42', 'f', 3)
-
-    channel.send('aaa')
-    channel.send('bbb')
-    channel.send('ccc')
-    channel.send('ddd')
-    channel.send('eee')
-
-    channel.connect(response, 0)
-    print response.body
-
-    channel.connect(response, 4)
-    print response.body
-
-    response.body = None
-    channel.connect(response, 5)
-    print response.body
-
-    channel = TextChannel('42', 'f')
-
-    channel.send('aaa')
-    channel.send('bbb')
-    channel.send('ccc')
-
-    channel.connect(response, 0)
-    print response.body
-
-    response.body = None
-    channel.send('ddd')
-    print response.body
-
-    channel.send('eee')
-    response.body = None
-    channel.connect(response, 4)
-    print response.body
-
-    channel.send('eee')
-    print response.body
-
-    # -----------------
-
-    channel = Channel('42', 'f', 3)
-
-    channel.send('aaa')
-    channel.send('bbb')
-    channel.send('ccc')
-
-    channel.connect(response, 0)
-    print response.body
-
-    channel.connect(response, 1)
-    print response.body
-
-    channel.connect(response, 2)
-    print response.body
-
-    response.body = None
-    channel.connect(response, 3)
-    print response.body
-
-    response.body = None
-    channel.connect(response, 4)
-    print response.body
-
-    channel = Channel('42', 'f', 3)
-
-    channel.send('aaa')
-    channel.send('bbb')
-    channel.send('ccc')
-    channel.send('ddd')
-    channel.send('eee')
-
-    channel.connect(response, 0)
-    print response.body
-
-    channel.connect(response, 4)
-    print response.body
-
-    response.body = None
-    channel.connect(response, 5)
-    print response.body
