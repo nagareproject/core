@@ -557,11 +557,15 @@ class XmlRenderer(common.Renderer):
         children = self._stack[0].getchildren()
 
         text = self._stack[0].text
+
         if text is not None:
             children.insert(0, text)
 
+        if not children:
+            return ''
+
         if len(children) == 1:
-            children = children[0]
+            return children[0]
 
         return children
 
