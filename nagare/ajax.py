@@ -213,7 +213,7 @@ def serialize(self, content_type, doctype, declaration):
     Return:
       - a tuple ('text/plain', Javascript to evaluate on the client)
     """
-    return ';'.join(serializer.serialize(view, content_type, doctype, declaration) for view in self)
+    return ('text/plain', ';'.join(serializer.serialize(view, content_type, doctype, False)[1] for view in self))
 
 
 class Updates(Update):
