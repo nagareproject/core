@@ -52,7 +52,7 @@ def serialize(self, content_type, doctype, declaration):
       - a tuple ('text/plain', Javascript to evaluate on the client)
     """
     if self.output is None:
-        return ''
+        return ('text/plain', '')
 
     # Get the javascript for the header
     head = presentation.render(self.renderer.head, self.renderer, None, None)
