@@ -54,10 +54,7 @@ def serialize(next_method, output, content_type, doctype, declaration):
         # The browser only accepts HTML
         lxml.html.xhtml_to_html(output)
 
-        if doctype:
-            doctype += '\n'
-
-        output = (doctype if declaration else '') + output.write_htmlstring(pretty_print=True)
+        output = (doctype+'\n' if declaration else '') + output.write_htmlstring(pretty_print=True)
 
     return (content_type, output)
 
@@ -75,10 +72,7 @@ def serialize(output, content_type, doctype, declaration):
     Return:
       - a tuple (content_type, content)
     """
-    if doctype:
-        doctype += '\n'
-
-    r = ('<?xml version="1.0" encoding="UTF-8"?>\n'+doctype) if declaration else ''
+    r = ('<?xml version="1.0" encoding="UTF-8"?>\n'+doctype+'\n') if declaration else ''
     return (content_type, r + output.write_xmlstring())
 
 
@@ -112,3 +106,25 @@ def serialize(output, content_type, doctype, declaration):
       - a tuple (content_type, content)
     """
     return serialize(output.encode('utf-8'), content_type, doctype, declaration)
+
+
+@peak.rules.when(serialize, ((list, tuple),))
+def serialize(output, content_type, doctype, declaration):
+    """Generic method to generate from a list or a tuple
+
+    In:
+      - ``output`` -- the rendered content
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
+
+    Return:
+      - a tuple (content_type, content)
+    """
+    if not output:
+        return (content_type, '')
+
+    (content_type, first) = serialize(output[0], content_type, doctype, declaration)
+    second = ''.join(serialize(e, content_type, doctype, False)[1] for e in output[1:])
+
+    return (content_type, first+second)
