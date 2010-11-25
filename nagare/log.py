@@ -7,12 +7,14 @@
 # this distribution.
 #--
 
-import os, threading, StringIO
+import os, StringIO
 
 import logging
 import logging.config
 
 import configobj
+
+from nagare import local
 
 # -----------------------------------------------------------------------------
 
@@ -20,21 +22,17 @@ logging._srcfile = __file__[:-1] if __file__.endswith(('.pyc', '.pyo')) else __f
 
 # -----------------------------------------------------------------------------
 
-# One logger per thread
-
-_current = threading.local()
-
 def get_logger(name=None):
     if name is None:
         try:
-            return _current.logger
+            return local.request.logger
         except AttributeError:
             name = 'nagare.application'
 
     return logging.getLogger(name)
 
 def set_logger(name):
-    _current.logger = logging.getLogger(name)
+    local.request.logger = logging.getLogger(name)
 
 def debug(msg, *args, **kw):
     get_logger().debug(msg, *args, **kw)
