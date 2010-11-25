@@ -16,11 +16,84 @@ import datetime
 
 from peak.rules import when
 
-from babel import core, dates, numbers, support
-import pytz
-
 from nagare.namespaces import xml
-from nagare import serializer, ajax
+from nagare import serializer, ajax, log
+
+try:
+    from babel import core, negotiate_locale, Locale as CoreLocale
+    from babel import dates, numbers, support
+    import pytz
+
+    class LazyProxy(support.LazyProxy):
+        """Picklable ``babel.support.LazyProxy`` objects
+        """
+        @property
+        def value(self):
+            """Always evaluate, without any cache
+            """
+            return self._func(*self._args, **self._kwargs)
+
+        def __getstate__(self):
+            return (self._func, self._args, self._kwargs)
+
+        def __setstate__(self, attrs):
+            self.__init__(attrs[0], *attrs[1], **attrs[2])
+
+
+    @when(xml.add_child, (xml._Tag, LazyProxy))
+    def add_child(self, lazy):
+        """Add a lazy string to a tag
+
+        In:
+          - ``self`` -- the tag
+          - ``lazy`` -- the lazy string to add
+
+        """
+        self.add_child(lazy.value)
+
+    @when(ajax.py2js, (LazyProxy,))
+    def py2js(lazy, h):
+        """Generic method to transcode a lazy string to javascript
+
+        In:
+          - ``lazy`` -- the lazy string
+          - ``h`` -- the current renderer
+
+        Return:
+          - transcoded javascript
+        """
+
+        return ajax.py2js(lazy.value, h)
+
+    @when(serializer.serialize, (LazyProxy,))
+    def serialize(lazy, content_type, doctype, declaration):
+        """Generic method to generate a text from a lazy string
+
+        In:
+          - ``lazy`` -- the lazy string
+          - ``content_type`` -- the rendered content type
+          - ``doctype`` -- the (optional) doctype
+          - ``declaration`` -- is the XML declaration to be outputed ?
+
+        Return:
+          - a tuple (content_type, content)
+        """
+        return serializer.serialize(lazy.value, content_type, doctype, declaration)
+
+except ImportError:
+
+    # Dummy ``Locale`` base class and ``LazyProxy``, used when the i18n extra
+    # is not installed
+
+    class CoreLocale(object):
+        def __init__(self, language, territory, script, variant):
+            if not (language is territory is script is variant is None):
+                log.warning('i18n extra not installed')
+
+            self.language = None
+
+    def LazyProxy(f, *args, **kw):
+        return f(*args, **kw)
 
 # -----------------------------------------------------------------------------
 
@@ -28,75 +101,6 @@ from nagare import serializer, ajax
 
 if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
     os.environ['LC_CTYPE'] = 'en_US.utf-8'
-
-# -----------------------------------------------------------------------------
-
-_current = threading.local()
-
-def get_locale():
-    return _current.locale
-
-def set_locale(locale):
-    _current.locale = locale
-
-# -----------------------------------------------------------------------------
-
-class LazyProxy(support.LazyProxy):
-    """Picklable ``babel.support.LazyProxy`` objects
-    """
-    @property
-    def value(self):
-        """Always evaluate, without any cache
-        """
-        return self._func(*self._args, **self._kwargs)
-
-    def __getstate__(self):
-        return (self._func, self._args, self._kwargs)
-
-    def __setstate__(self, attrs):
-        self.__init__(attrs[0], *attrs[1], **attrs[2])
-
-# -----------------------------------------------------------------------------
-
-@when(xml.add_child, (xml._Tag, LazyProxy))
-def add_child(self, lazy):
-    """Add a lazy string to a tag
-
-    In:
-      - ``self`` -- the tag
-      - ``lazy`` -- the lazy string to add
-
-    """
-    self.add_child(lazy.value)
-
-@when(ajax.py2js, (LazyProxy,))
-def py2js(lazy, h):
-    """Generic method to transcode a lazy string to javascript
-
-    In:
-      - ``lazy`` -- the lazy string
-      - ``h`` -- the current renderer
-
-    Return:
-      - transcoded javascript
-    """
-
-    return ajax.py2js(lazy.value, h)
-
-@when(serializer.serialize, (LazyProxy,))
-def serialize(lazy, content_type, doctype, declaration):
-    """Generic method to generate a text from a lazy string
-
-    In:
-      - ``lazy`` -- the lazy string
-      - ``content_type`` -- the rendered content type
-      - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
-
-    Return:
-      - a tuple (content_type, content)
-    """
-    return serializer.serialize(lazy.value, content_type, doctype, declaration)
 
 # -----------------------------------------------------------------------------
 
@@ -245,7 +249,7 @@ class DummyTranslation(object):
     ngettext = ungettext = _N = lazy_ngettext = lazy_ungettext = _LN = lambda self, singular, plural, n: singular if n==1 else plural
 
 
-class Locale(core.Locale):
+class Locale(CoreLocale):
     def __init__(
                     self,
                     language=None, territory=None, script=None, variant=None,
@@ -275,8 +279,9 @@ class Locale(core.Locale):
         """
         if language is not None:
             super(Locale, self).__init__(language, territory, script, variant)
+        else:
+            self.language = None
 
-        self.language = language
         self.dirname = dirname
         self.domain = domain
 
@@ -991,11 +996,11 @@ class NegociatedLocale(Locale):
             no associated timezone. If no default timezone is given, the ``timezone``
             value is used
         """
-        locale = core.negotiate_locale(
-                                        request.accept_language.best_matches(),
-                                        map('-'.join, locales),
-                                        '-'
-                                      )
+        locale = negotiate_locale(
+                                    request.accept_language.best_matches(),
+                                    map('-'.join, locales),
+                                    '-'
+                                 )
 
         if not locale:
             (language, territory) = default_locale
@@ -1014,3 +1019,13 @@ class NegociatedLocale(Locale):
                                                 dirname=dirname, domain=domain,
                                                 timezone=timezone, default_timezone=default_timezone
                                               )
+
+# -----------------------------------------------------------------------------
+
+_current = threading.local()
+
+def get_locale():
+    return _current.locale
+
+def set_locale(locale):
+    _current.locale = locale
