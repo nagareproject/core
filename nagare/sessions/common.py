@@ -137,6 +137,7 @@ class Sessions(object):
 
     def __init__(
                     self,
+                    lock_factory,
                     states_history=True,
                     pickler=cPickle.Pickler, unpickle=cPickle.Unpickler,
                     security_cookie_name='_nagare'
@@ -146,6 +147,7 @@ class Sessions(object):
         In:
           - ``security_cookie_name`` -- name of the cookie where the session secure id is stored
         """
+        self.lock_factory = lock_factory
         self.states_history = True
         self.pickler = cPickle.Pickler
         self.unpickler = cPickle.Unpickler
