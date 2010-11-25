@@ -14,6 +14,7 @@ from nagare.namespaces import xhtml_base
 from nagare.namespaces import xml
 from nagare import callbacks
 from nagare import wsgi
+from nagare import local
 from nagare.sessions.memory_sessions import SessionsWithPickledStates
 from nagare import presentation
 
@@ -25,7 +26,7 @@ import os
 
 def create_FixtureApp(app):
     app = wsgi.create_WSGIApp(app)
-    app.set_sessions_manager(SessionsWithPickledStates())
+    app.set_sessions_manager(SessionsWithPickledStates(local.DummyLock))
     app.start()
 
     return TestApp(app)

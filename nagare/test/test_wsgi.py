@@ -7,8 +7,10 @@
 # this distribution.
 #--
 
-from nagare import wsgi
+from nagare import local, wsgi
 from nagare.sessions import ExpirationError, common
+
+local.request = local.Process()
 
 def create_environ():
     return {
@@ -51,7 +53,7 @@ class ExpiredSessionManager(common.Sessions):
         raise ExpirationError()
 
 class App(wsgi.WSGIApp):
-    def __init__(self, session_manager=SessionManager()):
+    def __init__(self, session_manager=SessionManager(local.DummyLock)):
         super(App, self).__init__(lambda: None)
         self.sessions = session_manager
 
@@ -75,5 +77,5 @@ def test_request_validity2():
 
 def test_bad_session():
     """Request - session expired"""
-    r = process_request(App(session_manager=ExpiredSessionManager()))
+    r = process_request(App(session_manager=ExpiredSessionManager(local.DummyLock)))
     assert (r.status_code == 301) and r['Location'] == 'http://localhost:8080/app/'
