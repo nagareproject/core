@@ -22,7 +22,7 @@ import os
 import webob
 from webob import exc, acceptparse
 
-from nagare import component, presentation, serializer, database, top, security, log, comet, i18n
+from nagare import component, presentation, serializer, database, top, security, log, comet, i18n, local
 from nagare.security import dummy_manager
 from nagare.callbacks import Callbacks, CallbackLookupError
 from nagare.namespaces import xhtml
@@ -73,7 +73,8 @@ class WSGIApp(object):
         self.last_exception = None
 
         self.security = dummy_manager.Manager()
-        self.default_locale = i18n.Locale()
+
+        self.set_default_locale(i18n.Locale())
 
     def set_config(self, config_filename, config, error):
         """Read the configuration parameters
@@ -118,7 +119,7 @@ class WSGIApp(object):
         In:
           - ``publisher`` -- the publisher of the application
         """
-        pass
+        local.request = publisher.local
 
     def set_sessions_manager(self, sessions_manager):
         """Register the sessions manager
@@ -364,6 +365,8 @@ class WSGIApp(object):
         Return:
           - the content to send back to the browser
         """
+        local.request.clear()
+
         # Create the ``WebOb`` request and response objects
         # -------------------------------------------------
 
@@ -464,6 +467,7 @@ class WSGIApp(object):
                         self._phase2(output, renderer.content_type, renderer.doctype, render is not None, response)
 
                         if not xhr_request:
+                            # TODO: move it into a ``renderer.end_rendering()`` method
                             callbacks.clear_not_used(renderer._rendered)
 
                     # Store the session

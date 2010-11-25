@@ -12,6 +12,7 @@
 import time
 from flup.server import fcgi_fork
 
+from nagare import local
 from nagare.publishers import common
 
 class Publisher(common.Publisher, fcgi_fork.WSGIServer):
@@ -28,6 +29,8 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
                 maxSpare='integer(default=None)', maxChildren='integer(default=None)',
                 maxRequests='integer(default=None)',
                )
+
+    local = local.Process()
 
     def _sanitizeEnv(self, environ):
         super(Publisher, self)._sanitizeEnv(environ)

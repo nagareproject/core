@@ -10,8 +10,10 @@
 """The HTTP multi-threaded publisher"""
 
 import time
+
 from paste import httpserver
 
+from nagare import local
 from nagare.publishers import common
 
 class Publisher(common.Publisher):
@@ -40,6 +42,8 @@ class Publisher(common.Publisher):
 
     spec = server_spec.copy()
     spec.update(threadpool_spec)
+
+    local = local.Thread()
 
     def serve(self, filename, conf, error):
         """Run the publisher

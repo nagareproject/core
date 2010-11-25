@@ -49,7 +49,7 @@ class Admin(object):
 @presentation.render_for(Admin)
 def render(self, h, comp, *args):
     """Aggregates all the default views of the components"""
-    
+
     h.head.css_url('/static/nagare/application.css')
     h.head << h.head.title('Nagare Administration interface')
 
@@ -100,6 +100,8 @@ class WSGIApp(wsgi.WSGIApp):
         In:
           - ``publisher`` -- the publisher of the application
         """
+        super(WSGIApp, self).set_publisher(publisher)
+
         self.publisher = publisher
 
         if self.as_root:
