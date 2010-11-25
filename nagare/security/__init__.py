@@ -9,10 +9,7 @@
 
 """Securiy API for the applications"""
 
-import threading
-
-# A security context by thread, with the current user and the securiy manager
-_current = threading.local()
+from nagare import local
 
 # ---------------------------------------------------------------------------
 
@@ -24,7 +21,7 @@ def _get_user():
     Return:
       - the user object (created by the security manager)
     """
-    return _current.user
+    return local.request.user
 
 def get_user():
     """Return the current user
@@ -41,7 +38,7 @@ def set_user(user):
     In:
       - ``user`` -- the current user
     """
-    _current.user = user
+    local.request.user = user
 
 
 def get_manager():
@@ -52,7 +49,7 @@ def get_manager():
     Return:
       - the security manager
     """
-    return _current.security_manager
+    return local.request.security_manager
 
 def set_manager(manager):
     """Change the security manager
@@ -60,7 +57,7 @@ def set_manager(manager):
     In:
       - ``manager`` -- the new security manager
     """
-    _current.security_manager = manager
+    local.request.security_manager = manager
 
 # ---------------------------------------------------------------------------
 
