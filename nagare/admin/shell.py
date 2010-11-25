@@ -21,7 +21,7 @@ In both cases:
 
 import sys, os, code, atexit, __builtin__
 
-from nagare import database, log
+from nagare import database, log, local
 from nagare.admin import util
 
 def create_globals(cfgfiles, debug, error):
@@ -32,6 +32,7 @@ def create_globals(cfgfiles, debug, error):
       - ``debug`` -- enable the display of the generated SQL statements
       - ``error`` -- the function to call in case of configuration errors
     """
+    local.request = local.Process()
 
     configs = []
 
