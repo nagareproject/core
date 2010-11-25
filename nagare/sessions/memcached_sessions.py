@@ -7,7 +7,7 @@
 # this distribution.
 #--
 
-import threading, time
+import time
 
 import memcache
 
@@ -63,6 +63,7 @@ class Sessions(common.Sessions):
 
     def __init__(
                  self,
+                 lock_factory,
                  host='127.0.0.1', port=11211,
                  ttl=0,
                  lock_ttl=0, lock_poll_time=0.1, lock_max_wait_time=5,
@@ -84,7 +85,7 @@ class Sessions(common.Sessions):
           - ``reset`` -- do a reset of all the sessions on startup ?
           - ``debug`` -- display the memcache requests / responses
         """
-        super(Sessions, self).__init__(**kw)
+        super(Sessions, self).__init__(lock_factory, **kw)
 
         self.host = ['%s:%d' % (host, port)]
         self.ttl = ttl
@@ -94,7 +95,7 @@ class Sessions(common.Sessions):
         self.min_compress_len = min_compress_len
         self.debug = debug
 
-        self.memcached = threading.local()
+        self.memcached = lock_factory()
 
         if reset:
             self.flush_all()

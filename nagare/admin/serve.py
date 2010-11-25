@@ -257,7 +257,7 @@ def run(parser, options, args):
         conf.update(aconf['sessions'].dict())
         t = conf.pop('type')
 
-        sessions_manager = sessions_managers[t].load()()
+        sessions_manager = sessions_managers[t].load()(publisher.local.create_lock)
         sessions_manager.set_config(options.conf, conf, parser.error)
 
         (app, metadatas) = util.activate_WSGIApp(

@@ -26,7 +26,7 @@ Also no static contents can be served.
     Don't run a production application with this command
 """
 
-import sys, os
+import os
 
 import pkg_resources
 
@@ -116,7 +116,7 @@ def run(parser, options, args):
 
     # Always use the standalone session manager (in memory sessions)
     sessions_managers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
-    sessions_manager = sessions_managers['standalone'].load()()
+    sessions_manager = sessions_managers['standalone'].load()(publisher.local.create_lock)
     app.set_sessions_manager(sessions_manager)
 
     # The static contents of the framework are served by the standalone server
