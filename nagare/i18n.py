@@ -11,13 +11,12 @@
 """
 
 import os
-import threading
 import datetime
 
 from peak.rules import when
 
 from nagare.namespaces import xml
-from nagare import serializer, ajax, log
+from nagare import serializer, ajax, local, log
 
 try:
     from babel import core, negotiate_locale, Locale as CoreLocale
@@ -280,7 +279,7 @@ class Locale(CoreLocale):
         if language is not None:
             super(Locale, self).__init__(language, territory, script, variant)
         else:
-            self.language = None
+            self.language = self.territory = self.script = self.variant = None
 
         self.dirname = dirname
         self.domain = domain
@@ -1022,10 +1021,8 @@ class NegociatedLocale(Locale):
 
 # -----------------------------------------------------------------------------
 
-_current = threading.local()
-
 def get_locale():
-    return _current.locale
+    return getattr(local.request, 'locale', None) or Locale()
 
 def set_locale(locale):
-    _current.locale = locale
+    local.request.locale = locale
