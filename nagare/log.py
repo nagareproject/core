@@ -22,17 +22,20 @@ logging._srcfile = __file__[:-1] if __file__.endswith(('.pyc', '.pyo')) else __f
 
 # -----------------------------------------------------------------------------
 
-def get_logger(name=None):
+def get_logger(name='.'):
     if name is None:
+        name = '.'
+
+    if name.startswith('.'):
         try:
-            return local.request.logger
+            name = (local.request.logger_name + name).rstrip('.')
         except AttributeError:
             name = 'nagare.application'
 
     return logging.getLogger(name)
 
 def set_logger(name):
-    local.request.logger = logging.getLogger(name)
+    local.request.logger_name = name
 
 def debug(msg, *args, **kw):
     get_logger().debug(msg, *args, **kw)
@@ -111,6 +114,12 @@ def configure(log_conf, app_name=None):
         if handler:
             app_default_conf['logger_app_'+app_name]['handlers'] += (', ' + handler)
 
+        logger_sections = [values for (section, values) in log_conf.items() if section.startswith('logger_')]
+
+        for logger_section in logger_sections:
+            if ('qualname' in logger_section) and logger_section['qualname'].startswith('.'):
+                logger_section['qualname'] = ('nagare.application.' + app_name + logger_section['qualname']).rstrip('.')
+
         # Use the generic 'logger', 'handler' and 'formatter' sections to
         # configure the dedicated logger, handler and formatter
         for section in ('logger', 'handler', 'formatter'):
@@ -143,6 +152,7 @@ def configure(log_conf, app_name=None):
 
     # Merge the resulting configuration to the global configuration
     apps_log_conf.merge(app_default_conf)
+
 
 def activate():
     """Use the merging of all the logging configurations to configure the Python logging system
