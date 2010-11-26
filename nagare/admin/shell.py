@@ -32,6 +32,7 @@ def create_globals(cfgfiles, debug, error):
       - ``debug`` -- enable the display of the generated SQL statements
       - ``error`` -- the function to call in case of configuration errors
     """
+    # Configure the local service
     local.request = local.Process()
 
     configs = []
@@ -44,7 +45,7 @@ def create_globals(cfgfiles, debug, error):
 
         log.configure(aconf['logging'].dict(), aconf['application']['name'])
 
-    # Configure the logging system
+    # Configure the logging service
     log.activate()
 
     apps = {}

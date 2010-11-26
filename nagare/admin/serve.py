@@ -220,7 +220,7 @@ def run(parser, options, args):
 
         log.configure(aconf['logging'].dict(), aconf['application']['name'])
 
-    # Configure the logging system
+    # Configure the logging service
     log.activate()
 
     # Configure each application and register it to the publisher
