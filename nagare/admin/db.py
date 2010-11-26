@@ -16,7 +16,7 @@ from __future__ import with_statement
 
 import pkg_resources
 
-from nagare import database
+from nagare import local, log, database
 from nagare.admin import util
 
 def read_options(debug, args, error):
@@ -46,6 +46,15 @@ def read_options(debug, args, error):
 
     # Read the configuration of the application
     (cfgfile, app, dist, aconf) = util.read_application(args[0], error)
+
+    # Configure the local service
+    local.request = local.Process()
+
+    # Configure the logging service
+    log.configure(aconf['logging'].dict(), aconf['application']['name'])
+    log.activate()
+    log.set_logger('nagare.application.'+ aconf['application']['name'])
+    
     return util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[1]
 
 
