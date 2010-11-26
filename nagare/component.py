@@ -167,7 +167,7 @@ class Component(object):
 
         # Else, check if I was called by a component
         if self._channel is None:
-            raise AnswerWithoutCall()
+            raise AnswerWithoutCall(self)
 
         # Returns my answer to the calling component
         self._channel.send(r)
