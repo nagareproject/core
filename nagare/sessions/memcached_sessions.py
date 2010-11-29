@@ -11,6 +11,7 @@ import time
 
 import memcache
 
+from nagare import local
 from nagare.sessions import ExpirationError, common
 
 KEY_PREFIX = 'nagare_'
@@ -63,7 +64,6 @@ class Sessions(common.Sessions):
 
     def __init__(
                  self,
-                 lock_factory,
                  host='127.0.0.1', port=11211,
                  ttl=0,
                  lock_ttl=0, lock_poll_time=0.1, lock_max_wait_time=5,
@@ -85,7 +85,7 @@ class Sessions(common.Sessions):
           - ``reset`` -- do a reset of all the sessions on startup ?
           - ``debug`` -- display the memcache requests / responses
         """
-        super(Sessions, self).__init__(lock_factory, **kw)
+        super(Sessions, self).__init__(**kw)
 
         self.host = ['%s:%d' % (host, port)]
         self.ttl = ttl
@@ -94,8 +94,6 @@ class Sessions(common.Sessions):
         self.lock_max_wait_time = lock_max_wait_time
         self.min_compress_len = min_compress_len
         self.debug = debug
-
-        self.memcached = lock_factory()
 
         if reset:
             self.flush_all()
@@ -128,13 +126,13 @@ class Sessions(common.Sessions):
         Return:
           - the connection
         """
-        # The connection objects are thread local
-        connection = self.memcached.__dict__.get('connection')
+        # The connection objects are local to the workers
+        connection = getattr(local.worker, 'memcached_connection', None)
 
         if connection is None:
             connection = memcache.Client(self.host, debug=self.debug)
-            self.memcached.connection = connection
-
+            local.worker.memcached_connection = connection
+            
         return connection
 
     def flush_all(self):

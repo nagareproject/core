@@ -16,6 +16,7 @@ These sessions managers keeps:
 
 import copy
 
+from nagare import local
 from nagare.sessions import ExpirationError, common, lru_dict
 
 DEFAULT_NB_SESSIONS = 10000
@@ -31,14 +32,14 @@ class SessionsBase(common.Sessions):
 
     spec.update(common.Sessions.spec)
 
-    def __init__(self, lock_factory, nb_sessions=DEFAULT_NB_SESSIONS, nb_states=DEFAULT_NB_STATES, **kw):
+    def __init__(self, nb_sessions=DEFAULT_NB_SESSIONS, nb_states=DEFAULT_NB_STATES, **kw):
         """Initialization
 
         In:
           - ``nb_sessions`` -- maximum number of sessions kept in memory
           - ``nb_states`` -- maximum number of states, for each sessions, kept in memory
         """
-        super(SessionsBase, self).__init__(lock_factory, **kw)
+        super(SessionsBase, self).__init__(**kw)
 
         self.nb_states = nb_states
         self._sessions = lru_dict.ThreadSafeLRUDict(nb_sessions)
@@ -80,7 +81,7 @@ class SessionsBase(common.Sessions):
             - id of this state,
             - session lock
         """
-        lock = self.lock_factory()
+        lock = local.worker.create_lock()
         lock.acquire()
 
         self._sessions[session_id] = [0, lock, secure_id, None, lru_dict.LRUDict(self.nb_states)]
