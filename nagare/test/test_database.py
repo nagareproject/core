@@ -27,8 +27,11 @@ from nagare.sessions.memory_sessions import SessionsWithPickledStates
 from exceptions import Exception
 
 def create_FixtureApp(app):
+    local.worker = local.Process()
+    local.request = local.Process()
+
     app = wsgi.create_WSGIApp(app)
-    app.set_sessions_manager(SessionsWithPickledStates(local.DummyLock))
+    app.set_sessions_manager(SessionsWithPickledStates())
     app.start()
 
     return TestApp(app)
