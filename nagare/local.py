@@ -9,7 +9,10 @@
 
 """Scoped objects
 
-Currently only for objects scoped to a request
+Currently:
+
+  - objects scoped to a worker, a handler of a request
+  - objects scoped to a request (i.e a scoped cleared on each new request)
 """
 
 import threading
@@ -39,4 +42,5 @@ class Process(object):
 
 # ----------------------------------------------------------------------------
 
+worker = None
 request = None

@@ -119,7 +119,7 @@ class WSGIApp(object):
         In:
           - ``publisher`` -- the publisher of the application
         """
-        local.request = publisher.local
+        pass
 
     def set_sessions_manager(self, sessions_manager):
         """Register the sessions manager

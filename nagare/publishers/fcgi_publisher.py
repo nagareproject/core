@@ -30,7 +30,13 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
                 maxRequests='integer(default=None)',
                )
 
-    local = local.Process()
+    def __init__(self):
+        """Initialization
+        """
+        super(Publisher, self).__init__()
+
+        local.worker = local.Process()
+        local.request = local.Process()
 
     def _sanitizeEnv(self, environ):
         super(Publisher, self)._sanitizeEnv(environ)

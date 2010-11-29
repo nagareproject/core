@@ -111,7 +111,7 @@ def run(parser, options, args):
 
     # Always use the standalone session manager (in memory sessions)
     sessions_managers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
-    sessions_manager = sessions_managers['standalone'].load()(publisher.local.create_lock)
+    sessions_manager = sessions_managers['standalone'].load()()
     app.set_sessions_manager(sessions_manager)
 
     # Set the application logger level to DEBUG

@@ -43,7 +43,13 @@ class Publisher(common.Publisher):
     spec = server_spec.copy()
     spec.update(threadpool_spec)
 
-    local = local.Thread()
+    def __init__(self):
+        """Initialization
+        """
+        super(Publisher, self).__init__()
+
+        local.worker = local.Thread()
+        local.request = local.Thread()
 
     def serve(self, filename, conf, error):
         """Run the publisher

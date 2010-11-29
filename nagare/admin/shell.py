@@ -33,6 +33,7 @@ def create_globals(cfgfiles, debug, error):
       - ``error`` -- the function to call in case of configuration errors
     """
     # Configure the local service
+    local.worker = local.Process()
     local.request = local.Process()
 
     configs = []
