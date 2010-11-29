@@ -39,6 +39,26 @@ class ViewToJs(object):
         self.renderer = renderer
         self.output = output
 
+
+def serialize_body(view_to_js, content_type, doctype):
+    """Wrap a view body into a javascript code
+
+    In:
+      - ``view_to_js`` -- the view
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
+
+    Return:
+      - Javascript to evaluate on the client
+    """
+    # Get the HTML or XHTML of the view
+    body = serializer.serialize(view_to_js.output, content_type, doctype, False)[1]
+
+    # Wrap it into a javascript code
+    return "%s('%s', %s)" % (view_to_js.js, view_to_js.id, py2js(body, view_to_js.renderer))
+
+
 @peak.rules.when(serializer.serialize, (ViewToJs,))
 def serialize(self, content_type, doctype, declaration):
     """Wrap a view into a javascript code
@@ -57,11 +77,8 @@ def serialize(self, content_type, doctype, declaration):
     # Get the javascript for the header
     head = presentation.render(self.renderer.head, self.renderer, None, None)
 
-    # Get the HTML or XHTML of the view
-    body = serializer.serialize(self.output, content_type, doctype, False)[1]
-
-    # Wrap all into a javascript code
-    return ('text/plain', "%s('%s', %s); %s" % (self.js, self.id, py2js(body, self.renderer), head))
+    # Wrap the body and the header into a javascript code
+    return ('text/plain', serialize_body(self, content_type, doctype) + '; ' + head)
 
 
 def javascript_dependencies(renderer):
@@ -213,7 +230,15 @@ def serialize(self, content_type, doctype, declaration):
     Return:
       - a tuple ('text/plain', Javascript to evaluate on the client)
     """
-    return ('text/plain', ';'.join(serializer.serialize(view, content_type, doctype, False)[1] for view in self))
+    bodies = [serialize_body(view_to_js, content_type, doctype) for view_to_js in self if view_to_js.output is not None]
+
+    if not bodies:
+        return ('text/plain', '')
+
+    # Get the javascript for the header
+    head = presentation.render(self[0].renderer.head, self[0].renderer, None, None)
+
+    return ('text/plain', '; '.join(bodies) + '; ' + head)
 
 
 class Updates(Update):
@@ -257,7 +282,7 @@ class Updates(Update):
           - the rendering function
         """
         renders = [update._generate_render(renderer) for update in self._updates]
-        return lambda r: ViewsToJs([render(r) for render in renders])
+        return lambda r: ViewsToJs(render(r) for render in renders)
 
 # ---------------------------------------------------------------------------
 
