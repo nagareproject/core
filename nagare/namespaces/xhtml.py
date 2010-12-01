@@ -640,7 +640,7 @@ class Option(xhtml_base._HTMLTag):
         if 'selected' in self.attrib:
             del self.attrib['selected']
 
-        if self.get('value') in values:
+        if self.get('value') in map(unicode, values):
             self.set('selected', 'selected')
 
         return self
