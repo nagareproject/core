@@ -90,6 +90,9 @@ def absolute_url(url, static):
     Return:
       - an absolute URL
     """
+    if url.startswith('#'):
+        return url
+
     i = url.find(':')
     if ((i == -1) or not url[:i].isalpha()) and url and (url[0] != '/'):
         # If this is a relative URL, it's relative to the statics directory
