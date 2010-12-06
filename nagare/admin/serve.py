@@ -212,7 +212,7 @@ def run(parser, options, args):
 
     configs = []
 
-    # Merge all the ``[logging]]`` section of all the applications
+    # Merge all the ``[logging]`` section of all the applications
     for cfgfile in args:
         # Read the configuration file of the application
         (cfgfile, app, dist, aconf) = util.read_application(cfgfile, parser.error)

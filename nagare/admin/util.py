@@ -191,6 +191,9 @@ def read_application_options(cfgfile, error, default={}):
     Return:
       - a ``ConfigObj`` of the application parameters
     """
+    if default:
+        default['name'] = 'string(default="%s")' % configobj.ConfigObj(cfgfile)['application']['name']
+
     spec = configobj.ConfigObj(default)
     spec.merge(application_options_spec)
 
