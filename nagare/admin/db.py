@@ -48,6 +48,7 @@ def read_options(debug, args, error):
     (cfgfile, app, dist, aconf) = util.read_application(args[0], error)
 
     # Configure the local service
+    local.worker = local.Process()
     local.request = local.Process()
 
     # Configure the logging service
