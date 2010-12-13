@@ -319,11 +319,18 @@ class JS(object):
         
         src = inspect.getsource(o)
 
+        classname = ''
+        if isinstance(o, types.MethodType):
+            classname = o.im_class.__name__
+            o = o.im_func
+
         if isinstance(o, types.FunctionType):
             if o.__module__ == '__main__':
-                self.name = module = ''
+                self.name = module = classname
             else:
                 module = o.__module__.replace('.', '_')
+                if classname:
+                    module += ('_' + classname)
                 self.name = module + '_'
 
             self.name += o.func_name
@@ -445,7 +452,7 @@ def py2js(d, h):
     """
     return '{' + ', '.join(['%s : %s' % (py2js(name, h), py2js(value, h)) for (name, value) in d.items()]) + '}'
 
-@peak.rules.when(py2js, (types.FunctionType,))
+@peak.rules.when(py2js, ((types.FunctionType, types.MethodType),))
 def py2js(value, h):
     """Generic method to transcode a function
 
