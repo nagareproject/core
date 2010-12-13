@@ -1252,13 +1252,24 @@ class AsyncRenderer(Renderer):
     """
     head_renderer_factory = AsyncHeadRenderer
 
-    def __init__(self, *args, **kw):
+    def __init__(self, parent=None, session=None, request=None, response=None, callbacks=None, static_url='', static_path='', url='/', async_header=False):
         """Renderer initialisation
 
         In:
           - ``parent`` -- parent renderer
+          - ``session`` -- the session object
+          - ``request`` -- the request object
+          - ``response`` -- the response object
+          - ``callbacks`` -- the registered actions on the tags
+          - ``static_url`` -- url of the static contents of the application
+          - ``static_path`` -- path of the static contents of the application
+          - ``url`` -- url prefix of the application
+          - ``async_header`` -- is the head renderer to create a synchronous or an asynchronous one?
         """
-        super(AsyncRenderer, self).__init__(*args, **kw)
+        super(AsyncRenderer, self).__init__(parent, session, request, response, callbacks, static_url, static_path, url)
+
+        if not (parent or async_header):
+            self.head = HeadRenderer(static_url=static_url)
 
         self.async_root = True;
         self.wrapper_to_generate = False    # Add a ``<div>`` around the rendering ?

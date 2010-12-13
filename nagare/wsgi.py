@@ -299,7 +299,8 @@ class WSGIApp(object):
                                                 request, response,
                                                 callbacks,
                                                 self.static_url, self.static_path,
-                                                request.script_name
+                                                request.script_name,
+                                                async_header = True
                                              )
 
         return renderer
