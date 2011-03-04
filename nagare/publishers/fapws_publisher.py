@@ -7,18 +7,19 @@
 # this distribution.
 #--
 
-"""The FAPWS3__  publisher
+"""The FAPWS2__  publisher
 
 __ http://william-os4y.livejournal.com/
 """
 
-import fapws.base
-import fapws._evwsgi as evwsgi
+import _evhttp
+import fapws2
+import fapws2.base
 
 from nagare.publishers import common
 
 class Publisher(common.Publisher):
-    """The FAPWS3 publisher"""
+    """The FAPWS2 publisher"""
 
     # Possible command line options with the default values
     # ------------------------------------------------------
@@ -35,10 +36,10 @@ class Publisher(common.Publisher):
         """
         (host, port, conf) = self._validate_conf(filename, conf, error)
 
-        # The publisher is an events based server so call once the ``on_new_process()`` method
+        # The puslisher is an events based server so call once the ``on_new_process()`` method
         self.on_new_process()
 
-        evwsgi.start(host, port)
-        evwsgi.set_base_module(fapws.base)
-        evwsgi.wsgi_cb('', self.urls)
-        evwsgi.run()
+        _evhttp.start(host, port)
+        _evhttp.set_base_module(fapws2.base)
+        _evhttp.http_cb('', self.urls)
+        _evhttp.event_dispatch()

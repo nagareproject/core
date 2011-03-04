@@ -68,13 +68,13 @@ setup(
       install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.2.4', 'WebOb==0.9.7', 'Paste', 'flup', 'python-memcached'),
       extras_require = {
         'debug' : ('WebError',),
-        'database' : ('SQLAlchemy', 'Elixir==0.7.1'),
+        'database' : ('SQLAlchemy==0.5.8', 'Elixir==0.7.1'),
         'doc' : ('Pygments', 'docutils', 'RstDoc'),
         'test' : ('nose',),
         'i18n' : ('Babel', 'pytz'),
         'full' : (
                   'WebError',
-                  'SQLAlchemy', 'Elixir==0.7.1',
+                  'SQLAlchemy==0.5.8', 'Elixir==0.7.1',
                   'Pygments', 'docutils', 'RstDoc',
                   'nose',
                   'Babel', 'pytz'
@@ -107,9 +107,6 @@ setup(
       fastcgi = nagare.publishers.fcgi_publisher:Publisher
       fapws2 = nagare.publishers.fapws_publisher:Publisher
       eventlet = nagare.publishers.eventlet_publisher:Publisher
-      concurrence = nagare.publishers.concurrence_publisher:Publisher
-      concurrence2 = nagare.publishers.concurrence.publisher:Publisher
-      syncless = nagare.publishers.syncless_publisher:Publisher
 
       [nagare.sessions]
       standalone = nagare.sessions.memory_sessions:SessionsWithPickledStates

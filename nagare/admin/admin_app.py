@@ -66,7 +66,7 @@ def render(self, h, comp, *args):
 
     return h.root
 
-# ---------------------------------------------------------------------------
+# -------------------------------------------e--------------------------------
 
 application_spec = { 'application' : { 'as_root' : 'boolean(default=True)' } }
 
@@ -117,7 +117,7 @@ class WSGIApp(wsgi.WSGIApp):
         # Create the ``admin`` object with the list of all the launched application
         return self.root_factory(self.publisher.get_registered_applications())
 
-# ---------------------------------------------------------------------------
+# -------------------------------------------e--------------------------------
 
 # The admin application singleton.
 # The given factory creates a component from a ``admin`` object

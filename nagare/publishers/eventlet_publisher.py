@@ -34,7 +34,7 @@ class Publisher(common.Publisher):
         """
         (host, port, conf) = self._validate_conf(filename, conf, error)
 
-        # The publisher is an events based server so call once the ``on_new_process()`` method
+        # The puslisher is an events based server so call once the ``on_new_process()`` method
         self.on_new_process()
 
         wsgi.server(api.tcp_listener((host, port)), self.urls)

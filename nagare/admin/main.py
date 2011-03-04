@@ -13,7 +13,7 @@ The ``main()`` function is called by the ``nagare-admin`` console script, create
 by  ``setuptools``
 """
 
-import sys, os, logging
+import sys, os
 import optparse
 
 import configobj
@@ -51,7 +51,7 @@ def main():
         try:
             commands[entry_point.name] = entry_point.load()
         except ImportError:
-            logging.getLogger('nagare', "Warning: the command '%s' can't be imported",  entry_point.name)
+            print "Warning: the command '%s' can't be imported" % entry_point.name
             raise
 
     parser = optparse.OptionParser(usage='\n'.join(usage(commands)))

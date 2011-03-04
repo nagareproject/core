@@ -19,7 +19,7 @@ import stackless
 
 from peak.rules import when
 
-from nagare import presentation, local
+from nagare import presentation
 
 class AnswerWithoutCall(BaseException):
     pass
@@ -44,7 +44,6 @@ def call_wrapper(action, *args, **kw):
     Return:
       *Never*
     """
-    #local.Tasklet(action)(*args, **kw).run()
     stackless.tasklet(action)(*args, **kw).run()
 
 
@@ -238,16 +237,14 @@ class Task:
 
        A ``Task`` is an object, not a component: you must wrap it into a ``Component()`` to use it.
     """
-
     def _go(self, comp):
         # If I was not called by an other component and nobody is listening to
         # my answer,  I'm the root component. So I call my ``go()`` method forever
-        print "On answer", comp._on_answer
         if comp._channel is comp._on_answer is None:
             while True:
                 self.go(comp)
 
-        # Else, answer with the return of the ``go`` method
+        # Else, answer with the return of the ``go()`` method
         comp.answer(self.go(comp))
 
     def go(self, comp):

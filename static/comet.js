@@ -15,13 +15,13 @@ function comet_getAndEval(id, nb, callback, poll_time) {
                                     var new_nb = o.responseText.substring(0, 9);
                                     var msg = o.responseText.substring(9);
 
-                                    setTimeout(function () { callback(msg); }, 0);
+                                    setTimeout(function () { callback(msg) }, 0);
                                     comet_getAndEval(id, (new_nb != "") ? new_nb : nb, callback, poll_time);
                                },
 
         failure : function (o) {
                                     if(o.status != 501) {
-                                        setTimeout(function() { comet_getAndEval(id, nb, callback, poll_time); }, poll_time);
+                                        setTimeout(function() { comet_getAndEval(id, nb, callback, poll_time) }, poll_time);
                                     }
                                }
     }
