@@ -67,18 +67,16 @@ def entity_getstate(entity):
     state = entity._sa_instance_state   # SQLAlchemy managed state
 
     if state.key:
-        key = state.key[1]                       # Primary key
         attrs = set(state.manager.local_attrs)   # SQLAlchemy managed attributes
         attrs.add('_sa_instance_state')
     else:
-        key = None
         attrs = ()
 
     # ``d`` is the dictionary of the _not_ SQLAlchemy managed attributes
     d = dict([(k, v) for (k, v) in entity.__dict__.items() if k not in attrs])
 
     # Keep only the primary key from the SQLAlchemy state
-    d['_sa_key'] = key
+    d['_sa_key'] = state.key[1] if state.key else None
 
     return d
 

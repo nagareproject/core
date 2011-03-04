@@ -289,13 +289,16 @@ class Renderer(xml.XmlRenderer):
         source.close()
 
         body = ET.parse(html, parser).getroot()[0]
-        for e in body[:]:
+
+        child = body[:]
+        for e in child:
             if isinstance(e, _HTMLTag):
                 # Attach the renderer to each roots
                 e._renderer = self
-
+                body.remove(e)
+    
         # Return the children of the dummy ``<body>``
-        return ([body.text] if body.text and not no_leading_text else []) + body[:]
+        return ([body.text] if body.text and not no_leading_text else []) + child
 
     def parse_html(self, source, fragment=False, no_leading_text=False, xhtml=False, **kw):
         """Parse a (X)HTML file
