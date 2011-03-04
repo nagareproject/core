@@ -128,7 +128,7 @@ function nagare_loadAll(named_css, anon_css, css_urls, named_js, anon_js, js_url
 
 function nagare_replaceNode(id, html) {
     var n = document.getElementById(id);
-    if(n) {
+    if(n && html) {
         var e = document.createElement("div");
         e.innerHTML = html;
         n.parentNode.replaceChild(e.firstChild, n);
@@ -138,5 +138,5 @@ function nagare_replaceNode(id, html) {
 
 function nagare_updateNode(id, html) {
     var n = document.getElementById(id)
-    if(n) n.innerHTML = html;
+    if(n && html) n.innerHTML = html;
 }
