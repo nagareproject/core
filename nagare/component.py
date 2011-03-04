@@ -237,6 +237,7 @@ class Task:
 
        A ``Task`` is an object, not a component: you must wrap it into a ``Component()`` to use it.
     """
+
     def _go(self, comp):
         # If I was not called by an other component and nobody is listening to
         # my answer,  I'm the root component. So I call my ``go()`` method forever
@@ -244,7 +245,7 @@ class Task:
             while True:
                 self.go(comp)
 
-        # Else, answer with the return of the ``go()`` method
+        # Else, answer with the return of the ``go`` method
         comp.answer(self.go(comp))
 
     def go(self, comp):
