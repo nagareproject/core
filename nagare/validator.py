@@ -57,7 +57,7 @@ class IntValidator(Validator):
 
         try:
             self.value = int(self.value)
-        except ValueError:
+        except (ValueError, TypeError):
             raise ValueError('Must be an integer')
 
     def to_int(self):
