@@ -1,5 +1,8 @@
 get - Release Notes
 
+2.9.0
+    * charset defaults to utf-8
+
 2.8.1
     * No change
 
