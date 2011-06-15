@@ -1,5 +1,5 @@
 //--
-// Copyright (c) 2008, Net-ng.
+// Copyright (c) 2008-2011, Net-ng.
 // All rights reserved.
 //
 // This software is licensed under the BSD License, as described in
@@ -25,7 +25,7 @@ var nagare_callbacks = {
     upload  : function (o) {
                             if(o.responseText.substring(0, 5) != "URL: ") {
                                 var js = "";
-                                var js_fragments = o.responseXML.firstChild.lastChild.firstChild;
+                                var js_fragments = o.responseXML.lastChild.lastChild.firstChild;
                                 for(var i=0; i<js_fragments.childNodes.length; i++)
                                     js += js_fragments.childNodes[i].data;
                                 setTimeout(js, 0);
