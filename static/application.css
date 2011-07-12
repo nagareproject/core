@@ -33,8 +33,7 @@ body, th, tr {
 
 #title {
     color: #3a3a3a;
-    font: normal 40px "DistrictThinRegular";
-    /* font-weight: bold; */
+    font: italic 40px "DistrictThinRegular";
     padding: 25px 40px 0 0;
     text-align: right;
 }

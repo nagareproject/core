@@ -132,7 +132,7 @@ class Sessions(common.Sessions):
         if connection is None:
             connection = memcache.Client(self.host, debug=self.debug)
             local.worker.memcached_connection = connection
-            
+
         return connection
 
     def flush_all(self):
