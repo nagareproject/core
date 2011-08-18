@@ -19,7 +19,8 @@ In both cases:
   - the metadata of the applications are activated
 """
 
-import sys, os, code, atexit, __builtin__
+import sys, os, code, __builtin__
+import pkg_resources
 
 from nagare import database, log, local
 from nagare.admin import util
@@ -75,54 +76,113 @@ def set_shell_options(optparser):
     optparser.add_option('--plain', action='store_const', const=False, default=True, dest='ipython', help='launch a plain Python interpreter instead of IPython')
 
 
-def run_ipython_shell(shell, ns):
-    """Launch a IPython interpreter
-
-    In:
-      - ``shell`` -- a IPython interpreter
-      - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
+class IPythonShellV1(object):
+    """A IPython < 0.11 interpreter
     """
-    print "Variables 'apps' and 'session' are available"
-    shell.IPShell(argv=[], user_ns=ns).mainloop(sys_exit=1)
+    def __init__(self, ipython, banner, ns):
+        """Initialisation
+
+        In:
+          - ``ipython`` -- the ``IPython`` module
+          - ``banner`` -- banner to display
+          - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
+        """
+        self.shell = ipython.Shell.IPShell(argv=[], user_ns=ns)
+        self.banner = banner
+
+    def __call__(self):
+        """Launch the interpreter
+        """
+        self.shell.mainloop(1, self.banner)
 
 
-def run_python_shell(ns):
-    """Launch a plain Python interpreter
-
-    In:
-      - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
+class IPythonShellV2(object):
+    """A IPython >= 0.11 interpreter
     """
-    try:
-        import readline
-    except ImportError:
-        pass
-    else:
-        # If the ``readline`` module exists, set completion on TAB and a
-        # dedicated commands history
+    def __init__(self, ipython, banner, ns):
+        """Initialisation
+
+        In:
+          - ``ipython`` -- the ``IPython`` module
+          - ``banner`` -- banner to display
+          - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
+        """
+        self.shell = ipython.frontend.terminal.embed.InteractiveShellEmbed(user_ns=ns, banner1=banner)
+        self.shell.confirm_exit = False
+
+    def __call__(self):
+        """Launch the interpreter
+        """
+        self.shell()
+
+
+class PythonShell(code.InteractiveConsole):
+    """A plain Python interpreter
+    """
+    def __init__(self, banner, ns):
+        code.InteractiveConsole.__init__(self, ns)
+        self.banner = banner
+        
+    def raw_input(self, prompt):
+        return code.InteractiveConsole.raw_input(self, 'nagare'+prompt)
+
+    def __call__(self):
+        self.interact(self.banner)
+
+
+class PythonShellWithHistory(PythonShell):
+    """A plain Python interpreter with a readline history
+    """
+    def __call__(self, readline):
+        """Launch the interpreter
+
+        In:
+          - ``readline`` -- the ``readline`` module
+          - ``banner`` -- banner to display
+        """
+        # Set completion on TAB and a dedicated commands history file
         import rlcompleter
 
-        readline.parse_and_bind("tab: complete")
+        readline.parse_and_bind('tab: complete')
 
-        history_path = os.path.expanduser("~/.nagarehistory")
+        history_path = os.path.expanduser('~/.nagarehistory')
 
         if os.path.exists(history_path):
             readline.read_history_file(history_path)
 
         readline.set_history_length(200)
-        atexit.register(lambda: readline.write_history_file(history_path))
 
-    sys.ps1 = 'nagare>>> '
-    interpreter = code.InteractiveConsole(ns)
-    interpreter.interact("Python %s on %s\nVariables 'apps' and 'session' are available" % (sys.version, sys.platform))
+        PythonShell.__call__(self)
+
+        readline.write_history_file(history_path)
+
+
+def create_python_shell(ipython, banner, ns):
+    if ipython:
+        try:
+            import IPython
+        except ImportError:
+            pass
+        else:
+            shell_factory = IPythonShellV1 if map(int, IPython.__version__.split('.')) < [0, 11] else IPythonShellV2
+            shell_factory(IPython, banner, ns)()
+            return
+
+    try:
+        import readline
+
+        PythonShellWithHistory(banner, ns)(readline)
+    except ImportError:
+        PythonShell(banner, ns)()
 
 
 def shell(parser, options, args):
     """Launch an interactive shell
 
     In:
-      - ``parser`` -- the optparse.OptParser object used to parse the configuration file
-      - ``options`` -- options in the command lines
-      - ``args`` -- arguments in the command lines
+      - ``parser`` -- the ``optparse.OptParser`` object used to parse the configuration file
+      - ``options`` -- options in the command line
+      - ``args`` -- arguments in the command line
 
     The arguments are a list of names of registered applications
     or paths to applications configuration files.
@@ -130,17 +190,11 @@ def shell(parser, options, args):
     ns = create_globals(args, options.debug, parser.error)
     ns['__name__'] = '__console__'
 
-    try:
-        import IPython
-        ipython_available = True
-    except ImportError:
-        ipython_available = False
+    banner = "Python %s on %s\nNagare %s\n\nVariables 'apps' and 'session' are available" % (sys.version,
+                sys.platform,
+                pkg_resources.get_distribution('nagare').version)
 
-    if ipython_available and options.ipython:
-        run_ipython_shell(IPython.Shell, ns)
-    else:
-        run_python_shell(ns)
-
+    create_python_shell(options.ipython, banner, ns)
 
 class Shell(util.Command):
     desc = 'Launch a shell'
@@ -165,10 +219,10 @@ def set_batch_options(optparser):
     return sys.argv[:i+4]
 
 def batch(parser, options, args):
-    """Execute Python statements from files
+    """Execute Python statements a file
 
     In:
-      - ``parser`` -- the optparse.OptParser object used to parse the configuration file
+      - ``parser`` -- the ``optparse.OptParser`` object used to parse the configuration file
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines
 
