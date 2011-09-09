@@ -32,6 +32,9 @@ def create_globals(cfgfiles, debug, error):
         registered applications
       - ``debug`` -- enable the display of the generated SQL statements
       - ``error`` -- the function to call in case of configuration errors
+
+    Return:
+      - the namespace with the ``apps`` and ``session`` variables defined
     """
     # Configure the local service
     local.worker = local.Process()
@@ -79,15 +82,17 @@ def set_shell_options(optparser):
 class IPythonShellV1(object):
     """A IPython < 0.11 interpreter
     """
-    def __init__(self, ipython, banner, ns):
+    def __init__(self, ipython, banner, app_names, ns):
         """Initialisation
 
         In:
           - ``ipython`` -- the ``IPython`` module
           - ``banner`` -- banner to display
+          - ``app_names`` -- names of the activated applications
           - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
         """
-        self.shell = ipython.Shell.IPShell(argv=[], user_ns=ns)
+        prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
+        self.shell = ipython.Shell.IPShell(argv=['--prompt_in1=Nagare%s [\\#]: ' % prompt], user_ns=ns)
         self.banner = banner
 
     def __call__(self):
@@ -99,15 +104,20 @@ class IPythonShellV1(object):
 class IPythonShellV2(object):
     """A IPython >= 0.11 interpreter
     """
-    def __init__(self, ipython, banner, ns):
+    def __init__(self, ipython, banner, app_names, ns):
         """Initialisation
 
         In:
           - ``ipython`` -- the ``IPython`` module
           - ``banner`` -- banner to display
+          - ``app_names`` -- names of the activated applications
           - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
         """
-        self.shell = ipython.frontend.terminal.embed.InteractiveShellEmbed(user_ns=ns, banner1=banner)
+        config = ipython.config.loader.Config()
+        prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
+        config.InteractiveShellEmbed.prompt_in1 = 'Nagare%s [\\#]: ' % prompt
+
+        self.shell = ipython.frontend.terminal.embed.InteractiveShellEmbed(config=config, user_ns=ns, banner1=banner)
         self.shell.confirm_exit = False
 
     def __call__(self):
@@ -119,12 +129,20 @@ class IPythonShellV2(object):
 class PythonShell(code.InteractiveConsole):
     """A plain Python interpreter
     """
-    def __init__(self, banner, ns):
+    def __init__(self, banner, app_names, ns):
+        """Initialisation
+
+        In:
+          - ``banner`` -- banner to display
+          - ``app_names`` -- names of the activated applications
+          - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
+        """
         code.InteractiveConsole.__init__(self, ns)
         self.banner = banner
-        
+        self.prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
+
     def raw_input(self, prompt):
-        return code.InteractiveConsole.raw_input(self, 'nagare'+prompt)
+        return code.InteractiveConsole.raw_input(self, 'nagare'+self.prompt+prompt)
 
     def __call__(self):
         self.interact(self.banner)
@@ -157,7 +175,17 @@ class PythonShellWithHistory(PythonShell):
         readline.write_history_file(history_path)
 
 
-def create_python_shell(ipython, banner, ns):
+def create_python_shell(ipython, banner, app_names, ns):
+    """Shell factory
+
+    Create a shell according to the installed modules (``readline`` and ``ipython``)
+
+    In:
+      - ``ipython`` -- does the user want a IPython shell?
+      - ``banner`` -- banner to display
+      - ``app_names`` -- names of the activated applications
+      - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
+    """
     if ipython:
         try:
             import IPython
@@ -165,15 +193,15 @@ def create_python_shell(ipython, banner, ns):
             pass
         else:
             shell_factory = IPythonShellV1 if map(int, IPython.__version__.split('.')) < [0, 11] else IPythonShellV2
-            shell_factory(IPython, banner, ns)()
+            shell_factory(IPython, banner, app_names, ns)()
             return
 
     try:
         import readline
 
-        PythonShellWithHistory(banner, ns)(readline)
+        PythonShellWithHistory(banner, app_names, ns)(readline)
     except ImportError:
-        PythonShell(banner, ns)()
+        PythonShell(banner, app_names, ns)()
 
 
 def shell(parser, options, args):
@@ -194,7 +222,7 @@ def shell(parser, options, args):
                 sys.platform,
                 pkg_resources.get_distribution('nagare').version)
 
-    create_python_shell(options.ipython, banner, ns)
+    create_python_shell(options.ipython, banner, [app.name for app in ns['apps'].values()], ns)
 
 class Shell(util.Command):
     desc = 'Launch a shell'
