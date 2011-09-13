@@ -61,6 +61,7 @@ setup(
       download_url = 'http://www.nagare.org/download',
       packages = find_packages(),
       include_package_data = True,
+      use_hg_version = True,
       package_data = { '' : ['nagare/static/*',] },
       namespace_packages = ('nagare',),
       zip_safe = False,
