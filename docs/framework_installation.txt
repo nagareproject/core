@@ -16,15 +16,15 @@ Else, to install Stackless Python from its sources, to the *<STACKLESS_HOME>*
 directory, do:
 
   .. code-block:: sh
-  
+
      cd /tmp
-     wget http://www.stackless.com/binaries/stackless-264-export.tar.bz2
-     tar jxvf stackless-264-export.tar.bz2
-     
-     cd stackless-2.6.4*
+     wget http://www.stackless.com/binaries/stackless-271-export.tar.bz2
+     tar jxvf stackless-271-export.tar.bz2
+
+     cd stackless-271-export
      ./configure --prefix=<STACKLESS_HOME>
      make all
-     make install 
+     make install
 
 .. note::
 
@@ -43,12 +43,12 @@ directory, do:
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To install Stackless Python on Windows, download the `dedicated installer
-<http://www.stackless.com/binaries/python-2.6.4-stackless.msi>`_ and launch it.
+<http://www.stackless.com/binaries/python-2.7.1-stackless.msi>`_ and launch it.
 
 2. Nagare installation
 ----------------------
 
-The framework can be installed system-wide, where every users can used it or
+The framework can be installed system-wide where every users can use it or
 into a dedicated directory called a "virtual environment".
 
 Creating a virtual environment is the standard and recommended way because such
@@ -59,51 +59,51 @@ and doesn't require the root privileges.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To create a virtual environment into the *<NAGARE_HOME>* directory, download
-`virtualenv <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz>`_ and launch it **with Stackless Python**.
+`virtualenv <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.6.4.tar.gz>`_ and launch it **with Stackless Python**.
 
 On Linux:
 
   .. code-block:: sh
 
      cd /tmp
-     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz
-     tar zxvf virtualenv-1.4.5.tar.gz
-     
-     <STACKLESS_HOME>/bin/python virtualenv-1.4.5/virtualenv.py <NAGARE_HOME>
-      
+     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.6.4.tar.gz
+     tar zxvf virtualenv-1.6.4.tar.gz
+
+     <STACKLESS_HOME>/bin/python virtualenv-1.6.4/virtualenv.py <NAGARE_HOME>
+
 On Windows:
 
     Download and launch the `Python Win32 extensions <http://sourceforge.net/projects/pywin32/files/>`_
 
     Download
-    `http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz>`_
-    and extract the file ``virtualenv.py`` (you could need an archiver as ``7-zip`` or ``winrar``).
-    
+    `http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.6.4.tar.gz <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.6.4.tar.gz>`_
+    and extract the file ``virtualenv.py`` (you could need an archiver like ``7-zip`` or ``winrar``).
+
     then launch:
-    
+
     .. code-block:: cmd
-    
+
        <STACKLESS_HOME>\python.exe virtualenv.py <NAGARE_HOME>
- 
+
 The final step is to install the framework into this newly created virtual
 environment.
- 
+
 On Linux:
- 
+
     .. code-block:: sh
-   
+
        <NAGARE_HOME>/bin/easy_install 'nagare[full]'
-      
+
 On Windows:
 
     .. code-block:: cmd
-    
+
        <NAGARE_HOME>\Scripts\easy_install.exe nagare[full]
-       
+
 2.2. System-wide installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If Stackless Python is installed on a system directory, you will need to have
+If Stackless Python is installed in a system directory, you will need to have
 the root privileges.
 
 First, install ``easy_install`` by downloading
@@ -113,13 +113,13 @@ First, install ``easy_install`` by downloading
 Second, install the framework on Linux:
 
   .. code-block:: sh
-  
+
      <STACKLESS_HOME>/bin/easy_install 'nagare[full]'
-     
+
 or, on Windows:
 
   .. code-block:: cmd
-  
+
      <STACKLESS_HOME>\Scripts\easy_install.exe nagare[full]
 
 See the following chapter if you don't want to install the framework with all
@@ -129,7 +129,7 @@ its modules.
 -----------------------
 
 The framework installation is modular. The command ``easy_install nagare`` installs
-only the framework core with the minimum number of features. More features, 
+only the framework core with the minimum number of features. More features,
 called "extras", can be installed with the syntax ``easy_install 'nagare[extra1,extra2...]'``.
 
 Currently, the available extras are:
@@ -138,9 +138,10 @@ Currently, the available extras are:
   - `database` -- install the Python modules needed, for an application, to access relational databases
   - `doc` -- install the Python modules needed to generate the framework documentation
   - `test` -- install the unit tests manager
-  
+  - `i18n` -- install the internationalization modules
+
   - `full` -- install all of the above extras (i.e ``easy_install 'nagare[full]'``
-    is equivalent to ``easy_install 'nagare[debug,database,doc,test]'``)
+    is equivalent to ``easy_install 'nagare[debug,database,doc,test,i18n]'``)
 
 4. Developers framework installation
 ------------------------------------
@@ -152,58 +153,59 @@ and launch it **with Stackless Python**.
   .. code-block:: sh
 
      cd /tmp
-     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.5.tar.gz
-     tar zxvf virtualenv-1.4.5.tar.gz
-     
-     <STACKLESS_HOME>/bin/python virtualenv-1.4.5/virtualenv.py <NAGARE_HOME>
- 
+     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.6.4.tar.gz
+     tar zxvf virtualenv-1.6.4.tar.gz
+
+     <STACKLESS_HOME>/bin/python virtualenv-1.6.4/virtualenv.py <NAGARE_HOME>
+
 Second, grab the framework sources from the repository:
 
   .. code-block:: sh
-  
+
      cd <NAGARE_HOME>
-     svn co svn://www.nagare.org/trunk/nagare
+     hg clone http://hg.nagare.org/core
 
 Third, install the framework from the sources:
 
   .. code-block:: sh
-  
-     cd nagare/core
-     <NAGARE_HOME>/bin/python setup.py develop
-     <NAGARE_HOME>/bin/easy_install 'nagare[full]' 
 
-You can now work with the sources of the framework in ``<NAGARE_HOME>nagare/core/nagare``
+     cd core
+     <NAGARE_HOME>/bin/python setup.py develop
+     <NAGARE_HOME>/bin/easy_install 'nagare[full]'
+
+You can now work with the sources of the framework in ``<NAGARE_HOME>/core/nagare``
 and, when you want to update the sources from the repository, do:
 
   .. code-block:: sh
-  
-     cd <NAGARE_HOME>/nagare/core
-     svn update
+
+     cd <NAGARE_HOME>/core
+     hg pull
+     hg update
      <NAGARE_HOME>/bin/python setup.py develop
-     
+
 5. Testing the installation
 ---------------------------
 
 To test the installation, launch the adminstrative interface:
 
   .. code-block:: sh
-  
+
      <NAGARE_HOME>/bin/nagare-admin serve admin
 
 or, in Windows:
 
   .. code-block:: cmd
-  
+
      <NAGARE_HOME>\Scripts\nagare-admin.exe serve admin
 
 which must results in the following display:
-     
+
   .. code-block:: sh
-  
+
      Application 'app admin' registered as '/admin'
      Application 'app admin' registered as '/'
      serving on http://127.0.0.1:8080
-     
+
 Then you can browse at http://127.0.0.1:8080/admin to look at the administrative
 interface.
 
