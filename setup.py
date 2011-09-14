@@ -50,9 +50,9 @@ setup(
 
       For a standard installation, read the ``docs/quickstart.txt`` document.
 
-      Read ``docs/framework_installation.txt`` to install the latest development
-      version from the
-      `Nagare subversion repository <svn://www.nagare.org/trunk/nagare/core#egg=nagare-dev>`_
+      Read ``docs/framework_installation.txt`` to install the
+      `latest <http://www.nagare.org/download/nagare-latest#egg=nagare-dev>`_
+      development version from the `Mercurial repository <http://hg.nagare.org/core>`_
       or to create a Nagare developer installation.
       """) % long_description,
       license = 'BSD',
