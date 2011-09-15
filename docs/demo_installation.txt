@@ -7,17 +7,14 @@ Demo installation
 To install the demonstration, enter the command:
 
   .. code-block:: sh
-  
+
      <NAGARE_HOME>/bin/easy_install nagare.examples
 
 or, in Windows:
 
   .. code-block:: cmd
-  
-     <NAGARE_HOME>\Scripts\easy_install.exe nagare.examples
 
-If you want to study the Python sources, they are installed in
-``<NAGARE_HOME>/lib/python2.5/site-packages/nagare-0.1.0-py2.5.egg/nagare``
+     <NAGARE_HOME>\Scripts\easy_install.exe nagare.examples
 
 2. Developers installation
 --------------------------
@@ -26,24 +23,25 @@ If you want to work with the latest demo sources, first grab the sources from
 the repository:
 
   .. code-block:: sh
-  
+
      cd <NAGARE_HOME>
-     svn co svn://www.nagare.org/trunk/nagare src
+     hg clone http://hg.nagare.org/examples
 
 Second, install the demo from the sources:
 
   .. code-block:: sh
-  
-     cd src/examples
+
+     cd examples
      <NAGARE_HOME>/bin/python setup.py develop
 
-You can now work with the sources of the demo in ``<NAGARE_HOME>/src/nagare/examples/nagare``
+You can now work with the sources of the demo in ``<NAGARE_HOME>/examples/nagare``
 and, when you want to update the sources from the repository, do:
 
   .. code-block:: sh
-  
-     cd <NAGARE_HOME>/src
-     svn update
+
+     cd <NAGARE_HOME>/examples
+     hg pull
+     hg update
 
 3. Lauching the demo applications
 ---------------------------------
@@ -56,13 +54,13 @@ and, when you want to update the sources from the repository, do:
 To check the installation, the command:
 
   .. code-block:: sh
-  
+
      <NAGARE_HOME>/bin/nagare-admin serve
-     
+
 must display the applications installed with the demo:
 
   .. code-block:: sh
-     
+
      Available applications:
        - admin
        - demo
@@ -73,9 +71,9 @@ must display the applications installed with the demo:
 To launch the "demo" application, enter:
 
   .. code-block:: sh
-  
+
      <NAGARE_HOME>/bin/nagare-admin serve demo
-     
+
 and browse to http://127.0.0.1:8080/demo.
 
 The "wiki", "gallery" and "portal" applications need a database so the extra step
@@ -84,7 +82,7 @@ of the database creation is required before to launch them.
 To launch the "wiki" application, enter the commands:
 
   .. code-block:: sh
-  
+
      <NAGARE_HOME>/bin/nagare-admin create-db wiki
      <NAGARE_HOME>/bin/nagare-admin serve wiki
 
@@ -93,7 +91,7 @@ and browse to http://127.0.0.1:8080/wiki.
 for the "gallery" application, enter the commands:
 
   .. code-block:: sh
-  
+
      <NAGARE_HOME>/bin/nagare-admin create-db gallery
      <NAGARE_HOME>/bin/nagare-admin serve gallery
 
@@ -102,7 +100,7 @@ and browse to http://127.0.0.1:8080/gallery.
 or, for the "portal" application:
 
   .. code-block:: sh
-  
+
      <NAGARE_HOME>/bin/nagare-admin create-db portal
      <NAGARE_HOME>/bin/nagare-admin serve portal
 

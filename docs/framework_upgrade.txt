@@ -39,13 +39,14 @@ on Windows:
 3. Developer installation
 -------------------------
 
-If your Nagare installation was directly a checkout from the SVN repository,
+If your Nagare installation was directly a checkout from the Mercurial repository,
 execute:
 
 .. code-block:: sh
 
-    cd nagare/core
-    svn update
+    cd core
+    hg pull
+    hg update
     <NAGARE_HOME>/bin/easy_install setup.py develop
 
 .. wikiname: NagareUpgrade
