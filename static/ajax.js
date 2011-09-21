@@ -140,3 +140,7 @@ function nagare_updateNode(id, html) {
     var n = document.getElementById(id)
     if(n && html) n.innerHTML = html;
 }
+
+function get_field_value(field) {
+    return escape(field.type=='checkbox' && !field.checked ? "" : field.value);
+}

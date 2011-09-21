@@ -197,7 +197,7 @@ class Update(object):
           - the javascript code
         """
         if priority == 1:
-            return 'nagare_getAndEval("%s;_a;%s="+escape(this.value))' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(1, renderer))
+            return 'nagare_getAndEval("%s;_a;%s="+get_field_value(this))' % (renderer.add_sessionid_in_url(sep=';'), self._generate_replace(1, renderer))
         elif priority == 4:
             return 'return nagare_postAndEval(this.form, "%s")' % self._generate_replace(4, renderer)
         elif priority == 41:
