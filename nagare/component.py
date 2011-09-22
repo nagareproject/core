@@ -52,7 +52,7 @@ class Component(object):
 
     A component has views, can the embedded, replaced, called and can answsered a value.
     """
-    def __init__(self, o, model=0, url=None):
+    def __init__(self, o=None, model=0, url=None):
         """Initialisation
 
         In:
@@ -90,7 +90,7 @@ class Component(object):
         """
         return presentation.init(self, url, self, http_method, request)
 
-    def becomes(self, o, model=0, url=None):
+    def becomes(self, o=None, model=0, url=None):
         """Replace a component by an object or an other component
 
         In:
@@ -102,6 +102,7 @@ class Component(object):
         Return:
           - ``self``
         """
+        o = o or self
         if isinstance(o, Component):
             o = o()
 
@@ -111,7 +112,7 @@ class Component(object):
 
         return self
 
-    def call(self, o, model=0, url=None):
+    def call(self, o=None, model=0, url=None):
         """Call an other object or component
 
         The current component is replaced and will be back when the object
@@ -128,6 +129,7 @@ class Component(object):
         """
         sys.exc_clear()
 
+        o = o or self
         if isinstance(o, Component):
             o = o()
 
