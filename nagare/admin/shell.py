@@ -61,7 +61,10 @@ def create_globals(cfgfiles, debug, error):
 
         log.set_logger('nagare.application.'+name)
 
-        (apps[name], databases) = util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)
+        requirement = None if not dist else pkg_resources.Requirement.parse(dist.project_name)
+        data_path = None if not requirement else pkg_resources.resource_filename(requirement, '/data')
+
+        (apps[name], databases) = util.activate_WSGIApp(app, cfgfile, aconf, error, data_path=data_path, debug=debug)
 
         for (database_settings, populate) in databases:
             database.set_metadata(*database_settings)
