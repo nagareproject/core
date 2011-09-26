@@ -52,17 +52,24 @@ def render(self, h, comp, *args):
 
     h.head.css_url('/static/nagare/application.css')
     h.head << h.head.title('Nagare Administration interface')
+    
+    h.head << h.head.style('''
+        #content { margin-left: 0 !important }
+        #footer { text-align: right }
+        #footer a { padding-right: 10px }
+    ''')
 
-    with h.div(class_='mybody'):
-        with h.div(id='myheader'):
-            h << h.a(h.img(src='/static/nagare/img/logo.gif'), id='logo', href='http://www.nagare.org/', title='Nagare home')
-            h << h.span('Administration interface', id='title')
+    with h.div(id='body'):
+        h << h.a(h.img(src='/static/nagare/img/logo_small.png'), id='logo', href='http://www.nagare.org/', title='Nagare home')
+        
+        with h.div(id='content'):
+            h << h.div('Administration interface', id='title')
 
-        with h.div(id='main'):
-            h << [c.on_answer(comp.call) for c in self.components]
-            h << h.div(u'\N{Copyright Sign} ', h.a('Net-ng', href='http://www.net-ng.com'), u'\N{no-break space}', align='right')
+            with h.div(id='main'):
+                h << [c.on_answer(comp.call) for c in self.components]
 
-    h << h.div(' ', class_='footer')
+    with h.div(' ', id='footer'):
+        h << h.a(u'\N{Copyright Sign} Net-ng', href='http://www.net-ng.com')
 
     return h.root
 
