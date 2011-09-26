@@ -419,6 +419,20 @@ def repeat_test2():
         child.append_text(value)
     assert [child.text for child in node.getchildren()] == ['test1', 'test2']
 
+def repeat_test3():
+    """ XML namespace unit test - repeat - findmeld in repeat loop """
+    h = xml.Renderer()
+
+    xhtml_tree_2 = '<div xmlns:meld="http://www.plope.com/software/meld3"><ul><li meld:id="entry"><span meld:id="count">count</span></li></ul></div>'
+
+    root = h.parse_xmlstring(xhtml_tree_2, fragment=True)[0]
+
+    for (elem, count) in root.repeat(range(2), 'entry'):
+        elem.findmeld('count').fill(count)
+
+    h << root
+
+    assert h.root.write_xmlstring() == '<div xmlns:meld="http://www.plope.com/software/meld3"><ul><li meld:id="entry"><span meld:id="count">0</span></li><li meld:id="entry"><span meld:id="count">1</span></li></ul></div>'
 
 def root_test1():
     """ XML namespace unit test - root - one element """

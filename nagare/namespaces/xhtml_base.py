@@ -289,7 +289,7 @@ class Renderer(xml.XmlRenderer):
         source.close()
 
         body = ET.parse(html, parser).getroot()[0]
-        for e in body[:]:
+        for e in body:
             if isinstance(e, _HTMLTag):
                 # Attach the renderer to each roots
                 e._renderer = self

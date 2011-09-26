@@ -185,6 +185,7 @@ class _Tag(ET.ElementBase):
 
         for thing in iterable:
             clone = copy.deepcopy(element)
+            clone._renderer = element.renderer
             parent.append(clone)
 
             yield (clone, thing)
