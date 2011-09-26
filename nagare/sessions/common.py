@@ -228,8 +228,8 @@ class Sessions(object):
           - a tuple (session id, state id) or (None, None) if no session found
         """
         return (
-                    request.str_params.get('_s'),
-                    request.str_params.get('_c') if self.states_history else '0'
+                    request.params.get('_s'),
+                    request.params.get('_c') if self.states_history else '0'
                 )
 
     def sessionid_in_url(self, session_id, state_id, request, response):

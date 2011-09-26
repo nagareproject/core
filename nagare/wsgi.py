@@ -31,18 +31,11 @@ from nagare.sessions import ExpirationError
 
 # ---------------------------------------------------------------------------
 
-class MIMEAcceptWithoutWildcards(acceptparse.Accept):
-    def _match(self, item, match):
-        if '*' in item:
-            return False
-        return super(MIMEAcceptWithoutWildcards, self)._match(item, match)
-
-
 class Response(webob.Response):
     def __init__(self, accept):
         super(Response, self).__init__(headerlist=[])
 
-        accept = MIMEAcceptWithoutWildcards('Accept', accept)
+        accept = acceptparse.Accept(accept)
         self.xml_output = accept.best_match(('text/html', 'application/xhtml+xml')) == 'application/xhtml+xml'
 
         self.content_type = ''
@@ -390,7 +383,7 @@ class WSGIApp(object):
         self.last_exception = None
 
         log.set_logger('nagare.application.'+self.name) # Set the dedicated application logger
-
+        
         # Create a database transaction for each request
         with database.session.begin():
             try:
