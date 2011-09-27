@@ -106,7 +106,7 @@ setup(
       standalone = nagare.publishers.standalone_publisher:Publisher
       threaded = nagare.publishers.standalone_publisher:Publisher
       fastcgi = nagare.publishers.fcgi_publisher:Publisher
-      fapws2 = nagare.publishers.fapws_publisher:Publisher
+      fapws3 = nagare.publishers.fapws_publisher:Publisher
       eventlet = nagare.publishers.eventlet_publisher:Publisher
 
       [nagare.sessions]
