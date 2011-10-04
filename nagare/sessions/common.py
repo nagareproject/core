@@ -214,6 +214,7 @@ class Sessions(object):
             session_secure_id = state.get()
 
             if session_secure_id != secure_id:
+                print "RAISE"
                 raise ExpirationError()
 
         return state
@@ -225,11 +226,11 @@ class Sessions(object):
           - ``request`` -- the web request object
 
         Return:
-          - a tuple (session id, state id) or (None, None) if no session found
+          - a tuple (session id, state id) or ('', '') if no session found
         """
         return (
-                    request.params.get('_s'),
-                    request.params.get('_c') if self.states_history else '0'
+                    str(request.params.get('_s', '')),
+                    str(request.params.get('_c', '')) if self.states_history else '0'
                 )
 
     def sessionid_in_url(self, session_id, state_id, request, response):
