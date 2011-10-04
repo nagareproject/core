@@ -214,7 +214,6 @@ class Sessions(object):
             session_secure_id = state.get()
 
             if session_secure_id != secure_id:
-                print "RAISE"
                 raise ExpirationError()
 
         return state
