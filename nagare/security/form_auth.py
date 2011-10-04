@@ -32,7 +32,7 @@ class Authentication(basic_auth.Authentication):
 
     def __init__(self, prefix='__ac', key=None, max_age=None,
                  path='/', domain=None, secure=None, httponly=False,
-                 version=None, comment=None, expires=None,
+                 comment=None, expires=None, overwrite=False,
                  realm=None):
         """Initialization
 
@@ -54,9 +54,9 @@ class Authentication(basic_auth.Authentication):
         self.domain = domain
         self.secure = secure
         self.httponly = httponly
-        self.version = version
         self.comment = comment
         self.expires = expires
+        self.overwrite = overwrite
 
     def get_ids_from_params(self, params):
         """Search the data associated with the connected user into the request
@@ -161,9 +161,9 @@ class Authentication(basic_auth.Authentication):
                                 domain=self.domain,
                                 secure=self.secure,
                                 httponly=self.httponly,
-                                version=self.version,
                                 comment=self.comment,
-                                expires=self.expires
+                                expires=self.expires,
+                                overwrite=self.overwrite
                             )
             else:
                 response.delete_cookie(self.key, self.path, self.domain)
