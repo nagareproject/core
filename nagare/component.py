@@ -21,6 +21,8 @@ from peak.rules import when
 
 from nagare import presentation
 
+_marker = object()
+
 class AnswerWithoutCall(BaseException):
     pass
 
@@ -90,7 +92,7 @@ class Component(object):
         """
         return presentation.init(self, url, self, http_method, request)
 
-    def becomes(self, o=None, model=0, url=None):
+    def becomes(self, o=_marker, model=0, url=None):
         """Replace a component by an object or an other component
 
         In:
@@ -102,7 +104,7 @@ class Component(object):
         Return:
           - ``self``
         """
-        o = o or self
+        o = self if o is _marker else o
         if isinstance(o, Component):
             o = o()
 
@@ -112,7 +114,7 @@ class Component(object):
 
         return self
 
-    def call(self, o=None, model=0, url=None):
+    def call(self, o=_marker, model=0, url=None):
         """Call an other object or component
 
         The current component is replaced and will be back when the object
@@ -129,7 +131,7 @@ class Component(object):
         """
         sys.exc_clear()
 
-        o = o or self
+        o = self if o is _marker else o
         if isinstance(o, Component):
             o = o()
 
