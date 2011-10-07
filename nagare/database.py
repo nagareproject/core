@@ -124,5 +124,5 @@ def set_metadata(metadata, database_uri, database_debug, engine_settings):
       - ``engine_settings`` -- dedicated parameters for the used database engine
     """
     if not metadata.bind:
-        metadata.bind = _engines.setdefault(database_uri, sqlalchemy.create_engine(database_uri, echo=database_debug, **engine_settings))
+        metadata.bind = _engines.setdefault(database_uri, sqlalchemy.engine_from_config(engine_settings, '', echo=database_debug, url=database_uri))
         setup_all()
