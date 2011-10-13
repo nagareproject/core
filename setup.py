@@ -112,7 +112,6 @@ setup(
       [nagare.sessions]
       standalone = nagare.sessions.memory_sessions:SessionsWithPickledStates
       pickle = nagare.sessions.memory_sessions:SessionsWithPickledStates
-      memory = nagare.sessions.memory_sessions:SessionsWithMemoryStates
       memcache = nagare.sessions.memcached_sessions:Sessions
 
       [nagare.applications]

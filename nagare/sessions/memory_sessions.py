@@ -14,8 +14,6 @@ These sessions managers keeps:
   - for each session, the last recently used ``DEFAULT_NB_STATES`` states
 """
 
-import copy
-
 from nagare import local
 from nagare.sessions import ExpirationError, common, lru_dict
 
@@ -177,34 +175,3 @@ class SessionsWithPickledStates(SessionsBase):
           - the objects graph
         """
         return self.unpickle(session_data, state_data)
-
-
-class SessionsWithMemoryStates(SessionsBase):
-    """Sessions managers that kepts the objects graph in memory
-    """
-    def serialize(self, data):
-        """Memorize an objects graph
-
-        In:
-          - ``data`` -- the objects graphs
-
-        Return:
-          - the tuple:
-            - data to keep into the session
-            - data to keep into the state
-        """
-        # Do nothing
-        return (None, data)
-
-    def deserialize(self, session_data, state_data):
-        """Create the objects graph
-
-        In:
-          - ``session_data`` -- data from the session
-          - ``state_data`` -- data from the state
-
-        Out:
-          - the objects graph
-        """
-        return copy.deepcopy(state_data) if self.states_history else state_data
-

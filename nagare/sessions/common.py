@@ -49,7 +49,7 @@ class State(object):
           - ``response`` -- the web response object
 
         Return:
-          - tuple (session id paremeter, state id parameter)
+          - tuple (session id parameter, state id parameter)
         """
         return self.sessions_manager.sessionid_in_url(self.session_id, self.state_id, request, response)
 
@@ -106,7 +106,7 @@ class State(object):
 
 
 def persistent_id(o, session_data, tasklets):
-    """The object with a `_persistent_id` attribut are stored into the session
+    """The object with a `_persistent_id` attribute are stored into the session
     not into the state snapshot
 
     In:
@@ -240,7 +240,7 @@ class Sessions(object):
           - ``response`` -- the web response object
 
         Return:
-          - tuple (session id paremeter, state id parameter)
+          - tuple (session id parameter, state id parameter)
         """
         ids = ('_s='+session_id,)
         if self.states_history:
