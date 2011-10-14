@@ -65,7 +65,7 @@ def register_directive():
 def tracRef(f, *path, **query):
     path = list(path)
     if path[0] in (u'browser', u'rstdoc'):
-        path[1:1] = [u'trunk', u'nagare']
+        path[0] = 'api'
 
     return f(*path, **query)
 
@@ -80,7 +80,7 @@ def apidoc_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
 
     if role == 'apidoc':
         role = 'rstdoc'
-        text = 'core/' + path.replace('.', '/') + '.py' + anchor
+        text = path.replace('.', '/') + '.py' + anchor
 
     r = roles.trac_role(role, rawtext, text, lineno, inliner, options, content)
 
