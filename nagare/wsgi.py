@@ -477,7 +477,7 @@ class WSGIApp(object):
                     response = self.on_exception(request, response)
             finally:
                 if session:
-                    session.lock.release()
+                    session.release()
 
         return response(environ, start_response)
 

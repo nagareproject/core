@@ -41,6 +41,11 @@ class State(object):
         self.data = None            # Objects graph
         self.back_used = False     # Is this state a snapshot of a previous objects graph ?
 
+    def release(self):
+        """Release the session lock
+        """
+        self.lock.release()
+
     def sessionid_in_url(self, request, response):
         """Return the session and states ids to put into an URL
 
