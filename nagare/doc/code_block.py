@@ -64,7 +64,7 @@ def register_directive():
 
 def tracRef(f, *path, **query):
     path = list(path)
-    if path[0] in (u'browser', u'rstdoc'):
+    if path[0] == 'rstdoc':
         path[0] = 'api'
 
     return f(*path, **query)
