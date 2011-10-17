@@ -41,7 +41,7 @@ To test this snippet, launched it with:
 
 This simple GuessBook example associates a callback to a textarea element,
 that append the new messages to the list of the existing ones:
-                 
+
 .. code-block:: python
 
    from __future__ import with_statement
@@ -125,7 +125,7 @@ The callbacks are processed in this order:
 
   1. the ``form`` ``pre_action()`` callback
   2. the ``select``, ``textarea`` and ``input`` of type ``text``, ``password``,
-     ``radio``, ``checkbox``, ``hidden`` and ``file`` ``action()`` callback 
+     ``radio``, ``checkbox``, ``hidden`` and ``file`` ``action()`` callback
   3. the ``form`` ``post_action()`` callback
   4. the ``a`` and ``input(type='submit')`` ``action()`` callback
   5. the ``input(type='image')`` ``action()`` callback
@@ -156,7 +156,7 @@ The callbacks of the ``h.input(type='checkbox')`` are only called for the
 selected checkboxes. So, you need to reset the attributes that keep the current
 selected checkboxes before to process the callbacks. This reset method is
 typically the ```pre_action`` callback of the ``h.form``:
-   
+
 .. code-block:: python
 
    from __future__ import with_statement
@@ -167,7 +167,7 @@ typically the ```pre_action`` callback of the ``h.form``:
    class ColorSelection:
        def __init__(self):
            self.reset_colors()
-               
+
        def reset_colors(self):
            self.colors = []
 
@@ -201,11 +201,11 @@ or, with a more compact view method:
 
            h << h.br << h.input(type='submit', value='Send')
        return h.root
-       
+
 The ``var.Var()`` objects
 -------------------------
 
-The instances of the ``Var`` class in :apidoc:`nagare.var#var.Var` are
+The instances of the ``Var`` class in :apidoc:`var#var.Var` are
 variable-like objects that provide a "functional" interface:
 
   - calling the object with a value, set the variable value and return the value
@@ -214,7 +214,7 @@ variable-like objects that provide a "functional" interface:
 They can be usefull to directly get / set variables in a lambda expression
 callback.
 
-For example, the first snippet can be rewrote as: 
+For example, the first snippet can be rewrote as:
 
 .. code-block:: python
 
@@ -270,7 +270,7 @@ and ``nagare-error-message`` css classes to design the erroneous fields renderin
 The ``editor.Property`` objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The instances of the ``Property`` class in :apidoc:`nagare.editor#editor.Property`
+The instances of the ``Property`` class in :apidoc:`editor#editor.Property`
 are objects:
 
   - with a validation function, set by calling its ``.validate()`` method. A
@@ -285,17 +285,17 @@ are objects:
   - that keeps the last valid value in its ``value`` attribute
   - that keeps the error message of the validation in its ``error`` attribute,
     or ``None`` if the value is valid.
-  
+
 .. code-block:: pycon
 
    >>> from nagare.editor import Property
-   
+
    >>> def is_lesser_than_10(n):
    ...     if n<10:
    ...         return n
    ...     else:
    ...         raise ValueError, 'must be lesser than 10'
-   
+
    >>> number = Property()
    >>> number.validate(is_lesser_than_10)
    <nagare.editor.Property object at 0x842348c>
@@ -307,7 +307,7 @@ are objects:
    >>> number.value
    2
    >>> number.error
-   
+
    >>> # Invalid value
    >>> number.set(20)
    >>> number.input
@@ -317,7 +317,7 @@ are objects:
    >>> number.error
    u'must be lesser than 10'
 
-   # Setting a valid value by calling the property   
+   # Setting a valid value by calling the property
    >>> number(2)
    2
    >>> number.input
@@ -327,8 +327,8 @@ are objects:
    >>> number.value
    2
    >>> number.error
-   
-   # Setting an invalid value by calling the property   
+
+   # Setting an invalid value by calling the property
    >>> number(20)
    20
    >>> number.input
@@ -343,7 +343,7 @@ are objects:
 The ``validator`` module
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :apidoc:`nagare.validator` module defines a ``IntValidator`` and a
+The :apidoc:`validator` module defines a ``IntValidator`` and a
 ``StringValidator`` objects to validate the numbers and the strings. They are
 suitable to be used as a validating function of a ``editor.Property`` object:
 
@@ -351,7 +351,7 @@ suitable to be used as a validating function of a ``editor.Property`` object:
 
    >>> from nagare.validator import IntValidator
    >>> from nagare.editor import Property
-   
+
    >>> number = Property()
 
    # The validating function, first creates a ``IntValidator()``, then checks
@@ -388,14 +388,14 @@ suitable to be used as a validating function of a ``editor.Property`` object:
 The ``editor.Editor`` objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An instances of the ``Editor`` class in :apidoc:`nagare.editor#editor.Editor`
+An instances of the ``Editor`` class in :apidoc:`editor#editor.Editor`
 is an intermediary between the values received from a form an a target object.
 
 An ``Editor`` object automatically creates ``editor.Property`` objects reflecting
 the attributes, of the target object, we want to edit with the form.
 
 An ``Editor`` object will modified the target object attributes only if all the
-validating functions of its properties validate the data from the form.  
+validating functions of its properties validate the data from the form.
 
 Putting all together
 ~~~~~~~~~~~~~~~~~~~~
@@ -408,12 +408,12 @@ In this example, we've got pure Python ``Person`` objects with ``name`` and
    from __future__ import with_statement
    from nagare import editor, presentation, component
    from nagare.validator import StringValidator, IntValidator
-   
+
    class Person:
        def __init__(self):
            self.name = ''
            self.age = 0
-           
+
 We create a dedicated editor for this objects, to be able to edit these
 attributes with a web form:
 
@@ -429,15 +429,15 @@ attributes with a web form:
            # We use a string validator to check that the name is not empty i.e
            # the name is required
            self.name.validate(lambda name: StringValidator(name).not_empty())
-           
-           # We use an integer validator to check the age is positive 
-           self.age.validate(lambda age: IntValidator(age).greater_than(0))              
+
+           # We use an integer validator to check the age is positive
+           self.age.validate(lambda age: IntValidator(age).greater_than(0))
 
        # This ``commit`` method will write back the values of the ``name`` and
        # ``age`` attributes to the target object is they are valid
        def commit(self):
            super(PersonEditor, self).commit(('name', 'age'))
-           
+
 Then we can create a view on the ``PersonEditor`` objects to render the web
 form:
 
@@ -454,11 +454,11 @@ form:
             # The ``error()`` method will display the error message if it's
             # not ``None``
             h << 'Name: ' << h.input.action(self.name).error(self.name.error) << h.br
-            
+
             h << 'Age: ' << h.input.action(self.age).error(self.age.error) << h.br
-            
+
             h << h.input(type='submit', value='Send').action(self.commit)
-            
+
         return h.root
 
 Finally, an application creates a ``Person`` object and wraps it into a
@@ -472,10 +472,10 @@ Finally, an application creates a ``Person`` object and wraps it into a
 
            # Create a ``PersonEditor`` object that wrap the ``Person`` object to edit
            editor = PersonEditor(self.person)
-           
+
            # Transform the editor object into a component
            self.editor_component = component.Component(editor)
-                  
+
    @presentation.render_for(App)
    def render(self, h, *args):
        # Display the current values
@@ -483,7 +483,7 @@ Finally, an application creates a ``Person`` object and wraps it into a
        h << h.p('Age: ', self.person.age)
 
        h << h.hr
-          
+
        # Render the editor
        h << self.editor_component
        return h.root
@@ -498,7 +498,7 @@ and check that the validation error messages are displayed and that the
 ``Person`` target object is only modified is all the values are valid.
 
 .. note::
-   
+
    For more complete examples of validations, use of all the possible form
    elements, inter-fields validation ... see the
    `Demo1 <http://www.nagare.org/demo/form/1>`_ and

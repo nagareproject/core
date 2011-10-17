@@ -5,7 +5,7 @@ What is a component ?
 ---------------------
 
 A component is an object, instance of the ``Component`` class in
-:apidoc:`nagare.component#component.Component`.
+:apidoc:`component#component.Component`.
 
 A component has one or multiple rendering methods. They are used to generate
 a HTML, XHTML, XML or any other views on it.
@@ -29,19 +29,19 @@ From example, starting with a pure Python ``Counter`` class :
    class Counter:
        def __init__(self):
            self.value = 0
-           
+
        def increase(self):
            self.value += 1
-           
+
        def decrease(self):
-           self.value -= 1  
-           
+           self.value -= 1
+
 to create a ``Counter`` component, you only need to do:
 
 .. code-block:: python
 
    from nagare import component
-   counter1 = component.Component(Counter()) 
+   counter1 = component.Component(Counter())
 
 How to associate views to a component ?
 ---------------------------------------
@@ -61,7 +61,7 @@ is called with :
   2. a renderer
   3. the component
   4. the model asked
-  
+
  and the method will generally returns a tree of DOM objects, build by using
  the :wiki:`RendererObjects` API.
 
@@ -71,7 +71,7 @@ a view for the *xml* model (the ``xml_view`` method) to the class ``AClass``:
 .. code-block:: python
 
    from nagare import presentation
-  
+
    @presentation.render_for(AClass)
    def view_by_default(self, h, component, model, *args):
      # Here, generate and return a view, typically a DOM tree
@@ -86,7 +86,7 @@ a view for the *xml* model (the ``xml_view`` method) to the class ``AClass``:
    compatibility with some future parameters addition. Furthermore if you're
    not using, for example, the ``component`` and the ``model`` parameters into
    your rendering process but only the ``self`` and ``h`` parameters, then you
-   could defined your view method as a simpler ``def render(self, h, *args)`` 
+   could defined your view method as a simpler ``def render(self, h, *args)``
 
    The views for a class are defined and added externally to the class itself,
    even from an other file if you want. So again, views can be added without any
@@ -97,7 +97,7 @@ For example, a default HTML view on our ``Counter`` objects could be:
 .. code-block:: python
 
     from nagare import presentation
-    
+
     @presentation.render_for(Counter)
     def render(self, h, *args):
         with h.div:
@@ -105,9 +105,9 @@ For example, a default HTML view on our ``Counter`` objects could be:
             h << h.a('--')
             h << ' | '
             h << h.a('++')
-            
+
         return h.root
- 
+
 and an other simpler HTML view, called ``static``, could be:
 
 .. code-block:: python
@@ -118,12 +118,12 @@ and an other simpler HTML view, called ``static``, could be:
 
 How to render a component ?
 ---------------------------
- 
+
 To render a component, calls its ``render()`` method, with a renderer and an
-optional ``model`` parameter: 
- 
+optional ``model`` parameter:
+
 .. code-block:: pycon
- 
+
     >>> from nagare.namespaces import xhtml
 
     >>> counter1 = Component(Counter())
@@ -132,12 +132,12 @@ optional ``model`` parameter:
     >>> tree = counter1.render(h)
     >>> tree.write_htmlstring()
     '<div>Value: 0<br><a>--</a> | <a>++</a></div>'
-    
+
     >>> h = xhtml.Renderer()
     >>> tree = counter1.render(h, model='static')
     >>> tree.write_htmlstring()
     '<b>0</b>'
-    
+
 But it's simpler to add the component as the child of a DOM object and let
 Nagare automatically creates a new renderer and call the view of the component.
 So:
@@ -147,7 +147,7 @@ So:
     >>> tree = h.div(counter1)
     >>> tree.write_htmlstring()
     '<div><div>Value: 0<br><a>--</a> | <a>++</a></div></div>'
-    
+
 is a shortcut for explicitly calling the default view:
 
 .. code-block:: pycon
@@ -187,10 +187,10 @@ then a ``ColorText`` component, a text displayed with a given background color:
         def __init__(self, text, color='#ffffff'):
             self.color = color
             self.text = text
-            
+
     @presentation.render_for(ColorText)
     def render(self, h, *args):
-        return h.span(self.text, style='background-color:' + self.color) 
+        return h.span(self.text, style='background-color:' + self.color)
 
 Composition of embedded components
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -204,7 +204,7 @@ embeds the views of the inner components:
 .. code-block:: python
 
     from nagare.component import Component
-    
+
     # ``App`` is the compound component
     class App:
         def __init__(self):
@@ -221,21 +221,21 @@ embeds the views of the inner components:
             h << self.color_chooser_comp
             h << h.hr
             h << self.text_comp
-            
+
         return h.root
 
 Launching the application with:
 
 .. code-block:: sh
 
-    <NAGARE_HOME>/bin/nagare-admin serve-module color.py:App color    
+    <NAGARE_HOME>/bin/nagare-admin serve-module color.py:App color
 
 and browsing to http://localhost:8080/color, gives you:
 
 .. class:: htmlscreen
 
     .. raw:: html
-    
+
        <div>
          <a style="background-color: #4B96FF">X</a>
          <a style="background-color: #FF8FDF">X</a>
@@ -271,9 +271,9 @@ component, with the value to return:
 .. note::
 
    Of course, this view could be written in a more compact Python code:
-   
+
    .. code-block:: python
-   
+
       for color in ('#4B96FF', '#FF8FDF', '#9EFF5D', '#ffffff'):
           h << h.a('X', 'style' : 'background-color: ' + color).action(lambda color=color: binding.answer(color))
 
@@ -302,7 +302,7 @@ object, using the ``on_answer()`` method of the ``ColorChooser`` component:
             self.color_chooser_comp = Component(ColorChooser())
             self.text = ColorText('Hello world !')
             self.text_comp = Component(self.text)
-            
+
             self.color_chooser_comp.on_answer(self.text.set_color)
 
 Now, clicking on a color immediatly change the background color of the text.
@@ -318,7 +318,7 @@ For example, our ``App`` component is now changed to only have one inner
 component, the ``content`` component:
 
 .. code-block:: python
-   
+
    class App:
        def __init__(self):
            self.color_chooser = ColorChooser()
@@ -339,9 +339,9 @@ simply replace the ``content`` component:
            # On a click on this link, replace the ``content`` inner object
            # by the ``color_chooser`` object
            h << h.a('The Color chooser').action(lambda: self.content.becomes(self.color_chooser))
-           
+
            h << ' | '
-           
+
            # On a click on this link, replace the ``content`` inner object
            # by the ``text`` object
            h << h.a('The text').action(lambda: self.content.becomes(self.text))
@@ -350,7 +350,7 @@ simply replace the ``content`` component:
            # Render the ``content`` component which can have ``color_chooser``
            # or ``text`` as inner object
            h << self.content
-            
+
        return h.root
 
 So now a little menu of two items is displayed. Clicking on the items display
@@ -360,7 +360,7 @@ the ``color_chooser`` or the ``text`` object. And, clicking on a color in the
 .. class:: htmlscreen
 
     .. raw:: html
-       
+
        <div>
            <a href="#">The Color chooser</a> | <a href="#">The text</a>
            <hr>
@@ -369,7 +369,7 @@ the ``color_chooser`` or the ``text`` object. And, clicking on a color in the
            <a style="background-color: #9EFF5D" href="#">X</a>
            <a style="background-color: #ffffff" href="#">X</a>
        </div>
-       
+
 Temporary replacing a component
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -377,7 +377,7 @@ Permanently replacing a component is like a "goto" in some programming
 languages. Temporary replacing a component is like a "call": the component
 is replaced, but as soon as the replacing component calls its
 ``answer(return_value)`` method, the previous component comes back in the
-component graph and receives the returned value. 
+component graph and receives the returned value.
 
 For example, our ``App`` component can be changed to first displays the
 ``text_comp`` component and a link to choose its color. Once the link is
@@ -413,7 +413,7 @@ selected color and change the color of the text:
 
             h << h.hr
             h << self.text_comp
-            
+
         return h.root
 
 How to build an application ?
@@ -425,5 +425,5 @@ With Nagare, an application is only a compound component, a graph of components.
 
 And navigating into the application, by clicking on links or by submitting forms,
 is activating callbacks that permanently or temporary modify this graph.
-         
+
 .. wikiname: ComponentModel

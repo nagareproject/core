@@ -30,7 +30,7 @@ DOM objects creation
 --------------------
 
 A ``Renderer`` is a DOM objects factory. For example, the XHTML renderer
-:apidoc:`nagare.namespaces.xhtml#xhtml.Renderer` has an attribute, for
+:apidoc:`namespaces.xhtml#xhtml.Renderer` has an attribute, for
 each XHTML tag, that create a DOM object:
 
 .. code-block:: pycon
@@ -47,7 +47,7 @@ ElementTree API
 ~~~~~~~~~~~~~~~
 
 A DOM object is an instance of the class ``_Tag`` from
-:apidoc:`nagare.namespaces.xml#xml._Tag`. As this class inherits from
+:apidoc:`namespaces.xml#xml._Tag`. As this class inherits from
 ``lxml.etree.ElementBase``, the DOM objects offer an
 `ElementTree API. <http://effbot.org/zone/pythondoc-elementtree-ElementTree.htm#elementtree.ElementTree._ElementInterface-class>`_:
 
@@ -55,13 +55,13 @@ A DOM object is an instance of the class ``_Tag`` from
 
     >>> from nagare.namespaces import xhtml
     >>> h = xhtml.Renderer()
-    
-    >>> root = h.div  
+
+    >>> root = h.div
     >>> root.set('id', 'content')
-    
-    >>> title = h.h1    
+
+    >>> title = h.h1
     >>> title.text = 'Hello world'
-    
+
     >>> root.append(title)
     >>> root.write_htmlstring()
     '<div id="content"><h1>Hello world</h1></div>'
@@ -78,10 +78,10 @@ Functional DOM building API
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``_Tag`` class implements a ``__call__``  method to add children, text or
-attributes to a DOM object: 
+attributes to a DOM object:
 
   .. code-block:: python
-  
+
      def __call__(self, *children, **attributes)
 
 Each element in ``children`` can be a:
@@ -91,7 +91,7 @@ Each element in ``children`` can be a:
     string and added as data to the DOM object
   - list, tuple or generator which each elements are added to the DOM object
   - dictionary which each items are added as attributes of the DOM object
-  
+
 Each items in ``attributes`` are added as attributes of the DOM object.
 
 .. note::
@@ -103,7 +103,7 @@ Using the DOM object creation API of the renderers, with the nesting of
 calls to the created DOM objects, a DOM tree can be built in a functional way:
 
   .. code-block:: python
-  
+
      >>> from nagare.namespaces import xhtml
      >>> h = xhtml.Renderer()
 
@@ -125,7 +125,7 @@ finally retrieved from the attribute ``root`` of the Renderer:
 .. code-block:: python
 
    >>> from __future__ import with_statement
-  
+
    >>> from nagare.namespaces import xhtml
    >>> h = xhtml.Renderer()
 
@@ -133,7 +133,7 @@ finally retrieved from the attribute ``root`` of the Renderer:
    ...     h << { 'id' : 'content' }
    ...     with h.h1:
    ...         h << 'Hello world'
-  
+
    >>> root = h.root
    >>> root.write_htmlstring()
    '<div id="content"><h1>Hello world</h1></div>'
@@ -142,7 +142,7 @@ finally retrieved from the attribute ``root`` of the Renderer:
 
   Dont't forget the line ``from __future__ import with_statement`` at the
   beginning of the file to activate the ``with`` statement in Python 2.5.
-  
+
   In a component view, don't forget to return the tree with ``h.root``
 
 Remember that the different ways to build a DOM tree can be freely mixed,
@@ -151,13 +151,13 @@ so the example above can be rewrote as:
 .. code-block:: python
 
    >>> from __future__ import with_statement
-   
+
    >>> from nagare.namespaces import xhtml
    >>> h = xhtml.Renderer()
 
    >>> with h.div(id='content'):
    ...     h << h.h1('Hello world')
-   
+
    >>> root = h.root
    >>> root.write_htmlstring()
    '<div id="content"><h1>Hello world</h1></div>'
@@ -169,7 +169,7 @@ Or, creating a HTML list from the Python list ``l``:
 
    # Functional
    >>> root = h.ul([u.li(element) for element in l])
-   
+
    # Imperative
    >>> with h.ul:
    ...     for element in l:
@@ -211,7 +211,7 @@ attribute to a DOM object:
 
    >>> from nagare.namespaces import xhtml
    >>> h = xhtml.Renderer()
-   
+
    >>> tree = h.html(
    ...            h.body(
    ...                h.h1("Hello").meld_id("title")
@@ -234,9 +234,9 @@ template:
 
    >>> from nagare.namespaces import xhtml
    >>> h = xhtml.Renderer()
-   
+
    >>> root = h.parse_html('/tmp/template.xml', xhtml=True)
-   
+
    >>> print root.write_xmlstring()
    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:meld="http://www.plope.com/software/meld3">
        <body>
@@ -253,9 +253,9 @@ Use the ``findmeld()`` method of the DOM objects to retreive the marked nodes:
 
    >>> from nagare.namespaces import xhtml
    >>> h = xhtml.Renderer()
-   
+
    >>> root = h.parse_html('/tmp/template.xml', xhtml=True)
-   
+
    >>> root.findmeld('title')
    <Element {http://www.w3.org/1999/xhtml}h1 at 8410c5c>
 
@@ -264,14 +264,14 @@ Use the ``findmeld()`` method of the DOM objects to retreive the marked nodes:
 
 Once a DOM object is found, you can manipulate it with the normal ElementTree,
 Lxml, functional or imperative API:
- 
+
 .. code-block:: pycon
 
    >>> from nagare.namespaces import xhtml
    >>> h = xhtml.Renderer()
-   
+
    >>> root = h.parse_html('/tmp/template.xml', xhtml=True)
-   
+
    >>> t = root.findmeld('title')
    >>> t.text = 'World'
 
@@ -290,68 +290,68 @@ These three methods of the DOM objects are helpers to work with templates:
     object current attributes.
 
     .. code-block:: python
-      
+
        >>> from nagare.namespaces import xhtml
        >>> h = xhtml.Renderer()
-    
+
        >>> root = h.div(h.h1('Hello world'), id='content')
        >>> root.write_htmlstring()
-       <div id="content"><h1>Hello world</h1></div>'      
-       
+       <div id="content"><h1>Hello world</h1></div>'
+
        >>> root.fill("Go to ", h.a("Nagare home", href="http://www.nagare.org"), class_="description")
-       
+
        >>> root.write_htmlstring()
         '<div id="content" class="description">Go to <a href="http://www.nagare.org">Nagare home</a></div>'
-    
+
   - ``replace(self, *children)`` -- replace the DOM object by the given children:
 
     .. code-block:: python
-      
+
        >>> from nagare.namespaces import xhtml
        >>> h = xhtml.Renderer()
-    
+
        >>> root = h.div(h.h1('Hello world'), id='content')
        >>> root.write_htmlstring()
        <div id="content"><h1>Hello world</h1></div>'
        >>> root[0].write_htmlstring()
-       <h1>Hello world</h1>    
-       
+       <h1>Hello world</h1>
+
        >>> root[0].replace(h.h2('Nagare'))
-       
+
        >>> root.write_htmlstring()
        '<div id="content"><h2>Nagare</h2></div>'
-  
+
   - ``repeat(self, iterable, childname=None)`` -- (description taken from
     the `meld3 <http://plope.com/software/meld3/>`_ site)
-    
+
       Repeats an element with values from an iterable.
-    
+
       If ``childname`` is not ``None``, repeat the element on which repeat was called,
       otherwise find the child element with a ``meld:id`` matching ``childname``
       and repeat that.  The element is repeated within its parent element.
-    
+
       This method returns an iterable; the value of each iteration is a
       two-sequence in the form (newelement, data).  ``newelement`` is a clone of
       the template element (including clones of its children) which has already
       been seated in its parent element in the template. ``data`` is a value from
       the passed in iterable.  Changing ``newelement`` (typically based on values
-      from ``data``) mutates the element "in place". 
+      from ``data``) mutates the element "in place".
 
     .. code-block:: pycon
-    
+
         >>> from nagare.namespaces import xhtml
         >>> h = xhtml.Renderer()
-        
+
         >>> root = h.parse_xmlstring('''<ul xmlns:meld="http://www.plope.com/software/meld3">
         ...   <li meld:id="alist" align="center">A line example</li>
         ... </ul>''')
-    
+
         >>> items = ['Item %d' % i for i in range(3)]
-    
+
         >>> for (element, item) in root.findmeld('alist').repeat(items):
         ...     element.text = item
         ...
-    
+
         >>> print root.write_xmlstring()
         <ul xmlns:meld="http://www.plope.com/software/meld3">
         <li align="center">Item 0</li>
@@ -369,7 +369,7 @@ Once a tree of DOM object is build, it can be serialized in (X)HTML:
     parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
     removed, else they are kept so that the xml string can be re-parse as a
     template.
-    
+
   - ``write_htmlstring(self, encoding='utf-8', pipeline=True)`` -- serializes
     the DOM tree into a HTML string, encoded according to the ``encoding``
     parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
