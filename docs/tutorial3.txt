@@ -1,0 +1,91 @@
+Nagare Tutorial, learning concepts
+==================================
+
+With a MVC framework, a click on an active HTML element (link, button ...) triggers the following chain of actions:
+
+    1. an URL is sent to the server,
+    2. one way or another, the URL is mapped to a controller,
+    3. the controller does the action by driving the model,
+    4. finally the controller passes the resulting data to the view.
+
+With Nagare, things are different. Indeed, the actions are directly mapped to active nodes of a DOM tree.
+
+Let's see how it works.
+
+Part 3. Add actions
+------------------------------
+
+1. Add active nodes into DOM tree:
+
+Change the default view of your ``Counter`` class to add html links (``a`` tags):
+
+  .. code-block:: python
+  
+     ...
+     @presentation.render_for(Counter)
+     def render(counter, h, *args):
+         h << h.div('Value: ', counter.val)
+
+         h << h.a('++')
+         h << '|'
+         h << h.a('--')
+
+   	 return h.root
+
+Here, the "lshift" ``<<`` operator is used to append nodes to the renderer. Then its ``root`` node is finally returned.
+
+2. Bind action to active nodes:
+
+As active nodes, ``a`` nodes have a special ``action()`` method which is used to bind action to the node. An action can be any callable as, in this case, a bound method:
+
+  .. code-block:: python
+  
+     ...
+     @presentation.render_for(Counter)
+     def render(counter, h, *args):
+         h << h.div('Value: ', counter.val)
+
+         h << h.a('++').action(counter.increase)
+         h << '|'
+         h << h.a('--').action(counter.decrease)
+
+   	 return h.root
+
+That's it! Now, you can play with your counter at http://localhost:8080/tutorial.
+
+3. How does it work?
+
+Nagare handles a HTTP request in two phases:
+
+    - Phase #1: the right state of the application (a previous snapshot of all the application components) is restored. Then the callback manager finds the action from its id and executes it. A new snapshot of the modified components graph is created and stored.
+    - Phase #2: the presentation service generates a DOM tree from the different views of the components. The DOM tree is then serialized to HTML and sent back to the browser.
+
+If you look closely at the URL, you will see something like:
+
+``?_s=2171996978143275&_c=00011&_action480534548``
+
+where:
+
+    - ``_s``: id of the session created for the application,
+    - ``_c``: id of the snapshot to use,
+    - ``_actionxxx``: id of the action to call.
+
+As you can see the URL are non-significative by default.
+
+With a MVC framework you must always map an URL to an action, even if its result is not a resource (in REST terminology), like the third step of a wizard or a contextual shopping basket.
+
+With Nagare you DON'T HAVE to use significative URL but you totally CAN if you NEED it (see :wiki:`RestfulUrl`). Also, non-significative URL with randomized sessions and actions ids improve security.
+
+4. Back and Fork
+
+Start with a counter at 0, do ten times ``++`` and see what happens when you use your browser back button 4 times.
+What do you expect when doing ``++`` now?
+11?
+7?
+
+Now open a new tab on ``--`` link, you get one tab with a value of 7 and one tab with a value of 6. 
+Play with the 2 counters, that's right, you've got 2 different counters!
+
+`Go to part 2 of this tutorial </trac/wiki/NagareTutorial2>`_ | `Go to part 4 of this tutorial </trac/wiki/NagareTutorial4>`_
+
+.. wikiname: NagareTutorial3

@@ -1,0 +1,75 @@
+Nagare Tutorial, learning concepts
+==================================
+
+This tutorial will guide you through the basics of Nagare applications.
+
+We will assume that you already have installed Nagare. To check if Nagare is properly installed, you can run the Python interactive interpreter and type:
+
+
+  .. code-block:: python
+  
+     >>> import nagare
+
+If any error occurs see :wiki:`NagareInstallation`.
+
+Part 1. Create an application
+-------------------------------------------
+
+1. When installed, Nagare comes with one application, called ``admin``. You can see it by running the following command:
+
+  .. code-block:: sh
+  
+     $ nagare-admin serve
+     Available applications:
+       - admin
+ 
+
+2. Move to a working directory and ask Nagare to create your application skeleton:
+
+  .. code-block:: sh
+  
+     $ cd /tmp
+     $ nagare-admin create-app tutorial
+     Application 'tutorial' created.
+
+     Note:
+       1. Edit the file 'tutorial/setup.py' to set the informations about your new application.
+       2. Register your application with:
+            - cd "tutorial"
+            - "<NAGARE_HOME>/bin/python" setup.py develop
+
+3. To add your application to the known applications, you have to register it:
+
+  .. code-block:: sh
+  
+     $ cd tutorial
+     $ python setup.py develop
+     ...
+     Finished processing dependencies for tutorial==0.0.1
+
+3. Now the application can be served:
+
+  .. code-block:: sh
+  
+     $ nagare-admin serve
+     Available applications:
+      - admin
+      - tutorial
+
+4. Launch your application in ``reload`` mode, this way any modification made to your files will automatically restart your application.
+
+  .. code-block:: sh
+  
+     $ nagare-admin serve --reload tutorial
+     Application 'app tutorial' registered as '/tutorial'
+     02/28/11 11:33:04 - serving on http://127.0.0.1:8080
+
+5. Open you webbrowser and go to http://127.0.0.1:8080/tutorial, you should see the default application screen.
+
+:code-block:`Image:tutorial1.png`
+
+ 
+`Go to part 2 of this tutorial </trac/wiki/NagareTutorial2>`_
+
+.. wikiname: NagareTutorial
+

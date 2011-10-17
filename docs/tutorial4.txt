@@ -1,0 +1,131 @@
+Nagare Tutorial, learning concepts
+==================================
+
+A major feature of Nagare is its ability to easily reuse existing code.
+
+Part 4. Re-use components
+-----------------------------
+
+1. An application with 2 counters:
+
+Move ``app.py`` module to ``counter.py`` and create a new ``app.py`` file with the following code:
+
+.. code-block:: python
+
+   from nagare import component, presentation
+   from counter import Counter
+   
+   class App(object):
+       
+       def __init__(self):
+           self.counter1 = component.Component(Counter())
+           self.counter2 = component.Component(Counter())
+
+ 
+   @presentation.render_for(App)
+   def render(self, h, *args):
+       h << self.counter1
+       h << h.hr
+       h << self.counter2
+
+       return h.root
+
+   # factory
+   app = App
+
+``app`` is now a composite application with two independent ``Counter`` components, each with its own state.
+
+Don't think about a Nagare application as a set of HTML pages reachable though URL. But instead model it as a tree of components which is modified then rendered when navigating.
+
+2. Multiviews
+
+Several views can be bound to a component. For example, here we add a new ``freezed`` named view to our ``Counter`` components:
+
+.. code-block:: python
+
+   @presentation.render_for(Counter, model='freezed')
+   def render(counter, h, *args):
+       return h.h1(counter.val)
+
+Then, we can tell ``counter1`` to use this ``freezed`` view as its default one:
+
+.. code-block:: python
+
+   ...
+   class App(object):
+       
+       def __init__(self):
+           self.counter1 = component.Component(Counter(), model='freezed')
+           self.counter2 = component.Component(Counter())
+   ...
+
+The application now displays two counters with two different views
+
+3. Navigating
+
+Now, we would like to switch between views at runtime. To achieve that, we just need to replace the inner object of the ``counter1`` component with the exact same object but with a different model:
+
+.. code-block:: python
+
+   ...
+   self.counter1.becomes(self.counter1, model='freezed')
+   ...
+
+That can be done via a callback registered in the ``Counter`` default view:
+
+.. code-block:: python
+
+   @presentation.render_for(Counter)
+   def render(counter, h, comp, *args):
+       h << h.div('Value: ', counter.val)
+       
+       h << h.a('++').action(counter.increase)
+       h << '|'
+       h << h.a('--').action(counter.decrease)
+
+       h << h.br
+       h << h.a('freeze').action(lambda: comp.becomes(counter, model='freezed'))
+
+       return h.root
+
+As you can see one of the optional arguments is ``comp``, the component wrapping the ``counter`` object.
+
+In this example we used the ``becomes()`` method to only change the default view of a component. But ``becomes()`` can actually swap the whole inner object to a new one. This is in fact how navigating into an application is done in Nagare. For example `this blog post </trac/blog/tabbed-navigation-with-nagare>`_  shows how to navigate in a tabbed menu.
+
+4. Going async
+
+With Nagare, a component can be rendered synchronously (default) or asynchronously without any change to its code.
+
+First, note the statement we used to add a counter view to the DOM tree:
+
+.. code-block:: python
+
+   ...
+   h << self.counter1
+   ...
+
+is in fact a shortcut for:
+
+.. code-block:: python
+
+   ...
+   h << self.counter1.render(h, model=None)
+   ...
+
+Using this full method call, we can now create and pass an asynchronous renderer instead of ``h``:
+
+.. code-block:: python
+
+   from nagare.namespaces import xhtml
+   ...
+   h << self.counter1.render(xhtml.AsyncRenderer(h), model=None)
+   ...
+
+This way ``counter1`` is rendered asynchronously whereas ``counter2`` is rendered synchronously. When you look at the generated html page you can see that for ``counter1`` links are disabled (attribute ``href`` set to ``#``) and some javascript is added (attribute ```onclick`` added with a call to the ``nagare_getAndEval()`` javascript function).
+
+
+That's all folks, if you'd like to learn more, feel free to join us on `IRC Freenode #nagare <irc://irc.freenode.net/nagare>`_, `Nagare blog </trac/blog>`_ and `Nagare users group <http://groups.google.com/group/nagare-users>`_ .
+
+`Go to part 3 of this tutorial </trac/wiki/NagareTutorial3>`_
+
+.. wikiname: NagareTutorial4

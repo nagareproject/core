@@ -1,0 +1,86 @@
+Nagare Tutorial, learning concepts
+==================================
+
+The main goal of Nagare is to develop a web application like any standard python application. There are three steps to reach this goal:
+
+    - Do everything in python (no sql, no templating language, avoid hand-written javascript as much as possible)
+    - Hide the request/response connectionless nature of HTTP: no manual handling of the session
+    - Use aggregation as the shortest way to transform any python object into a Nagare component
+
+Part 2. Modify the default application
+--------------------------------------
+
+1. With ``nagare-admin create-app`` a complete ``setuptools`` compatible package is created. Some Nagare specific files are also created:
+
+    - ``conf/tutorial.cfg``: application configuration file
+    - ``data``: folder where read/write datas are expected (sqlite database, csv files, etc.)
+    - ``static``: folder where html static files are stored (css, images and javascripts)
+    - ``tutorial/models.py``: module where the database models are defined using Elixir/SQLAlchemy ORM
+    - ``tutorial/app.py``: code of your application
+
+2. Let's start with a pure python class. Replace the whole content of ``tutorial/app.py`` with:
+
+  .. code-block:: python
+  
+     class Counter(object):
+
+         def __init__(self):
+             self.val = 0
+
+         def increase(self):
+             self.val += 1
+
+         def decrease(self):
+             self.val -= 1
+
+3. Now, add an HTML view for the ``Counter`` class:
+
+  .. code-block:: python
+
+     from nagare import presentation
+     ...
+     @presentation.render_for(Counter)
+     def render(counter, h, *args):
+   	    return "Hello"
+
+For Nagare, a view is just a function that takes a renderer (``h``) as a parameter and returns a DOM tree. In this example, we return a simple DOM tree with only one text node. To bind the view to the ``Counter`` class, we import the Nagare presentation service and use the ``render_for`` decorator.
+
+4. Define the Nagare application:
+
+For Nagare, an application is just an object factory (i.e. a callable that returns an object graph), and obviously a class is, so we just have to add the following to our ``app.py`` file:
+
+  .. code-block:: python
+ 
+     ...
+     # define app
+     app = Counter
+
+5. You can now view your new web application in your browser (go to http://localhost:8080/tutorial).
+
+If you take a look at the page source, you could see that Nagare has wrapped the text node into a valid html structure. By default, the DOM tree is serialized as HTML4. This can be changed in the application configuration file, to use XHTML if the browser accepts it.
+
+6. A more complex DOM tree:
+
+Replace the ``Counter`` view with the following one:
+
+  .. code-block:: python
+
+     ...
+     @presentation.render_for(Counter)
+     def render(counter, h, *args):
+   	    return h.div("Value: ", counter.val)
+     ...
+
+As you can see the ``h`` HTML renderer can be used as a factory for all the HTML tags.
+
+As we build a server-side DOM tree, we are protected against code injection. For example, if ``counter.val`` contains something like:
+
+ .. code-block:: python
+
+     "<script>alert('Hello World');</script>"
+
+This string would be escaped and no javascript will ever be executed.
+
+`Go to part 1 of this tutorial </trac/wiki/NagareTutorial>`_ | `Go to part 3 of this tutorial </trac/wiki/NagareTutorial3>`_
+
+.. wikiname: NagareTutorial2
