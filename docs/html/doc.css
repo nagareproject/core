@@ -1,179 +1,212 @@
-p {
-	text-align: justify;
-	padding-left: 30px;
-    /* font-family: times; */
+@font-face {
+    font-family: 'DistrictThinRegular';
+    src: url('font/distth___-webfont.eot');
+    src: url('font/distth___-webfont.eot?iefix') format('eot'),
+         url('font/distth___-webfont.ttf') format('truetype'),
+         url('font/distth___-webfont.svg#webfontCd4xCxJE') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
-h1, h2, h3, h4 {
-	color: #AFB11D;
-	font-family: arial;
+/* reset-min.css */
+/* ------------- */
+
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}input,button,textarea,select{*font-size:100%;}
+
+/* Content */
+/* ------- */
+
+body {
+    background: white url(img/logo.png) no-repeat top left;
+    color: #3a3a3a;
+    margin: 0;
+    padding: 0;
 }
+
+body, th, tr {
+    font-family: arial, verdana, sans, geneva;
+    font-size: 17px;
+}
+
+:link, :visited { text-decoration: none }
+
+.document {
+    padding: 10px 20px 0 160px;
+}
+
+p {
+    margin-bottom: 15px;
+    text-align: justify
+}
+
+em { font-style: italic }
+strong { font-weight: bolder }
+hr {
+    border: none;
+    border-top: 1px solid #CCB;
+    margin: 2em 0;
+}
+
+.literal, .option, pre, tt { font-size: 14px }
+
+blockquote { margin: 0 0 15px 0 !important }
+blockquote.citation { border-color: #b7b7b7 }
+blockquote ul, blockquote ol { padding-bottom: 0 }
+.htmlscreen { margin-bottom: 15px }
+
+h1 .status { color: #7B7B16 }
 
 h1.title {
-	background: transparent url(img/h1.gif) no-repeat scroll left bottom;
-	height: 70px;
-	padding: 2px 0pt 0px 61px;
-	margin-top: 10px;
+    color: #3a3a3a;
+    border: 0;
+    font: bold 30px "DistrictThinRegular";
+}
+
+h1 {
+    margin: 25px 0 15px 0 !important;
+    color: #3f7516;
+    border-bottom: 1px solid #9f9f9f;
+    font-size: 26px;
 }
 
 h2 {
-	/* font-weight: bold; */
-	font-style: italic;
+    margin: 20px 0 15px 0 !important;
+    font-size: 23px;
 }
 
-h3 a, h2 a, h1 a {
-	border: 0 !important;
+h3 {
+    margin: 20px 0 15px 0 !important;
+    font-style: italic;
+    font-size: 20px;
 }
 
-hr {
-	border-color: #CD7878 -moz-use-text-color -moz-use-text-color;
+h3 a, h2 a, h1 a { border: 0 !important }
+
+dd { padding-left: 40px }
+
+ul { padding: 0 0 15px 40px }
+ul li { list-style-type: square }
+ul ul { padding: 0 0 0 40px }
+ul ol { padding: 0 0 0 40px }
+ul ul li { list-style-type: disc; }
+
+ol { padding: 0 0 15px 40px }
+ol ul { padding: 0 0 0 40px }
+ol ol { padding: 0 0 0 40px }
+ol.arabic li { list-style-type: decimal }
+ol.arabic ul li { list-style-type: disc }
+
+a {
+    color: #3f7516;
+    border-bottom: 1px dotted #3f7516;
 }
 
-.document {
-	color: #4a4a4a;
-	margin: 0 30px 0 30px;
-}
-
-ul {
-	list-style-type: square;
-}
-
-ul ul {
-	list-style-type: disc;
-}
-
-a, a.missing, a:visited {
-	color: #afb11d;
-	border-bottom: 1px dotted #afb11d;
-	border: 0;
-	text_decoration: none;
-}
+a:hover { background-color: transparent }
 
 a em {
-	color: #757708;
+    color: #757708;
+    border: 0;
 }
 
-.admonition-title {
-	display: none;
+.admonition-title { display: none; }
+
+div.highlight, .ncodediv, .note, .warning, pre.literal-block {
+    margin: 0 0 15px 30px !important;
+    padding: 14px;
+    background-color: #f8f8f8;
+    background-repeat: no-repeat;
+    border: 0px !important;
+    border-left-width: 2px !important;
+    border-left-style: solid !important;
 }
+
+.note p, .warning p { margin-bottom: 0 }
 
 .note {
-	background: #ffffff url(img/light.png) no-repeat top left;
-	max-width: 900px;
-    padding: 5px 5px 5px 50px;
-	margin: 0.27em 0 0.27em 60px;
-	border: solid 1px #aeaeae;
+    background-image: url(img/note.gif);
+    background-position: 9px 8px;
+    padding-left: 49px !important;
+    border-left-color: #3F7516 !important;
 }
 
-* html .note {
-    background: #ffffff url(img/light.png) no-repeat top left;
-    width: 900px;
-    padding: 5px 5px 5px 50px;
-    margin: 0.27em 0 0.27em 60px;
-    border: solid 1px #aeaeae;
+.note .highlight {
+    background: transparent;
+    border-left-width: 0 !important;
+    margin: 0;
+    padding-bottom: 0;
 }
 
-.warning {
-	background: #f7dfd3 url(img/error_bg.png) no-repeat top left;
-    max-width: 900px;
-    padding: 5px 5px 5px 50px;
-    margin: 0.27em 0 0.27em 60px;
-	border: solid 1px #8d1818;
+.warning, div.system-message {
+    background-color: #fff2d9;
+    background-image: url(img/alert.gif);
+    background-position: 11px 8px;
+    background-repeat: no-repeat;
+    padding-left: 49px !important;
+    border-left-color: red !important;
 }
 
-* html .warning {
-    background: #ffffff url(img/error_bg.png) no-repeat top left;
-    width: 900px;
-    padding: 5px 5px 5px 50px;
-    margin: 0.27em 0 0.27em 60px;
-    border: solid 1px #8d1818;
+/* Code */
+/* ---- */
+
+.ncodediv, div.highlight, pre.literal-block {
+    border-left-color: #b7b7b7;
+    overflow-x: auto
 }
 
-/*********************************************/
-/*	ALERTS AND BLOCKS */
-/*********************************************/
-
-div.system-message {
-	background: #f7dfd3 url(img/error_bg.png) no-repeat top left;
-	width: 900px;
-	padding-left: 35px;
-	padding-bottom: 10px;
-	border-color: #8d1818;
-	min-height: 50px;
-}
-
-/*********************************************/
-/*	CODE */
-/*********************************************/
-
-.hll {
-	background-color: yellow;
-}
-	
-.ncodediv {
-    background: #ffffff url(img/code.png) no-repeat top right !important;
-    overflow-x: auto;
-    width: 99%;
-    margin-left: 30px;
-    padding-bottom: 1.5em;
-    border: 1px #aeaeae dashed;
-}
-
-table.ncodetable pre {
+table.ncode, table pre {
     margin: 5px 5px 0 5px;
+    font-size: 13px;
 }
 
-.linenos pre {
-	color: #aeaeae;
-}
+.linenos pre { color: #878787 }
 
 div.highlight {
-	padding: 0.27em;
-    border: 1px #aeaeae dashed;
-    margin-left: 30px;
+    padding: 14px;
 }
 
+div.highlight p { margin-top: 0 }
 div.highlight pre {
-	background: #ffffff url(img/code.png) no-repeat top right !important;
-    overflow-x: auto;
-    width: 99%;
-	margin: 0;
-	padding: 5px 5px 1.5em 5px;
+    margin: 0;
+    font-size: 13px !important;
 }
 
-/*********************************************/
-/*	TABLE */
-/*********************************************/
-
-table.docutils {
-	border: 2px solid #757708;
-	border-collapse: collapse;
+.highlight .highlight {
+    margin: 0;
+    padding: 14px
 }
 
-table.docutils thead th {
-	color: #8e9009;
-	font-weight: bold;
-	padding: 3px;
-	border: 1px solid #c1c22d;
+pre.wiki {
+    border: 0;
+    border-left: 2px solid #b7b7b7;
+    margin: 0 0 15px 40px;
+    padding-left: 15px;
+    background: none;
 }
 
-table.docutils tbody td {
-	padding: 3px;
-	border: 1px solid #c1c22d;
-}
+.hll { background-color: yellow }
 
-table a {
-	border-bottom:0 !important;
-}
+/* Table */
+/* ----- */
 
-.htmlscreen {
-	border: solid 1px #aaa;
-	padding: 5px;
-	margin: 0 60px 0 90px;
-	background-color: #eee;
+table.docutils, table.wiki {
+    margin-bottom: 15px;
+    border: 1px solid #3f7516;
+    border-collapse: collapse;
+    width: 100%;
 }
-
-.document .pre {
-    background-color: #eee;
+table.docutils thead th, table.wiki thead th {
+    text-align: left;
+    text-shadow: 1px 1px 0 white;
+    text-transform: uppercase;
+    background: #d4e2c8;
+    padding: 3px;
+    border: 1px solid #3f7516;
 }
-
+table.docutils tbody td, table.wiki tbody td {
+    padding: 3px;
+    border-left: 1px solid #3f7516;
+    border-right: 1px solid #3f7516;
+}
+table.docutils tbody tr:nth-child(2n), table.wiki tbody tr:nth-child(2n) { background: #edfae1 }
+table.docutils tbody td, table.wiki tbody td { border: 1px solid #3f7516 }
+table a { border-bottom: 0 !important }
