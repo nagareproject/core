@@ -48,7 +48,7 @@ host                No        127.0.0.1          By default, the publisher only 
                                                  to '0.0.0.0' to listen to on all the interfaces
                                                  of your system.
                                                  The optional ``--host`` on the command line
-                                                 takes precedence over this parameter. 
+                                                 takes precedence over this parameter.
 port                No        *publisher         Port where to listen to the requests. If no
                               dependante*        value is explicitly given, the ``standalone``,
                                                  ``fapws2`` and ``eventlet`` publishers listen on
@@ -59,7 +59,7 @@ port                No        *publisher         Port where to listen to the req
 =================== ========= ================== ================================================
 
 All other parameters, if present, are passed as keywords to the SQLALchemy
-``create_engine()`` call (see http://www.sqlalchemy.org/docs/04/dbengine.html#dbengine_options)
+``create_engine()`` call (see http://www.sqlalchemy.org/docs/core/engines.html#engine-creation-api)
 
 .. note::
 
@@ -81,7 +81,7 @@ type                No        standalone         Choice of the sessions manager 
 
                                                    - ``standalone``: threads-safe in-memory sessions
                                                      manager. Can be used with the ``standalon``,
-                                                     ``fapws2`` or ``eventlet`` publisher. 
+                                                     ``fapws2`` or ``eventlet`` publisher.
                                                    - ``memcache``: the sessions are stored and
                                                      shared into an external memcached server.
                                                      Can be use will all the publishers

@@ -10,18 +10,18 @@ The database connection is activated and configurated in the ``[database]`` sect
 of the application configuration file as described in
 :wiki:`ApplicationConfiguration#database-section`. One of the parameters in
 this section is the location of the
-`__metadata__ <http://www.sqlalchemy.org/docs/04/metadata.html>`_ object of
+`__metadata__ <http://www.sqlalchemy.org/docs/core/schema.html#metadata-describing>`_ object of
 SQLAlchemy:
 
-  - which must be explicitly created:  
+  - which must be explicitly created:
 
     .. code-block:: python
-    
+
        from elixir import *
        from sqlalchemy import MetaData
-    
+
        __metadata__ = MetaData()
-       
+
        # Database definitions
        ...
 
@@ -29,7 +29,7 @@ SQLAlchemy:
     is launched
 
   - where your code must explicitly register the
-    `table definitions <http://www.sqlalchemy.org/docs/04/ormtutorial.html#datamapping_tables>`_
+    `table definitions <http://www.sqlalchemy.org/docs/orm/mapper_config.html>`_
     if you are using SQLAlchemy only
 
   - where Elixir automatically register the entities defined (see for example
