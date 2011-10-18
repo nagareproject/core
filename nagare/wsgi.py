@@ -434,7 +434,7 @@ class WSGIApp(object):
                 # Phase 2
                 # -------
 
-                # If the ``redirect_after_post`` parameter of the ``[application``
+                # If the ``redirect_after_post`` parameter of the ``[application]``
                 # section is `True`` (the default), conform to the PRG__ pattern
                 #
                 # __ http://en.wikipedia.org/wiki/Post/Redirect/GetPRG
@@ -469,7 +469,7 @@ class WSGIApp(object):
 
                     security.get_manager().end_rendering(request, response, session)
                 except exc.HTTPException, response:
-                    # When a ``webob.exc`` object is raised during phase 2, stop immediatly
+                    # When a ``webob.exc`` object is raised during phase 2, stop immediately
                     # use it as the response object
                     pass
                 except Exception:

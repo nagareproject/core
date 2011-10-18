@@ -52,7 +52,7 @@ class Var(object):
         """Return or set the value
 
         In:
-          - ``v` -- if given, ``v`` becomes the new value
+          - ``v`` -- if given, ``v`` becomes the new value
 
         Return:
           - the variable value
