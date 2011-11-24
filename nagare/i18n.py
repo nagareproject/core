@@ -968,7 +968,7 @@ class Locale(CoreLocale):
 
 # -----------------------------------------------------------------------------
 
-class NegociatedLocale(Locale):
+class NegotiatedLocale(Locale):
     def __init__(
                     self,
                     request,
@@ -977,7 +977,7 @@ class NegociatedLocale(Locale):
                     timezone=None, default_timezone=None
                 ):
         """
-        A locale with negociated language and territory
+        A locale with negotiated language and territory
 
         In:
           - ``request`` -- the HTTP request object
@@ -996,7 +996,7 @@ class NegociatedLocale(Locale):
             value is used
         """
         locale = negotiate_locale(
-                                    request.accept_language.best_matches(),
+                                    request.accept_language,
                                     map('-'.join, locales),
                                     '-'
                                  )
@@ -1013,7 +1013,7 @@ class NegociatedLocale(Locale):
                 (language, territory) = locale.split('-')
                 territory = territory.upper()
 
-        super(NegociatedLocale, self).__init__(
+        super(NegotiatedLocale, self).__init__(
                                                 language, territory,
                                                 dirname=dirname, domain=domain,
                                                 timezone=timezone, default_timezone=default_timezone
