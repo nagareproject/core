@@ -178,7 +178,7 @@ clicked.
    .. code-block:: python
 
       comp.call(o)
-   
+
    but use the ``component.call_wrapper()`` function:
 
    .. code-block:: python
@@ -353,7 +353,7 @@ component, passing it the rest of the URL:
         if city not in self.cities: # Check if the city name is valid
             raise presentation.HTTPNotFound() # Else, send back a ``404``
 
-        self.select_city(city)  # Set the ``content`` component
+        self.change_city(city)  # Set the ``content`` component
 
         # The ``content`` component is initialized with the rest of the URL
         self.content.init(url[1:], http_method, request)
