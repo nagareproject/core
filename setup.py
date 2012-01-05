@@ -66,16 +66,19 @@ setup(
       namespace_packages = ('nagare',),
       zip_safe = False,
       dependency_links = ('http://www.nagare.org/download/',),
-      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.3.0', 'WebOb', 'Paste', 'flup', 'python-memcached'),
+      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.3.0', 'WebOb>=1.2b1', 'Paste', 'flup', 'python-memcached'),
       extras_require = {
         'debug' : ('WebError',),
-        'database' : ('SQLAlchemy', 'Elixir'),
+        # The SQLAlchemy==0.5.8 version restriction can be removed if you want to test a newer version.
+        # Nagare 0.4.0 is compatible with SQLAlchemy 0.6.x and 0.7.x.
+        # But we observe an important performance drop on our projects, at least with Oracle.
+        'database' : ('SQLAlchemy==0.5.8', 'Elixir'),
         'doc' : ('Pygments', 'docutils', 'RstDoc'),
         'test' : ('nose',),
         'i18n' : ('Babel', 'pytz'),
         'full' : (
                   'WebError',
-                  'SQLAlchemy', 'Elixir',
+                  'SQLAlchemy==0.5.8', 'Elixir',
                   'Pygments', 'docutils', 'RstDoc',
                   'nose',
                   'Babel', 'pytz'
