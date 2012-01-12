@@ -25,6 +25,7 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
 
     spec = dict(
                 host='string(default=None)', port='integer(default=9000)',
+                socket='string(default=None)', umask='integer(default=0)',
                 multiplexed='boolean(default=None)', minSpare='integer(default=None)',
                 maxSpare='integer(default=None)', maxChildren='integer(default=None)',
                 maxRequests='integer(default=None)',
@@ -84,6 +85,12 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
         """
         (host, port, conf) = self._validate_conf(filename, conf, error)
 
-        fcgi_fork.WSGIServer.__init__(self, self.urls, bindAddress=(host, port), debug=False, **conf)
-        print time.strftime('%x %X -', time.localtime()), 'serving on fastcgi://%s:%d' % (host, port)
+        socket = conf.pop('socket', None)
+        if not socket:
+            bind = (host, port)
+            print time.strftime('%x %X -', time.localtime()), 'serving on fastcgi://%s:%d' % bind
+        else:
+            bind = socket
+            print time.strftime('%x %X -', time.localtime()), 'serving on unix://%s' % bind
+        fcgi_fork.WSGIServer.__init__(self, self.urls, bindAddress=bind, debug=False, **conf)
         self.run()
