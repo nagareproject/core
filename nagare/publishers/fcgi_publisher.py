@@ -9,7 +9,7 @@
 
 """The FastCGI publisher"""
 
-import time
+import os, time
 from flup.server import fcgi_fork
 
 from nagare import local
@@ -25,7 +25,7 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
 
     spec = dict(
                 host='string(default=None)', port='integer(default=9000)',
-                socket='string(default=None)', umask='integer(default=0)',
+                socket='string(default="")', umask='integer(default=None)',
                 multiplexed='boolean(default=None)', minSpare='integer(default=None)',
                 maxSpare='integer(default=None)', maxChildren='integer(default=None)',
                 maxRequests='integer(default=None)',
@@ -75,22 +75,42 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
         """
         return '/static/'+name+'/'
 
+    def _validate_conf(self, filename, conf, error):
+        """Validate the configuration read from the publisher configuration file
+
+       In:
+         - ``filename`` -- the path to the configuration file
+         - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
+         - ``error`` -- the function to call in case of configuration errors
+
+       Return:
+         - the tuple:
+
+           - hostname to listen to
+           - port to listen to
+           - unix socket to listen to
+           - conf object
+       """
+        (host, port, conf) = super(Publisher, self)._validate_conf(filename, conf, error)
+        return (host, port, conf.pop('socket'), conf)
+
     def serve(self, filename, conf, error):
         """Run the publisher
 
         In:
-          -  ``filename`` -- the path to the configuration file
+          - ``filename`` -- the path to the configuration file
           - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
         """
-        (host, port, conf) = self._validate_conf(filename, conf, error)
+        (host, port, socket, conf) = self._validate_conf(filename, conf, error)
 
-        socket = conf.pop('socket', None)
         if not socket:
-            bind = (host, port)
-            print time.strftime('%x %X -', time.localtime()), 'serving on fastcgi://%s:%d' % bind
+            bind_address = (host, port)
+            banner = 'fastcgi://%s:%d'
         else:
-            bind = socket
-            print time.strftime('%x %X -', time.localtime()), 'serving on unix://%s' % bind
-        fcgi_fork.WSGIServer.__init__(self, self.urls, bindAddress=bind, debug=False, **conf)
+            bind_address = os.path.normpath(socket)
+            banner = 'unix://%s'
+
+        fcgi_fork.WSGIServer.__init__(self, self.urls, bindAddress=bind_address, debug=False, **conf)
+        print time.strftime('%x %X -', time.localtime()), 'serving on', banner % bind_address
         self.run()
