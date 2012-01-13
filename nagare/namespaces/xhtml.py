@@ -355,7 +355,7 @@ class Form(xhtml_base._HTMLTag):
         Delete the existing ``<form>`` tags in the child tree
         """
         if isinstance(child, ET.ElementBase):
-            for f in child.findall('form'):
+            for f in child.findall('.//form'):
                 f.replace(f.getchildren()[1:])
 
         if isinstance(child, Form):
