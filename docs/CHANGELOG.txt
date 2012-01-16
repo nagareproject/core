@@ -1,6 +1,61 @@
 Nagare Changelog
 ================
 
+0.4.0
+-----
+
+New features
+~~~~~~~~~~~~
+
+  - Mercurial migration (http://hg.nagare.org and http://bitbucket.org/nagare mirror)
+  - new site, examples and documentation design
+  - tutorial (http://www.nagare.org/trac/wiki/NagareTutorial)
+  - i18n service (messages catalogs, HTTP language negotiation, timezones, dates, currencies, numbers ...)
+  - multiprocess / thread scopes differences handled by the new ``nagare.local`` service
+  - HTML5 renderer (``nagare.namespaces.xhtml5.Renderer()``)
+  - user impersonnalisation (stackable user objects)
+  - stackable security rules
+  - standalone publisher threads pool fully configurable
+  - dummy sessions manager for completly Restful applications (no state kept on the server)
+  - fastcgi over unix socket
+  - the DOCTYPE can be changed
+  - the content type of an XML response can be changed
+  - configurable default initial renderer
+  - relative logger names
+  - ``nagare-admin shell`` prompt displays the name of the application
+  - application name can be inserted as ``$name`` in the configuration file
+
+Changes
+~~~~~~~
+
+  - A renderer can create an asynchronous renderer:
+    ``comp.render(xhtml.AsyncRenderer())`` => ``comp.render(h.AsyncRenderer())``
+  - New versions of YUI, IPython, SQLAlchemy, lxml and WebOb
+
+Bugs fixed
+~~~~~~~~~~
+
+  - client disconnection detection added for comet streams
+  - #51: javascript executed multiple times
+  - #52: more informations for the ``AnswerWithoutCall`` exception
+  - #53: a ``component.Task`` must exit on ``answer()`` if a ``on_answer()`` was set
+  - #54: log service not initialized
+  - #55: xhtml ``select`` and ``option``: problem with integer
+  - #66: serializer can't serialize an empty DOM
+  - #67: serializer can't serialize a fragment (a list of DOM)
+  - #1298: bad generation of pure ``href`` anchor
+  - #1442: bad Javascript translation of Python methods
+  - #1443: error when the default initial renderer is asynchronous
+  - #1444: ajax error when no HTML is rendered
+  - #1447: ``IntValidator`` does not catch ``TypeError``
+  - #1498: tutorial errors
+  - #1502: incorrect ``memory`` sessions manager
+  - #1508: error with the latest IPython version
+  - #1509: ``data_path`` not initialized
+  - #1510: bad checkbox values in ajax
+  - #1511: SQLAlchemy engines creation fully configurable
+
+
 0.3.0
 -----
 
@@ -42,7 +97,7 @@ Changes
   - with the YUI connection manager, a large browser response must be reassembled (Firefox only)
   - late creation of the SQLAlchemy database engines and metadatas binding
   - input fields ot type ``button`` now working in an Ajax submit
-  - ``Var.var()`` now working inn a unicode context
+  - ``Var.var()`` now working in a unicode context
   - ``nagare-admin create-rules`` had problems when a static directory didn't exist
   - bad boolean expressions parenthesis translation in pyjs fixed
   - parsing (X)HTML from URL now working under Windows
