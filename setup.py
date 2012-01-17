@@ -9,7 +9,7 @@
 # this distribution.
 #--
 
-VERSION = '0.3.0'
+VERSION = '0.4.0'
 
 import sys, os, textwrap
 from setuptools import setup, find_packages
