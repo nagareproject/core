@@ -1,2 +1,3 @@
 graft conf
 graft static
+graft docs
