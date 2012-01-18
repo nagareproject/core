@@ -31,10 +31,10 @@ def create_empty_file(filename):
 def create_or_update(path, create=None, update=None, *args, **kw):
     if not create:
         create = lambda *args, **kw: None
-        
+
     if not update:
         update = lambda *args, **kw: None
-        
+
     return (update if os.path.exists(path) else create)(path, *args, **kw)
 
 def create_setup_py(filename, params):
@@ -43,9 +43,9 @@ def create_setup_py(filename, params):
                      params,
                      textwrap.dedent('''\
                         VERSION = '0.0.1'
-            
+
                         from setuptools import setup, find_packages
-            
+
                         setup(
                               name = '%(name)s',
                               version = VERSION,
@@ -77,9 +77,9 @@ def upgrade_setup_py(filename, params, setup_py=None):
 
     if os.path.exists(filename):
         os.rename(filename, filename+'.old')
-        
+
     with open(filename, 'w') as f:
-        print >>f, re.sub(r'^(\s*)(entry_points)', r"\1message_extractors = { '%(id)s' : [('**.py', 'python', None)] },\n\1\2" % params, setup_py, flags=re.M)
+        print >>f, re.sub(r'\n(\s*)(entry_points)', r"\n\1message_extractors = { '%(id)s' : [('**.py', 'python', None)] },\n\1\2" % params, setup_py)
 
 def upgrade_setup_cfg(filename):
     old_conf = ConfigObj(filename)
@@ -120,7 +120,7 @@ def create_manifest_in(filename):
             graft data/locale
         ''')
 
-def create_app_py(filename, params):    
+def create_app_py(filename, params):
     with open(filename, 'w') as f:
         f.write(textwrap.dedent('''\
             from __future__ import with_statement
@@ -232,7 +232,7 @@ def run(parser, options, args):
     root = args[0]
     app_name = os.path.basename(root)
     app_id = app_name.replace('-', '_')
-    
+
     create_or_update(root, os.mkdir)
 
     params = {
@@ -263,7 +263,7 @@ def run(parser, options, args):
     create_or_update(os.path.join(root, 'conf'), os.mkdir)
     create_or_update(os.path.join(root, 'conf', '__init__.py'), create_empty_file)
     create_or_update(os.path.join(root, 'conf', app_id+'.cfg'), create_conf, None, params)
-    
+
     print "Application '%s' created." % app_name
     print
     print textwrap.dedent("""\
