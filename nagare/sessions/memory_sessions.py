@@ -55,6 +55,7 @@ class SessionsBase(common.Sessions):
 
         self.nb_states = conf['nb_states']
         self._sessions = lru_dict.ThreadSafeLRUDict(conf['nb_sessions'])
+
         return conf
 
     def is_session_exist(self, session_id):

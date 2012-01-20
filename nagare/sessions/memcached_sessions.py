@@ -119,6 +119,7 @@ class Sessions(common.Sessions):
 
         if conf['reset']:
             self.flush_all()
+
         return conf
 
     def _get_connection(self):

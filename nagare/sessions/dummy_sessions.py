@@ -17,9 +17,10 @@ class State(object):
     back_used = False
     release = sessionid_in_url = sessionid_in_form = set = delete = lambda *args, **kw: ()
 
+
 class Sessions(object):
     def set_config(self, filename, conf, error):
-        pass
+        return conf
 
     def get(self, request, response, use_same_state):
         return State()
