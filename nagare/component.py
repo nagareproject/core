@@ -187,11 +187,11 @@ class Component(object):
         return self
 
     def __repr__(self):
-        return '<%s at %x on object %r model %r>' % (
+        return '<%s with %s at 0x%x on object %r>' % (
                                             self.__class__.__name__.lower(),
+                                            "model '%s'" % self.model if self.model else 'default model',
                                             id(self),
-                                            self.o,
-                                            self.model
+                                            self.o
                                            )
 
 @when(presentation.render, (Component, object, object, int))
