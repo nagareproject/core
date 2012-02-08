@@ -79,7 +79,11 @@ class Authentication(basic_auth.Authentication):
         Return:
           - A list with the id of the user and its password
         """
-        return [s.decode('base64').decode('utf-8') for s in cookie.split(':')]
+        try:
+            return [s.decode('base64').decode('utf-8') for s in cookie.split(':')]
+        except:
+            # in case there's a problem when decoding the authentication cookie, fall back to unauthenticated
+            return (None, None)
 
     def get_ids_from_cookie(self, cookies):
         """Search the data associated with the connected user into the cookies
