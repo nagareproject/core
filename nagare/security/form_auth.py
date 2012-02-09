@@ -100,20 +100,17 @@ class Authentication(basic_auth.Authentication):
 
         return self.cookie_decode(data)
 
-    def cookie_encode(self, username, password):
+    def cookie_encode(self, *ids):
         """Encode the data of the user cookie
 
         In:
-          - ``username`` -- name (login) of the user
-          - ``password`` -- password of the user
+          - ``ids`` -- a tuple with the id of the user and its password
 
         Return:
           - the data to put into the user cookie
         """
-        return '%s:%s' % (
-                          username.encode('utf-8').encode('base64').rstrip(),
-                          password.encode('utf-8').encode('base64').rstrip()
-                         )
+        encoded_ids = [''.join(value.encode('utf-8').encode('base64').split()) for value in ids]
+        return ':'.join(encoded_ids)
 
     def _get_ids(self, request, response):
         """Return the data associated with the connected user
