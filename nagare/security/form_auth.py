@@ -22,6 +22,8 @@ sent back on each request by the browser.
    clear into the cookie. So this authentication manager is as secure as
    the HTTP basic authentication.
 """
+from base64 import b64encode, b64decode
+
 import webob
 
 from nagare import security
@@ -80,9 +82,9 @@ class Authentication(basic_auth.Authentication):
           - A list with the id of the user and its password
         """
         try:
-            return [s.decode('base64').decode('utf-8') for s in cookie.split(':')]
-        except:
-            # in case there's a problem when decoding the authentication cookie, fall back to unauthenticated
+            return [b64decode(s).decode('utf-8') for s in cookie.split(':')]
+        except (TypeError, UnicodeDecodeError):
+            # In case there's a problem when decoding the authentication cookie, fall back to unauthenticated
             return (None, None)
 
     def get_ids_from_cookie(self, cookies):
@@ -104,13 +106,12 @@ class Authentication(basic_auth.Authentication):
         """Encode the data of the user cookie
 
         In:
-          - ``ids`` -- a tuple with the id of the user and its password
+          - ``ids`` -- a tuple of data to put into the cookie
 
         Return:
           - the data to put into the user cookie
         """
-        encoded_ids = [''.join(value.encode('utf-8').encode('base64').split()) for value in ids]
-        return ':'.join(encoded_ids)
+        return ':'.join(b64encode(value.encode('utf-8')) for value in ids)
 
     def _get_ids(self, request, response):
         """Return the data associated with the connected user
