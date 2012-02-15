@@ -9,6 +9,8 @@
 
 """Authentication manager for the basic HTTP authentication scheme"""
 
+from base64 import b64decode
+
 from webob import exc
 
 from nagare.security import common
@@ -41,7 +43,7 @@ class Authentication(common.Authentication):
             (scheme, data) = authorization.split(' ', 1)
             if scheme == 'Basic':
                 encoding = request.accept_charset.best_match(['iso-8859-1', 'utf-8'])
-                ids = [s.decode(encoding) for s in data.decode('base64').split(':', 1)]
+                ids = [s.decode(encoding) for s in b64decode(data).split(':', 1)]
 
         return ids
 
