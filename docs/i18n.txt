@@ -11,7 +11,7 @@ There are many aspects to take into account when internationalizing an applicati
 - displaying the messages in the proper language according to the user's browser settings or a 
   per-user setting of the application
 - formatting numbers, dates, times, currencies, ...
-- dealing with timezones calculations
+- dealing with timezone calculations
 
 All these aspects are addressed by the ``nagare.i18n`` module.
 
@@ -23,13 +23,13 @@ First, the Nagare ``i18n`` extras should be installed in your virtual environmen
 
 .. code-block:: sh
 
-    easy_install nagare[i18n] 
+    easy_install nagare[i18n]
 
 This command installs ``Babel`` and ``pytz`` which are necessary to use the ``nagare.i18n`` module.
 
-When you create an new application with ``nagare-admin``, Nagare automatically create a ``setup.cfg``
-file that contains a default configuration for extracting the messages to translate, updating
-and compiling the message catalogs: 
+When you create an new application with ``nagare-admin create-app``, Nagare automatically creates a
+``setup.cfg`` file that contains a default configuration for extracting the messages to translate,
+updating and compiling the message catalogs: 
 
 .. code-block:: ini
 
@@ -67,13 +67,50 @@ This configuration is used by the distutils commands that are automatically regi
                                                the application framework
 =============================================  ================================================================
 
-See the `Babel setup documentation`_ for a complete reference of the command options.
+See the `Babel setup documentation`_ for a complete reference of the commands options.
 
 .. _Babel setup documentation: http://babel.edgewall.org/wiki/Documentation/setup.html
 
-The messages are stored in the ``data/locale`` folder by default, which is automatically included into your
-application source package thanks to the ``MANIFEST.in`` file.
+The messages are stored in the ``data/locale`` directory by default, which is automatically included into your
+application source package thanks to the ``MANIFEST.in`` file. The directory is not created by default, so you
+have to create it before issuing any ``Babel`` command:
 
+.. code-block:: sh
+
+    mkdir data/locale
+
+``nagare-admin create-app`` also creates a ``setup.py`` file that contain a line that configures the message
+extractors that ``Babel`` will use in order to extract the messages from your source files:
+
+.. code-block:: python
+
+    setup(
+          ...
+          message_extractors = { 'i18n_example' : [('**.py', 'python', None)] },
+          ...
+    )
+
+See the `Babel messages extractor documentation`_ to understand how to add additional message extractors if
+you need to.
+
+.. _Babel messages extractor documentation: http://babel.edgewall.org/wiki/Documentation/messages.html
+
+
+
+Marking the messages to translate
+---------------------------------
+
+
+Formatting numbers, dates, times, currencies, ...
+-------------------------------------------------
+
+
+Setting the locale of the application
+-------------------------------------
+
+
+Timezone calculations
+---------------------
 
 
 .. wikiname: Internationalization
