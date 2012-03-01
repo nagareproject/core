@@ -96,6 +96,17 @@ you need to.
 .. _Babel messages extractor documentation: http://babel.edgewall.org/wiki/Documentation/messages.html
 
 
+Since you will use the internationalization feature of Nagare in your application from now on, you should
+change the ``setup.py`` file to state that you need the ``i18n`` extra in your requirements:
+
+.. code-block:: python
+
+    setup(
+          ...
+          install_requires = ('nagare[i18n]', ...),
+          ...
+    )
+
 
 Marking the messages to translate
 ---------------------------------
