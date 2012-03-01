@@ -30,6 +30,7 @@ Nagare documentation
   - :wiki:`RendererObjects`
   - :wiki:`RestfulUrl`
   - :wiki:`EntryPoints`
+  - :wiki:`Internationalization`
     
 * Examples
 

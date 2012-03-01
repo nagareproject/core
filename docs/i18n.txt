@@ -1,0 +1,79 @@
+Internationalizing an application
+=================================
+
+Since version 0.4.0, the Nagare framework include the ``nagare.i18n`` module that can help you
+internationalize a Web application.
+
+There are many aspects to take into account when internationalizing an application:
+
+- extracting the messages (strings) used inside the application and translating them in each
+  language
+- displaying the messages in the proper language according to the user's browser settings or a 
+  per-user setting of the application
+- formatting numbers, dates, times, currencies, ...
+- dealing with timezones calculations
+
+All these aspects are addressed by the ``nagare.i18n`` module.
+
+
+Setup an application for internationalization
+---------------------------------------------
+
+First, the Nagare ``i18n`` extras should be installed in your virtual environment:
+
+.. code-block:: sh
+
+    easy_install nagare[i18n] 
+
+This command installs ``Babel`` and ``pytz`` which are necessary to use the ``nagare.i18n`` module.
+
+When you create an new application with ``nagare-admin``, Nagare automatically create a ``setup.cfg``
+file that contains a default configuration for extracting the messages to translate, updating
+and compiling the message catalogs: 
+
+.. code-block:: ini
+
+    [extract_messages]
+    keywords = _ , ugettext , lazy_ugettext:1 , N_:1,2 , ungettext:1,2 , lazy_ungettext:1,2
+    output_file = data/locale/messages.pot
+    
+    [init_catalog]
+    input_file = data/locale/messages.pot
+    output_dir = data/locale
+    domain = messages
+    
+    [update_catalog]
+    input_file = data/locale/messages.pot
+    output_dir = data/locale
+    domain = messages
+    
+    [compile_catalog]
+    directory = data/locale
+    domain = messages
+
+
+This configuration is used by the distutils commands that are automatically registered to ``setuptools`` when
+``Babel`` is installed. Here is the list of the commands and their effect:
+
+=============================================  ================================================================
+                 Command                                                  Effect
+=============================================  ================================================================
+``python setup.py extract_messages``           Extract the messages from the python sources to a ``.pot`` file
+``python setup.py init_catalog -l <lang>``     Create a new message catalog (``.po`` file) for a given
+                                               language, initialized from the ``.pot`` file
+``python setup.py update_catalog -l <lang>``   Update a message catalog with the new messages found in the 
+                                               ``.pot`` file after an ``extract_messages``
+``python setup.py compile_catalog -l <lang>``  Compile the message catalog to a binary form that can be used by
+                                               the application framework
+=============================================  ================================================================
+
+See the `Babel setup documentation`_ for a complete reference of the command options.
+
+.. _Babel setup documentation: http://babel.edgewall.org/wiki/Documentation/setup.html
+
+The messages are stored in the ``data/locale`` folder by default, which is automatically included into your
+application source package thanks to the ``MANIFEST.in`` file.
+
+
+
+.. wikiname: Internationalization
