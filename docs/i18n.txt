@@ -1,5 +1,5 @@
-Internationalizing an application
-=================================
+Internationalization of an application
+======================================
 
 Since version 0.4.0, the Nagare framework include the ``nagare.i18n`` module that can help you
 internationalize a Web application.
@@ -23,7 +23,7 @@ First, the Nagare ``i18n`` extras should be installed in your virtual environmen
 
 .. code-block:: sh
 
-    easy_install nagare[i18n]
+    $ easy_install nagare[i18n]
 
 This command installs ``Babel`` and ``pytz`` which are necessary to use the ``nagare.i18n`` module.
 
@@ -34,7 +34,7 @@ updating and compiling the message catalogs:
 .. code-block:: ini
 
     [extract_messages]
-    keywords = _ , ugettext , lazy_ugettext:1 , N_:1,2 , ungettext:1,2 , lazy_ungettext:1,2
+    keywords = _ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
     output_file = data/locale/messages.pot
     
     [init_catalog]
@@ -50,7 +50,6 @@ updating and compiling the message catalogs:
     [compile_catalog]
     directory = data/locale
     domain = messages
-
 
 This configuration is used by the distutils commands that are automatically registered to ``setuptools`` when
 ``Babel`` is installed. Here is the list of the commands and their effect:
@@ -77,7 +76,7 @@ have to create it before issuing any ``Babel`` command:
 
 .. code-block:: sh
 
-    mkdir data/locale
+    $ mkdir data/locale
 
 ``nagare-admin create-app`` also creates a ``setup.py`` file that contain a line that configures the message
 extractors that ``Babel`` will use in order to extract the messages from your source files:
@@ -111,17 +110,159 @@ change the ``setup.py`` file to state that you need the ``i18n`` extra in your r
 Marking the messages to translate
 ---------------------------------
 
+The ``nagare.i18n`` module provides some functions to translate the strings that appear in your code. The most
+useful function is ``nagare.i18n._``:
 
-Formatting numbers, dates, times, currencies, ...
--------------------------------------------------
+..  code-block:: python
+    :hl_lines: 2, 9
+    
+    from nagare import presentation
+    from nagare.i18n import _
+
+    class Example(object):
+        pass
+    
+    @presentation.render_for(Example)
+    def render(counter, h, *args):
+        h << _('This is a translated string')
+        h << 'This string is not translated'
+        return h.root
+
+
+There are also many more functions that deals with strings in ``nagare.i18n``:
+
+=============================================  ================================================================
+                Function                                                   Effect
+=============================================  ================================================================
+``_``                                          Shortcut to ``ugettext``
+``_N``                                         Shortcut to ``ungettext``
+``_L``                                         Shortcut to ``lazy_ugettext``
+``_LN``                                        Shortcut to ``lazy_ungettext``
+``gettext``                                    Return the localized translation of a message as a 8-bit string
+                                               encoded with the catalog's charset encoding, based on the current
+                                               locale set by Nagare
+``ugettext``                                   Return the localized translation of a message as a unicode string,
+                                               based on the current locale set by Nagare
+``ngettext``                                   Like ``gettext`` but consider plurals forms
+``nugettext``                                  Like ``ugettext`` but consider plurals forms
+``lazy_gettext``                               Like ``gettext`` but with lazy evaluation
+``lazy_ugettext``                              Like ``ugettext`` but with lazy evaluation
+``lazy_ngettext``                              Like ``ngettext`` but with lazy evaluation
+``lazy_nugettext``                             Like ``nugettext`` but with lazy evaluation
+=============================================  ================================================================
+
+
+Note that the ``lazy_*`` variants don't fetch the translation when they are evaluated. Instead Nagare automatically
+takes care of fetching the translation at the rendering time when it encounters a lazy translation. This is especially
+useful when you want to use translated strings in module or class constants, which are evaluated at definition
+time and consequently don't have the locale set properly. For example:
+
+..  code-block:: python
+    :hl_lines: 6
+    
+    from nagare.i18n import _L
+    
+    ...
+
+    # the following line is evaluated when the module is loaded, so _ would not work here
+    TITLE = _L("This is title")  
+    
+    @presentation.render_for(Example)
+    def render(counter, h, *args):
+        h << TITLE
+        return h.root
+    
+
+When ``Babel`` extracts the localizable strings from the sources files (with the ``extract_messages`` command),
+it only considers the strings enclosed in some specific keywords calls. The list of the supported keywords
+appear in the ``setup.cfg`` file:
+
+.. code-block:: ini
+
+    [extract_messages]
+    keywords = _ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
+
+All the ``nagare.i18n`` functions that deal with strings appear in this list. However, if you want to add
+additional translation functions, don't forget to update the keywords list in this file.
+
+
+
+Formatting numbers, dates, times, currencies and dealing with timezones
+-----------------------------------------------------------------------
+
+The ``nagare.i18n`` module also define functions for formatting numbers, dates, times, currencies and for dealing
+with timezones. We have grouped these functions into categories. See the Nagare :apidoc:`i18n` API documentation
+for more information on these functions. 
+
+
+Numbers
+~~~~~~~
+
+=============================================  ================================================================
+                Function                                                   Effect
+=============================================  ================================================================
+``get_decimal_symbol``                         Return the symbol used to separate decimal fractions
+``get_plus_sign_symbol``                       Return the plus sign symbol
+``get_minus_sign_symbol``                      Return the plus sign symbol
+``get_exponential_symbol``                     Return the symbol used to separate mantissa and exponent
+``get_group_symbol``                           Return the symbol used to separate groups of thousands
+
+``format_number``                              Return the given number formatted
+``format_decimal``                             Return the given decimal number formatted
+``format_percent``                             Return the formatted percent value
+``format_scientific``                          Return the value formatted in scientific notation
+
+``parse_number``                               Parse the localized number string into a long integer
+``parse_decimal``                              Parse the localized decimal string into a float
+=============================================  ================================================================
+
+
+Currencies
+~~~~~~~~~~
+
+=============================================  ================================================================
+                Function                                                   Effect
+=============================================  ================================================================
+``get_currency_name``                          Return the name used for the specified currency
+``get_currency_symbol``                        Return the symbol used for the specified currency
+``format_currency``                            Return formatted currency value
+=============================================  ================================================================
+
+
+Dates & timezones
+~~~~~~~~~~~~~~~~~
+
+=============================================  ================================================================
+                Function                                                   Effect
+=============================================  ================================================================
+``get_period_names``                           Return the names for day periods (AM/PM)
+``get_day_names``                              Return the day names for the specified format
+``get_month_names``                            Return the month names for the specified format
+``get_quarter_names``                          Return the quarter names for the specified format
+``get_era_names``                              Return the era names used for the specified format
+``get_date_format``                            Return the date formatting pattern for the specified format
+``get_datetime_format``                        Return the datetime formatting pattern for the specified format
+``get_time_format``                            Return the time formatting pattern for the specified format
+``get_timezone_gmt``                           Return the timezone associated with the given datetime object,
+                                               formatted as a string indicating the offset from GMT
+``get_timezone_location``                      Return a representation of the given timezone using the "location
+                                               format"
+``get_timezone_name``                          Return the localized display name for the given timezone
+
+``format_time``                                Return a time formatted according to the given pattern
+``format_date``                                Return a date formatted according to the given pattern
+``format_datetime``                            Return a datetime formatted according to the given pattern
+
+``parse_time``                                 Parse a time from a string
+``parse_date``                                 Parse a date from a string
+
+``to_timezone``                                Return a localized datetime object
+``to_utc``                                     Return a UTC datetime object
+=============================================  ================================================================
 
 
 Setting the locale of the application
 -------------------------------------
-
-
-Timezone calculations
----------------------
 
 
 .. wikiname: Internationalization
