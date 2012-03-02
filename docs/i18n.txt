@@ -10,7 +10,7 @@ There are many aspects to take into account when internationalizing an applicati
   language
 - displaying the messages in the proper language according to the user's browser settings or a 
   per-user setting of the application
-- formatting numbers, dates, times, currencies, ...
+- formatting numbers, dates, times, currencies for display or parsing them after user input
 - dealing with timezone calculations
 
 All these aspects are addressed by the ``nagare.i18n`` module.
@@ -27,9 +27,23 @@ First, the Nagare ``i18n`` extras should be installed in your virtual environmen
 
 This command installs ``Babel`` and ``pytz`` which are necessary to use the ``nagare.i18n`` module.
 
+However, if you plan to use the internationalization feature of Nagare in your Web application, you'd
+better change the ``setup.py`` file that is generated when you create the application, in order to specify
+that you need the ``i18n`` extra in your requirements:
+
+.. code-block:: python
+
+    setup(
+          ...
+          install_requires = ('nagare[i18n]', ...),
+          ...
+    )
+
+Then, Nagare get installed with the ``i18n`` extra when you install your application.
+
 When you create an new application with ``nagare-admin create-app``, Nagare automatically creates a
 ``setup.cfg`` file that contains a default configuration for extracting the messages to translate,
-updating and compiling the message catalogs: 
+intializing, updating and compiling the message catalogs: 
 
 .. code-block:: ini
 
@@ -52,7 +66,7 @@ updating and compiling the message catalogs:
     domain = messages
 
 This configuration is used by the distutils commands that are automatically registered to ``setuptools`` when
-``Babel`` is installed. Here is the list of the commands and their effect:
+``Babel`` is installed. Here is the list of the commands:
 
 =============================================  ================================================================
                  Command                                                  Effect
@@ -70,7 +84,7 @@ See the `Babel setup documentation`_ for a complete reference of the commands op
 
 .. _Babel setup documentation: http://babel.edgewall.org/wiki/Documentation/setup.html
 
-The messages are stored in the ``data/locale`` directory by default, which is automatically included into your
+The catalog files are stored in the ``data/locale`` directory by default, which is automatically included into your
 application source package thanks to the ``MANIFEST.in`` file. The directory is not created by default, so you
 have to create it before issuing any ``Babel`` command:
 
@@ -78,40 +92,12 @@ have to create it before issuing any ``Babel`` command:
 
     $ mkdir data/locale
 
-``nagare-admin create-app`` also creates a ``setup.py`` file that contain a line that configures the message
-extractors that ``Babel`` will use in order to extract the messages from your source files:
-
-.. code-block:: python
-
-    setup(
-          ...
-          message_extractors = { 'i18n_example' : [('**.py', 'python', None)] },
-          ...
-    )
-
-See the `Babel messages extractor documentation`_ to understand how to add additional message extractors if
-you need to.
-
-.. _Babel messages extractor documentation: http://babel.edgewall.org/wiki/Documentation/messages.html
-
-
-Since you will use the internationalization feature of Nagare in your application from now on, you should
-change the ``setup.py`` file to state that you need the ``i18n`` extra in your requirements:
-
-.. code-block:: python
-
-    setup(
-          ...
-          install_requires = ('nagare[i18n]', ...),
-          ...
-    )
-
 
 Marking the messages to translate
 ---------------------------------
 
 The ``nagare.i18n`` module provides some functions to translate the strings that appear in your code. The most
-useful function is ``nagare.i18n._``:
+useful function is ``nagare.i18n._`` which returns the translation of the given string as a unicode string:
 
 ..  code-block:: python
     :hl_lines: 2, 9
@@ -155,7 +141,8 @@ There are also many more functions that deals with strings in ``nagare.i18n``:
 Note that the ``lazy_*`` variants don't fetch the translation when they are evaluated. Instead Nagare automatically
 takes care of fetching the translation at the rendering time when it encounters a lazy translation. This is especially
 useful when you want to use translated strings in module or class constants, which are evaluated at definition
-time and consequently don't have the locale set properly. For example:
+time and consequently don't have the locale set properly. Here is how you would define a module constant for use in a
+view:
 
 ..  code-block:: python
     :hl_lines: 6
@@ -171,10 +158,14 @@ time and consequently don't have the locale set properly. For example:
     def render(counter, h, *args):
         h << TITLE
         return h.root
-    
 
-When ``Babel`` extracts the localizable strings from the sources files (with the ``extract_messages`` command),
-it only considers the strings enclosed in some specific keywords calls. The list of the supported keywords
+
+Extracting the messages
+-----------------------
+
+``Babel`` automatically takes care of the messages extraction from the sources when you run the 
+``python setup.py extract_messages`` command. Specifically, when it extracts the localizable strings from the sources
+files, it only considers the strings enclosed in some specific keywords calls. The list of the supported keywords
 appear in the ``setup.cfg`` file:
 
 .. code-block:: ini
@@ -182,16 +173,33 @@ appear in the ``setup.cfg`` file:
     [extract_messages]
     keywords = _ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
 
-All the ``nagare.i18n`` functions that deal with strings appear in this list. However, if you want to add
-additional translation functions, don't forget to update the keywords list in this file.
+All the ``nagare.i18n`` functions that deal with strings appear in this list, so you don't have to change this line 
+in most cases. However, if you need to add additional translation functions, don't forget to update the keywords
+list in this file.
 
+Furthermore, ``nagare-admin create-app`` creates a ``setup.py`` file that contains a line that configures the message
+extractors that ``Babel`` will use in order to extract the messages from your source files:
+
+.. code-block:: python
+
+    setup(
+          ...
+          message_extractors = { 'i18n_example' : [('**.py', 'python', None)] },
+          ...
+    )
+
+By default, Nagare set up an extractor of the localized strings from the python files. If you have other files that
+contain localizable strings (such as ``.js`` files), you'll have to add additional message extractors by yourself.
+Please refer the `Babel messages extractor documentation`_ to understand how to add additional message extractors.
+
+.. _Babel messages extractor documentation: http://babel.edgewall.org/wiki/Documentation/messages.html
 
 
 Formatting numbers, dates, times, currencies and dealing with timezones
 -----------------------------------------------------------------------
 
-The ``nagare.i18n`` module also define functions for formatting numbers, dates, times, currencies and for dealing
-with timezones. We have grouped these functions into categories. See the Nagare :apidoc:`i18n` API documentation
+The ``nagare.i18n`` module also define functions for formatting numbers, dates, times, currencies and for timezones
+calculations. We have grouped these functions by category. See the Nagare :apidoc:`i18n` API documentation
 for more information on these functions. 
 
 
