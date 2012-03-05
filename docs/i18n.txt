@@ -247,12 +247,17 @@ with the help of the ``init_catalog`` catalog, for example:
     $ python setup.py init_catalog -l en
 
 Then update the ``.po`` files that have just been created and provide the translations for all the strings that
-do not have one. Finally, compile the catalogs in binary form:
+do not have one. You can use for that either a dedicated ``.po`` file editor, or a simple text editor and fill
+the ``msgstr`` lines for each ``msgid``. Please refer to the `PO Files section of the Gettext Manual`_ for more
+information about this process.
+
+.. _`PO Files section of the Gettext Manual`: http://www.gnu.org/software/gettext/manual/gettext.html#PO-Files
+
+Finally, compile the catalogs in binary form:
 
 .. code-block:: sh
 
     $ python setup.py compile_catalog
-
 
 If you change the source files and add new messages to translate, you have to update the message catalogs:
 
