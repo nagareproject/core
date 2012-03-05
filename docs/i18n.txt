@@ -1,7 +1,7 @@
 Internationalization of an application
 ======================================
 
-Since version 0.4.0, the Nagare framework include the ``nagare.i18n`` module that can help you
+Since version 0.4.0, the Nagare framework includes a ``nagare.i18n`` module that can help you
 internationalize a Web application.
 
 There are many aspects to take into account when internationalizing an application:
@@ -9,7 +9,7 @@ There are many aspects to take into account when internationalizing an applicati
 - extracting the messages (strings) used inside the application and translating them in each
   language
 - displaying the messages in the proper language according to the user's browser settings or a 
-  per-user setting of the application
+  per-user language setting in the application
 - formatting numbers, dates, times, currencies for display or parsing them after user input
 - dealing with timezone calculations
 
@@ -29,7 +29,7 @@ This command installs ``Babel`` and ``pytz`` which are necessary to use the ``na
 
 However, if you plan to use the internationalization feature of Nagare in your Web application, you'd
 better change the ``setup.py`` file that is generated when you create the application, in order to specify
-that you need the ``i18n`` extra in your requirements:
+that you need the ``i18n`` extra as a requirement:
 
 .. code-block:: python
 
@@ -39,7 +39,7 @@ that you need the ``i18n`` extra in your requirements:
           ...
     )
 
-Then, Nagare get installed with the ``i18n`` extra when you install your application.
+Then, Nagare is installed with the ``i18n`` extra when you install your application.
 
 When you create an new application with ``nagare-admin create-app``, Nagare automatically creates a
 ``setup.cfg`` file that contains a default configuration for extracting the messages to translate,
@@ -65,20 +65,20 @@ intializing, updating and compiling the message catalogs:
     directory = data/locale
     domain = messages
 
-This configuration is used by the distutils commands that are automatically registered to ``setuptools`` when
-``Babel`` is installed. Here is the list of the commands:
+This configuration file is used by the distutils commands that are automatically registered to ``setuptools``
+when ``Babel`` is installed. Here is the list of the commands:
 
-=============================================  ================================================================
-                 Command                                                  Effect
-=============================================  ================================================================
-``python setup.py extract_messages``           Extract the messages from the python sources to a ``.pot`` file
-``python setup.py init_catalog -l <lang>``     Create a new message catalog (``.po`` file) for a given
-                                               language, initialized from the ``.pot`` file
-``python setup.py update_catalog -l <lang>``   Update a message catalog with the new messages found in the 
-                                               ``.pot`` file after an ``extract_messages``
-``python setup.py compile_catalog -l <lang>``  Compile the message catalog to a binary form that can be used by
-                                               the application framework
-=============================================  ================================================================
+===============================================  ================================================================
+                 Command                                                   Effect
+===============================================  ================================================================
+``python setup.py extract_messages``             Extract the messages from the python sources to a ``.pot`` file
+``python setup.py init_catalog -l <lang>``       Create a new message catalog (``.po`` file) for a given
+                                                 language, initialized from the ``.pot`` file
+``python setup.py update_catalog [-l <lang>``]   Update the message catalog(s) with the new messages found in the
+                                                 ``.pot`` file after an ``extract_messages``
+``python setup.py compile_catalog [-l <lang>``]  Compile the message catalog(s) to a binary form that can be used
+                                                 by the application
+===============================================  ================================================================
 
 See the `Babel setup documentation`_ for a complete reference of the commands options.
 
@@ -86,7 +86,7 @@ See the `Babel setup documentation`_ for a complete reference of the commands op
 
 The catalog files are stored in the ``data/locale`` directory by default, which is automatically included into your
 application source package thanks to the ``MANIFEST.in`` file. The directory is not created by default, so you
-have to create it before issuing any ``Babel`` command:
+have to create it before issuing any of the ``Babel`` commands:
 
 .. code-block:: sh
 
@@ -96,7 +96,7 @@ have to create it before issuing any ``Babel`` command:
 Marking the messages to translate
 ---------------------------------
 
-The ``nagare.i18n`` module provides some functions to translate the strings that appear in your code. The most
+The ``nagare.i18n`` module provides functions to translate the strings that appear in your code. The most
 useful function is ``nagare.i18n._`` which returns the translation of the given string as a unicode string:
 
 ..  code-block:: python
@@ -104,15 +104,17 @@ useful function is ``nagare.i18n._`` which returns the translation of the given 
     
     from nagare import presentation
     from nagare.i18n import _
-
-    class Example(object):
+    
+    class I18nExample(object):
         pass
     
-    @presentation.render_for(Example)
-    def render(counter, h, *args):
-        h << _('This is a translated string')
+    @presentation.render_for(I18nExample)
+    def render(self, h, *args):
+        h << _('This is a translated string') << h.br
         h << 'This string is not translated'
         return h.root
+    
+    app = I18nExample
 
 
 There are also many more functions that deals with strings in ``nagare.i18n``:
@@ -145,20 +147,24 @@ time and consequently don't have the locale set properly. Here is how you would 
 view:
 
 ..  code-block:: python
-    :hl_lines: 6
+    :hl_lines: 6, 11
     
-    from nagare.i18n import _L
+    from nagare.i18n import _, _L
     
     ...
-
+    
     # the following line is evaluated when the module is loaded, so _ would not work here
     TITLE = _L("This is title")  
     
-    @presentation.render_for(Example)
-    def render(counter, h, *args):
-        h << TITLE
+    @presentation.render_for(I18nExample)
+    def render(self, h, *args):
+        with h.h1:
+            h << TITLE
+        h << _('This is a translated string') << h.br
+        h << 'This string is not translated'
         return h.root
-
+    
+    ...
 
 Extracting the messages
 -----------------------
@@ -195,12 +201,79 @@ Please refer the `Babel messages extractor documentation`_ to understand how to 
 .. _Babel messages extractor documentation: http://babel.edgewall.org/wiki/Documentation/messages.html
 
 
+If you run the ``python setup.py extract_messages`` command on the previous example code, you should obtain the
+following ``messages.pot`` file:
+
+.. code-block:: po
+
+    # Translations template for nagare.examples.
+    # Copyright (C) 2012 ORGANIZATION
+    # This file is distributed under the same license as the nagare.examples
+    # project.
+    # FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+    #
+    #, fuzzy
+    msgid ""
+    msgstr ""
+    "Project-Id-Version: nagare.examples 0.3.0\n"
+    "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+    "POT-Creation-Date: 2012-03-05 11:05+0100\n"
+    "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+    "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+    "Language-Team: LANGUAGE <LL@li.org>\n"
+    "MIME-Version: 1.0\n"
+    "Content-Type: text/plain; charset=utf-8\n"
+    "Content-Transfer-Encoding: 8bit\n"
+    "Generated-By: Babel 0.9.6\n"
+    
+    #: nagare/examples/i18n.py:20
+    msgid "This is title"
+    msgstr ""
+    
+    #: nagare/examples/i18n.py:26
+    msgid "This is a translated string"
+    msgstr ""
+
+
+Translating the messages
+------------------------
+
+Once the ``.pot`` file is produced (after message extraction), you have to create a message catalog for each language
+with the help of the ``init_catalog`` catalog, for example:
+
+.. code-block:: sh
+
+    $ python setup.py init_catalog -l fr
+    $ python setup.py init_catalog -l en
+
+Then update the ``.po`` files that have just been created and provide the translations for all the strings that
+do not have one. Finally, compile the catalogs in binary form:
+
+.. code-block:: sh
+
+    $ python setup.py compile_catalog
+
+
+If you change the source files and add new messages to translate, you have to update the message catalogs:
+
+.. code-block:: sh
+
+    $ python setup.py extract_messages
+    $ python setup.py update_catalog
+    
+Then, fill in the missing translations in the ``.po`` files and compile the catalogs again.
+
+.. code-block:: sh
+
+    $ python setup.py compile_catalog
+
+
 Formatting numbers, dates, times, currencies and dealing with timezones
 -----------------------------------------------------------------------
 
-The ``nagare.i18n`` module also define functions for formatting numbers, dates, times, currencies and for timezones
-calculations. We have grouped these functions by category. See the Nagare :apidoc:`i18n` API documentation
-for more information on these functions. 
+The ``nagare.i18n`` module also defines functions for formatting numbers, dates, times, currencies and for timezones
+calculations, according to the locale of the user. We have grouped these functions by category. See the Nagare
+:apidoc:`i18n` API documentation for more information on these functions.
 
 
 Numbers
@@ -271,6 +344,12 @@ Dates & timezones
 
 Setting the locale of the application
 -------------------------------------
+
+Language setting:
+- use the browser language settings (``Accept-Language`` headers of the request)
+- per-user setting in the application
+- urls
+- configuration file
 
 
 .. wikiname: Internationalization
