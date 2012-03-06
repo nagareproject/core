@@ -8,10 +8,10 @@ There are many aspects to take into account when internationalizing an applicati
 
 - extracting the messages (strings) used inside the application and translating them in each
   language
-- displaying the messages in the proper language according to the user's browser settings or a 
-  per-user language setting in the application
 - formatting numbers, dates, times, currencies for display or parsing them after user input
 - dealing with timezone calculations
+- displaying the requested pages in the proper language according to the client browser language
+  settings or a setting in the application
 
 All these aspects are addressed by the ``nagare.i18n`` module.
 
@@ -143,28 +143,29 @@ There are also many more functions that deals with strings in ``nagare.i18n``:
 Note that the ``lazy_*`` variants don't fetch the translation when they are evaluated. Instead Nagare automatically
 takes care of fetching the translation at the rendering time when it encounters a lazy translation. This is especially
 useful when you want to use translated strings in module or class constants, which are evaluated at definition
-time and consequently don't have the locale set properly. Here is how you would define a module constant for use in a
-view:
+time and consequently don't have the locale set properly yet. Here is how you would define a class constant for use in
+a view:
 
 ..  code-block:: python
     :hl_lines: 6, 11
     
+    from nagare import presentation
     from nagare.i18n import _, _L
     
-    ...
-    
-    # the following line is evaluated when the module is loaded, so _ would not work here
-    TITLE = _L("This is title")  
+    class I18nExample(object):
+        # the following line is evaluated when the module is loaded, so _ would not work here
+        TITLE = _L("Internationalization Example")
     
     @presentation.render_for(I18nExample)
     def render(self, h, *args):
         with h.h1:
-            h << TITLE
+            h << self.TITLE
         h << _('This is a translated string') << h.br
         h << 'This string is not translated'
         return h.root
     
     ...
+
 
 Extracting the messages
 -----------------------
@@ -226,11 +227,11 @@ following ``messages.pot`` file:
     "Content-Transfer-Encoding: 8bit\n"
     "Generated-By: Babel 0.9.6\n"
     
-    #: nagare/examples/i18n.py:20
-    msgid "This is title"
+    #: nagare/examples/i18n.py:18
+    msgid "Internationalization Example"
     msgstr ""
     
-    #: nagare/examples/i18n.py:26
+    #: nagare/examples/i18n.py:25
     msgid "This is a translated string"
     msgstr ""
 
@@ -350,11 +351,176 @@ Dates & timezones
 Setting the locale of the application
 -------------------------------------
 
-Language setting:
-- use the browser language settings (``Accept-Language`` headers of the request)
-- per-user setting in the application
-- urls
-- configuration file
+The last step of the internationalization process is to initialize the locale of the application according to a
+*language setting*. There are many ways to implement a language setting:
+ 
+- use the client browser language settings, i.e. deal with the ``Accept-Language`` headers from the HTTP request
+- use a URL prefix, for example ``/en`` for english and ``/fr`` for french (see :wiki:`RestfulUrl`)
+- use a per-user setting: for example, read the locale setting from the user's profile stored in a database
+- use a per-session setting, for example store the language setting as an attribute of the root
+  component
+- use a per-application setting, for example provide the language setting in the application configuration
+  file
+
+You may even want to combine two or more of these schemes in your application!  As you will see next, Nagare makes
+it easy to change the locale at runtime, it doesn't really matter where the language setting comes from.
+
+The place where to change the locale is in the ``start_request`` method of the application object (``wsgi.WSGIApp``
+by default) since we have access to both the request and to the authenticated user (when necessary) there.
+Furthermore, since a user may change the language setting between two requests, the locale setting is scoped to the
+HTTP request by design in Nagare.
+
+The locale can be changed with either the ``WSGIApp.set_locale`` method or the ``WSGIApp.set_default_locale`` method
+(see :apidoc:`wsgi`). The ``WSGIApp.start_request`` method itself use ``WSGIApp.set_locale`` to install the default
+locale (set with ``WSGIApp.set_default_locale``). By default, the default locale is initialized to a default locale
+that doesn't perform any translation: it just returns the original string.
+
+
+Example 1: using  a negociated browser locale
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As an illustration, let's use a negociated browser locale in the previous example:
+
+.. code-block:: python
+    
+    from nagare import presentation, component, wsgi, i18n
+    
+    ...
+    
+    class I18nExampleApp(wsgi.WSGIApp):
+        AVAILABLE_LOCALES = (
+            ('en',),  # English
+            ('fr',),  # French
+        )
+    
+        def start_request(self, root, request, response):
+            # set the default locale to a browser negotiated locale
+            self.set_default_locale(i18n.NegotiatedLocale(request, self.AVAILABLE_LOCALES, default_locale=self.AVAILABLE_LOCALES[0]))
+    
+            # let nagare install the default locale
+            super(I18nExampleApp, self).start_request(root, request, response)
+    
+    
+    app = I18nExampleApp(lambda: component.Component(I18nExample()))
+
+We first create an application class that inherit from ``wsgi.WSGIApp`` so that we can override the default
+``start_request`` behavior in order to install the negociated browser locale.
+
+Since we must pass the list of the available locales to the ``i18n.NegotiatedLocale`` constructor, we define a
+``AVAILABLE_LOCALES`` class constant. The available locales should be given as a list of ``(language, territory)``
+tuples. The territory has been omitted here since we don't take them into account in our translations yet.
+
+Then, we set the default locale in our new ``start_request`` method and let nagare install the default locale by
+calling the base ``start_request`` method. Note that you should always call the base ``start_request`` method since
+it also installs the security manager and authenticate the user. The ``i18n.NegotiatedLocale`` constructor accepts
+the request as first parameter, the list of the available locales as second parameter and some optional parameters.
+It examines the ``Accept-Language`` headers of the request in order to determine the best ``(language, territory)``
+tuple to use for the current request according to the available locales. The ``default_locale`` optional parameter
+can be used to define the default ``(language, territory)`` value when the negociation fails.
+
+Finally, we use a ``I18nExampleApp`` instance as our application instead of the ``I18nExample`` one.
+
+
+Example 2: using a per-session locale setting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let's show another example: we will allow the user to change the language setting using links and store the setting
+in the session in order to persist the change for the next requests. Here is the code:
+
+.. code-block:: python
+
+    from nagare import presentation, component, wsgi, i18n
+    from nagare.i18n import _, _L
+    
+    
+    class I18nExample(object):
+        # the following line is evaluated when the module is loaded, so _ would not work here
+        TITLE = _L("Internationalization Example")
+    
+        AVAILABLE_LOCALES = (
+            (i18n.Locale('en'), u'English'),  # English
+            (i18n.Locale('fr'), u'Français'),  # French
+        )
+    
+        def __init__(self, locale=AVAILABLE_LOCALES[0][0]):
+            self.set_locale(locale)
+    
+        def set_locale(self, locale):
+            # remember the locale to use for the next requests in the session (see I18nExampleApp)
+            self.locale = locale
+    
+            # we should also initialize the locale dirname since it may not have been set yet
+            # we use the current locale dirname, which is set by the WSGIApp.set_locale method
+            dirname = i18n.get_locale().dirname
+            locale.dirname = dirname
+    
+            # change the locale for the current request so that the rendering is performed with the new locale
+            i18n.set_locale(self.locale)
+    
+    
+    @presentation.render_for(I18nExample)
+    def render(self, h, comp, *args):
+        with h.h1:
+            h << self.TITLE
+        h << _('This is a translated string') << h.br
+        h << 'This string is not translated'
+    
+        h << h.hr
+    
+        # language change
+        for locale, label in self.AVAILABLE_LOCALES:
+            h << h.a(label, title=label).action(lambda locale=locale: self.set_locale(locale))
+            h << " "
+    
+        return h.root
+    
+    
+    class I18nExampleApp(wsgi.WSGIApp):
+        def start_request(self, root, request, response):
+            # call base implementation
+            super(I18nExampleApp, self).start_request(root, request, response)
+    
+            if root():
+                # reinstall the locale stored in the session
+                locale = root().locale
+                self.set_locale(locale)
+    
+    
+    app = I18nExampleApp(lambda: component.Component(I18nExample()))
+
+
+We moved the ``AVAILABLE_LOCALES`` list to the ``I18nExample`` component since we'll show a list of
+language change links in its view. We also added a label to each entry and created ``i18n.Locale``
+instances from the locale information (i.e. the ``(language, territory)`` tuples).
+
+In the associated view, we iterate the ``AVAILABLE_LOCALES`` list in order to display a link for each locale.
+The links actions call the ``set_locale`` method, passing the associated ``i18n.Locale`` instance to it.
+
+The ``I18nExample.set_locale`` method performs two operations. First, it remembers the locale setting as an
+attribute of the component. Since the component will be pickled into the session after the request, the locale
+setting is effectively stored in the session and will be back in the next request when the session is unpickled.
+The locale setting is then used in the ``I18nExampleApp.start_request`` method for reinstalling the locale for
+subsequent requests.
+
+Second, it changes the locale in the current request (where the language change action is received) so that its
+rendering is affected by the change. However, we can't call ``I18nExampleApp.set_locale`` here, because we don't
+have access to the application instance from a component. Instead, we have to install the locale ourselves by
+calling the ``i18n.set_locale`` directly. But, the locale ``dirname`` attribute (i.e. the base directory where
+the locale catalog files are to be found) may not have been initialized yet, because it's the purpose of the
+``I18nExampleApp.set_locale`` method. So, we set the ``dirname`` attribute of the new locale to the ``dirname``
+of the currently installed locale, which should have been initialized by the ``I18nExampleApp.set_locale``
+method.
+
+Finally, the ``I18nExampleApp.start_request`` calls the ``set_locale`` method in order to reinstall the previously
+saved locale for the active request. It's important to call ``set_locale`` *after* calling the base implementation
+because we want to override the default locale set by the base implementation.
+
+
+These two examples explain the basics for setting the locale in a Nagare application. Real-world implementations may
+store the language setting by other means (see the list at the top-most paragraph of this section) and use a
+combination of these two techniques.
+
+
 
 
 .. wikiname: Internationalization
