@@ -19,9 +19,10 @@ import select
 
 from nagare import presentation, ajax
 
+
 class Client(object):
     """A connected client"""
-    
+
     def __init__(self, fileno, response):
         """Initialization
 
@@ -110,12 +111,13 @@ class Channel(object):
     def discard_disconnected_clients(self):
         """Forgot about the disconnected clients
         """
-        clients_to_discard = select.select(self.clients, [], [], 0)[0]
+        if self.clients:
+            clients_to_discard = select.select(self.clients, [], [], 0)[0]
 
-        for client in clients_to_discard:
-            client.release()
+            for client in clients_to_discard:
+                client.release()
 
-        self.clients = self.clients - set(clients_to_discard)
+            self.clients = self.clients - set(clients_to_discard)
 
     def send(self, msg):
         """Send a message to all the connected clients
@@ -135,7 +137,7 @@ class Channel(object):
 
         # Send the msg to all the waiting clients
         for client in clients:
-            self._send(client, self.history_nb+len(self.history), msg)
+            self._send(client, self.history_nb + len(self.history), msg)
 
     def close(self):
         """Close a channel
@@ -169,14 +171,14 @@ class Channel(object):
             - identifier of the next msg to ask for
             - the msg if available or ``None``
         """
-        if nb >= self.history_nb+len(self.history):
+        if nb >= self.history_nb + len(self.history):
             return (None, None)
 
         if nb < self.history_nb:
             nb = self.history_nb
 
         # Return only one message
-        return (nb+1, self.history[nb-self.history_nb])
+        return (nb + 1, self.history[nb - self.history_nb])
 
     def __len__(self):
         return len(self.clients)
@@ -195,8 +197,8 @@ class TextChannel(Channel):
             - the msg if available or ``None``
         """
         # Concatenate all the available msgs
-        msgs = self.history[max(nb, self.history_nb)-self.history_nb:]
-        return (len(self.history)+self.history_nb, ''.join(msgs) if msgs else None)
+        msgs = self.history[max(nb, self.history_nb) - self.history_nb:]
+        return (len(self.history) + self.history_nb, ''.join(msgs) if msgs else None)
 
 # ----------------------------------------------------------------------------
 
@@ -235,7 +237,7 @@ class Channels(dict):
         channel = self.get(id)
 
         if channel is None:
-            response.status = 404 # "Not Found"
+            response.status = 404  # "Not Found"
         else:
             self.discard_disconnected_clients()
 
