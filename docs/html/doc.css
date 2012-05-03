@@ -17,7 +17,6 @@ html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pr
 /* ------- */
 
 body {
-    background: white url(img/logo.png) no-repeat top left;
     color: #3a3a3a;
     margin: 0;
     padding: 0;
@@ -26,6 +25,12 @@ body {
 body, th, tr {
     font-family: arial, verdana, sans, geneva;
     font-size: 17px;
+}
+
+#logo {
+    display: inline;
+    float: left;
+    //width: 80px;
 }
 
 :link, :visited { text-decoration: none }
@@ -210,3 +215,4 @@ table.docutils tbody td, table.wiki tbody td {
 table.docutils tbody tr:nth-child(2n), table.wiki tbody tr:nth-child(2n) { background: #edfae1 }
 table.docutils tbody td, table.wiki tbody td { border: 1px solid #3f7516 }
 table a { border-bottom: 0 !important }
+

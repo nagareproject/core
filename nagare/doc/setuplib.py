@@ -66,7 +66,16 @@ class GenerateHTML(distutils.cmd.Command):
 
     def run(self):
         import docutils
+        from docutils.writers import html4css1
+
         from nagare.doc import code_block
+
+        class Writer(html4css1.Writer):
+            def interpolation_dict(self):
+                d = html4css1.Writer.interpolation_dict(self)
+                d['stylesheet'] += '\n<link rel="stylesheet" href="print.css" type="text/css" media="print" />'
+                d['body_prefix'] = '<img id="logo" src="img/logo.png">' + d['body_prefix']
+                return d
 
         if not self.args:
             raise distutils.errors.DistutilsOptionError('No file to convert')
@@ -89,7 +98,7 @@ class GenerateHTML(distutils.cmd.Command):
             docutils.core.publish_file(
                                        source_path=filename,
                                        destination_path=out_filename,
-                                       writer_name='html', settings_overrides=settings
+                                       writer=Writer(), settings_overrides=settings
                                       )
 
 
