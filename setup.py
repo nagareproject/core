@@ -67,6 +67,10 @@ setup(
       zip_safe = False,
       dependency_links = ('http://www.nagare.org/download/',),
       install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.3.0', 'WebOb>=1.2b1', 'Paste', 'flup', 'python-memcached'),
+      message_extractors = {'nagare': [
+          ('test/**', 'ignore', None),
+          ('**.py', 'python', None),
+      ]},
       extras_require = {
         'debug' : ('WebError',),
         # The SQLAlchemy==0.5.8 version restriction can be removed if you want to test a newer version.
