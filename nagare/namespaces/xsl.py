@@ -88,7 +88,7 @@ if __name__ == '__main__':
     from nagare.namespaces import xhtml
 
     x = Renderer()
-    x.namespaces = { 'xsl' : 'http://www.w3.org/1999/XSL/Transform' }
+    x.namespaces = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
     x.default_namespace = 'xsl'
 
     xsl = x.stylesheet(

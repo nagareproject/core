@@ -20,12 +20,13 @@ from nagare.sessions import ExpirationError, common, lru_dict
 DEFAULT_NB_SESSIONS = 10000
 DEFAULT_NB_STATES = 20
 
+
 class SessionsBase(common.Sessions):
     """Sessions manager for sessions kept in memory
     """
     spec = {
-            'nb_sessions' : 'integer(default=%d)' % DEFAULT_NB_SESSIONS,
-            'nb_states' : 'integer(default=%d)' % DEFAULT_NB_STATES
+            'nb_sessions': 'integer(default=%d)' % DEFAULT_NB_SESSIONS,
+            'nb_states': 'integer(default=%d)' % DEFAULT_NB_STATES
            }
 
     spec.update(common.Sessions.spec)

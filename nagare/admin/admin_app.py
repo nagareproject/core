@@ -23,6 +23,7 @@ import configobj
 
 from nagare import component, presentation, wsgi, config
 
+
 class Admin(object):
     """The root component of the admin application
 
@@ -46,13 +47,14 @@ class Admin(object):
         # Create the components
         self.components = map(component.Component, components)
 
+
 @presentation.render_for(Admin)
 def render(self, h, comp, *args):
     """Aggregates all the default views of the components"""
 
     h.head.css_url('/static/nagare/application.css')
     h.head << h.head.title('Nagare Administration interface')
-    
+
     h.head << h.head.style('''
         #content { margin-left: 0 !important }
         #footer { text-align: right }
@@ -61,7 +63,7 @@ def render(self, h, comp, *args):
 
     with h.div(id='body'):
         h << h.a(h.img(src='/static/nagare/img/logo_small.png'), id='logo', href='http://www.nagare.org/', title='Nagare home')
-        
+
         with h.div(id='content'):
             h << h.div('Administration interface', id='title')
 
@@ -75,7 +77,8 @@ def render(self, h, comp, *args):
 
 # ---------------------------------------------------------------------------
 
-application_spec = { 'application' : { 'as_root' : 'boolean(default=True)' } }
+application_spec = {'application': {'as_root': 'boolean(default=True)'}}
+
 
 class WSGIApp(wsgi.WSGIApp):
     """The admin application

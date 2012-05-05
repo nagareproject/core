@@ -12,9 +12,11 @@
 Display informations about the framework environment
 """
 
-import sys, pkg_resources
+import sys
+import pkg_resources
 
 from nagare.admin import util
+
 
 class Info(util.Command):
     """Display informations about the framework environment"""
@@ -34,4 +36,3 @@ class Info(util.Command):
         print sys.version
         print
         print 'Nagare version', pkg_resources.get_distribution('nagare').version
-

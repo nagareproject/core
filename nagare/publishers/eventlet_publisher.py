@@ -16,6 +16,7 @@ from eventlet import api, wsgi
 
 from nagare.publishers import common
 
+
 class Publisher(common.Publisher):
     """The eventlet publisher"""
 

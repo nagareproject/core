@@ -112,7 +112,7 @@ class Renderer(xhtml.Renderer):
     # New input types
     # ---------------
 
-    _specialTags = dict([(input_type+'_input', Input) for input_type in (
+    _specialTags = dict([(input_type + '_input', Input) for input_type in (
                     'tel', 'search', 'url', 'email',
                     'datetime', 'date', 'datetime-local_input',
                     'month', 'week', 'time', 'number', 'range', 'color'
@@ -214,7 +214,8 @@ if __name__ == '__main__':
         h << h.output
 
         with h.ul:
-            with h.li('Hello'): pass
+            with h.li('Hello'):
+                pass
             with h.li:
                 h << 'world'
             h << h.li('yeah')

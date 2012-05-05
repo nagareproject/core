@@ -8,8 +8,13 @@ This module is derivated from Ian Bicking's one to only exit if there is no
 importation errors into the modified file.
 """
 
-import os, sys, time, threading, traceback
+import os
+import sys
+import time
+import threading
+import traceback
 import subprocess
+
 
 def _turn_sigterm_into_systemexit():
     """
@@ -77,7 +82,8 @@ def restart_with_monitor():
         if exit_code != 3:
             return exit_code
 
-        print '-'*20, 'Restarting', '-'*20
+        print '-' * 20, 'Restarting', '-' * 20
+
 
 class Monitor(object):
     def __init__(self, poll_interval, included_files, excluded_directories):
@@ -130,7 +136,7 @@ class Monitor(object):
                     reload(m)
                     print >> sys.stderr, 'Module %s changed; reloading...' % filename
                     return True
-                except Exception, e:
+                except Exception:
                     print >> sys.stderr, 'WARNING, module %s NOT reloaded' % filename
                     print >> sys.stderr, traceback.format_exc()
 

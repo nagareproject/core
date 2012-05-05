@@ -11,7 +11,10 @@
 
 VERSION = '0.4.1'
 
-import sys, os, textwrap
+import sys
+import os
+import textwrap
+
 from setuptools import setup, find_packages
 
 # -----------------------------------------------------------------------------
@@ -34,12 +37,12 @@ long_description = f.read()
 f.close()
 
 setup(
-      name = 'nagare',
-      version = VERSION,
-      author = 'Alain Poirier',
-      author_email = 'alain.poirier at net-ng.com',
-      description = 'Nagare Python web framework',
-      long_description = textwrap.dedent("""
+      name='nagare',
+      version=VERSION,
+      author='Alain Poirier',
+      author_email='alain.poirier at net-ng.com',
+      description='Nagare Python web framework',
+      long_description=textwrap.dedent("""
       Description
       ^^^^^^^^^^^
 
@@ -55,28 +58,28 @@ setup(
       development version from the `Mercurial repository <http://hg.nagare.org/core>`_
       or to create a Nagare developer installation.
       """) % long_description,
-      license = 'BSD',
-      keywords = 'web wsgi framework sqlalchemy elixir seaside continuation ajax stackless',
-      url = 'http://www.nagare.org',
-      download_url = 'http://www.nagare.org/download',
-      packages = find_packages(),
-      include_package_data = True,
-      use_hg_version = True,
-      package_data = { '' : ['nagare/static/*',] },
-      namespace_packages = ('nagare',),
-      zip_safe = False,
-      dependency_links = ('http://www.nagare.org/download/',),
-      install_requires = ('PEAK-Rules', 'ConfigObj', 'lxml==2.3.0', 'WebOb>=1.2b1', 'Paste', 'flup', 'python-memcached'),
-      extras_require = {
-        'debug' : ('WebError',),
+      license='BSD',
+      keywords='web wsgi framework sqlalchemy elixir seaside continuation ajax stackless',
+      url='http://www.nagare.org',
+      download_url='http://www.nagare.org/download',
+      packages=find_packages(),
+      include_package_data=True,
+      use_hg_version=True,
+      package_data={'': ['nagare/static/*']},
+      namespace_packages=('nagare',),
+      zip_safe=False,
+      dependency_links=('http://www.nagare.org/download/',),
+      install_requires=('PEAK-Rules', 'ConfigObj', 'lxml==2.3.0', 'WebOb>=1.2b1', 'Paste', 'flup', 'python-memcached'),
+      extras_require={
+        'debug': ('WebError',),
         # The SQLAlchemy==0.5.8 version restriction can be removed if you want to test a newer version.
         # Nagare 0.4.0 is compatible with SQLAlchemy 0.6.x and 0.7.x.
         # But we observe an important performance drop on our projects, at least with Oracle.
-        'database' : ('SQLAlchemy==0.5.8', 'Elixir'),
-        'doc' : ('Pygments==1.1', 'docutils', 'RstDoc'),
-        'test' : ('nose',),
-        'i18n' : ('Babel', 'pytz'),
-        'full' : (
+        'database': ('SQLAlchemy==0.5.8', 'Elixir'),
+        'doc': ('Pygments==1.1', 'docutils', 'RstDoc'),
+        'test': ('nose',),
+        'i18n': ('Babel', 'pytz'),
+        'full': (
                   'WebError',
                   'SQLAlchemy==0.5.8', 'Elixir',
                   'Pygments==1.1', 'docutils', 'RstDoc',
@@ -84,9 +87,9 @@ setup(
                   'Babel', 'pytz'
                  ),
       },
-      test_suite = 'nose.collector',
+      test_suite='nose.collector',
       #tests_require = 'nose',
-      entry_points = '''
+      entry_points='''
       [distutils.commands]
       generate_api = nagare.doc.setuplib:GenerateAPI [doc]
       generate_html = nagare.doc.setuplib:GenerateHTML [doc]
@@ -125,7 +128,7 @@ setup(
       info = nagare.admin.interface.info:Admin
       apps = nagare.admin.interface.applications:Admin
       ''',
-      classifiers = (
+      classifiers=(
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: BSD License',
         'Intended Audience :: Developers',

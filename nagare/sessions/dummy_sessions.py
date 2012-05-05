@@ -12,6 +12,7 @@
 A new session is always created
 """
 
+
 class State(object):
     is_new = True
     back_used = False

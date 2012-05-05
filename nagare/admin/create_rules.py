@@ -15,8 +15,11 @@ servers, to let them serve the static contents of the launched applications,
 instead of the applications themselves.
 """
 
-import os, pkg_resources
+import os
+import pkg_resources
+
 from nagare.admin import util
+
 
 def set_options(optparser):
     """Register the possible options
@@ -35,6 +38,7 @@ def set_options(optparser):
     optparser.add_option('-a', '--apache', action='store_const', const=generate_apache_rules, dest='generate', help='generate apache rules', default=generate_apache_rules)
     optparser.add_option('-l', '--lighttpd', action='store_const', const=generate_lighttpd_rules, dest='generate', help='generate lighttpd rules')
     optparser.add_option('-n', '--nginx', action='store_const', const=generate_nginx_rules, dest='generate', help='generate nginx rules')
+
 
 def create_rules(app_names, error):
     """Generate the rewrite rules for the given registered applications
@@ -66,6 +70,7 @@ def create_rules(app_names, error):
 
     return sorted(apps, key=lambda x: len(x[0]))
 
+
 def commonprefix(filenames):
     """Return the common prefix of a list of filenames
 
@@ -77,6 +82,7 @@ def commonprefix(filenames):
     """
     filenames = [filename.split(os.sep) for filename in filenames]
     return os.sep.join(os.path.commonprefix(filenames)) or '/'
+
 
 def generate_lighttpd_rules(app_names, error):
     """Generate the lighttpd rewrite rules for the given registered applications
@@ -99,6 +105,7 @@ def generate_lighttpd_rules(app_names, error):
         yield '  "^/static/%s/(.*)" => "%s/$1",' % (app_name, static[len(document_root):])
     yield ')'
 
+
 def generate_nginx_rules(app_names, error):
     """Generate the nginx rewrite rules for the given registered applications
 
@@ -114,6 +121,7 @@ def generate_nginx_rules(app_names, error):
         yield '  alias %s/;' % static
         yield '}'
         yield ''
+
 
 def generate_apache_rules(app_names, error):
     """Generate the apache rewrite rules for the given registered applications
@@ -134,6 +142,7 @@ def generate_apache_rules(app_names, error):
     yield 'RewriteEngine On'
     for (app_name, static) in apps:
         yield 'RewriteRule ^/static/%s/(.*)$ %s/$1 [L,PT]' % (app_name, static[len(document_root):])
+
 
 def run(parser, options, args):
     print '\n'.join(options.generate(args, parser.error))

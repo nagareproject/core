@@ -14,7 +14,10 @@ This renderer is dedicated to the Nagare framework
 
 from __future__ import with_statement
 
-import operator, types, urllib, imghdr
+import operator
+import types
+#import urllib
+import imghdr
 
 from lxml import etree as ET
 import peak.rules
@@ -43,6 +46,7 @@ def add_attribute(self, name, value):
     # Generate a XHR request
     xml.add_attribute(self, name, value.generate_action(self._actions[0], self.renderer))
 
+
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.FunctionType))
 def add_attribute(self, name, value):
     """Add an attribute with a function value
@@ -55,6 +59,7 @@ def add_attribute(self, name, value):
     # Transcode the function to javascript
     xml.add_attribute(self, name, ajax.JS(value))
 
+
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.MethodType))
 def add_attribute(self, name, value):
     """Add an attribute with a method value
@@ -66,6 +71,7 @@ def add_attribute(self, name, value):
     """
     # Transcode the method to javascript
     xml.add_attribute(self, name, ajax.JS(value))
+
 
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, ajax.JS))
 def add_attribute(self, name, value):
@@ -120,12 +126,12 @@ class HeadRenderer(xhtml_base.HeadRenderer):
         # Directory where are located the static contents of the application
         self.static_url = static_url
 
-        self._named_css = {}        # CSS code
-        self._css_url = {}          # CSS URLs
-        self._named_javascript = {} # Javascript code
-        self._javascript_url = {}   # Javascript URLs
+        self._named_css = {}         # CSS code
+        self._css_url = {}           # CSS URLs
+        self._named_javascript = {}  # Javascript code
+        self._javascript_url = {}    # Javascript URLs
 
-        self._order = 0             # Memorize the order of the javascript and css
+        self._order = 0              # Memorize the order of the javascript and css
 
     def css(self, name, style, **kw):
         """Memorize an in-line named css style
@@ -232,6 +238,7 @@ class HeadRenderer(xhtml_base.HeadRenderer):
           - list of javascript (URLs, attributes)
         """
         return [(url, attributes) for (url, (order, attributes)) in sorted(self._javascript_url.items(), key=operator.itemgetter(1))]
+
 
 @presentation.render_for(HeadRenderer)
 def render(self, h, *args):
@@ -398,8 +405,8 @@ class Form(xhtml_base._HTMLTag):
           - ``self``
         """
         if permissions is not None:
-             # Wrap the ``action`` into a wrapper that will check the user permissions
-             action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
+            # Wrap the ``action`` into a wrapper that will check the user permissions
+            action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
         # Generate a hidden field with the action attached
         self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(3, action, with_request))))
@@ -547,6 +554,7 @@ class SubmitInput(_HTMLActionTag):
           - ``subject`` -- subject to test the permissions on
         """
         return self._async_action(renderer, action, with_request, permissions, subject)
+
 
 class HiddenInput(_HTMLActionTag):
     """ ``<input>`` tags with ``type=hidden`` attributes
@@ -705,7 +713,7 @@ class A(_HTMLActionTag):
             action = security.permissions_with_subject(permissions, subject or self._renderer.component())(action)
 
         href = self.get('href', '').partition('#')
-        self.set('href', renderer.add_sessionid_in_url(href[0], (renderer.register_callback(4, action, with_request),))+href[1]+href[2])
+        self.set('href', renderer.add_sessionid_in_url(href[0], (renderer.register_callback(4, action, with_request),)) + href[1] + href[2])
 
     def _async_action(self, renderer, action, with_request, permissions, subject):
         """Register an asynchronous action
@@ -734,6 +742,7 @@ class A(_HTMLActionTag):
 
         return self
     """
+
 
 @peak.rules.when(xml.add_attribute, (A, basestring, basestring))
 def add_attribute(next_method, self, name, value):
@@ -766,7 +775,7 @@ class Img(_HTMLActionTag):
         if not content_type:
             # If no ``Content-Type`` is already set, use the ``imghdr`` module
             # to guess the format of the image
-            content_type = 'image/'+(imghdr.what(None, img[:32]) or '*')
+            content_type = 'image/' + (imghdr.what(None, img[:32]) or '*')
         e.content_type = content_type
 
         raise e
@@ -830,6 +839,7 @@ class Label(xhtml_base._HTMLTag):
 class Script(xhtml_base._HTMLTag):
     pass
 
+
 @peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, Script))
 def add_child(next_method, self, script):
     """Add a <script> to a tag
@@ -844,6 +854,7 @@ def add_child(next_method, self, script):
 
 class Style(xhtml_base._HTMLTag):
     pass
+
 
 @peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, Style))
 def add_child(next_method, self, style):
@@ -870,11 +881,11 @@ class Renderer(xhtml_base.Renderer):
     # Redefinition of the he HTML tags with actions
     # ---------------------------------------------
 
-    a = TagProp('a', set(xhtml_base.allattrs+xhtml_base.focusattrs+('charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu')), A)
+    a = TagProp('a', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu')), A)
     area = TagProp('area', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('shape', 'coords', 'href', 'nohref', 'alt', 'target')), A)
     button = TagProp('button', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('name', 'value', 'type', 'disabled')), SubmitInput)
     form = TagProp('form', set(xhtml_base.allattrs + ('action', 'method', 'name', 'enctype', 'onsubmit', 'onreset', 'accept_charset', 'target')), Form)
-    img = TagProp('img', set(xhtml_base.allattrs+('src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
+    img = TagProp('img', set(xhtml_base.allattrs + ('src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
                                                               'align', 'border', 'hspace', 'vspace', 'lowsrc')), Img)
     input = TagProp('input', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength', 'src'
                                                      'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border')), TextInput)
@@ -884,17 +895,17 @@ class Renderer(xhtml_base.Renderer):
     textarea = TagProp('textarea', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap')), TextArea)
 
     script = TagProp('script', set(('id', 'charset', 'type', 'language', 'src', 'defer')), Script)
-    style = TagProp('style', set(xhtml_base.i18nattrs+('id', 'type', 'media', 'title')), Style)
+    style = TagProp('style', set(xhtml_base.i18nattrs + ('id', 'type', 'media', 'title')), Style)
 
     _specialTags = dict(
-                    text_input     = TextInput,
-                    radio_input    = RadioInput,
-                    checkbox_input = CheckboxInput,
-                    submit_input   = SubmitInput,
-                    hidden_input   = HiddenInput,
-                    file_input     = FileInput,
-                    password_input = PasswordInput,
-                    image_input    = ImageInput
+                    text_input=TextInput,
+                    radio_input=RadioInput,
+                    checkbox_input=CheckboxInput,
+                    submit_input=SubmitInput,
+                    hidden_input=HiddenInput,
+                    file_input=FileInput,
+                    password_input=PasswordInput,
+                    image_input=ImageInput
                    )
 
     @classmethod
@@ -1114,7 +1125,6 @@ class Renderer(xhtml_base.Renderer):
         """
         return self._callbacks.register_callback(self.component, priority, f, with_request, render)
 
-
     def decorate_error(self, element, error):
         """During the rendering, highlight an element that has an error
 
@@ -1130,7 +1140,6 @@ class Renderer(xhtml_base.Renderer):
                      self.div(error, class_='nagare-error-message'),
                      class_='nagare-error-field'
                     )
-
 
     def add_sessionid_in_form(self, form):
         """Add the session and continuation ids into a ``<form>``
@@ -1217,7 +1226,6 @@ class AsyncHeadRenderer(HeadRenderer):
         """
         return [css for (order, css) in sorted(self._anonymous_css)]
 
-
     def _get_anonymous_javascript(self):
         """Return the list of anonymous javascript codes, sorted by order of insertion
 
@@ -1271,7 +1279,7 @@ class AsyncRenderer(Renderer):
         if not (parent or async_header):
             self.head = HeadRenderer(static_url=static_url)
 
-        self.async_root = True;
+        self.async_root = True
         self.wrapper_to_generate = False    # Add a ``<div>`` around the rendering ?
 
     def SyncRenderer(self, *args, **kw):
@@ -1363,7 +1371,8 @@ if __name__ == '__main__':
 
     with h.body(onload='javascript:alert()'):
         with h.ul:
-            with h.li('Hello'): pass
+            with h.li('Hello'):
+                pass
             with h.li:
                 h << 'world'
             h << h.li('yeah')

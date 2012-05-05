@@ -16,6 +16,7 @@ from paste import httpserver
 from nagare import local
 from nagare.publishers import common
 
+
 class Publisher(common.Publisher):
     """The HTTP publisher"""
 
@@ -31,13 +32,13 @@ class Publisher(common.Publisher):
                       )
 
     threadpool_spec = dict(
-                            max_requests='integer(default=None)', # threads are killed after this many requests
-                            hung_thread_limit='integer(default=None)', # when a thread is marked "hung"
-                            kill_thread_limit='integer(default=None)', # when you kill that hung thread
-                            dying_limit='integer(default=None)', # seconds that a kill should take to go into effect (longer than this and the thread is a "zombie")
-                            spawn_if_under='integer(default=None)', # spawn if there's too many hung threads
-                            max_zombie_threads_before_die='integer(default=None)', # when to give up on the process
-                            hung_check_period='integer(default=None)' # every 100 requests check for hung workers
+                            max_requests='intege r(default=None)',  # threads are killed after this many requests
+                            hung_thread_limit='integer(default=None)',  # when a thread is marked "hung"
+                            kill_thread_limit='integer(default=None)',  # when you kill that hung thread
+                            dying_limit='integer(default=None)',  # seconds that a kill should take to go into effect (longer than this and the thread is a "zombie")
+                            spawn_if_under='integer(default=None)',  # spawn if there's too many hung threads
+                            max_zombie_threads_before_die='integer(default=None)',  # when to give up on the process
+                            hung_check_period='integer(default=None)'  # every 100 requests check for hung workers
                           )
 
     spec = server_spec.copy()

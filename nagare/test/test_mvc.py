@@ -7,8 +7,9 @@
 # this distribution.
 #--
 
-from nagare import component, presentation, callbacks
+from nagare import component, presentation
 from nagare.namespaces import xhtml
+
 
 class Foo:
 
@@ -18,6 +19,7 @@ class Foo:
     def set_myProperty_1(self, newProperty):
         self.myProperty_1 = newProperty
 
+
 class Bar:
 
     def __init__(self):
@@ -25,6 +27,7 @@ class Bar:
 
     def set_myProperty_2(self, newProperty):
         self.myProperty_2 = newProperty
+
 
 class Foobar:
 
@@ -54,7 +57,6 @@ def test1():
     app.bar.answer("I'm foo again")
     assert app.foo().myProperty_1 == "I'm foo again"
 
-
 # -------------------------------------------------------------------------------------------------------
 
 def test2():
@@ -77,9 +79,7 @@ def test2():
     assert app.myProperty().myProperty_1 == "I'm foo"
     assert not hasattr(app.myProperty(), 'myProperty_2')
 
-
 # -------------------------------------------------------------------------------------------------------
-
 
 def call(o1, o2, model=None):
     component.call_wrapper(lambda: o1().set_myProperty_1(o1.call(o2, model)))
@@ -100,7 +100,6 @@ def test3():
     assert app.myProperty.model == 'foo'
     assert isinstance(app.myProperty(), Foo)
     assert app.myProperty().myProperty_1 == "I'm bar"
-
 
 # -------------------------------------------------------------------------------------------------------
 
@@ -131,4 +130,3 @@ def test4():
 
     app.myProperty.becomes(Bar(), model='foo')
     assert app.myProperty.render(h).write_htmlstring(pretty_print=True).strip() == "<h1>I'm bar in foo</h1>"
-

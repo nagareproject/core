@@ -10,9 +10,12 @@
 """Framework environment administrative view
 """
 
-import sys, time, pkg_resources
+import sys
+import time
+import pkg_resources
 
-from nagare import component, presentation
+from nagare import presentation
+
 
 class Admin(object):
     priority = 1        # Order of the default view, into the administrative interface
@@ -24,6 +27,7 @@ class Admin(object):
           - ``apps`` -- list of tuples (application, application name, application urls)
         """
         pass
+
 
 @presentation.render_for(Admin)
 def render(self, h, *args):

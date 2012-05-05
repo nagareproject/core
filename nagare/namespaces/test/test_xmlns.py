@@ -11,12 +11,12 @@ from __future__ import with_statement
 
 import csv
 import os
-from StringIO import StringIO
 from types import ListType
 
 from lxml import etree as ET
 
 from nagare.namespaces import xml
+
 
 def append_text_test1():
     """ XML namespace unit test - append_text Append text to an empty node
@@ -131,8 +131,8 @@ def add_child_test3():
     """
     x = xml.Renderer()
 
-    node = x.node({'test':'test'})
-    assert node.attrib == {'test':'test'}
+    node = x.node({'test': 'test'})
+    assert node.attrib == {'test': 'test'}
     assert node.write_xmlstring() == '<node test="test"/>'
 
 
@@ -148,7 +148,7 @@ def add_child_test4():
     x = xml.Renderer()
 
     node = x.node(test='test')
-    assert node.attrib == {'test':'test'}
+    assert node.attrib == {'test': 'test'}
     assert node.write_xmlstring() == '<node test="test"/>'
 
 
@@ -164,9 +164,9 @@ def add_child_test5():
     x = xml.Renderer()
 
     child = x.child()
-    node = x.node(('test', child, 'test', {'test':'test'}))
+    node = x.node(('test', child, 'test', {'test': 'test'}))
 
-    assert node.attrib == {'test':'test'}
+    assert node.attrib == {'test': 'test'}
     assert node.text == 'test'
     assert node.getchildren()[0] == child
     assert node.getchildren()[0].tail == 'test'
@@ -187,7 +187,7 @@ def add_child_test6():
     child = x.child()
     node = x.node(['test', child, 'test', {'test':'test'}])
 
-    assert node.attrib == {'test':'test'}
+    assert node.attrib == {'test': 'test'}
     assert node.text == 'test'
     assert node.getchildren()[0] == child
     assert node.getchildren()[0].tail == 'test'
@@ -237,8 +237,8 @@ def add_child_test9():
     """
     x = xml.Renderer()
 
-    node = x.node({'class_':'test'})
-    assert node.attrib == {'class':'test'}
+    node = x.node({'class_': 'test'})
+    assert node.attrib == {'class': 'test'}
     assert node.write_xmlstring() == '<node class="test"/>'
 
 
@@ -254,7 +254,7 @@ def add_child_test10():
     x = xml.Renderer()
 
     node = x.node(class_='test')
-    assert node.attrib == {'class':'test'}
+    assert node.attrib == {'class': 'test'}
     assert node.write_xmlstring() == '<node class="test"/>'
 
 
@@ -270,7 +270,7 @@ def add_child_test11():
     x = xml.Renderer()
 
     try:
-        node = x.node(object())
+        x.node(object())
     except Exception:
         assert True
     else:
@@ -397,6 +397,7 @@ xml_test1_in = """
     </node>
 """
 
+
 def repeat_test1():
     """ XML namespace unit test - repeat - Repeat with 2 simple text, use childname argument"""
     x = xml.Renderer()
@@ -419,6 +420,7 @@ def repeat_test2():
         child.append_text(value)
     assert [child.text for child in node.getchildren()] == ['test1', 'test2']
 
+
 def repeat_test3():
     """ XML namespace unit test - repeat - findmeld in repeat loop """
     h = xml.Renderer()
@@ -433,6 +435,7 @@ def repeat_test3():
     h << root
 
     assert h.root.write_xmlstring() == '<div xmlns:meld="http://www.plope.com/software/meld3"><ul><li meld:id="entry"><span meld:id="count">0</span></li><li meld:id="entry"><span meld:id="count">1</span></li></ul></div>'
+
 
 def root_test1():
     """ XML namespace unit test - root - one element """
@@ -456,19 +459,20 @@ def parse_xmlstring_test1():
     try:
         x = xml.Renderer()
         f = open(os.path.join(os.path.dirname(__file__), 'test_xmlns_1.xml'))
-        root = x.parse_xmlstring(f.read())
+        x.parse_xmlstring(f.read())
         f.close()
     except UnicodeDecodeError:
         assert False
     else:
         assert True
 
+
 def parse_xmlstring_test2():
     """ XML namespace unit test - parse_xmlstring - bad encoding """
     try:
         x = xml.Renderer()
         f = open(os.path.join(os.path.dirname(__file__), 'iso-8859.xml'))
-        root = x.parse_xml(f, encoding='utf-8')
+        x.parse_xml(f, encoding='utf-8')
         f.close()
     except ET.XMLSyntaxError:
         assert True
@@ -477,6 +481,8 @@ def parse_xmlstring_test2():
 
 
 xml_fragments_1 = """leading_text<fragment1></fragment1>text<fragment2></fragment2>"""
+
+
 def parse_xmlstring_test3():
     """ XML namespace unit test - parse_xmlstring - parse fragment xml with fragment flag """
     x = xml.Renderer()
@@ -497,6 +503,8 @@ def parse_xmlstring_test4():
 
 
 xml_tree_1 = "<a>text</a>"
+
+
 def parse_xmlstring_test5():
     """ XML namespace unit test - parse_xmlstring - Test parse child type """
     x = xml.Renderer()
@@ -508,7 +516,7 @@ def parse_xml_test1():
     """ XML namespace unit test - parse_xmlstring - good encoding """
     try:
         x = xml.Renderer()
-        root = x.parse_xml(os.path.join(os.path.dirname(__file__), 'test_xmlns_1.xml'))
+        x.parse_xml(os.path.join(os.path.dirname(__file__), 'test_xmlns_1.xml'))
     except UnicodeDecodeError:
         assert False
     else:
@@ -637,10 +645,10 @@ def global_test4():
     root.findmeld('title').text = 'My document'
     root.findmeld('form1').set('action', './handler')
     data = (
-        {'name':'Girls',
-         'description':'Pretty'},
-        {'name':'Boys',
-         'description':'Ugly'},
+        {'name': 'Girls',
+         'description': 'Pretty'},
+        {'name': 'Boys',
+         'description': 'Ugly'},
         )
 
     iterator = root.findmeld('tr').repeat(data)
@@ -649,9 +657,9 @@ def global_test4():
         td1.text = item['name']
         element.findmeld('td2').text = item['description']
 
-    assert [elt.text for elt in root.xpath('.//x:td', namespaces={ 'x' : 'http://www.w3.org/1999/xhtml'})] == ['Girls', 'Pretty', 'Boys', 'Ugly']
+    assert [elt.text for elt in root.xpath('.//x:td', namespaces={'x': 'http://www.w3.org/1999/xhtml'})] == ['Girls', 'Pretty', 'Boys', 'Ugly']
     assert root[0][1].text == 'My document'
-    assert root.xpath('.//x:form', namespaces={ 'x' : 'http://www.w3.org/1999/xhtml'})[0].attrib['action'] == './handler'
+    assert root.xpath('.//x:form', namespaces={'x': 'http://www.w3.org/1999/xhtml'})[0].attrib['action'] == './handler'
 
 
 def global_test5():
@@ -663,15 +671,15 @@ def global_test5():
     root.findmeld('form1').set('action', './handler')
 
     data = (
-        {'name':'Girls',
-         'description':'Pretty'},
-        {'name':'Boys',
-         'description':'Ugly'},
+        {'name': 'Girls',
+         'description': 'Pretty'},
+        {'name': 'Boys',
+         'description': 'Ugly'},
         )
 
     children = []
     for elt in data:
-        children.append(x.tr([x.td(elt['name']), x.td(elt['description'])], {'class':'bar'}))
+        children.append(x.tr([x.td(elt['name']), x.td(elt['description'])], {'class': 'bar'}))
 
     root.findmeld('tr').replace(children)
 
@@ -688,15 +696,15 @@ def global_test6():
     root.findmeld('form1').set('action', './handler')
 
     data = (
-        {'name':'Girls',
-         'description':'Pretty'},
-        {'name':'Boys',
-         'description':'Ugly'},
+        {'name': 'Girls',
+         'description': 'Pretty'},
+        {'name': 'Boys',
+         'description': 'Ugly'},
         )
 
     children = []
     for elt in data:
-        children.append(x.tr([x.td(elt['name']), x.td(elt['description'])], {'class':'bar'}))
+        children.append(x.tr([x.td(elt['name']), x.td(elt['description'])], {'class': 'bar'}))
 
     root.findmeld('tr').replace(children)
 
@@ -715,15 +723,15 @@ def global_test7():
     root.findmeld('form1').set('action', './handler')
 
     data = (
-        {'name':'Girls',
-         'description':'Pretty'},
-        {'name':'Boys',
-         'description':'Ugly'},
+        {'name': 'Girls',
+         'description': 'Pretty'},
+        {'name': 'Boys',
+         'description': 'Ugly'},
         )
 
     children = []
     for elt in data:
-        children.append(x.tr([x.td(elt['name']), x.td(elt['description'])], {'class':'bar'}))
+        children.append(x.tr([x.td(elt['name']), x.td(elt['description'])], {'class': 'bar'}))
 
     root.findmeld('tr').replace(children)
 
@@ -736,18 +744,18 @@ def global_test7():
 def global_test8():
     """ XML namespace unit test - create xml """
     x = xml.Renderer()
-    x.namespaces = {'meld':'http://www.plope.com/software/meld3'}
+    x.namespaces = {'meld': 'http://www.plope.com/software/meld3'}
     data = (
-        {'name':'Girls',
-         'description':'Pretty'},
-        {'name':'Boys',
-         'description':'Ugly'},
+        {'name': 'Girls',
+         'description': 'Pretty'},
+        {'name': 'Boys',
+         'description': 'Ugly'},
         )
 
     with x.html:
         with x.head:
             with x.meta:
-                x << {'content':'text/html; charset=ISO-8859-1', 'http-equiv':'content-type'}
+                x << {'content': 'text/html; charset=ISO-8859-1', 'http-equiv': 'content-type'}
             with x.title.meld_id('title'):
                 x << 'My document'
         with x.body:
@@ -756,7 +764,7 @@ def global_test8():
             x << x.comment(' empty tag ')
             with x.div:
                 with x.form.meld_id('form1'):
-                    x << {'action':'./handler'}
+                    x << {'action': './handler'}
                     with x.table:
                         with x.tbody:
                             with x.tr:
@@ -765,9 +773,8 @@ def global_test8():
                                 with x.tr.meld_id('tr'):
                                     x << x.td(elt['name']).meld_id('td') << x.td(elt['description']).meld_id('td')
                     with x.input:
-                        x << {'type':'submit', 'name':'next', 'value': ' Next '}
+                        x << {'type': 'submit', 'name': 'next', 'value': ' Next '}
 
     assert [elt.text for elt in x.root.xpath('.//td')] == ['Girls', 'Pretty', 'Boys', 'Ugly']
     assert x.root[0][1].text == 'My document'
     assert x.root.xpath('.//form')[0].attrib['action'] == './handler'
-

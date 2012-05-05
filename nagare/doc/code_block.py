@@ -24,6 +24,7 @@ from docutils.parsers.rst import directives
 from rstdoc.traclib import roles, wiki_filter
 from rstdoc.rstlib.astdoc import setDocStringFilter
 
+
 def code_block_directive(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine):
     """The ``code-block`` directive uses Pygment to highlight a piece of code
 
@@ -44,12 +45,12 @@ def code_block_directive(name, arguments, options, content, lineno, content_offs
     formatter = HtmlFormatter(noclasses=True, **options)
     parsed = highlight(u'\n'.join(content), lexer, formatter)
     if 'linenos' in options:
-        parsed = '<div class="ncodediv">'+parsed+'</div>'
+        parsed = '<div class="ncodediv">' + parsed + '</div>'
     return [nodes.raw('', parsed, format='html')]
 
 code_block_directive.arguments = (1, 0, 1)
 code_block_directive.content = 1
-code_block_directive.options = { 'linenos' : directives.flag, 'hl_lines' : directives.unchanged_required }
+code_block_directive.options = {'linenos': directives.flag, 'hl_lines': directives.unchanged_required}
 
 
 def register_directive():
@@ -62,12 +63,14 @@ def register_directive():
 
     directives.register_directive('code-block', code_block_directive)
 
+
 def tracRef(f, *path, **query):
     path = list(path)
     if path[0] == 'rstdoc':
         path[0] = 'api'
 
     return f(*path, **query)
+
 
 def apidoc_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
     i = text.find('#')
@@ -86,6 +89,7 @@ def apidoc_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
 
     r[0][0][0].data = path
     return r
+
 
 def register_role(trac_url):
     roles.roles.register_local_role('apidoc', apidoc_role)

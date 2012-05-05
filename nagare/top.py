@@ -16,6 +16,7 @@ from nagare.namespaces import xhtml_base
 
 #VERSION = pkg_resources.get_distribution('nagare').version
 
+
 def wrap(content_type, h, body):
     """Add the tags is they don't exist or merge them into the existing ones
 
@@ -33,18 +34,18 @@ def wrap(content_type, h, body):
         if not isinstance(body, xhtml_base._HTMLTag) or not body.tag.endswith('html'):
             # No ``<html>`` found, add it
             if h.response.xml_output:
-                h.namespaces = { None : 'http://www.w3.org/1999/xhtml' }
+                h.namespaces = {None: 'http://www.w3.org/1999/xhtml'}
 
             if not isinstance(body, xhtml_base._HTMLTag) or not body.tag.endswith('body'):
                 # No ``<body>`` found, add it
                 body = h.body(body)
             body = h.html(body)
 
-        head1 = presentation.render(h.head, None, None, None) # The automatically generated ``<head>``
+        head1 = presentation.render(h.head, None, None, None)  # The automatically generated ``<head>``
 
         url = h.request.path_info.strip('/')
         if url:
-            head1.append(h.head.link(rel='canonical', href=h.request.script_name+'/'+url))
+            head1.append(h.head.link(rel='canonical', href=h.request.script_name + '/' + url))
 
         head2 = body[0]
 

@@ -293,7 +293,7 @@ class WSGIApp(object):
                                                 callbacks,
                                                 self.static_url, self.static_path,
                                                 request.script_name,
-                                                async_header = True
+                                                async_header=True
                                              )
 
         return renderer
@@ -306,10 +306,10 @@ class WSGIApp(object):
           - ``request`` -- the web request object
           - ``response`` -- the web response object
         """
-        security.set_manager(self.security) # Set the security manager
-        security.set_user(self.security.create_user(request, response)) # Create the User object
+        security.set_manager(self.security)  # Set the security manager
+        security.set_user(self.security.create_user(request, response))  # Create the User object
 
-        self.set_locale(self.default_locale) # Set the default Locale
+        self.set_locale(self.default_locale)  # Set the default Locale
 
     # Processing phase
     def _phase1(self, request, response, callbacks):
@@ -371,7 +371,7 @@ class WSGIApp(object):
         nb = request.params.get('_nb')
         if channel_id and nb:
             if environ['wsgi.multiprocess']:
-                response.status = 501 # "Not Implemented"
+                response.status = 501  # "Not Implemented"
             else:
                 comet.channels.connect(channel_id, int(nb), environ['wsgi.input'].file.fileno(), response)
 
@@ -382,8 +382,8 @@ class WSGIApp(object):
         session = None
         self.last_exception = None
 
-        log.set_logger('nagare.application.'+self.name) # Set the dedicated application logger
-        
+        log.set_logger('nagare.application.' + self.name)  # Set the dedicated application logger
+
         # Create a database transaction for each request
         with database.session.begin():
             try:

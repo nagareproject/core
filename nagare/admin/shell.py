@@ -19,11 +19,15 @@ In both cases:
   - the metadata of the applications are activated
 """
 
-import sys, os, code, __builtin__
+import __builtin__
+import sys
+import os
+import code
 import pkg_resources
 
 from nagare import database, log, local
 from nagare.admin import util
+
 
 def create_globals(cfgfiles, debug, error):
     """
@@ -59,7 +63,7 @@ def create_globals(cfgfiles, debug, error):
     for (cfgfile, app, dist, aconf) in configs:
         name = aconf['application']['name']
 
-        log.set_logger('nagare.application.'+name)
+        log.set_logger('nagare.application.' + name)
 
         requirement = None if not dist else pkg_resources.Requirement.parse(dist.project_name)
         data_path = None if not requirement else pkg_resources.resource_filename(requirement, '/data')
@@ -145,7 +149,7 @@ class PythonShell(code.InteractiveConsole):
         self.prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
 
     def raw_input(self, prompt):
-        return code.InteractiveConsole.raw_input(self, 'nagare'+self.prompt+prompt)
+        return code.InteractiveConsole.raw_input(self, 'nagare' + self.prompt + prompt)
 
     def __call__(self):
         self.interact(self.banner)
@@ -162,8 +166,6 @@ class PythonShellWithHistory(PythonShell):
           - ``banner`` -- banner to display
         """
         # Set completion on TAB and a dedicated commands history file
-        import rlcompleter
-
         readline.parse_and_bind('tab: complete')
 
         history_path = os.path.expanduser('~/.nagarehistory')
@@ -227,6 +229,7 @@ def shell(parser, options, args):
 
     create_python_shell(options.ipython, banner, [app.name for app in ns['apps'].values()], ns)
 
+
 class Shell(util.Command):
     desc = 'Launch a shell'
 
@@ -247,7 +250,8 @@ def set_batch_options(optparser):
         if not option.startswith('-'):
             break
 
-    return sys.argv[:i+4]
+    return sys.argv[:i + 4]
+
 
 def batch(parser, options, args):
     """Execute Python statements a file
@@ -261,22 +265,23 @@ def batch(parser, options, args):
     an applications configuration file, followed by the paths of a file to
     execute
     """
-    if len(args)==0:
+    if not args:
         parser.error('No application given')
 
-    if len(args)==1:
+    if len(args) == 1:
         parser.error('No file given')
 
     for (i, option) in enumerate(sys.argv[3:]):
         if not option.startswith('-'):
             break
 
-    del sys.argv[:i+3]
+    del sys.argv[:i + 3]
 
     ns = create_globals(args[:1], options.debug, parser.error)
     __builtin__.__dict__.update(ns)
 
     util.load_file(args[1], None)
+
 
 class Batch(util.Command):
     desc = 'Execute Python statements from a file'

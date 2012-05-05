@@ -14,7 +14,8 @@ Generate the directory structure and the skeleton of an application.
 
 from __future__ import with_statement
 
-import sys, os
+import sys
+import os
 import textwrap
 import re
 from StringIO import StringIO
@@ -22,11 +23,14 @@ from StringIO import StringIO
 from configobj import ConfigObj
 from nagare.admin import util
 
+
 def set_options(optparser):
     optparser.usage += ' application'
 
+
 def create_empty_file(filename):
     open(filename, 'w').close()
+
 
 def create_or_update(path, create=None, update=None, *args, **kw):
     if not create:
@@ -36,6 +40,7 @@ def create_or_update(path, create=None, update=None, *args, **kw):
         update = lambda *args, **kw: None
 
     return (update if os.path.exists(path) else create)(path, *args, **kw)
+
 
 def create_setup_py(filename, params):
     upgrade_setup_py(
@@ -47,26 +52,27 @@ def create_setup_py(filename, params):
                         from setuptools import setup, find_packages
 
                         setup(
-                              name = '%(name)s',
-                              version = VERSION,
-                              author = '',
-                              author_email = '',
-                              description = '',
-                              license = '',
-                              keywords = '',
-                              url = '',
-                              packages = find_packages(),
-                              include_package_data = True,
-                              package_data = {'' : ['*.cfg']},
-                              zip_safe = False,
-                              install_requires = ('nagare',),
-                              entry_points = """
+                              name='%(name)s',
+                              version=VERSION,
+                              author='',
+                              author_email='',
+                              description='',
+                              license='',
+                              keywords='',
+                              url='',
+                              packages=find_packages(),
+                              include_package_data=True,
+                              package_data={'': ['*.cfg']},
+                              zip_safe=False,
+                              install_requires=('nagare',),
+                              entry_points="""
                               [nagare.applications]
                               %(id)s = %(id)s.app:app
                               """
                              )
                      ''' % params)
                     )
+
 
 def upgrade_setup_py(filename, params, setup_py=None):
     if not setup_py:
@@ -76,10 +82,11 @@ def upgrade_setup_py(filename, params, setup_py=None):
                 return
 
     if os.path.exists(filename):
-        os.rename(filename, filename+'.old')
+        os.rename(filename, filename + '.old')
 
     with open(filename, 'w') as f:
-        print >>f, re.sub(r'\n(\s*)(entry_points)', r"\n\1message_extractors = { '%(id)s' : [('**.py', 'python', None)] },\n\1\2" % params, setup_py)
+        print >>f, re.sub(r'\n(\s*)(entry_points)', r"\n\1message_extractors={'%(id)s': [('**.py', 'python', None)]},\n\1\2" % params, setup_py)
+
 
 def upgrade_setup_cfg(filename):
     old_conf = ConfigObj(filename)
@@ -107,10 +114,11 @@ def upgrade_setup_cfg(filename):
 
     if(new_conf != old_conf):
         if os.path.exists(filename):
-            os.rename(filename, filename+'.old')
+            os.rename(filename, filename + '.old')
 
         new_conf.filename = filename
         new_conf.write()
+
 
 def create_manifest_in(filename):
     with open(filename, 'w') as f:
@@ -120,6 +128,7 @@ def create_manifest_in(filename):
             graft data/locale
         ''')
 
+
 def create_app_py(filename, params):
     with open(filename, 'w') as f:
         f.write(textwrap.dedent('''\
@@ -128,8 +137,10 @@ def create_app_py(filename, params):
             import os
             from nagare import presentation
 
+
             class %(Id)s(object):
                 pass
+
 
             @presentation.render_for(%(Id)s)
             def render(self, h, *args):
@@ -196,6 +207,7 @@ def create_app_py(filename, params):
             app = %(Id)s
         ''' % params))
 
+
 def create_models_py(filename):
     with open(filename, 'w') as f:
         f.write(textwrap.dedent('''\
@@ -206,6 +218,7 @@ def create_models_py(filename):
 
             # Here, put the definition of your Elixir or SQLAlchemy models
         '''))
+
 
 def create_conf(filename, params):
     with open(filename, 'w') as f:
@@ -222,6 +235,7 @@ def create_conf(filename, params):
             debug = off
         ''' % params))
 
+
 def run(parser, options, args):
     if len(args) == 0:
         parser.error('an application name must be provided')
@@ -236,12 +250,12 @@ def run(parser, options, args):
     create_or_update(root, os.mkdir)
 
     params = {
-        'exe' : sys.executable,
-        'root' : root,
-        'setup' : os.path.join(root, 'setup.py'),
-        'name' : app_name,
-        'id' : app_id,
-        'Id' : app_id.capitalize()
+        'exe': sys.executable,
+        'root': root,
+        'setup': os.path.join(root, 'setup.py'),
+        'name': app_name,
+        'id': app_id,
+        'Id': app_id.capitalize()
     }
 
     create_or_update(os.path.join(root, 'setup.py'), create_setup_py, upgrade_setup_py, params)
@@ -262,7 +276,7 @@ def run(parser, options, args):
 
     create_or_update(os.path.join(root, 'conf'), os.mkdir)
     create_or_update(os.path.join(root, 'conf', '__init__.py'), create_empty_file)
-    create_or_update(os.path.join(root, 'conf', app_id+'.cfg'), create_conf, None, params)
+    create_or_update(os.path.join(root, 'conf', app_id + '.cfg'), create_conf, None, params)
 
     print "Application '%s' created." % app_name
     print

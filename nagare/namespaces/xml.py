@@ -63,7 +63,7 @@ class _Tag(ET.ElementBase):
           - the XML
         """
         if not pipeline:
-            for element in self.xpath('.//*[@meld:id]', namespaces={ 'meld' : _MELD_NS }):
+            for element in self.xpath('.//*[@meld:id]', namespaces={'meld': _MELD_NS}):
                 del element.attrib[_MELD_ID]
 
         return ET.tostring(self, encoding=encoding, method='xml', **kw)
@@ -89,7 +89,7 @@ class _Tag(ET.ElementBase):
         Return:
           - the tag found, else the ``default`` value
         """
-        nodes = self.xpath('.//*[@meld:id="%s"]' % id, namespaces={ 'meld' : _MELD_NS })
+        nodes = self.xpath('.//*[@meld:id="%s"]' % id, namespaces={'meld': _MELD_NS})
 
         if len(nodes) != 0:
             # Return only the first tag found
@@ -126,7 +126,7 @@ class _Tag(ET.ElementBase):
         Return:
           - ``self``
         """
-        self.add_child({ _MELD_ID : id })
+        self.add_child({_MELD_ID: id})
         return self
 
     def fill(self, *children, **attrib):
@@ -158,10 +158,10 @@ class _Tag(ET.ElementBase):
             l = len(parent)
 
             i = parent.index(self)
-            parent.fill(parent.text or '', parent[:i], children, self.tail or '', parent[i+1:])
+            parent.fill(parent.text or '', parent[:i], children, self.tail or '', parent[i + 1:])
 
             if len(parent) >= l:
-                parent[i-l].tail = tail
+                parent[i - l].tail = tail
 
     def repeat(self, iterable, childname=None):
         """Iterate over a sequence, cloning a new child each time
@@ -241,6 +241,7 @@ def add_child(self, o):
 
     self.add_child(render(self.renderer))
 
+
 @peak.rules.when(add_child, (_Tag, basestring))
 def add_child(self, s):
     """Add a string to a tag
@@ -250,6 +251,7 @@ def add_child(self, s):
       - ``s`` - str or unicode string to add
     """
     self.append_text(s)
+
 
 @peak.rules.when(add_child, (_Tag, tuple))
 def add_child(self, t):
@@ -264,6 +266,7 @@ def add_child(self, t):
     for child in t:
         self.add_child(child)
 
+
 @peak.rules.when(add_child, (_Tag, list))
 def add_child(self, l):
     """Add a list to a tag
@@ -276,6 +279,7 @@ def add_child(self, l):
     """
     for child in l:
         self.add_child(child)
+
 
 @peak.rules.when(add_child, (_Tag, types.GeneratorType))
 def add_child(self, g):
@@ -290,6 +294,7 @@ def add_child(self, g):
     for child in g:
         self.add_child(child)
 
+
 @peak.rules.when(add_child, (_Tag, int))
 def add_child(self, i):
     """Add an integer to a tag
@@ -301,6 +306,7 @@ def add_child(self, i):
     Convert the integer to string and then add it
     """
     self.append_text(str(i))
+
 
 @peak.rules.when(add_child, (_Tag, long))
 def add_child(self, l):
@@ -314,6 +320,7 @@ def add_child(self, l):
     """
     self.append_text(str(l))
 
+
 @peak.rules.when(add_child, (_Tag, float))
 def add_child(self, f):
     """Add a float to a tag
@@ -325,6 +332,7 @@ def add_child(self, f):
     Convert the float to string and then add it
     """
     self.append_text(str(f))
+
 
 @peak.rules.when(add_child, (_Tag, ET.ElementBase))
 def add_child(self, element):
@@ -339,6 +347,7 @@ def add_child(self, element):
 
     self.append(element)
 
+
 @peak.rules.when(add_child, (_Tag, ET._Comment))
 def add_child(self, element):
     """Add a comment element to a tag
@@ -352,6 +361,7 @@ def add_child(self, element):
 
     self.append(element)
 
+
 @peak.rules.when(add_child, (_Tag, ET._ProcessingInstruction))
 def add_child(self, element):
     """Add a PI element to a tag
@@ -363,6 +373,7 @@ def add_child(self, element):
     Do nothing
     """
     pass
+
 
 @peak.rules.when(add_child, (_Tag, dict))
 def add_child(self, d):
@@ -396,6 +407,7 @@ def add_attribute(self, name, value):
       - ``value`` -- value of the attribute to add
     """
     add_attribute(self, name, unicode(value))
+
 
 @peak.rules.when(add_attribute, (_Tag, basestring, basestring))
 def add_attribute(self, name, value):
@@ -579,8 +591,8 @@ class XmlRenderer(common.Renderer):
         Return:
           - ``current``
         """
-        self << current     # Append the tag to its parent
-        self._stack.append(current) # Push it onto the stack
+        self << current  # Append the tag to its parent
+        self._stack.append(current)  # Push it onto the stack
 
         return current
 
@@ -600,7 +612,7 @@ class XmlRenderer(common.Renderer):
           - the new tag
         """
         # 1. Create the tag with in the default namespace
-        element = parser.makeelement(self._prefix+tag, nsmap=self.namespaces)
+        element = parser.makeelement(self._prefix + tag, nsmap=self.namespaces)
         # 2. Initialize it with this renderer
         return element.init(self)
 
@@ -739,7 +751,7 @@ class Renderer(XmlRenderer):
 
 if __name__ == '__main__':
     x = Renderer()
-    x.namespaces = { 'meld' : 'http://www.plope.com/software/meld3' }
+    x.namespaces = {'meld': 'http://www.plope.com/software/meld3'}
 
     with x.contacts:
         with x.contact.meld_id('contact'):
@@ -751,8 +763,8 @@ if __name__ == '__main__':
     print
 
     for (e, (name, addr)) in x.root.repeat((('bill', 'seatle'), ('steve', 'cupertino')), 'contact'):
-         e.findmeld('name').text = name
-         e.findmeld('addr').text = addr
+        e.findmeld('name').text = name
+        e.findmeld('addr').text = addr
 
     print x.root.write_xmlstring(pretty_print=True)
     print

@@ -17,15 +17,17 @@ Add the commands:
 
 from __future__ import with_statement
 
-import sys, os
+import sys
+import os
 import distutils
 from setuptools import find_packages
 
 settings = {
-            'stylesheet' : 'doc.css',
-            'stylesheet_path' : None,
-            'embed_stylesheet' : False
+            'stylesheet': 'doc.css',
+            'stylesheet_path': None,
+            'embed_stylesheet': False
            }
+
 
 class GenerateHTML(distutils.cmd.Command):
     """ReStructuredText to HTML converter
@@ -110,7 +112,7 @@ class GenerateAPI(distutils.cmd.Command):
     If no files are given, it generates the API documentation for all the
     Python files of the distribution.
     """
-    description =  'generate python documentation from module sources'
+    description = 'generate python documentation from module sources'
     user_options = [
         ('path=', 'p', 'Path to docs directory'),
         ('title=', None, 'The title of the Package index'),

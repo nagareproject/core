@@ -11,6 +11,7 @@
 
 from nagare.security import common
 
+
 class Manager(common.Authentication, common.Rules):
     """A security manager is typically a mix-in of an authentication
     manager and security rules

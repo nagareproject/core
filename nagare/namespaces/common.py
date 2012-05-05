@@ -11,6 +11,7 @@
 
 import random
 
+
 class Renderer(object):
     def new(self):
         """Create a new renderer from the same type of this renderer
@@ -40,7 +41,7 @@ class Renderer(object):
         In:
           - ``prefix`` -- prefix of the generated id
         """
-        return prefix+str(random.randint(10000000, 99999999))
+        return prefix + str(random.randint(10000000, 99999999))
 
     def __reduce__(self):
         """Prevent a renderer to be pickled

@@ -18,6 +18,7 @@ import random
 
 from nagare.component import call_wrapper
 
+
 class CallbackLookupError(LookupError):
     pass
 
@@ -176,7 +177,7 @@ class Callbacks:
                 elif callback_type == 5:
                     if param.endswith(('.x', '.y')):
                         call_wrapper(f, request, response, param.endswith('.y'), int(value))
-                else: # 0, 2, 3
+                else:  # 0, 2, 3
                     f(request, response)
             else:
                 if callback_type == 1:
@@ -186,7 +187,7 @@ class Callbacks:
                 elif callback_type == 5:
                     if param.endswith(('.x', '.y')):
                         call_wrapper(f, param.endswith('.y'), int(value))
-                else: # 0, 2, 3
+                else:  # 0, 2, 3
                     f()
 
         return render

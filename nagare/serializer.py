@@ -14,6 +14,7 @@ import lxml.html
 
 from nagare.namespaces import xml, xhtml_base
 
+
 @peak.rules.abstract
 def serialize(output, content_type, doctype, declaration):
     """Generic method to generate the content for the browser
@@ -54,7 +55,7 @@ def serialize(next_method, output, content_type, doctype, declaration):
         # The browser only accepts HTML
         lxml.html.xhtml_to_html(output)
 
-        output = (doctype+'\n' if declaration else '') + output.write_htmlstring(pretty_print=True)
+        output = (doctype + '\n' if declaration else '') + output.write_htmlstring(pretty_print=True)
 
     return (content_type, output)
 
@@ -72,7 +73,7 @@ def serialize(output, content_type, doctype, declaration):
     Return:
       - a tuple (content_type, content)
     """
-    r = ('<?xml version="1.0" encoding="UTF-8"?>\n'+doctype+'\n') if declaration else ''
+    r = ('<?xml version="1.0" encoding="UTF-8"?>\n' + doctype + '\n') if declaration else ''
     return (content_type, r + output.write_xmlstring())
 
 
@@ -127,4 +128,4 @@ def serialize(output, content_type, doctype, declaration):
     (content_type, first) = serialize(output[0], content_type, doctype, declaration)
     second = ''.join(serialize(e, content_type, doctype, False)[1] for e in output[1:])
 
-    return (content_type, first+second)
+    return (content_type, first + second)

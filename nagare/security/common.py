@@ -22,12 +22,14 @@ class Permission(object):
     """
     pass
 
+
 class Private(Permission):
     """To define the ``private`` permission singleton
 
     Nobody has access to objects protected with this permission
     """
     pass
+
 
 class Public(Permission):
     """To define the ``public`` permission singleton
@@ -80,7 +82,7 @@ class User(object):
         self.credentials = args
 
     def get_id(self):
-        return (self.id,)+self.credentials
+        return (self.id,) + self.credentials
 
     def __enter__(self):
         """Push this user to the stack

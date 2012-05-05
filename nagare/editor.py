@@ -11,6 +11,7 @@
 
 from nagare import var
 
+
 class Property(var.Var):
     """An editor property
 
@@ -77,7 +78,7 @@ class Property(var.Var):
             super(Property, self).set(input)
 
         try:
-            self.value = self._validate(input) # Call the validating function
+            self.value = self._validate(input)  # Call the validating function
             if callable(self.value):
                 self.value = self.value()
             self.error = None

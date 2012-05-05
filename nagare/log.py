@@ -7,7 +7,7 @@
 # this distribution.
 #--
 
-import os, StringIO
+import StringIO
 
 import logging
 import logging.config
@@ -34,26 +34,34 @@ def get_logger(name='.'):
 
     return logging.getLogger(name)
 
+
 def set_logger(name):
     local.request.logger_name = name
+
 
 def debug(msg, *args, **kw):
     get_logger().debug(msg, *args, **kw)
 
+
 def info(msg, *args, **kw):
     get_logger().info(msg, *args, **kw)
+
 
 def warning(msg, *args, **kw):
     get_logger().warning(msg, *args, **kw)
 
+
 def error(msg, *args, **kw):
     get_logger().error(msg, *args, **kw)
+
 
 def critical(msg, *args, **kw):
     get_logger().critical(msg, *args, **kw)
 
+
 def exception(msg, *args):
     get_logger().exception(msg, *args)
+
 
 def log(level, msg, *args, **kw):
     get_logger().exception(level, msg, *args, **kw)
@@ -65,11 +73,12 @@ handlers = []
 formatters = []
 
 apps_log_conf = configobj.ConfigObj({
-                                            'loggers' : { 'keys' : '' },
-                                            'handlers' : { 'keys' : '' },
-                                            'formatters' : { 'keys' : '' },
-                                            'logger_root' : { 'handlers' : '' }
+                                            'loggers': {'keys': ''},
+                                            'handlers': {'keys': ''},
+                                            'formatters': {'keys': ''},
+                                            'logger_root': {'handlers': ''}
                                         }, list_values=False, indent_type='')
+
 
 def configure(log_conf, app_name=None):
     """Merge all the applications logging configurations
@@ -83,21 +92,21 @@ def configure(log_conf, app_name=None):
     if app_name:
         # The default application configuration
         app_default = {
-            'logger_app_'+app_name : {
-                'qualname' : 'nagare.application.'+app_name,
-                'level' : 'INFO',
-                'handlers' : 'app_'+app_name,
-                'propagate' : '1'
+            'logger_app_' + app_name: {
+                'qualname': 'nagare.application.' + app_name,
+                'level': 'INFO',
+                'handlers': 'app_' + app_name,
+                'propagate': '1'
             },
 
-            'handler_app_'+app_name : {
-                'class' : 'StreamHandler',
-                'formatter' : 'app_'+app_name,
-                'args' : '(sys.stderr,)'
+            'handler_app_' + app_name: {
+                'class': 'StreamHandler',
+                'formatter': 'app_' + app_name,
+                'args': '(sys.stderr,)'
             },
 
-            'formatter_app_'+app_name : {
-                'format' : '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            'formatter_app_' + app_name: {
+                'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
             }
         }
 
@@ -105,14 +114,14 @@ def configure(log_conf, app_name=None):
         app_default_conf.merge(configobj.ConfigObj(app_default, indent_type='', interpolation=False))
 
         # Create a dedicated logger, handler and formatter for the application
-        loggers.append('app_'+app_name)
-        handlers.append('app_'+app_name)
-        formatters.append('app_'+app_name)
+        loggers.append('app_' + app_name)
+        handlers.append('app_' + app_name)
+        formatters.append('app_' + app_name)
 
         # Create the list of all the handlers of the dedicated logger
         handler = log_conf.get('logger', {}).pop('handlers', None)
         if handler:
-            app_default_conf['logger_app_'+app_name]['handlers'] += (', ' + handler)
+            app_default_conf['logger_app_' + app_name]['handlers'] += (', ' + handler)
 
         logger_sections = [values for (section, values) in log_conf.items() if section.startswith('logger_')]
 
@@ -123,7 +132,7 @@ def configure(log_conf, app_name=None):
         # Use the generic 'logger', 'handler' and 'formatter' sections to
         # configure the dedicated logger, handler and formatter
         for section in ('logger', 'handler', 'formatter'):
-            log_conf[section+'_app_'+app_name] = log_conf.pop(section, {})
+            log_conf[section + '_app_' + app_name] = log_conf.pop(section, {})
 
     # Merge the loggers list
     keys = log_conf.get('loggers', {}).get('keys')

@@ -17,6 +17,7 @@ Currently:
 
 import threading
 
+
 class Thread(threading.local):
     """Objects with attributs scoped to the current thread
     """
