@@ -146,7 +146,7 @@ class Sessions(object):
     def __init__(
                     self,
                     states_history=True,
-                    pickler=cPickle.Pickler, unpickle=cPickle.Unpickler,
+                    pickler=cPickle.Pickler, unpickler=cPickle.Unpickler,
                     security_cookie_name='_nagare'
                 ):
         """Initialization
@@ -155,8 +155,8 @@ class Sessions(object):
           - ``security_cookie_name`` -- name of the cookie where the session secure id is stored
         """
         self.states_history = True
-        self.pickler = cPickle.Pickler
-        self.unpickler = cPickle.Unpickler
+        self.pickler = pickler
+        self.unpickler = unpickler
         self.security_cookie_name = security_cookie_name
 
     def set_config(self, filename, conf, error):
