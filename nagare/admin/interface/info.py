@@ -38,5 +38,5 @@ def render(self, h, *args):
         h.p('Nagare - version %s - %s -' % (pkg_resources.get_distribution('nagare').version, time.strftime('%c'))),
         # h.p('Installed options: ', ', '.join(pkg_resources.get_distribution('fw-ng').extras)),
 
-        h.p('Python: ', sys.version.split('\n')[0])
+        h.p(sys.subversion[0], ' ', sys.version.split('\n')[0])
     )
