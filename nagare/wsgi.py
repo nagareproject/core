@@ -258,6 +258,29 @@ class WSGIApp(object):
 
     # -----------------------------------------------------------------------
 
+    def create_request(self, environ):
+        """Create the ``webob.Request`` object
+
+        In:
+            - ``environ`` -- dictionary of the received elements from the browser
+
+        Return:
+            - a ``webob.Request`` object
+        """
+        return webob.Request(environ, charset='utf-8')
+
+    def create_response(self, request, accept):
+        """Create the ``webob.Response`` object
+
+        In:
+            - ``request`` -- the ``webob.Request`` object
+            - ``accept`` -- the ``Accept`` HTTP header to use
+
+        Return:
+            - a ``webob.Response`` object
+        """
+        return Response(accept)
+
     def create_root(self, *args, **kw):
         """Create the application root component
 
@@ -364,8 +387,8 @@ class WSGIApp(object):
         # Create the ``WebOb`` request and response objects
         # -------------------------------------------------
 
-        request = webob.Request(environ, charset='utf-8')
-        response = Response('text/html' if self.always_html else str(request.accept))
+        request = self.create_request(environ)
+        response = self.create_response(request, 'text/html' if self.always_html else str(request.accept))
 
         channel_id = request.params.get('_channel')
         nb = request.params.get('_nb')
