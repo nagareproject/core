@@ -32,7 +32,7 @@ class Publisher(common.Publisher):
                       )
 
     threadpool_spec = dict(
-                            max_requests='intege r(default=None)',  # threads are killed after this many requests
+                            max_requests='integer(default=None)',  # threads are killed after this many requests
                             hung_thread_limit='integer(default=None)',  # when a thread is marked "hung"
                             kill_thread_limit='integer(default=None)',  # when you kill that hung thread
                             dying_limit='integer(default=None)',  # seconds that a kill should take to go into effect (longer than this and the thread is a "zombie")
