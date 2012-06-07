@@ -1,0 +1,393 @@
+The WSGI Application
+====================
+
+When you create an application using the ``nagare-admin create-app`` command (see :wiki:`ApplicationCreation`
+for more details), Nagare automatically creates a class which acts as the *root component* of your
+application:
+
+.. code-block:: python
+
+    setup(
+          ...
+          entry_points = """
+          [nagare.applications]
+          myapp = myapp.app:app
+          """
+          ...
+    )
+
+.. code-block:: python
+
+    class Root(object):
+        # root component of the application
+        pass
+    
+    @presentation.render_for(Root)
+    def render(self, h, *args):
+        # some rendering code...
+        return h.root
+        
+    app = Root
+
+Under the hood, Nagare automatically wraps this *root component* in a ``WSGIApp`` instance
+(see :apidoc:`wsgi#wsgi.WSGIApp`) via the ``create_WSGIApp`` function (see :apidoc:`wsgi#wsgi.create_WSGIApp`).
+The ``WSGIApp`` is the plumbing between the `WSGI protocol`_ and Nagare's component API (:apidoc:`component`):
+it exposes a WSGI interface to the host server (i.e. a *publisher* in Nagare terms) and maps the incoming
+requests to components updates and rendering. So, in short, the ``WSGIApp`` implements the WSGI application that
+serves your Nagare components as Web pages.
+
+The ``WSGIApp`` provides some smart defaults for the common use-cases: there's no authentication by default, a
+default locale is used so that localizable strings are returned as is, the exceptions that occur while
+processing your components are hidden behind a HTTP Internal Server Error, etc. 
+
+However, sometimes, you want to override this default application behavior: for example, you may want to use a user
+authentication scheme, show custom error pages when exceptions occur, initialize something in each request, change
+the locale, ... We are going to show you how to do that, but we must first explain how Nagare handles a client request
+so that you can understand how to customize the application behavior.
+
+
+How Nagare handles a client request
+-----------------------------------
+
+When the WSGI server receives a client request, it calls the ``WSGIApp.__call__`` method of the application
+(see :apidoc:`wsgi#wsgi.WSGIApp.__call__`), which returns the content of the response for this request, as described
+in the `WSGI protocol`_. This is where Nagare does all the work so that your components are served as a Web pages on
+top of WSGI.
+
+First, Nagare analyzes the incoming request in order to retrieve the session information (i.e. which user is
+sending the request to the server), and (eventually) the action the user triggered on the last page he visited.
+
+The session information is represented by the ``_s`` and ``_c`` parameters of the URL. If the session information is
+either missing, expired or invalid, Nagare creates a new session and sets up the initial state of the application by
+calling the root component factory (i.e. the function passed to the ``WSGIApp`` constructor). This factory returns an
+instance of the root component that, once rendered, will be the first page the user will see. Otherwise, Nagare uses the
+session information to load the corresponding session data and initializes the components state from this data, which
+effectively put the components in the same setup as in the previous page.
+
+When significative URLs are used (see :wiki:`RestfulUrl`), the URL is used to initialize the state of the components when
+a new session is created and is ignored otherwise (because the session data carries more state information than the URL
+itself).
+
+Once the components are initialized, Nagare finds and executes the action callback (represented by the ``_actionNNN``
+parameter of the URL, where ``NNN`` is a random number) which updates the state of the components to reflect the consequences
+of the action (see :wiki:`CallbacksAndForms` for more information about actions). This is the *callback processing* phase.
+
+Finally, Nagare creates a renderer and renders the components tree starting from the root component. This is the *rendering*
+phase. At this point, we are not supposed to change the component graph, but it's possible nevertheless.
+
+After the rendering, the state of the components is persisted in the session store, which is either in memory, in `memcache`_,
+or not at all, depending on the publisher configuration (see :wiki:`PublisherConfiguration`). The session stored can then be
+used in the next request to initialize the components before executing the action callback.
+
+The same principles applies when your components are rendered asynchronously (i.e. with an ``AsyncRenderer``), except that only
+a components subtree is rendered (starting from the asynchronous root) and the same session state is written over and over
+instead of creating a new state for each request as in synchronous mode.
+
+To sum up, there are 4 important steps when handling a request:
+
+1. initialize the components from the session or from the URL (if a new session begins)
+2. update the components tree by processing the action callbacks
+3. render the components tree
+4. save the new state in the session
+
+That's basically what the ``WSGIApp.__call__`` method does. However, note that there are many hooks called in
+this method that can be overridden to customize the application behavior. That's what we're going to review now.
+
+
+Customizing the WSGIApp
+-----------------------
+
+It's possible to customize the ``WSGIApp`` behavior by subclassing the ``WSGIApp`` class and changing the global ``app``
+attribute to refer to the ``WSGIApp`` subclass, as shown below:
+
+.. code-block:: python
+
+    from nagare import wsgi
+    
+    ...
+    
+    class MyApp(wsgi.WSGIApp):
+        # put your customization code here
+        pass
+    
+    def root_factory():
+        return component.Component(Root())
+    
+    app = MyApp(root_factory)
+
+
+The ``WSGIApp`` constructor accepts a root component *factory* as single argument, which is used to create the *root
+component* when a new session begins, that is, the initial state of the application when a new user comes in.
+
+There are many methods that can be overridden in the ``WSGIApp``. Maybe the most important one is ``WSGIApp.__call__``
+which has already been described: it implements the `WSGI protocol`_. Most of the time, you don't need to override this
+method directly because Nagare provides finer grained methods.
+
+The ``WSGIApp.start_request`` method (see :apidoc:`wsgi#wsgi.WSGIApp.start_request`) is called at the begin of each
+incoming request. This is where we can perform request- or session-specific initializations such as installing the locale
+depending on the user/browser settings, authenticating the user using the credentials sent in the request, initializing
+request or session scoped data... The first parameter of this method receives the root component that has just been
+created or been initialized from the session, before URL rules are process (i.e. ``presentation.init`` rules). The last
+two parameters are the request and the response objects.
+
+The ``WSGIApp.set_config`` method (see :apidoc:`wsgi#wsgi.WSGIApp.set_config`) is another commonly used method: it's the
+place where the application receives its configuration. You can read custom configuration sections and values in
+this method in order to configure the services that you use in your application.
+
+For completeness, here is the full listing of the overridable methods and their purpose:
+
+=================================================================  ==============================================================
+                           Method                                                             Purpose
+=================================================================  ==============================================================
+``__init__(root_factory)``                                         Constructor, receives the root component factory
+``__call__(environ, start_response)``                              Implements the `WSGI protocol`_. This is the plumbing between
+                                                                   WSGI and the Nagare components
+``_phase1(request, response, callbacks)``                          Phase 1: processes action callbacks in order to update the
+                                                                   components tree
+``_phase2(output, content_type, doctype, is_xhr, response)``       Phase 2: renders the components tree
+``create_renderer(async, session, request, response, callbacks)``  Creates a renderer that will be used to render the components
+                                                                   tree. Internally, it calls the ``WSGIApp.renderer_factory``
+                                                                   attribute to create the renderer, which is initialized by
+                                                                   default to ``xhtml.Renderer``. So, by default, Nagare uses a
+                                                                   (X)HTML renderer to render the component
+``create_root(*args, **kw)``                                       Creates the application root component by using the component
+                                                                   factory passed to the constructor. You can pass parameters to
+                                                                   the root component in this method, such as instances of services
+                                                                   initialized from the application configuration
+``on_after_post(request, response, ids)``                          Generate a redirection after a POST request if the
+                                                                   ``redirect_after_post`` option is enabled in the application
+                                                                   configuration. It's also known as the `PRG Pattern`_
+``on_back(request, response, h, output)``                          Called when the user used the back button of his browser
+``on_bad_http_method(request, response)``                          Called when a HTTP request other than a GET or PUT was
+                                                                   received. By default, this method returns a MethodNotAllowed
+                                                                   response
+``on_callback_lookuperror(request, response, async)``              A callback was not found: this generally occurs when you use
+                                                                   an asynchronous renderer to update a component on a page but
+                                                                   try to use a (dead) callback (i.e. ``_actionNNN``) defined in
+                                                                   an older state of the component
+``on_exception(request, response)``                                Method called when an unhandled exception occurs. Note that
+                                                                   it does not include the exceptions deriving from 
+                                                                   ``webob.exc.HTTPException`` which are used to send special
+                                                                   HTTP responses
+``on_incomplete_url(request, response)``                           An URL without an application name was received
+``on_session_expired(request, response)``                          The session information received is either expired or invalid
+``set_config(config_filename, config, error)``                     Called when Nagare configures the application from the
+                                                                   application configuration file. You can read you own configuration
+                                                                   keys/values in this method
+``set_data_path(data_path)``                                       Register the directory where the application data is to be found
+``set_databases(databases)``                                       Register the databases properties
+``set_default_locale(locale)``                                     Register the default locale, i.e. the locale used by default in
+                                                                   all requests
+``set_locale(locale)``                                             Set the locale for the current request
+``set_project(name)``                                              Register the application distribution name
+``set_publisher(publisher)``                                       Register the publisher that serves the application to the outside
+                                                                   world (see :wiki:`PublisherConfiguration`)
+``set_sessions_manager(sessions_manager)``                         Register the sessions manager (see :wiki:`PublisherConfiguration`)
+``set_static_path(static_path)``                                   Register the directory of the static contents of the application,
+                                                                   such as Javascript or CSS files
+``set_static_url(static_url)``                                     Register the URL of the static contents
+``start()``                                                        Called when the publisher starts a new process serving the
+                                                                   application. May be useful to initialize process scoped data.
+``start_request(root, request, response)``                         Called when a new request is received. This method can be used to
+                                                                   access the request data, add some headers in the response or 
+                                                                   configure the root component that has just been deserialized from
+                                                                   the session
+=================================================================  ==============================================================
+
+
+Some examples
+-------------
+
+In order to illustrate how to use the ``WSGIApp`` methods, here are some examples showing how to solve
+common use-cases in Nagare applications.
+
+
+Reading a specific configuration section to initialize a service
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Imagine that you want to send emails to the visitors of your next Web application. You need to connect to
+a SMTP server but, for obvious reasons, you want to be able to configure the host and the port of the SMTP
+server your Web application will connect to.
+
+In the application configuration file, we can add a specific section that provides the configuration
+information for the mail sender service.
+
+.. code-block:: ini
+
+    [mail]
+    host = mail.server.com
+    port = 25
+
+
+In order to read this configuration section, we need to override the ``WSGIApp.set_config`` method.
+
+.. code-block:: python
+
+    import configobj
+    from nagare import wsgi, config
+    from myapp.mailsender import MailSender
+    
+    class MyApp(wsgi.WSGIApp):
+        APPLICATION_SPEC = {
+            'mail': {
+                'host': 'string(default="localhost")',
+                'port': 'integer(default=25)',
+            },
+        }
+        
+        def set_config(self, config_filename, conf, error):
+            # call the base implementation
+            super(MyApp, self).set_config(config_filename, conf, error)
+    
+            # read the configuration values
+            conf = configobj.ConfigObj(conf, configspec=configobj.ConfigObj(self.APPLICATION_SPEC))
+            config.validate(config_filename, conf, error)
+
+            # create the mail sender service instance
+            mail_host = conf['mail']['host']
+            mail_port = conf['mail']['port']
+            self.mail_sender = MailSender(mail_host, mail_port)
+
+        ...
+
+First, we validate and read the configuration file, then we get the ``host`` and ``port`` values needed
+to configure our ``MailSender`` service. When creating the ``ConfigObj`` object, we use a ``configspec``
+to:
+
+1. validate the correctness of the configuration file
+2. provide "smart" default values for the missing configuration keys
+
+Now that the mail sender service is created, we must pass it to the Nagare components that need it.
+The configured mail sender instance can be passed to the root component by overriding the 
+``WSGIApp.create_root`` method:
+
+.. code-block:: python
+
+    class MyApp(wsgi.WSGIApp):
+        ...
+
+        def create_root(self, *args, **kw):
+            return super(MyApp, self).create_root(self.mail_sender)
+
+
+Then the root component can use the mail sender instance or pass it to its children components:
+
+.. code-block:: python
+
+    class Root(object):
+        def __init__(self, mail_sender)
+            self.mail_sender = mail_sender
+            # do something useful with the mail_sender:
+            # use it in an action callback or pass it to a children component
+
+    def root_factory(mail_sender):
+        return component.Component(Root(mail_sender))
+    
+    app = MyApp(root_factory)
+
+
+Authenticating users
+~~~~~~~~~~~~~~~~~~~~
+
+Nagare applications have no user authentification by default, so all visitors are allowed
+to see your application. This default behavior is installed in the ``WSGIApp`` constructor.
+You can change it by creating a custom security manager using one of the authentification
+schemes available in the ``nagare.security`` package (such as a HTTP Basic authentication or
+a Form authentication retrieving users from a database).
+
+Then, the custom security manager can be installed either in ``WSGIApp.__init__``,
+``WSGIApp.set_config`` or ``WSGIApp.start_request``. Here is an example:
+
+.. code-block:: python
+
+    from myapp.security import MySecurityManager
+    
+    class MyApp(wsgi.WSGIApp):
+        def __init__(self, root_factory):
+             super(MyApp, self).__init__(root_factory)
+             self.security = MySecurityManager()
+
+
+Installing a locale in each request
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Basically, you can change the default locale globally by calling ``WSGIApp.set_default_locale``, or
+just change the locale for the current request by calling ``WSGIApp.set_locale`` (according to a user
+or session locale setting for example). Some examples can be found in
+:wiki:`InternationalizationOfApplications`.
+
+
+Serving an application in /
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, an application named ``myapp`` is served in ``/myapp``, but you may want your application
+to respond in the root URL (i.e. ``/``) too. To achieve that, you must tell the ``publisher`` that your
+application must be registered to the root URL. This can be done by overriding the
+``WSGIApp.set_publisher`` method:
+
+.. code-block:: python
+
+    class MyApp(wsgi.WSGIApp):
+        def set_publisher(self, publisher):
+            # call the base implementation
+            super(EurekaBase, self).set_publisher(publisher)
+            
+            # register the application in the root URL
+            publisher.register_application(self.application_path, "", self, self)
+
+Note that the static contents of the application are still be served in ``/static/myapp``.
+
+
+Building absolute URLs in components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Imagine that you want to send an email to a user containing a link to your Web application, maybe a
+welcome email. In order to do that, you need to create absolute URLs pointing to the application, and
+you need to know the base URL of the application to do that. You may use a specific key in the
+configuration file to store the server host URL. An alternative way would be to use the URL of the host
+accessed by the request being processed. You can access the request data and pass the host URL to the
+root component in the ``WSGIApp.start_request`` method, as show in the following example:
+
+.. code-block:: python
+
+    import urlparse
+    
+    class Root(object):
+        host_url = None
+
+        def absolute_url(self, url)
+            return urlparse.urljoin(self.host_url, url)
+
+
+.. code-block:: python
+
+    class MyApp(wsgi.WSGIApp):
+        def start_request(self, root, request, response):
+            # Update the host_url attribute of the Root instance
+            root().host_url = request.host_url
+
+
+Logging unhandled exceptions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We can intercept unhandled exceptions and log them to the application logger by overriding
+the ``WSGIApp.on_exception`` method, as show in the example below:
+
+.. code-block:: python
+
+    from nagare import log
+    
+    class MyApp(wsgi.WSGIApp):
+        def on_exception(self, request, response):
+            # log the current exception (i.e. sys.exc_info())
+            log.exception('An error occured')
+            
+            # return an internal server error to the client
+            return webob.exc.HTTPInternalServerError()
+
+
+.. _`WSGI protocol`: http://www.wsgi.org
+.. _`PRG Pattern`: http://en.wikipedia.org/wiki/Post/Redirect/Get
+.. _`memcache`: http://memcached.org/
+
