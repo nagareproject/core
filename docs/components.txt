@@ -382,7 +382,7 @@ component graph and receives the returned value.
 For example, our ``App`` component can be changed to first displays the
 ``text_comp`` component and a link to choose its color. Once the link is
 clicked, the ``App`` component temporary replaces itself by the ``color_chooser``
-object. Remenber that, once a color is selected, the ``color_chooser`` component
+object. Remember that, once a color is selected, the ``color_chooser`` component
 do an ``answer(color)``. So the ``App`` component is restored, receives the
 selected color and change the color of the text:
 
