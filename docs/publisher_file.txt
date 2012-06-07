@@ -28,9 +28,9 @@ Comments, starting with the ``#`` character can be added to a configuration file
 
 This section defines the publisher to use.
 
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 Name                Mandatory Default value      Description
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 type                No        standalone         Choice of the publisher to use.
 
                                                  The current choices are:
@@ -38,9 +38,12 @@ type                No        standalone         Choice of the publisher to use.
                                                    - ``standalone``: Python threaded HTTP server
                                                      (convenient in development mode)
                                                    - ``fastcgi``: multi-processes fastcgi server.
-                                                     A external HTTP is required (recommended in production)
-                                                   - ``fapws2``: fast events drivent HTTP server (experimental)
-                                                   - ``eventlet``: fast events drivent HTTP server (experimental)
+                                                     A external HTTP is required (recommended in
+                                                     production)
+                                                   - ``fapws2``: fast event-driven HTTP server
+                                                     (experimental)
+                                                   - ``eventlet``: fast event-driven HTTP server
+                                                     (experimental)
 host                No        127.0.0.1          By default, the publisher only accepts requests
                                                  on the local interface. If you want to accept
                                                  external requests, set this parameter to the
@@ -50,13 +53,14 @@ host                No        127.0.0.1          By default, the publisher only 
                                                  The optional ``--host`` on the command line
                                                  takes precedence over this parameter.
 port                No        *publisher         Port where to listen to the requests. If no
-                              dependante*        value is explicitly given, the ``standalone``,
+                              dependent*         value is explicitly given, the ``standalone``,
                                                  ``fapws2`` and ``eventlet`` publishers listen on
                                                  port ``8080``. And the ``fastcgi`` publisher
                                                  listen on ``9000``.
                                                  The optional ``--port / -p`` on the command line
                                                  takes precedence over this parameter.
-=================== ========= ================== ================================================
+debug               No        off                Put the publisher in debug mode
+=================== ========= ================== ==================================================
 
 All other parameters, if present, are passed as keywords to the SQLALchemy
 ``create_engine()`` call (see http://www.sqlalchemy.org/docs/core/engines.html#engine-creation-api)
@@ -72,46 +76,46 @@ All other parameters, if present, are passed as keywords to the SQLALchemy
 
 This section defined the sessions manager to use.
 
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 Name                Mandatory Default value      Description
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 type                No        standalone         Choice of the sessions manager to use.
 
                                                  The current choices are:
 
                                                    - ``standalone``: threads-safe in-memory sessions
-                                                     manager. Can be used with the ``standalon``,
+                                                     manager. Can be used with the ``standalone``,
                                                      ``fapws2`` or ``eventlet`` publisher.
                                                    - ``memcache``: the sessions are stored and
                                                      shared into an external memcached server.
                                                      Can be use will all the publishers
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 
 If the ``type`` parameter has the value ``standalone``, the following parameters
-can be configurated:
+can be configured:
 
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 Name                Mandatory Default value      Description
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 nb                  No        10000              Maximum number of sessions keeped
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 
 If the ``type`` parameter has the value ``memcache``, the following parameters
-can be configurated:
+can be configured:
 
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 Name                Mandatory Default value      Description
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 host                No        127.0.0.1          Address of the memcached server
 port                No        11211              Port of the memcached server
-ttl                 No        0                  How long (in seconds), do the session live ?
+ttl                 No        0                  How long (in seconds) does the session live?
                                                  A value of ``0`` means the sessions are managed
                                                  in LRU.
 reset               No        on                 If this parameter is true, then all the sessions
                                                  are removed from the memcached server when the
                                                  application (re)starts.
 debug               No        off                Display the requests sent to the memcached server
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 
 .. note::
 
@@ -125,14 +129,14 @@ debug               No        off                Display the requests sent to th
 This section configures the reloader process which automatically detect source
 changes and relaunch the application.
 
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 Name                Mandatory Default value      Description
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 activated           No        off                If not activated, the framework will not read
                                                  the following parameters.
                                                  In production, don't activate the reloader.
 interval            No        1                  Time, in seconds, between the control of
                                                  source changes
-=================== ========= ================== ================================================
+=================== ========= ================== ==================================================
 
 .. wikiname: PublisherConfiguration
