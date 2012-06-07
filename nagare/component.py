@@ -23,6 +23,7 @@ from nagare import presentation
 
 _marker = object()
 
+
 class AnswerWithoutCall(BaseException):
     pass
 
@@ -194,6 +195,7 @@ class Component(object):
                                             self.o
                                            )
 
+
 @when(presentation.render, (Component, object, object, int))
 @when(presentation.render, (Component, object, object, types.NoneType))
 @when(presentation.render, (Component, object, object, str))
@@ -216,6 +218,7 @@ def render(self, renderer, comp, model):
 
     output = presentation.render(self(), renderer, self, model)
     return renderer.end_rendering(output)
+
 
 @presentation.init_for(Component)
 def init_for(self, url, comp, http_method, request):
@@ -255,6 +258,7 @@ class Task:
 
     def go(self, comp):
         raise BaseException('AbstractMethod')
+
 
 @presentation.render_for(Task)
 def render(self, renderer, comp, *args):

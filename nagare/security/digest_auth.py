@@ -16,6 +16,7 @@ import webob
 
 from nagare.security import common
 
+
 class Authentication(common.Authentication):
     """Authentication manager for the digest HTTP authentication scheme
     """
@@ -50,7 +51,7 @@ class Authentication(common.Authentication):
                 data['encoding'] = encoding
                 return (data.pop('username').decode(encoding), data)
 
-        return (None, { 'response' : None, 'encoding' : None })
+        return (None, {'response': None, 'encoding': None})
 
     def check_password(self, username, password, response, encoding, realm='', uri='', nonce='', nc='', cnonce='', qop='', **kw):
         """Authentication

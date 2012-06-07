@@ -16,6 +16,7 @@ import configobj
 
 from nagare import config
 
+
 def serve_file(filename):
     """Create a WSGI application that return a static file
 
@@ -40,7 +41,7 @@ class Publisher(object):
     def __init__(self):
         """Initialisation
        """
-        self.urls = urlmap.URLMap() # Dispatch for all the registered applications
+        self.urls = urlmap.URLMap()  # Dispatch for all the registered applications
         self.apps = {}  # List of all the registered applications
 
     def register_application(self, app_name, name, app, wsgi_pipe):
@@ -55,7 +56,7 @@ class Publisher(object):
         self.apps.setdefault(app, (app_name, []))
         self.apps[app][1].append(name)
 
-        self.urls['/'+name] = wsgi_pipe
+        self.urls['/' + name] = wsgi_pipe
         print "Application '%s' registered as '/%s'" % (app_name, name)
 
     def get_registered_applications(self):
@@ -74,9 +75,9 @@ class Publisher(object):
        Return:
          - URL prefix (``/static/<name>/``)
        """
-        self.urls['/static/'+name] = lambda environ, start_response: serve_file(get_file(environ['PATH_INFO']))(environ, start_response)
+        self.urls['/static/' + name] = lambda environ, start_response: serve_file(get_file(environ['PATH_INFO']))(environ, start_response)
 
-        return '/static/'+name+'/'
+        return '/static/' + name + '/'
 
     def _validate_conf(self, filename, conf, error):
         """Validate the configuration read from the publisher configuration file

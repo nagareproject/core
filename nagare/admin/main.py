@@ -13,13 +13,11 @@ The ``main()`` function is called by the ``nagare-admin`` console script, create
 by  ``setuptools``
 """
 
-import sys, os
+import sys
 import optparse
 
-import configobj
 import pkg_resources
 
-from nagare.admin import util
 
 def usage(commands):
     """
@@ -67,7 +65,7 @@ def main():
 
     parser.usage = '%%prog %s [options]' % command_name
 
-    argv = command.set_options(parser) # Let the command register its command line options
+    argv = command.set_options(parser)  # Let the command register its command line options
     (options, args) = parser.parse_args((argv if argv is not None else sys.argv)[2:])   # Parse the command line
 
     command.run(parser, options, args)  # Run the command

@@ -17,6 +17,7 @@ from __future__ import with_statement
 
 import threading
 
+
 class LRUDict(object):
     """A LRU dictionary is a dictionary with a fixed maximum number of keys"""
 
@@ -28,9 +29,9 @@ class LRUDict(object):
         """
         self.size = size
 
-        self.oldest = self.newest = 0 # Age of the oldest key / age of the last recently used key
-        self.age_to_items = {}        # Dict: key_age -> key
-        self.items = {}               # Dict: key -> (key_age, value)
+        self.oldest = self.newest = 0  # Age of the oldest key / age of the last recently used key
+        self.age_to_items = {}         # Dict: key_age -> key
+        self.items = {}                # Dict: key -> (key_age, value)
 
     def __contains__(self, k):
         """Test if a key exists into this dictionary

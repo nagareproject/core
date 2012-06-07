@@ -16,6 +16,7 @@ from nagare.sessions import ExpirationError, common
 
 KEY_PREFIX = 'nagare_'
 
+
 class Lock(object):
     def __init__(self, connection, lock_id, ttl, poll_time, max_wait_time):
         """Distributed lock in memcache
@@ -37,7 +38,7 @@ class Lock(object):
         """Acquire the lock
         """
         t0 = time.time()
-        while not self.connection.add(self.lock, 1, self.ttl) and (time.time() < (t0+self.max_wait_time)):
+        while not self.connection.add(self.lock, 1, self.ttl) and (time.time() < (t0 + self.max_wait_time)):
             time.sleep(self.poll_time)
 
     def release(self):
@@ -160,10 +161,10 @@ class Sessions(common.Sessions):
         lock.acquire()
 
         connection.set_multi({
-            '_sess' : (secure_id, None),
-            '_state' : '0',
-            '00000' : {}
-        }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
+            '_sess': (secure_id, None),
+            '_state': '0',
+            '00000': {}
+        }, self.ttl, KEY_PREFIX + session_id, self.min_compress_len)
 
         return (0, lock)
 
@@ -188,7 +189,7 @@ class Sessions(common.Sessions):
         lock.acquire()
 
         state_id = state_id.zfill(5)
-        session = connection.get_multi(('_sess', '_state', state_id), KEY_PREFIX+session_id)
+        session = connection.get_multi(('_sess', '_state', state_id), KEY_PREFIX + session_id)
 
         if len(session) != 3:
             raise ExpirationError()
@@ -214,13 +215,12 @@ class Sessions(common.Sessions):
           - ``state_data`` -- data keept into the state
         """
         if not use_same_state:
-            self._get_connection().incr(KEY_PREFIX+session_id+'_state')
+            self._get_connection().incr(KEY_PREFIX + session_id + '_state')
 
         self._get_connection().set_multi({
-            '_sess' : (secure_id, session_data),
-            '%05d' % state_id : state_data
-        }, self.ttl, KEY_PREFIX+session_id, self.min_compress_len)
-
+            '_sess': (secure_id, session_data),
+            '%05d' % state_id: state_data
+        }, self.ttl, KEY_PREFIX + session_id, self.min_compress_len)
 
     def _delete(self, session_id):
         """Delete the session
@@ -228,7 +228,7 @@ class Sessions(common.Sessions):
         In:
           - ``session_id`` -- id of the session to delete
         """
-        self._get_connection().delete(KEY_PREFIX+session_id)
+        self._get_connection().delete(KEY_PREFIX + session_id)
 
     def serialize(self, data):
         """Pickle an objects graph

@@ -12,17 +12,19 @@ from nagare.sessions import ExpirationError, common
 
 local.request = local.Process()
 
+
 def create_environ():
     return {
-            'REQUEST_METHOD' : 'GET',
-            'SCRIPT_NAME' : '/app',
-            'PATH_INFO' : '/',
-            'QUERY_STRING' : '_s=10&_c=42',
-            'SERVER_PROTOCOL' : 'HTTP/1.0',
-            'SERVER_NAME' : 'localhost',
-            'SERVER_PORT' : 8080,
-            'wsgi.url_scheme' : 'http'
+            'REQUEST_METHOD': 'GET',
+            'SCRIPT_NAME': '/app',
+            'PATH_INFO': '/',
+            'QUERY_STRING': '_s=10&_c=42',
+            'SERVER_PROTOCOL': 'HTTP/1.0',
+            'SERVER_NAME': 'localhost',
+            'SERVER_PORT': 8080,
+            'wsgi.url_scheme': 'http'
             }
+
 
 class Response(dict):
     def __init__(self):
@@ -39,23 +41,28 @@ class Response(dict):
     def __repr__(self):
         return '%d %s - %s' % (self.status_code, self.status, super(Response, self).__repr__())
 
+
 class Session(object):
     def is_new(self):
         return True
 
+
 class SessionManager(common.Sessions):
     def get(self, request, response):
         assert self._get_ids(request) == ('10', '42')
+
 
 class ExpiredSessionManager(common.Sessions):
     def get(self, request, response, use_same_state):
         assert self._get_ids(request) == ('10', '42')
         raise ExpirationError()
 
+
 class App(wsgi.WSGIApp):
     def __init__(self, session_manager=SessionManager(local.DummyLock)):
         super(App, self).__init__(lambda: None)
         self.sessions = session_manager
+
 
 def process_request(app=None, environ={}, **kw):
     if app is None:
@@ -69,11 +76,13 @@ def process_request(app=None, environ={}, **kw):
     app(env, r)
     return r
 
+
 def test_request_validity2():
     """Request - invalid url"""
     r = process_request(PATH_INFO='')
     print r.keys()
     assert (r.status_code == 301) and r['Location'] == 'http://localhost:8080/app/?_s=10&_c=42'
+
 
 def test_bad_session():
     """Request - session expired"""

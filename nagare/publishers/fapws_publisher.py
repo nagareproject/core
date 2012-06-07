@@ -17,6 +17,7 @@ import fapws._evwsgi as evwsgi
 
 from nagare.publishers import common
 
+
 class Publisher(common.Publisher):
     """The FAPWS3 publisher"""
 

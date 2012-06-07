@@ -9,12 +9,13 @@
 
 """Various tools used be the administrative commands"""
 
-import sys, os
+import sys
+import os
 
 import pkg_resources
 import configobj
 
-from nagare import wsgi, database, config, log
+from nagare import wsgi, config
 
 # ---------------------------------------------------------------------------
 
@@ -111,12 +112,13 @@ def load_module(module, app):
     return (r, None)
 
 loaders = {
-            '' : load_module,
-            'python' : load_module,
-            'egg' : load_egg,
-            'file' : load_file,
-            'app' : load_app
+            '': load_module,
+            'python': load_module,
+            'egg': load_egg,
+            'file': load_file,
+            'app': load_app
           }
+
 
 def load_object(path):
     """Load an object from a path
@@ -155,30 +157,31 @@ def load_object(path):
 # -------------------------------------
 
 application_options_spec = {
-    'application' : dict(
-        path = 'string()', # Where to find the application object (see ``load_object()``) ?
-        name = 'string()', # URL for the application
-        debug = 'boolean(default=False)', # Debug web page activated ?
+    'application': dict(
+        path='string()',  # Where to find the application object (see ``load_object()``) ?
+        name='string()',  # URL for the application
+        debug='boolean(default=False)',  # Debug web page activated ?
 
-        redirect_after_post = 'boolean(default=False)', # Follow the PRG pattern ?
-        always_html = 'boolean(default=True)', # Don't generate xhtml, even if it's a browser capability ?
-        wsgi_pipe = 'string(default="")' # Method to create the WSGI middlewares pipe
+        redirect_after_post='boolean(default=False)',  # Follow the PRG pattern ?
+        always_html='boolean(default=True)',  # Don't generate xhtml, even if it's a browser capability ?
+        wsgi_pipe='string(default="")'  # Method to create the WSGI middlewares pipe
     ),
 
-    'database' : dict(
-        activated = 'boolean(default=False)', # Activate the database engine ?
-        uri = 'string(default="")', # Database connection string
-        metadata = 'string(default="")', # Database metadata : database entities description
-        populate = 'string(default="")', # Method to call after the database tables creation
-        debug = 'boolean(default=False)', # Set the database engine in debug mode ?
-        __many__ = dict( # Database sub-sections
-            activated = 'boolean(default=False)',
-            populate = 'string(default="")'
+    'database': dict(
+        activated='boolean(default=False)',  # Activate the database engine ?
+        uri='string(default="")',  # Database connection string
+        metadata='string(default="")',  # Database metadata : database entities description
+        populate='string(default="")',  # Method to call after the database tables creation
+        debug='boolean(default=False)',  # Set the database engine in debug mode ?
+        __many__=dict(  # Database sub-sections
+            activated='boolean(default=False)',
+            populate='string(default="")'
         )
     ),
 
-    'logging' : dict()
+    'logging': dict()
 }
+
 
 def read_application_options(cfgfile, error, default={}):
     """Read the configuration file for the application
@@ -198,16 +201,16 @@ def read_application_options(cfgfile, error, default={}):
     spec.merge(application_options_spec)
 
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
-    spec.merge({ 'sessions' : { 'type' : 'option(%s, default="")' % (choices + ', ""') } })
+    spec.merge({'sessions': {'type': 'option(%s, default="")' % (choices + ', ""')}})
 
     conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)
     config.validate(cfgfile, conf, error)
 
     # The database sub-sections inherit from the database section
     spec['database']['__many__'].merge(dict(
-                            uri = 'string(default=%s)' % str(conf['database']['uri']),
-                            metadata = 'string(default=%s)' % str(conf['database']['metadata']),
-                            debug = 'boolean(default=%s)' % str(conf['database']['debug']),
+                            uri='string(default=%s)' % str(conf['database']['uri']),
+                            metadata='string(default=%s)' % str(conf['database']['metadata']),
+                            debug='boolean(default=%s)' % str(conf['database']['debug']),
                            ))
     conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)
     config.validate(cfgfile, conf, error)
@@ -216,6 +219,7 @@ def read_application_options(cfgfile, error, default={}):
         del conf['sessions']['type']
 
     return conf
+
 
 def read_application(cfgfile, error):
     """Read the configuration file for the application and create the application object
@@ -245,7 +249,7 @@ def read_application(cfgfile, error):
 
         # From the directory of the application, get its configuration file
         requirement = pkg_resources.Requirement.parse(app.dist.project_name)
-        cfgfile = pkg_resources.resource_filename(requirement, os.path.join('conf', cfgfile+'.cfg'))
+        cfgfile = pkg_resources.resource_filename(requirement, os.path.join('conf', cfgfile + '.cfg'))
 
     # Read the application configuration file
     aconf = read_application_options(cfgfile, error)
@@ -367,4 +371,3 @@ def activate_WSGIApp(
         app.set_project(project_name)
 
     return (app, zip(databases, populates))
-

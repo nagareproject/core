@@ -9,7 +9,9 @@
 
 """Base classes for the sessions management"""
 
-import random, cStringIO, cPickle
+import random
+import cStringIO
+import cPickle
 
 import configobj
 from stackless import tasklet
@@ -17,6 +19,7 @@ from stackless import tasklet
 from nagare import config
 from nagare.admin import util
 from nagare.sessions import ExpirationError
+
 
 class State(object):
     """A state (objects graph serialized / deserialized by a sessions manager)
@@ -88,7 +91,7 @@ class State(object):
         """
         (new_state_id, self.lock, self.secure_id, self.data) = self.sessions_manager.get_state(self.session_id, self.state_id, self.use_same_state)
 
-        self.back_used = not self.use_same_state and (int(self.state_id) != (new_state_id-1))
+        self.back_used = not self.use_same_state and (int(self.state_id) != (new_state_id - 1))
 
         self.is_new = False
         self.state_id = new_state_id
@@ -134,16 +137,16 @@ class Sessions(object):
     """The sessions managers
     """
     spec = {
-            'security_cookie_name' : 'string(default="_nagare")',
-            'states_history' : 'boolean(default=True)',
-            'pickler' : 'string(default="cPickle:Pickler")',
-            'unpickler' : 'string(default="cPickle:Unpickler")',
+            'security_cookie_name': 'string(default="_nagare")',
+            'states_history': 'boolean(default=True)',
+            'pickler': 'string(default="cPickle:Pickler")',
+            'unpickler': 'string(default="cPickle:Unpickler")',
            }
 
     def __init__(
                     self,
                     states_history=True,
-                    pickler=cPickle.Pickler, unpickle=cPickle.Unpickler,
+                    pickler=cPickle.Pickler, unpickler=cPickle.Unpickler,
                     security_cookie_name='_nagare'
                 ):
         """Initialization
@@ -152,8 +155,8 @@ class Sessions(object):
           - ``security_cookie_name`` -- name of the cookie where the session secure id is stored
         """
         self.states_history = True
-        self.pickler = cPickle.Pickler
-        self.unpickler = cPickle.Unpickler
+        self.pickler = pickler
+        self.unpickler = unpickler
         self.security_cookie_name = security_cookie_name
 
     def set_config(self, filename, conf, error):
@@ -247,7 +250,7 @@ class Sessions(object):
         Return:
           - tuple (session id parameter, state id parameter)
         """
-        ids = ('_s='+session_id,)
+        ids = ('_s=' + session_id,)
         if self.states_history:
             ids += ('_c=%05d' % state_id,)
 

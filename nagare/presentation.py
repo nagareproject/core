@@ -18,6 +18,7 @@ from webob.exc import HTTPNotFound
 class ModelError(LookupError):
     pass
 
+
 def render(self, renderer, comp, model):
     """Generic method to associate views to an object
 
@@ -35,6 +36,7 @@ def render(self, renderer, comp, model):
         raise ModelError('No model "%s" for %r' % (model, self))
     else:
         raise ModelError('No default model for %r' % self)
+
 
 def render_for(cls, model=None):
     """Decorator helper to register a view for a class of objects
@@ -54,6 +56,7 @@ def render_for(cls, model=None):
 
     return when(render, cond)
 
+
 @when(render, (object, object, object, int))
 def render(self, renderer, comp, model):
     return render(self, renderer, comp, None)
@@ -71,6 +74,7 @@ def init(self, url, comp, http_method, request):
       - ``request`` -- the web request object
     """
     raise HTTPNotFound()
+
 
 def init_for(cls, cond=None):
     """Decorator helper to register an URL for a class of objects

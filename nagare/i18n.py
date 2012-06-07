@@ -39,7 +39,6 @@ try:
         def __setstate__(self, attrs):
             self.__init__(attrs[0], *attrs[1], **attrs[2])
 
-
     @when(xml.add_child, (xml._Tag, LazyProxy))
     def add_child(self, lazy):
         """Add a lazy string to a tag
@@ -102,6 +101,7 @@ except ImportError:
 if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
     os.environ['LC_CTYPE'] = 'en_US.utf-8'
 
+
 # -----------------------------------------------------------------------------
 
 # Service API
@@ -110,26 +110,33 @@ if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
 def gettext(msg, **kw):
     return get_locale().gettext(msg, **kw)
 
+
 def ugettext(msg, **kw):
     return get_locale().ugettext(msg, **kw)
 _ = ugettext
 
+
 def ngettext(singular, plural, n, **kw):
     return get_locale().ngettext(singular, plural, n, **kw)
+
 
 def ungettext(singular, plural, n, **kw):
     return get_locale().ungettext(singular, plural, n, **kw)
 _N = ungettext
 
+
 def lazy_gettext(msg, **kw):
     return LazyProxy(gettext, msg, **kw)
+
 
 def lazy_ugettext(msg, **kw):
     return LazyProxy(ugettext, msg, **kw)
 _L = lazy_ugettext
 
+
 def lazy_ngettext(singular, plural, n, **kw):
     return LazyProxy(ngettext, singular, plural, n, **kw)
+
 
 def lazy_ungettext(singular, plural, n, **kw):
     return LazyProxy(ungettext, singular, plural, n, **kw)
@@ -139,32 +146,42 @@ _LN = lazy_ungettext
 def get_period_names():
     return get_locale().get_period_names()
 
+
 def get_day_names(width='wide', context='format'):
     return get_locale().get_day_names(width, context)
+
 
 def get_month_names(width='wide', context='format'):
     return get_locale().get_month_names(width, context)
 
+
 def get_quarter_names(width='wide', context='format'):
     return get_locale().get_quarter_names(width, context)
+
 
 def get_era_names(width='wide'):
     return get_locale().get_era_names(width)
 
+
 def get_date_format(format='medium'):
     return get_locale().get_date_format(format)
+
 
 def get_datetime_format(format='medium'):
     return get_locale().get_datetime_format(format)
 
+
 def get_time_format(format='medium'):
     return get_locale().get_time_format(format)
+
 
 def get_timezone_gmt(dt=None, width='long'):
     return get_locale().get_timezone_gmt(dt, width)
 
+
 def get_timezone_location(dt_or_timezone=None):
     return get_locale().get_timezone_location(dt_or_timezone)
+
 
 def get_timezone_name(dt_or_timezone=None, width='long', uncommon=False):
     return get_locale().get_timezone_name(dt_or_timezone, width, uncommon)
@@ -173,41 +190,54 @@ def get_timezone_name(dt_or_timezone=None, width='long', uncommon=False):
 def get_currency_name(currency):
     return get_locale().get_currency_name(currency)
 
+
 def get_currency_symbol(currency):
     return get_locale().get_currency_symbol(currency)
+
 
 def get_decimal_symbol():
     return get_locale().get_decimal_symbol()
 
+
 def get_plus_sign_symbol():
     return get_locale().get_plus_sign_symbol()
+
 
 def get_minus_sign_symbol():
     return get_locale().get_minus_sign_symbol()
 
+
 def get_exponential_symbol():
     return get_locale().get_exponential_symbol()
+
 
 def get_group_symbol():
     return get_locale().get_group_symbol()
 
+
 def format_number(number):
     return get_locale().format_number(number)
+
 
 def format_decimal(number, format=None):
     return get_locale().format_decimal(number, format)
 
+
 def format_currency(number, currency, format=None):
     return get_locale().format_currency(number, currency, format)
+
 
 def format_percent(number, format=None):
     return get_locale().format_percent(number, format)
 
+
 def format_scientific(number, format=None):
     return get_locale().format_scientific(number, format)
 
+
 def parse_number(string):
     return get_locale().parse_number(string)
+
 
 def parse_decimal(string):
     return get_locale().parse_decimal(string)
@@ -216,20 +246,26 @@ def parse_decimal(string):
 def to_timezone(dt):
     return get_locale().to_timezone(dt)
 
+
 def to_utc(dt):
     return get_locale().to_utc(dt)
+
 
 def format_time(t=None, format='medium'):
     return get_locale().format_time(t, format)
 
+
 def format_date(d=None, format='medium'):
     return get_locale().format_date(d, format)
+
 
 def format_datetime(dt=None, format='medium'):
     return get_locale().format_datetime(dt, format)
 
+
 def parse_time(string):
     return get_locale().parse_time(string)
+
 
 def parse_date(string):
     return get_locale().parse_date(string)
@@ -241,12 +277,13 @@ def parse_date(string):
 
 _translations_cache = {}    # Already loaded translation objects
 
+
 class DummyTranslation(object):
     """Identity translation
     """
     gettext = ugettext = _ = lazy_gettext = lazy_ugettext = _L = lambda self, msg: msg
 
-    ngettext = ungettext = _N = lazy_ngettext = lazy_ungettext = _LN = lambda self, singular, plural, n: singular if n==1 else plural
+    ngettext = ungettext = _N = lazy_ngettext = lazy_ungettext = _LN = lambda self, singular, plural, n: singular if n == 1 else plural
 
 
 class Locale(CoreLocale):
@@ -288,10 +325,10 @@ class Locale(CoreLocale):
         if isinstance(timezone, basestring):
             timezone = pytz.timezone(timezone)
         self.tzinfo = timezone
-        
+
         if default_timezone is None:
             default_timezone = timezone
-        
+
         if isinstance(default_timezone, basestring):
             default_timezone = pytz.timezone(default_timezone)
         self.default_timezone = default_timezone
@@ -435,7 +472,6 @@ class Locale(CoreLocale):
         """
         return LazyProxy(self.ungettext, singular, plural, n, **kw)
     _LN = lazy_ungettext
-
 
     def get_period_names(self):
         """Return the names for day periods (AM/PM)
@@ -630,7 +666,6 @@ class Locale(CoreLocale):
         """
         return dates.get_timezone_name(dt_or_timezone, width, uncommon, self)
 
-
     def get_currency_name(self, currency):
         """Return the name used for the specified currency
 
@@ -804,7 +839,6 @@ class Locale(CoreLocale):
         """
         return numbers.parse_decimal(string, self)
 
-
     def to_timezone(self, dt):
         """Return a localized datetime object
 
@@ -833,7 +867,7 @@ class Locale(CoreLocale):
         """
         if not dt.tzinfo:
             dt = (self.default_timezone or pytz.UTC).localize(dt)
-            
+
         return dt.astimezone(pytz.UTC)
 
     def format_time(self, t=None, format='medium'):
@@ -860,7 +894,7 @@ class Locale(CoreLocale):
         """
         if isinstance(t, datetime.time):
             t = datetime.time(t.hour, t.minute, t.second)
-            
+
         if isinstance(t, datetime.datetime):
             t = self.to_utc(t)
 
@@ -1020,6 +1054,7 @@ class NegotiatedLocale(Locale):
                                                 timezone=timezone, default_timezone=default_timezone
                                               )
 
+
 # -----------------------------------------------------------------------------
 
 def get_locale():
@@ -1028,16 +1063,18 @@ def get_locale():
 
 
 def set_locale(locale, nagare_locale_dirname=None):
-    """Set the current locale for the request. You can optionally pass the nagare locale dirname to use in
-    order to find the nagare messages translations, such as the ones found in the `validator` module.
+    """Set the current locale for the request. You can optionally pass the
+    nagare locale dirname to use in order to find the nagare messages
+    translations, such as the ones found in the `validator` module.
     Otherwise, we'll use the same directory as the provided locale"""
     local.request.locale = locale
-    local.request.nagare_locale =_create_nagare_locale(locale, nagare_locale_dirname or locale.dirname)
+    dirname = nagare_locale_dirname or locale.dirname
+    local.request.nagare_locale = _create_nagare_locale(locale, dirname)
 
 
 def _create_nagare_locale(locale, dirname):
-    """Create a locale object for translating the builtin nagare messages, such as the ones in the validator
-    module"""
+    """Create a locale object for translating the builtin nagare messages, such
+    as the ones in the validator module"""
     nagare_locale = copy.deepcopy(locale)
     nagare_locale.domain = 'nagare'  # nagare domain: use the 'nagare.po' files
     nagare_locale.dirname = dirname

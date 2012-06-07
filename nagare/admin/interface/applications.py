@@ -11,9 +11,9 @@
 """
 
 from __future__ import with_statement
-import operator
 
 from nagare import presentation
+
 
 class Admin(object):
     priority = 100        # Order of the default view, into the administrative interface
@@ -26,6 +26,7 @@ class Admin(object):
         """
         self.apps = sorted([(app_name, names) for (_, app_name, names) in apps])
 
+
 @presentation.render_for(Admin)
 def render(self, h, *args):
     """Display the currently launched application, with their names and their URLs
@@ -36,9 +37,9 @@ def render(self, h, *args):
         with h.ul:
             for (app_name, names) in self.apps:
                 with h.li("Application '%s' registered as " % app_name):
-                   for (i, name) in enumerate(sorted(names)):
-                       if i:
-                           h << ' and '
-                       h << h.a('/'+name, href='/'+name+('/' if name else ''))
+                    for (i, name) in enumerate(sorted(names)):
+                        if i:
+                            h << ' and '
+                        h << h.a('/' + name, href='/' + name + ('/' if name else ''))
 
     return h.root

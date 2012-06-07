@@ -10,9 +10,12 @@
 """Framework environment administrative view
 """
 
-import sys, time, pkg_resources
+import sys
+import time
+import pkg_resources
 
-from nagare import component, presentation
+from nagare import presentation
+
 
 class Admin(object):
     priority = 1        # Order of the default view, into the administrative interface
@@ -25,6 +28,7 @@ class Admin(object):
         """
         pass
 
+
 @presentation.render_for(Admin)
 def render(self, h, *args):
     """Display informations about the running framework environment"""
@@ -34,5 +38,5 @@ def render(self, h, *args):
         h.p('Nagare - version %s - %s -' % (pkg_resources.get_distribution('nagare').version, time.strftime('%c'))),
         # h.p('Installed options: ', ', '.join(pkg_resources.get_distribution('fw-ng').extras)),
 
-        h.p('Python: ', sys.version.split('\n')[0])
+        h.p(sys.subversion[0], ' ', sys.version.split('\n')[0])
     )

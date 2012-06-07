@@ -9,16 +9,18 @@
 
 """The FastCGI publisher"""
 
-import os, time
+import os
+import time
 from flup.server import fcgi_fork
 
 from nagare import local
 from nagare.publishers import common
 
+
 class Publisher(common.Publisher, fcgi_fork.WSGIServer):
     """The FastCGI publisher"""
 
-    default_port = 9000 # Default FastCGI port
+    default_port = 9000  # Default FastCGI port
 
     # Possible command line options with the default values
     # ------------------------------------------------------
@@ -73,7 +75,7 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
            (you can use the administrative command ``nagare-admin create-rules`` to generate
            the rewrite rules if you are using the lighttpd or nginx servers)
         """
-        return '/static/'+name+'/'
+        return '/static/' + name + '/'
 
     def _validate_conf(self, filename, conf, error):
         """Validate the configuration read from the publisher configuration file

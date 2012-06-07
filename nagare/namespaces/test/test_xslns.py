@@ -19,7 +19,7 @@ from nagare.namespaces import xhtml
 def test1():
     """ XSL namespace unit test - simple xsl transformation 1 """
     x = xsl.Renderer()
-    x.namespaces = { 'xsl' : 'http://www.w3.org/1999/XSL/Transform' }
+    x.namespaces = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
     x.default_namespace = 'xsl'
 
     styleSheet = x.stylesheet(
@@ -49,7 +49,7 @@ def test1():
 def test2():
     """ XSL namespace unit test - simple xsl transformation 2 """
     x = xsl.Renderer()
-    x.namespaces = { 'xsl' : 'http://www.w3.org/1999/XSL/Transform' }
+    x.namespaces = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
     x.default_namespace = 'xsl'
 
     styleSheet = x.stylesheet(

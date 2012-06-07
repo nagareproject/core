@@ -12,6 +12,7 @@
 import configobj
 from validate import Validator
 
+
 def _validate(filename, config):
     """Validate a ``ConfigObj`` object
 
@@ -26,6 +27,7 @@ def _validate(filename, config):
 
     for (sections, name, error) in errors:
         yield 'file "%s", section "[%s]", parameter "%s": %s' % (filename, ' / '.join(sections), name, error)
+
 
 def validate(filename, config, error):
     """Validate a ``ConfigObj`` object

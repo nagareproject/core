@@ -106,7 +106,7 @@ def run(parser, options, args):
 
     wsgi_pipe = debugged_app(app) if options.debug else app
     publisher.register_application(args[0], args[1], app, wsgi_pipe)
-    app.set_config('', { 'application' : { 'redirect_after_post' : False, 'name' : args[1], 'always_html' : True } }, None)
+    app.set_config('', {'application': {'redirect_after_post': False, 'name': args[1], 'always_html': True}}, None)
     app.set_publisher(publisher)
 
     # Always use the standalone session manager (in memory sessions)
@@ -115,9 +115,9 @@ def run(parser, options, args):
     app.set_sessions_manager(sessions_manager)
 
     # Set the application logger level to DEBUG
-    log.configure({ 'logger' : { 'level' : 'DEBUG' } }, args[1])
+    log.configure({'logger': {'level': 'DEBUG'}}, args[1])
     log.activate()
-    log.set_logger('nagare.application.'+args[1])
+    log.set_logger('nagare.application.' + args[1])
 
     # The static contents of the framework are served by the standalone server
     publisher.register_static('nagare', lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path))

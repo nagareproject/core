@@ -9,7 +9,8 @@
 
 """Various pre-defined components"""
 
-from nagare import component, presentation, var
+from nagare import presentation, var
+
 
 class Ask(object):
     """Ask the user to enter a line of text
@@ -23,6 +24,7 @@ class Ask(object):
           - ``msg`` -- message to display
         """
         self.msg = msg
+
 
 @presentation.render_for(Ask)
 def render(self, h, comp, *args):
@@ -44,6 +46,7 @@ def render(self, h, comp, *args):
                   h.input(type='submit', value='Send').action(lambda: comp.answer(r()))
                  )
 
+
 class Confirm(object):
     """Display a confirmation message
     """
@@ -55,6 +58,7 @@ class Confirm(object):
           - ``msg`` -- message to display
         """
         self.msg = msg
+
 
 @presentation.render_for(Confirm)
 def render(self, h, comp, *args):
@@ -86,6 +90,7 @@ class View(object):
           - ``view`` -- a function that will be called to render this object
         """
         self.view = view
+
 
 @presentation.render_for(View)
 def render(self, h, *args):

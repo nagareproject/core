@@ -24,6 +24,7 @@ from paste.fixture import TestApp
 
 import os
 
+
 def create_FixtureApp(app):
     local.worker = local.Process()
     local.request = local.Process()
@@ -36,17 +37,18 @@ def create_FixtureApp(app):
 
 # Test for XHTML namespace
 
+
 def head_render_init_test1():
     """ XHTML namespace unit test - HeadRender - Allowed tags """
     try:
         h = xhtml.HeadRenderer('/tmp/static_directory/')
-        with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
-            h << h.base({'id':'id', 'href':'href', 'target':'target'})
-            h << h.link({'charset':'charset', 'href':'href', 'hreflang':'hreflang', 'type':'type', 'rel':'rel', 'rev':'rev', 'media':'media', 'target':'target'})
-            h << h.meta({'id':'id', 'http_equiv':'http_equiv', 'name':'name', 'content':'content', 'scheme':'scheme'})
-            h << h.title({'title':'title'})
-            h << h.style({'id':'id'})
-            h << h.script({'id':'id'})
+        with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
+            h << h.base({'id': 'id', 'href': 'href', 'target': 'target'})
+            h << h.link({'charset': 'charset', 'href': 'href', 'hreflang': 'hreflang', 'type': 'type', 'rel': 'rel', 'rev': 'rev', 'media': 'media', 'target': 'target'})
+            h << h.meta({'id': 'id', 'http_equiv': 'http_equiv', 'name': 'name', 'content': 'content', 'scheme': 'scheme'})
+            h << h.title({'title': 'title'})
+            h << h.style({'id': 'id'})
+            h << h.script({'id': 'id'})
     except AttributeError:
         assert False
     else:
@@ -57,7 +59,7 @@ def head_render_init_test2():
     """ XHTML namespace unit test - HeadRender - Forbiden tag """
     try:
         h = xhtml.HeadRenderer('/tmp/static_directory/')
-        h << h.test({'id':'id', 'href':'href', 'target':'target'})
+        h << h.test({'id': 'id', 'href': 'href', 'target': 'target'})
     except AttributeError:
         assert True
     else:
@@ -67,25 +69,25 @@ def head_render_init_test2():
 def head_render_css_url_test1():
     """ XHTML namespace unit test - HeadRender - css_url - relative url """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.css_url('css')
 
-    assert h._css_url == {'/tmp/static_directory/css' : (0, {})}
+    assert h._css_url == {'/tmp/static_directory/css': (0, {})}
 
 
 def head_render_javascript_css_test2():
     """ XHTML namespace unit test - HeadRender - css_url - absolute url """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.css_url('/css')
 
-    assert h._css_url == {'/css' : (0, {})}
+    assert h._css_url == {'/css': (0, {})}
 
 
 def head_render_css_url_test3():
     """ XHTML namespace unit test - HeadRender - css_url - absolute url + relative url """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.css_url('/css')
         h << h.css_url('css')
 
@@ -96,24 +98,24 @@ def head_render_css_url_test3():
 def head_render_javascript_url_test1():
     """ XHTML namespace unit test - HeadRender - javascript_url - relative url """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript_url('test.js')
 
-    assert h._javascript_url == {'/tmp/static_directory/test.js' : (0, {})}
+    assert h._javascript_url == {'/tmp/static_directory/test.js': (0, {})}
 
 
 def head_render_javascript_url_test2():
     """ XHTML namespace unit test - HeadRender - javascript_url - absolute url """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript_url('/test.js')
-    assert h._javascript_url == {'/test.js' : (0, {})}
+    assert h._javascript_url == {'/test.js': (0, {})}
 
 
 def head_render_javascript_url_test3():
     """ XHTML namespace unit test - HeadRender - javascript_url - absolute url + relative url """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript_url('/test.js')
         h << h.javascript_url('test.js')
 
@@ -124,17 +126,17 @@ def head_render_javascript_url_test3():
 def head_render_javascript_url_test4():
     """ XHTML namespace unit test - HeadRender - javascript_url - Add twice the same js_url"""
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript_url('test.js')
         h << h.javascript_url('test.js')
 
-    assert h._javascript_url == {'/tmp/static_directory/test.js' : (0, {})}
+    assert h._javascript_url == {'/tmp/static_directory/test.js': (0, {})}
 
 
 def head_render_javascript_test1():
     """ XHTML namespace unit test - HeadRender - javascript - use string """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript('test', 'function test(arg1) { return true }')
 
     assert h._named_javascript == {'test': (0, 'function test(arg1) { return true }', {})}
@@ -147,21 +149,21 @@ def head_render_javascript_test2():
         return True
 
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript('test', js_method)
 
-    assert h._javascript_url == {'/static/nagare/pyjslib.js' : (0, {})}
-    assert h._named_javascript.has_key('test')
+    assert h._javascript_url == {'/static/nagare/pyjslib.js': (0, {})}
+    assert 'test' in h._named_javascript
 
 
 def head_render_javascript_test3():
     """ XHTML namespace unit test - HeadRender - javascript - add 2 js with same name """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript('test', 'function test(arg1) { return true }')
         h << h.javascript('test', 'function test(arg1) { return true }')
 
-    assert h._named_javascript == {'test' : (0, 'function test(arg1) { return true }', {})}
+    assert h._named_javascript == {'test': (0, 'function test(arg1) { return true }', {})}
 
 
 def head_render_render_test1():
@@ -223,7 +225,7 @@ def head_render_render_test8():
         return True
 
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'lang':'lang', 'dir':'dir', 'id':'id', 'profile':'profile'}):
+    with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript('test', js_method)
     assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head lang="lang" profile="profile" id="id" dir="dir"><script src="/static/nagare/pyjslib.js" type="text/javascript"></script><script type="text/javascript">function nagare_namespaces_test_test_xhtmlns_js_method(arg1) {    return true;}</script></head>'
 
@@ -231,15 +233,15 @@ def head_render_render_test8():
 def head_render_render_test9():
     """ XHTML namespace unit test - HeadRender - Render - render with head """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    h << h.head({'id':'id'})
+    h << h.head({'id': 'id'})
     assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head id="id"></head>'
 
 
 def head_render_render_test10():
     """ XHTML namespace unit test - HeadRender - Render - render with head & style """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
-    with h.head({'id':'id'}):
-        h << h.style('test', {'id':'id'})
+    with h.head({'id': 'id'}):
+        h << h.style('test', {'id': 'id'})
     assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head id="id"><style id="id">test</style></head>'
 
 
@@ -265,7 +267,7 @@ def html_render_parse_html_test1():
     """ XHTML namespace unit test - HTMLRender - parse_html - good encoding """
     try:
         h = xhtml.Renderer()
-        root = h.parse_html(os.path.join(os.path.dirname(__file__), 'helloworld.html'))
+        h.parse_html(os.path.join(os.path.dirname(__file__), 'helloworld.html'))
     except UnicodeDecodeError:
         assert False
     else:
@@ -277,7 +279,7 @@ if 0:
         """ XHTML namespace unit test - HTMLRender - parse_html - bad encoding """
         try:
             h = xhtml.Renderer()
-            root = h.parse_html(os.path.join(os.path.dirname(__file__), 'iso-8859.html'), encoding='utf-8')
+            h.parse_html(os.path.join(os.path.dirname(__file__), 'iso-8859.html'), encoding='utf-8')
         except UnicodeDecodeError:
             assert True
         else:
@@ -302,14 +304,15 @@ def html_render_parse_html_test5():
     """ XHTML namespace unit test - HTMLRender - parse_html - get html from an URL """
     try:
         h = xhtml.Renderer()
-        root = h.parse_html('http://www.google.fr/')
+        h.parse_html('http://www.google.fr/')
     except:
         assert False
     else:
         assert True
 
-
 xml_tree_1 = "<a>text</a>"
+
+
 def html_render_parse_html_test6():
     """ XHTML namespace unit test - HTMLRender - parse_html - option xhtml=False - xmlstring - Test child type """
     x = xhtml.Renderer()
@@ -332,6 +335,8 @@ def html_render_parse_html_test8():
 
 
 html_tree_1 = "<html><body></html>"
+
+
 def html_render_parse_html_test9():
     """ XHTML namespace unit test - HTMLRender - parse_html - option xhtml=False - htmlstring - Test child type """
     x = xhtml.Renderer()
@@ -343,7 +348,7 @@ def html_render_parse_html_test10():
     """ XHTML namespace unit test - HTMLRender - parse_html - option xhtml=True  - htmlstring - Test child type """
     try:
         x = xhtml.Renderer()
-        root = x.parse_htmlstring(html_tree_1, xhtml=True)
+        x.parse_htmlstring(html_tree_1, xhtml=True)
     except:
         assert True
     else:
@@ -354,7 +359,7 @@ def html_render_parse_html_test11():
     """ XHTML namespace unit test - HTMLRender - parse_xml - htmlstring - Test child type """
     try:
         x = xhtml.Renderer()
-        root = x.parse_xmlstring(html_tree_1)
+        x.parse_xmlstring(html_tree_1)
     except:
         assert True
     else:
@@ -362,6 +367,8 @@ def html_render_parse_html_test11():
 
 
 xhtml_tree_1 = "<xhtml><a/></xhtml>"
+
+
 def html_render_parse_html_test12():
     """ XHTML namespace unit test - HTMLRender - parse_html - option xhtml=False - xhtmlstring - Test child type """
     x = xhtml.Renderer()
@@ -386,28 +393,28 @@ def html_render_parse_html_test14():
 def htmltag_write_xmlstring_test1():
     """ XHTML namespace unit test - HTMLRender - write_htmlstring - without argument """
     h = xhtml.Renderer()
-    h << h.table(h.tr(h.td()),h.tr(h.td()))
+    h << h.table(h.tr(h.td()), h.tr(h.td()))
     assert h.root.write_htmlstring() == '<table><tr><td></td></tr><tr><td></td></tr></table>'
 
 
 def htmltag_write_xmlstring_test2():
     """ XHTML namespace unit test - HTMLRender - write_htmlstring - with pipeline == True"""
     h = xhtml.Renderer()
-    h << h.table(h.tr(h.td().meld_id('test'),h.tr(h.td().meld_id('test'))))
+    h << h.table(h.tr(h.td().meld_id('test'), h.tr(h.td().meld_id('test'))))
     assert h.root.write_htmlstring(pipeline=True) == '<table><tr><td xmlns:ns0="http://www.plope.com/software/meld3" ns0:id="test"></td><tr><td xmlns:ns0="http://www.plope.com/software/meld3" ns0:id="test"></td></tr></tr></table>'
 
 
 def htmltag_write_xmlstring_test3():
     """ XHTML namespace unit test - HTMLRender - write_htmlstring - with pipeline == False """
     h = xhtml.Renderer()
-    h << h.table(h.tr(h.td().meld_id('false'),h.tr(h.td().meld_id('false'))))
+    h << h.table(h.tr(h.td().meld_id('false'), h.tr(h.td().meld_id('false'))))
     assert h.root.write_htmlstring(pipeline=False) == '<table><tr><td xmlns:ns0="http://www.plope.com/software/meld3"></td><tr><td xmlns:ns0="http://www.plope.com/software/meld3"></td></tr></tr></table>'
 
 
 def html_render_add_tag_test1():
     """ XHTML namespace unit test - HTMLRender - add tag - create simple html """
     h = xhtml.Renderer()
-    h << h.html(h.body(h.table(h.tr(h.td()),h.tr(h.td()))))
+    h << h.html(h.body(h.table(h.tr(h.td()), h.tr(h.td()))))
     assert h.root.write_htmlstring().replace('\n', '') == '<html><body><table><tr><td></td></tr><tr><td></td></tr></table></body></html>'
 
 
@@ -442,7 +449,7 @@ def html_render_form_test3():
 def html_render_form_test4():
     """ XHTML namespace unit test - Form - create simple form with iso-8859-15 enconding"""
     h = xhtml.Renderer()
-    h << h.html(h.body(h.form(h.input(type="string", name="input1", value="value"), h.input(type="submit", name="submit"), {"accept-charset":"iso-8859-15"})))
+    h << h.html(h.body(h.form(h.input(type="string", name="input1", value="value"), h.input(type="submit", name="submit"), {"accept-charset": "iso-8859-15"})))
     form = h.root.xpath('.//form')
     attributes = form[0].attrib
     assert attributes['method'] == "post"
@@ -460,16 +467,13 @@ class My_app_test_form():
         self.actions_done.append('my_pre_action')
         assert self.actions_done == ['my_pre_action']
 
-
     def my_post_action(self):
         self.actions_done.append('my_post_action')
-        assert self.actions_done == ['my_pre_action', 'my_input_action', 'my_post_action',]
-
+        assert self.actions_done == ['my_pre_action', 'my_input_action', 'my_post_action']
 
     def my_input_action(self):
         self.actions_done.append('my_input_action')
         assert self.actions_done == ['my_pre_action', 'my_input_action']
-
 
     def my_submit_action(self):
         self.actions_done.append('my_submit_action')
@@ -597,7 +601,6 @@ def html_render_select_test6():
     options = h.root.xpath('.//option')
     assert options[0].attrib['selected'] == 'selected'
     assert options[2].attrib['selected'] == 'selected'
-
 
 
 class My_app_test_select_multiple():
@@ -771,7 +774,6 @@ def html_render_radiobutton_test4():
     labels = h.root.xpath('.//label')
 
     assert reduce(lambda x, y: x and y, [label.get('for') is not None for label in labels])
-
 
 
 def html_render_textarea_test1():
@@ -1057,7 +1059,8 @@ def global_test1():
     with h.html:
         with h.body(onload='javascript:alert()'):
             with h.ul:
-                with h.li('Hello'): pass
+                with h.li('Hello'):
+                    pass
                 with h.li:
                     h << 'world'
                 h << h.li('yeah')
@@ -1089,9 +1092,9 @@ def global_test2():
     h = xhtml.Renderer()
 
     helloWorld = h.ul([h.li('Hello'), h.li('world'), h.li('yeah')])
-    totoDiv    = h.div([h.h1('moi', [h.i('toto')])], {'class':'toto'})
-    yeah012    = h.div('yeah012')
-    table      = h.table([h.tr([h.td(elt1), h.td(elt2)]) for elt1,elt2 in t], {'toto':'toto'})
+    totoDiv = h.div([h.h1('moi', [h.i('toto')])], {'class': 'toto'})
+    yeah012 = h.div('yeah012')
+    table = h.table([h.tr([h.td(elt1), h.td(elt2)]) for elt1, elt2 in t], {'toto': 'toto'})
 
     html = h.html([h.body([helloWorld, totoDiv, yeah012, table], {'onload':'javascript:alert()'})])
 

@@ -26,6 +26,7 @@ from nagare.sessions.memory_sessions import SessionsWithPickledStates
 
 from exceptions import Exception
 
+
 def create_FixtureApp(app):
     local.worker = local.Process()
     local.request = local.Process()
@@ -39,6 +40,7 @@ def create_FixtureApp(app):
 __metadata__ = MetaData()
 __metadata__.bind = "sqlite:///:memory:"
 __metadata__.bind.echo = False
+
 
 # Setup / Teardown functions
 def setup():
@@ -59,10 +61,8 @@ class Language(Entity):
 
 
 class App1:
-
     def __init__(self):
         self.languages = []
-
 
     def add_language(self, language):
         self.languages.append(language)
@@ -80,14 +80,14 @@ def test_1():
     session.flush()
 
     language = Language.query.all()[0]
-    assert language.id    == u"english"
+    assert language.id == u"english"
     assert language.label == u"hello world"
 
     Language(id=u"french", label=u"bonjour monde")
     session.flush()
 
     language = Language.query.all()[1]
-    assert language.id    == u"french"
+    assert language.id == u"french"
     assert language.label == u"bonjour monde"
 
 
@@ -105,7 +105,6 @@ def test_2():
 
     for language in Language.query.all():
         assert language.label == res[language.id]
-
 
 
 @with_setup(setup_func, teardown_func)
@@ -168,6 +167,7 @@ def setup_func_2():
     Father(name=u"Charles Ingalls")
     session.flush()
 
+
 class My_database_app():
 
     def __init__(self):
@@ -184,6 +184,7 @@ class My_database_app():
 def render(self, h, *args):
     h << h.div(self.father.name)
     return h.root
+
 
 @presentation.render_for(My_database_app)
 def render(self, h, comp, *args):

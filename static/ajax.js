@@ -13,7 +13,7 @@
 var nagare_callbacks = {
     cache : false,
 
-    success : function (o) { setTimeout(o.responseText, 0) },
+    success : function (o) { setTimeout(o.responseText, 0); },
     failure : function (o) {
                             var url = o.getResponseHeader["X-Debug-URL"];
                             if(url) {
@@ -65,8 +65,8 @@ function nagare_imageInputSubmit(event, button, action) {
 // ----------------------------------------------------------------------------
 // Responses
 
-var nagare_loaded_named_css = {}
-var nagare_loaded_named_js = {}
+var nagare_loaded_named_css = {};
+var nagare_loaded_named_js = {};
 
 function nagare_filter(items, filter) {
     var not_in_filter = new Array();
@@ -82,7 +82,7 @@ function nagare_filter(items, filter) {
 function nagare_itemgetter(l, x) {
     var r = new Array();
     for(var i=0; i<l.length; i++) r[r.length] = l[i][x];
-    return r
+    return r;
 }
 
 function nagare_loadCSS(css, attrs) {
@@ -102,7 +102,7 @@ function nagare_loadCSS(css, attrs) {
 }
 
 function nagare_loadAll(named_css, anon_css, css_urls, named_js, anon_js, js_urls) {
-    var named_css = nagare_filter(named_css, nagare_loaded_named_css)
+    var named_css = nagare_filter(named_css, nagare_loaded_named_css);
     for(var i=0; i<named_css.length; i++) {
         nagare_loadCSS(named_css[i][1], named_css[i][2]);
         nagare_loaded_named_css[named_css[i][0]] = 1;
@@ -110,7 +110,7 @@ function nagare_loadAll(named_css, anon_css, css_urls, named_js, anon_js, js_url
 
     nagare_loadCSS(anon_css, {});
 
-    var named_js = nagare_filter(named_js, nagare_loaded_named_js)
+    var named_js = nagare_filter(named_js, nagare_loaded_named_js);
     for(var i=0; i<named_js.length; i++) {
         setTimeout(named_js[i][1], 0);
         nagare_loaded_named_js[named_js[i][0]] = 1;
@@ -119,7 +119,7 @@ function nagare_loadAll(named_css, anon_css, css_urls, named_js, anon_js, js_url
     setTimeout(anon_js, 0);
 
     YAHOO.util.Get.css(nagare_itemgetter(css_urls, 0), { onSuccess: function (o) {
-        YAHOO.util.Get.script(nagare_itemgetter(js_urls, 0), { onSuccess: function(o) { o.purge() } })
+        YAHOO.util.Get.script(nagare_itemgetter(js_urls, 0), { onSuccess: function(o) { o.purge();} });
     } });
 }
 
@@ -137,7 +137,7 @@ function nagare_replaceNode(id, html) {
 }
 
 function nagare_updateNode(id, html) {
-    var n = document.getElementById(id)
+    var n = document.getElementById(id);
     if(n && html) n.innerHTML = html;
 }
 

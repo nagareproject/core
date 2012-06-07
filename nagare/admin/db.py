@@ -19,6 +19,7 @@ import pkg_resources
 from nagare import local, log, database
 from nagare.admin import util
 
+
 def read_options(debug, args, error):
     """Activate all the database metadata objects of an application
 
@@ -54,8 +55,8 @@ def read_options(debug, args, error):
     # Configure the logging service
     log.configure(aconf['logging'].dict(), aconf['application']['name'])
     log.activate()
-    log.set_logger('nagare.application.'+ aconf['application']['name'])
-    
+    log.set_logger('nagare.application.' + aconf['application']['name'])
+
     return util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[1]
 
 

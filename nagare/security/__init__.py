@@ -23,6 +23,7 @@ def _get_user():
     """
     return local.request.user
 
+
 def get_user():
     """Return the current user
 
@@ -31,6 +32,7 @@ def get_user():
     """
     user = _get_user()
     return user if user is not None and not user.expired else None
+
 
 def set_user(user):
     """Change the user
@@ -50,6 +52,7 @@ def get_manager():
       - the security manager
     """
     return local.request.security_manager
+
 
 def set_manager(manager):
     """Change the security manager
@@ -117,6 +120,7 @@ def check_permissions(perm, subject=None):
         get_manager().denies(credential)
 
     return credential
+
 
 def permissions(perm):
     """Decorator to check the permissions of the current user

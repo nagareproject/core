@@ -17,6 +17,7 @@ from nagare.namespaces.xml import TagProp
 # Official ESI namespace
 NS = 'http://www.edge-delivery.org/esi/1.0'
 
+
 class Renderer(xml.XmlRenderer):
     """ The ESI renderer
     """
@@ -52,10 +53,9 @@ if __name__ == '__main__':
 
     h = xhtml.Renderer()
     s = Renderer()
-    s.namespaces= { 'esi' : NS }
+    s.namespaces = {'esi': NS}
     s.default_namespace = 'esi'
 
     html = h.html(h.body(h.h1('hello'), s.include(dict(src='http://www.net-ng.com'), s.include(src='http://www.net-ng.com')), h.p('world')))
 
     print html.write_xmlstring(pretty_print=True)
-

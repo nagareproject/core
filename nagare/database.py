@@ -11,6 +11,7 @@
 
 # If the framework haven't the SQLAlchemy or Elixir packages installed,
 # the default database session is a dummy one
+
 class DummySession(object):
     def begin(self):
         return self
@@ -18,6 +19,7 @@ class DummySession(object):
     __enter__ = __exit__ = clear = query = remove = close = configure = lambda *args, **kw: None
 
 session = DummySession()
+
 
 def setup_all():
     pass

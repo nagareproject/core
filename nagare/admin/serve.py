@@ -26,14 +26,14 @@ from nagare.admin import reloader, util
 # -----------------------------------
 
 publisher_options_spec = {
-    'publisher' : dict(
-        host = 'string(default="127.0.0.1")', # Listen only on the loopback interface
-        port = 'integer(default=-1)' # The default port depends of the publisher used
+    'publisher': dict(
+        host='string(default="127.0.0.1")',  # Listen only on the loopback interface
+        port='integer(default=-1)'  # The default port depends of the publisher used
     ),
 
-    'reloader' : dict(
-        activated = 'boolean(default=False)', # No automatic reload
-        interval = 'integer(default=1)',
+    'reloader': dict(
+        activated='boolean(default=False)',  # No automatic reload
+        interval='integer(default=1)',
     ),
 }
 
@@ -67,13 +67,13 @@ def read_publisher_options(parser, options):
     configspec = configobj.ConfigObj(publisher_options_spec)
 
     if options.conf:
-        configspec.merge({ 'here' : 'string(default="%s")' % os.path.abspath(os.path.dirname(options.conf)) })
+        configspec.merge({'here': 'string(default="%s")' % os.path.abspath(os.path.dirname(options.conf))})
 
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.publishers')])
-    configspec.merge({ 'publisher' : { 'type' : 'option(%s, default="standalone")' % choices } })
+    configspec.merge({'publisher': {'type': 'option(%s, default="standalone")' % choices}})
 
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
-    configspec.merge({ 'sessions' : { 'type' : 'option(%s, default="standalone")' % choices } })
+    configspec.merge({'sessions': {'type': 'option(%s, default="standalone")' % choices}})
 
     conf = configobj.ConfigObj(options.conf, configspec=configspec, interpolation='Template')
     config.validate(options.conf, conf, parser.error)
@@ -99,6 +99,7 @@ try:
     debugged_app = lambda app: EvalException(app, xmlhttp_key='_a')
 except ImportError:
     debugged_app = lambda app: app
+
 
 def create_wsgi_pipe(app, options, config_filename, config, error):
     """Wrap the application into one or more WSGI "middlewares" to create a WSGI pipe

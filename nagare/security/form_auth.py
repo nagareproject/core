@@ -29,6 +29,7 @@ import webob
 from nagare import security
 from nagare.security import basic_auth
 
+
 class Authentication(basic_auth.Authentication):
     """Simple form based authentication"""
 
@@ -70,7 +71,7 @@ class Authentication(basic_auth.Authentication):
         Return:
           - A tuple with the id of the user and its password
         """
-        return (params.get(self.prefix+'_name'), params.get(self.prefix+'_password'))
+        return (params.get(self.prefix + '_name'), params.get(self.prefix + '_password'))
 
     def cookie_decode(self, cookie):
         """Decode the data of the user cookie

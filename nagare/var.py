@@ -21,6 +21,7 @@ Handy into the lambda expressions
 
 _marker = object()
 
+
 class Var(object):
     """Functional variables
     """

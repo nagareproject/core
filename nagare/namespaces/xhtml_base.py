@@ -15,7 +15,8 @@ Having not dependencies to the framework make it suitable to be used in others f
 
 from __future__ import with_statement
 
-import cStringIO, urllib
+import cStringIO
+import urllib
 
 from lxml import etree as ET
 
@@ -47,7 +48,7 @@ class _HTMLTag(xml._Tag):
           - the XHTML
         """
         if not pipeline:
-            for element in self.xpath('.//*[@meld:id]', namespaces={ 'meld' : xml._MELD_NS }):
+            for element in self.xpath('.//*[@meld:id]', namespaces={'meld': xml._MELD_NS}):
                 del element.attrib[xml._MELD_ID]
 
         return ET.tostring(self, encoding=encoding, method='html', **kw)
@@ -76,12 +77,12 @@ class HeadRenderer(xml.XmlRenderer):
     # -------------
 
     base = TagProp('base', set(('id', 'href', 'target')))
-    head = TagProp('head', set(i18nattrs+('id', 'profile')))
-    link = TagProp('link', set(allattrs+('charset', 'href', 'hreflang', 'type', 'rel', 'rev', 'media', 'target')))
-    meta = TagProp('meta', set(i18nattrs+('id', 'http_equiv', 'name', 'content', 'scheme')))
-    title = TagProp('title', set(i18nattrs+('id',)))
-    style = TagProp('style', set(i18nattrs+('id',)))
-    script = TagProp('script', set(i18nattrs+('id',)))
+    head = TagProp('head', set(i18nattrs + ('id', 'profile')))
+    link = TagProp('link', set(allattrs + ('charset', 'href', 'hreflang', 'type', 'rel', 'rev', 'media', 'target')))
+    meta = TagProp('meta', set(i18nattrs + ('id', 'http_equiv', 'name', 'content', 'scheme')))
+    title = TagProp('title', set(i18nattrs + ('id',)))
+    style = TagProp('style', set(i18nattrs + ('id',)))
+    script = TagProp('script', set(i18nattrs + ('id',)))
 
     @classmethod
     def class_init(cls, specialTags):
@@ -109,21 +110,21 @@ class Renderer(xml.XmlRenderer):
     # The HTML tags
     # -------------
 
-    a = TagProp('a', set(allattrs+focusattrs+('charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu')))
+    a = TagProp('a', set(allattrs + focusattrs + ('charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu')))
     abbr = TagProp('abbr', set(allattrs))
     acronym = TagProp('acronym', set(allattrs))
     address = TagProp('address', set(allattrs))
-    applet = TagProp('applet', set(componentattrs+('codebase', 'archive', 'code', 'object', 'alt', 'name', 'width'
+    applet = TagProp('applet', set(componentattrs + ('codebase', 'archive', 'code', 'object', 'alt', 'name', 'width'
                                                                   'height', 'align', 'hspace', 'vspace')))
     area = TagProp('area', set(allattrs + focusattrs + ('shape', 'coords', 'href', 'nohref', 'alt', 'target')))
     b = TagProp('b', set(allattrs))
     basefont = TagProp('basefont', set(componentattrs + i18nattrs + ('id', 'size', 'color', 'face')))
-    bdo = TagProp('bdo', set(componentattrs+eventattrs+('lang', 'dir')))
+    bdo = TagProp('bdo', set(componentattrs + eventattrs + ('lang', 'dir')))
     big = TagProp('big', set(allattrs))
-    blockquote = TagProp('blockquote', set(allattrs+('cite',)))
-    body = TagProp('body', set(allattrs+('onload', 'onunload', 'onfocus', 'background', 'bgcolor', 'text'
+    blockquote = TagProp('blockquote', set(allattrs + ('cite',)))
+    body = TagProp('body', set(allattrs + ('onload', 'onunload', 'onfocus', 'background', 'bgcolor', 'text'
                                                                'link', 'vlink', 'alink', 'leftmargin', 'topmargin', 'marginwidth', 'marginheight')))
-    br = TagProp('br', set(componentattrs+('clear',)))
+    br = TagProp('br', set(componentattrs + ('clear',)))
     button = TagProp('button', set(allattrs + focusattrs + ('name', 'value', 'type', 'disabled')))
     caption = TagProp('caption', set(allattrs + ('align',)))
     center = TagProp('center', set(allattrs))
@@ -132,11 +133,11 @@ class Renderer(xml.XmlRenderer):
     col = TagProp('col', set(allattrs + cellhalignattrs + cellvalignattrs + ('span', 'width')))
     colgroup = TagProp('colgroup', set(allattrs + cellhalignattrs + cellvalignattrs + ('span', 'width')))
     dd = TagProp('dd', set(allattrs))
-    del_ = TagProp('del', set(allattrs+('cite', 'datetime')))
+    del_ = TagProp('del', set(allattrs + ('cite', 'datetime')))
     dfn = TagProp('dfn', set(allattrs))
-    dir = TagProp('dir', set(allattrs+('compact',)))
-    div = TagProp('div', set(allattrs+('align',)))
-    dl = TagProp('dl', set(allattrs+('compact',)))
+    dir = TagProp('dir', set(allattrs + ('compact',)))
+    div = TagProp('div', set(allattrs + ('align',)))
+    dl = TagProp('dl', set(allattrs + ('compact',)))
     dt = TagProp('dt', set(allattrs))
     em = TagProp('em', set(allattrs))
     embed = TagProp('embed', set(('width', 'height', 'src', 'controller', 'href', 'target', 'border', 'pluginspage',
@@ -147,41 +148,41 @@ class Renderer(xml.XmlRenderer):
     frame = TagProp('frame', set())
     frameset = TagProp('frameset', set(componentattrs + ('rows', 'cols', 'onload', 'onunload', 'framespacing', 'border', 'marginwidth'
                                                                       'marginheight', 'frameborder', 'noresize', 'scrolling')))
-    h1 = TagProp('h1', set(allattrs+('align',)))
-    h2 = TagProp('h2', set(allattrs+('align',)))
-    h3 = TagProp('h3', set(allattrs+('align',)))
-    h4 = TagProp('h4', set(allattrs+('align',)))
-    h5 = TagProp('h5', set(allattrs+('align',)))
-    h6 = TagProp('h6', set(allattrs+('align',)))
-    hr = TagProp('hr', set(allattrs+('align', 'noshade', 'size', 'width', 'color')))
-    html = TagProp('html', set(i18nattrs+('id',)))
+    h1 = TagProp('h1', set(allattrs + ('align',)))
+    h2 = TagProp('h2', set(allattrs + ('align',)))
+    h3 = TagProp('h3', set(allattrs + ('align',)))
+    h4 = TagProp('h4', set(allattrs + ('align',)))
+    h5 = TagProp('h5', set(allattrs + ('align',)))
+    h6 = TagProp('h6', set(allattrs + ('align',)))
+    hr = TagProp('hr', set(allattrs + ('align', 'noshade', 'size', 'width', 'color')))
+    html = TagProp('html', set(i18nattrs + ('id',)))
     i = TagProp('i', set(allattrs))
-    iframe = TagProp('iframe', set(componentattrs+('longdesc', 'name', 'src', 'frameborder', 'marginwidth', 'marginheight'
+    iframe = TagProp('iframe', set(componentattrs + ('longdesc', 'name', 'src', 'frameborder', 'marginwidth', 'marginheight'
                                                                  'noresize', 'scrolling', 'align', 'height', 'width', 'hspace', 'vspace', 'bordercolor')))
-    img = TagProp('img', set(allattrs+('src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
+    img = TagProp('img', set(allattrs + ('src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
                                                               'align', 'border', 'hspace', 'vspace', 'lowsrc')))
     input = TagProp('input', set(allattrs + focusattrs + ('type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength', 'src'
                                                      'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border')))
-    ins = TagProp('ins', set(allattrs+('cite', 'datetime')))
+    ins = TagProp('ins', set(allattrs + ('cite', 'datetime')))
     isindex = TagProp('isindex', set(componentattrs + i18nattrs + ('prompt',)))
     kbd = TagProp('kbd', set(allattrs))
     label = TagProp('label', set(allattrs + ('for', 'accesskey', 'onfocus', 'onblur')))
     legend = TagProp('legend', set(allattrs + ('accesskey', 'align')))
-    li = TagProp('li', set(allattrs+('type', 'value')))
+    li = TagProp('li', set(allattrs + ('type', 'value')))
     map = TagProp('map', set(i18nattrs + eventattrs + ('id', 'class', 'style', 'title', 'name')))
-    menu = TagProp('menu', set(allattrs+('compact',)))
+    menu = TagProp('menu', set(allattrs + ('compact',)))
     noframes = TagProp('noframes', set(allattrs))
     noscript = TagProp('noscript', set(allattrs))
     object = TagProp('object', set(allattrs + ('declare', 'classid', 'codebase', 'data', 'type', 'codetype'
                                                                    'archive', 'standby', 'height', 'width', 'usemap', 'name'
                                                                    'tabindex', 'align', 'border', 'hspace', 'vspace')))
-    ol = TagProp('ol', set(allattrs+('type', 'compact', 'start')))
+    ol = TagProp('ol', set(allattrs + ('type', 'compact', 'start')))
     optgroup = TagProp('optgroup', set(allattrs + ('disabled', 'label')))
     option = TagProp('option', set(allattrs + ('selected', 'disabled', 'label', 'value')))
-    p = TagProp('p', set(allattrs+('align',)))
+    p = TagProp('p', set(allattrs + ('align',)))
     param = TagProp('param', set(('id', 'name', 'value', 'valuetype', 'type')))
-    pre = TagProp('pre', set(allattrs+('width',)))
-    q = TagProp('q', set(allattrs+('cite',)))
+    pre = TagProp('pre', set(allattrs + ('width',)))
+    q = TagProp('q', set(allattrs + ('cite',)))
     s = TagProp('s', set(allattrs))
     samp = TagProp('samp', set(allattrs))
     script = TagProp('script', set(('id', 'charset', 'type', 'language', 'src', 'defer')))
@@ -190,7 +191,7 @@ class Renderer(xml.XmlRenderer):
     span = TagProp('span', set(allattrs))
     strike = TagProp('strike', set(allattrs))
     strong = TagProp('strong', set(allattrs))
-    style = TagProp('style', set(i18nattrs+('id', 'type', 'media', 'title')))
+    style = TagProp('style', set(i18nattrs + ('id', 'type', 'media', 'title')))
     sub = TagProp('sub', set(allattrs))
     sup = TagProp('sup', set(allattrs))
     table = TagProp('table', set(componentattrs + i18nattrs + ('prompt',)))
@@ -207,7 +208,7 @@ class Renderer(xml.XmlRenderer):
     tr = TagProp('tr', set(allattrs + cellhalignattrs + cellvalignattrs + ('bgcolor', 'nowrap', 'width', 'background')))
     tt = TagProp('tt', set(allattrs))
     u = TagProp('u', set(allattrs))
-    ul = TagProp('ul', set(allattrs+('type', 'compact')))
+    ul = TagProp('ul', set(allattrs + ('type', 'compact')))
     var = TagProp('var', set(allattrs))
 
 #    frame = TagProp('frame', set(componentattrs + ('longdesc', 'name', 'src', 'frameborder', 'marginwidht', 'marginheight',
@@ -353,7 +354,8 @@ if __name__ == '__main__':
 
     with h.body(onload='javascript:alert()'):
         with h.ul:
-            with h.li('Hello'): pass
+            with h.li('Hello'):
+                pass
             with h.li:
                 h << 'world'
             h << h.li('yeah')
