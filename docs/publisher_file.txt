@@ -40,7 +40,7 @@ type                No        standalone         Choice of the publisher to use.
                                                    - ``fastcgi``: multi-processes fastcgi server.
                                                      A external HTTP is required (recommended in
                                                      production)
-                                                   - ``fapws2``: fast event-driven HTTP server
+                                                   - ``fapws3``: fast event-driven HTTP server
                                                      (experimental)
                                                    - ``eventlet``: fast event-driven HTTP server
                                                      (experimental)
@@ -54,7 +54,7 @@ host                No        127.0.0.1          By default, the publisher only 
                                                  takes precedence over this parameter.
 port                No        *publisher         Port where to listen to the requests. If no
                               dependent*         value is explicitly given, the ``standalone``,
-                                                 ``fapws2`` and ``eventlet`` publishers listen on
+                                                 ``fapws3`` and ``eventlet`` publishers listen on
                                                  port ``8080``. And the ``fastcgi`` publisher
                                                  listen on ``9000``.
                                                  The optional ``--port / -p`` on the command line
@@ -85,7 +85,7 @@ type                No        standalone         Choice of the sessions manager 
 
                                                    - ``standalone``: threads-safe in-memory sessions
                                                      manager. Can be used with the ``standalone``,
-                                                     ``fapws2`` or ``eventlet`` publisher.
+                                                     ``fapws3`` or ``eventlet`` publisher.
                                                    - ``memcache``: the sessions are stored and
                                                      shared into an external memcached server.
                                                      Can be use will all the publishers
