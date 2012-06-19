@@ -315,7 +315,7 @@ Installing a locale in each request
 Basically, you can change the default locale globally by calling ``WSGIApp.set_default_locale``, or
 just change the locale for the current request by calling ``WSGIApp.set_locale`` (according to a user
 or session locale setting for example). Some examples can be found in
-:wiki:`InternationalizationOfApplications`.
+:wiki:`Internationalization`.
 
 
 Serving an application in /
@@ -391,3 +391,4 @@ the ``WSGIApp.on_exception`` method, as show in the example below:
 .. _`PRG Pattern`: http://en.wikipedia.org/wiki/Post/Redirect/Get
 .. _`memcache`: http://memcached.org/
 
+.. wikiname: WSGIApp

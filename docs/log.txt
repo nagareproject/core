@@ -244,3 +244,5 @@ and activate the ``domain`` logger instead.
 
 .. _`logging`: http://docs.python.org/library/logging.html
 .. _`Configuration file format`: http://docs.python.org/library/logging.config.html#configuration-file-format
+
+.. wikiname: LogModule

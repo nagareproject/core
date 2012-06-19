@@ -19,7 +19,7 @@ Nagare documentation
   - :wiki:`ApplicationConfiguration`
   - :wiki:`PublisherConfiguration`
   - :wiki:`ThirdParty`
-    
+
 * Developer documentation
 
   - :wiki:`ApplicationCreation`
@@ -30,8 +30,10 @@ Nagare documentation
   - :wiki:`RendererObjects`
   - :wiki:`RestfulUrl`
   - :wiki:`EntryPoints`
+  - :wiki:`WSGIApp`
   - :wiki:`Internationalization`
-    
+  - :wiki:`LogModule`
+
 * Examples
 
   - :wiki:`DemoInstallation`
