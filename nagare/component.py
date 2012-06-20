@@ -110,6 +110,8 @@ class Component(object):
             o = o()
 
         self.o = o
+
+        self._channel = None
         self.model = model
         self.url = url or self.url
 
