@@ -4,7 +4,7 @@ The Renderer objects
 Creating a renderer
 -------------------
 
-As described in :wiki:`ComponentModel`, the views of a component received
+As described in :wiki:`ComponentModel`, the views of a component receive
 a renderer. A renderer is a DOM objects factory that the developer uses to
 build the DOM tree of the view (see :wiki:`PresentationTier`):
 
@@ -20,13 +20,13 @@ build the DOM tree of the view (see :wiki:`PresentationTier`):
          # the `h` parameter is the renderer, used to generate a DOM tree
          return h.div(h.h1('Hello world !'))
 
-By default, each views receive a new XHTML renderer
+By default, each view receives a new XHTML renderer
 (instance of the ``Renderer`` class of
 :apidoc:`namespaces.xhtml#xhtml.Renderer`) suitable to build a
 synchronous (X)HTML DOM tree.
 
-A view can also create a different renderer, for example to generate an other
-XML dialect than XHTML:
+A single view can also use a different renderer, for example to generate
+another XML dialect than XHTML:
 
   .. code-block:: python
 
@@ -58,13 +58,31 @@ or to generate an asynchronous view of a component:
      @presentation.render_for(App):
      def render(self, h, *args):
          # Creating an asynchronous XHTML renderer
-         a = xhtml.AsyncRenderer(h)
+         a = h.AsyncRenderer()
          return h.div(self.content.render(a))
 
 .. note::
 
    The new renderer must be created with the current renderer as first parameter,
    to maintain a parent/child relationship between them.
+
+Now, if all your views need to generate XML (or use any other renderer), it would be
+cumbersome to create a renderer in each view. Instead, you can tell Nagare to use
+another default renderer by setting the ``renderer_factory`` attribute of the
+``WSGIApp`` (see :wiki:`WSGIApp`), as shown in the example below:
+
+.. code-block:: python
+
+    from nagare import wsgi
+    from nagare.namespaces import xml
+    
+    class WSGIApp(wsgi.WSGIApp):
+        # use the XML renderer by default
+        renderer_factory = xml.Renderer
+
+Then, all the views will receive an instance of ``xml.Renderer`` as renderer. Note that
+you can still create another renderer in the view as explained above.
+
 
 Default renderers
 -----------------
@@ -85,7 +103,7 @@ A XHTML renderer is a factory for all the possible XHTML tags. It also has:
   - the following methods:
 
     - ``parse_html(self, source, fragment=False, no_leading_text=False, xhtml=False)`` --
-      to read HTML or XHTML (choosen with the ``xhtml`` parameter) from the
+      to read HTML or XHTML (chosen with the ``xhtml`` parameter) from the
       ``source`` file to a DOM tree. If ``fragment`` is ``True``, the (X)HTML
       read can have multiple roots and the result will always be a list of DOM
       trees. Also, if ``fragment`` is ``True``, if ``no_leading_text`` is
@@ -176,6 +194,37 @@ After the rendering phase, Nagare generates a ``<head>`` section which is the
 concatenation of all the DOM objects the different views have put into the
 Head renderer.
 
+XHTML5 renderer
+~~~~~~~~~~~~~~~
+
+A XHTML5 renderer is an instance of the ``Renderer`` class of
+:apidoc:`namespaces.xhtml5#xhtml5.Renderer`.
+
+A XHTML5 renderer is a factory for all the possible HTML5 or XHTML5 tags from
+the new `HTML5 specification`_.
+
+Since it's extremely likely that you want to use this renderer in all the views
+of your application instead of the default (X)HTML renderer, you can install it
+like this:
+
+.. code-block:: python
+
+    from nagare import wsgi
+    from nagare.namespaces import xhtml5
+    
+    class WSGIApp(wsgi.WSGIApp):
+        # use the (X)HTML5 renderer by default
+        renderer_factory = xhtml5.Renderer
+
+Then, all the views will receive a (X)HTML5 renderer by default.
+
+This renderer is like an XHTML renderer except that the set of available tags and
+attributes is a little different. For example, HTML5 offers ``<audio>``, ``<video>``
+and ``<canvas>`` tags and more structural markup such as ``<section>``, ``<article>``,
+``<aside>``, ``<nav>``, ``<figure>``, ``<header>`` and ``<footer>`` tags.
+
+.. _`HTML5 specification`: http://www.w3.org/TR/html5/
+
 XML renderer
 ~~~~~~~~~~~~
 
@@ -243,7 +292,7 @@ atttribut to the prefix of the namespace:
      </xsl:template>
    </xsl:stylesheet>
 
-Different renderers, with different namespaces, can be combinated to build
+Different renderers, with different namespaces, can be combined to build
 a DOM tree:
 
 .. code-block:: pycon
