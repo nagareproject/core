@@ -230,18 +230,19 @@ class Sessions(common.Sessions):
         """
         self._get_connection().delete(KEY_PREFIX + session_id)
 
-    def serialize(self, data):
+    def serialize(self, data, clean_callbacks):
         """Pickle an objects graph
 
         In:
           - ``data`` -- the objects graphs
+          - ``clean_callbacks`` -- do we have to forget the old callbacks?
 
         Return:
           - the tuple:
             - data to keep into the session
             - data to keep into the state
         """
-        return self.pickle(data)
+        return self.pickle(data, clean_callbacks)
 
     def deserialize(self, session_data, state_data):
         """Unpickle an objects graph
@@ -251,6 +252,6 @@ class Sessions(common.Sessions):
           - ``state_data`` -- data from the state
 
         Out:
-          - the objects graph
+          - tuple (the objects graph, the callbacks)
         """
         return self.unpickle(session_data, state_data)

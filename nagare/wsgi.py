@@ -24,10 +24,12 @@ from webob import exc, acceptparse
 
 from nagare import component, presentation, serializer, database, top, security, log, comet, i18n, local
 from nagare.security import dummy_manager
-from nagare.callbacks import Callbacks, CallbackLookupError
+from nagare.callbacks import CallbackLookupError
+from nagare.callbacks import process as process_callbacks
 from nagare.namespaces import xhtml
 
 from nagare.sessions import ExpirationError
+
 
 # ---------------------------------------------------------------------------
 
@@ -289,7 +291,7 @@ class WSGIApp(object):
         """
         return self.root_factory(*args, **kw)
 
-    def create_renderer(self, async, session, request, response, callbacks):
+    def create_renderer(self, async, session, request, response):
         """Create the initial renderer (the root of all the used renderers)
 
         In:
@@ -297,13 +299,11 @@ class WSGIApp(object):
           - ``session`` -- the session
           - ``request`` -- the web request object
           - ``response`` -- the web response object
-          - ``callbacks`` -- object to register the callbacks
         """
         renderer = self.renderer_factory(
                                             None,
                                             session,
                                             request, response,
-                                            callbacks,
                                             self.static_url, self.static_path,
                                             request.script_name
                                         )
@@ -313,7 +313,6 @@ class WSGIApp(object):
                                                 None,
                                                 session,
                                                 request, response,
-                                                callbacks,
                                                 self.static_url, self.static_path,
                                                 request.script_name,
                                                 async_header=True
@@ -349,7 +348,7 @@ class WSGIApp(object):
         Return:
           - function to render the objects graph or ``None``
         """
-        return callbacks.process_response(request, response)
+        return process_callbacks(callbacks, request, response)
 
     # Rendering phase
     def _phase2(self, output, content_type, doctype, is_xhr, response):
@@ -424,12 +423,12 @@ class WSGIApp(object):
 
                 if session.is_new:
                     # A new session is created
-                    root = self.create_root()   # Create a new application root component
-                    callbacks = Callbacks()     # Create a new callbacks registry
+                    root = self.create_root()  # Create a new application root component
+                    callbacks = {}
                 else:
                     # An existing session is used, retrieve the application root component
                     # and the callbacks registry
-                    (root, callbacks) = session.data
+                    root, callbacks = session.data
 
                 request.method = request.params.get('_method', request.method)
                 if not session.is_new and request.method not in ('GET', 'POST'):
@@ -470,7 +469,7 @@ class WSGIApp(object):
                         use_same_state = xhr_request
 
                         # Create a new renderer
-                        renderer = self.create_renderer(xhr_request, session, request, response, callbacks)
+                        renderer = self.create_renderer(xhr_request, session, request, response)
                         # If the phase 1 has returned a render function, use it
                         # else, start the rendering by the application root component
                         output = render(renderer) if render else root.render(renderer)
@@ -483,12 +482,8 @@ class WSGIApp(object):
 
                         self._phase2(output, renderer.content_type, renderer.doctype, render is not None, response)
 
-                        if not xhr_request:
-                            # TODO: move it into a ``renderer.end_rendering()`` method
-                            callbacks.clear_not_used(renderer._rendered)
-
                     # Store the session
-                    session.set(use_same_state, (root, callbacks))
+                    session.set(use_same_state, root)
 
                     security.get_manager().end_rendering(request, response, session)
                 except exc.HTTPException, response:

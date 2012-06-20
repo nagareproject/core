@@ -18,11 +18,14 @@ from stackless import tasklet
 
 from nagare import config
 from nagare.admin import util
+from nagare.component import Component
 from nagare.sessions import ExpirationError
+
+cPicklerClass = cPickle.Pickler().__class__
 
 
 class State(object):
-    """A state (objects graph serialized / deserialized by a sessions manager)
+    """A state (objects graph serialized / de-serialized by a sessions manager)
     """
     def __init__(self, sessions_manager, session_id, state_id, use_same_state):
         """Initialization
@@ -40,8 +43,8 @@ class State(object):
 
         self.is_new = True         # Is the objects graph initialized ?
         self.secure_id = None      # the secure number associated to the session
-        self.lock = None            # Session lock
-        self.data = None            # Objects graph
+        self.lock = None           # Session lock
+        self.data = None           # Objects graph
         self.back_used = False     # Is this state a snapshot of a previous objects graph ?
 
     def release(self):
@@ -113,24 +116,42 @@ class State(object):
         self.sessions_manager.delete(self.session_id)
 
 
-def persistent_id(o, session_data, tasklets):
+def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
     """The object with a `_persistent_id` attribute are stored into the session
     not into the state snapshot
 
     In:
       - ``o`` -- object to check
+      - ``clean_callbacks`` -- do we have to forget the old callbacks?
 
     Out:
+      - ``callbacks`` -- merge of the callbacks from all the components
       - ``session_data`` -- dict of the objects to store into the session
       - ``tasklets`` -- set of the serialized tasklets
+
+    Return:
+      - the persistent id or ``None``
     """
-    id = getattr(o, '_persistent_id', None)
-    if id is not None:
-        session_data[id] = o
-        return str(id)
+    id_ = getattr(o, '_persistent_id', None)
+    if id_ is not None:
+        session_data[id_] = o
+        return str(id_)
 
     if type(o) == tasklet:
         tasklets.add(o)
+        return None
+
+    if isinstance(o, Component):
+        old = o.__dict__.pop('_callbacks', None)
+        new = o.__dict__.pop('_new_callbacks', None if clean_callbacks else old)
+
+        if new:
+            o._callbacks = new
+            callbacks.update(new)
+
+        return None
+
+    return None
 
 
 class Sessions(object):
@@ -178,6 +199,12 @@ class Sessions(object):
         self.unpickler = util.load_object(conf['unpickler'])[0]
 
         return conf
+
+    def set_persistent_id(self, pickler, persistent_id):
+        if isinstance(pickler, cPicklerClass):
+            pickler.inst_persistent_id = persistent_id
+        else:
+            pickler.persistent_id = persistent_id
 
     def get(self, request, response, use_same_state):
         """Create a new state or return an existing one
@@ -286,7 +313,8 @@ class Sessions(object):
             - id of this state,
             - session lock,
             - secure number associated to the session,
-            - objects graph
+            - objects graph,
+            - callbacks
         """
         (state_id, lock, secure_id, session_data, state_data) = self._get(session_id, state_id, use_same_state)
         data = self.deserialize(session_data, state_data)
@@ -325,8 +353,7 @@ class Sessions(object):
           - ``use_same_state`` -- is this state to be stored in the previous snapshot ?
           - ``data`` -- the objects graph
         """
-        (session_data, state_data) = self.serialize(data)
-        self._set(session_id, state_id, secure_id, use_same_state, session_data, state_data)
+        self._set(session_id, state_id, secure_id, use_same_state, *self.serialize(data, not use_same_state))
 
     def delete(self, session_id):
         """Delete the session
@@ -347,11 +374,12 @@ class Sessions(object):
         """
         return False
 
-    def pickle(self, data):
+    def pickle(self, data, clean_callbacks):
         """Pickle an objects graph
 
         In:
           - ``data`` -- the objects graph
+          - ``clean_callbacks`` -- do we have to forget the old callbacks?
 
         Out:
           - the tuple:
@@ -363,8 +391,15 @@ class Sessions(object):
 
         session_data = {}
         tasklets = set()
-        p.persistent_id = lambda o: persistent_id(o, session_data, tasklets)
+        callbacks = {}
+
+        # Serialize the objects graph and extract all the callbacks
+        self.set_persistent_id(p, lambda o: persistent_id(o, clean_callbacks, callbacks, session_data, tasklets))
         p.dump(data)
+
+        # Serialize the callbacks
+        self.set_persistent_id(p, lambda o: None)
+        p.dump(callbacks)
 
         # Kill all the blocked tasklets, which are now serialized
         for t in tasklets:
@@ -380,10 +415,10 @@ class Sessions(object):
           - ``state_data`` -- data from the state
 
         Out:
-          - the objects graph
+          - tuple (the objects graph, the callbacks)
         """
         p = self.unpickler(cStringIO.StringIO(state_data))
         if session_data:
             p.persistent_load = lambda i: session_data.get(int(i))
 
-        return p.load()
+        return p.load(), p.load()

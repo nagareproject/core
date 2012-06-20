@@ -8,186 +8,145 @@
 #--
 """Callbacks manager
 
-Manage:
-
-  - id / callbacks association
-  - list of the callbacks registered for a componant
+Manage the dictionary of the ids / callbacks associations
 """
 
+import stackless
 import random
 
-from nagare.component import call_wrapper
+
+def call_wrapper(action, *args, **kw):
+    """A wrapper that create a tasklet.
+
+    It's necessary to wrapper a callable that do directly or indirectly a
+    ``comp.call(o)`` into such a ``call_wrapper``.
+
+    .. note::
+        The actions your registered on the ``<a>`` tags or on the submit buttons
+        are already wrapped for you.
+
+    In:
+      - ``action`` -- a callable. It will be called, wrapped into a new tasklet,
+        with the ``args`` and ``kw`` parameters.
+      - ``args`` -- positional parameters of the callable
+      - ``kw`` -- keywords parameters of the callable
+
+    Return:
+      *Never*
+    """
+    stackless.tasklet(action)(*args, **kw).run()
 
 
 class CallbackLookupError(LookupError):
     pass
 
 
-class Callbacks:
-    """Callback manager
+def register(priority, callback, with_request, render, callbacks):
+    """Register a callback
 
-    ``self.callbacks`` is a list of tuple (component, callbacks dictionary)
-    where the callback dictionay associated the id of the callback to the
-    callback tuple (action function, render function)
+    In:
+      - ``priority`` -- type of the callback
+
+        - 0 : <form>.pre_action
+        - 1 : action with value (<textarea>, checkbox ...)
+        - 2 : action without value (radio button)
+        - 3 : <form>.post_action
+        - 4 : action with continuation and without value (<a>, submit button ...)
+        - 5 : action with continuation and with value (special case for >input type='image'>)
+
+      - ``callback`` -- the action function or method
+      - ``with_request`` -- will the request and response objects be passed to the action ?
+      - ``render`` -- the render function or method
+
+    Out:
+      - ``callbacks`` -- dictionary where the keys are the callback ids and the
+        values are tuples (callback, with_request, render)
+
+    Return:
+      - the callback identifier
     """
-    def __init__(self):
-        self.callbacks = []
+    id_ = random.randint(10000000, 99999999)
 
-    def _search_by_component(self, component):
-        """Search the callbacks of a component
+    # Remember the action and the rendering function
+    callbacks[id_] = (callback, with_request, render)
 
-        In:
-          - ``component`` -- the component
+    return '_action%d%08d' % (priority, id_)
 
-        Return:
-          - the dictionary of the callbacks or ``None`` if component not found
-        """
-        for (b, c) in self.callbacks:
-            if b == component:
-                return c
 
-        return None
+def process(callbacks, request, response):
+    """Call the actions associated to the callback identifiers received
 
-    def clear_not_used(self, components):
-        """Keep only the callbacks of the given components
+    In:
+      - ``callbacks`` -- dictionary where the keys are the callback ids and the
+        values are tuples (callback, with_request, render)
+      - ``request`` -- the web request object
+      - ``response`` -- the web response object
 
-        In:
-          - ``components`` -- list of the components we want to keep the callbacks
-        """
-        self.callbacks = [x for x in self.callbacks if x[0] in components]
+    Return:
+      - the render function
+    """
+    # The structure of a callback identifier is
+    # '_action<priority on 1 char><key into the callbacks dictionary>'
+    actions = {}
 
-    def unregister_callbacks(self, component):
-        """Clear all the callbacks of a component
+    try:
+        for (name, value) in request.params.items():
+            if isinstance(value, basestring) and value.startswith('_action'):
+                # For the radio buttons, the callback identifier is the value,
+                # not the name
+                name = value
 
-        In:
-          - ``component`` -- the component
-        """
-        # Retrieve the dictionary of the callbacks of the component
-        callbacks = self._search_by_component(component)
-        if callbacks is not None:
-            # Clear the dictionary
-            callbacks.clear()
+            if name and name.startswith('_action'):
+                v = actions.get(name)
+                if v is not None:
+                    # Multiple values for the same callback are put into a tuple
+                    v = v[3]
+                    value = (v if isinstance(v, tuple) else (v,)) + (value,)
 
-    def register_callback(self, component, priority, callback, with_request, render):
-        """Register a callback
+                actions[name] = ((int(name[7]), len(actions)), int(name[8:16]), name, value)
+    except ValueError:
+        raise CallbackLookupError(name[8:])
 
-        In:
-          - ``component`` -- the component associated to the callback
-          - ``priority`` -- type of the callback
+    render = None
+    callback_type = 0
 
-            - 0 : <form>.pre_action
-            - 1 : action with value (<textarea>, checkbox ...)
-            - 2 : action without value (radio button)
-            - 3 : <form>.post_action
-            - 4 : action with continuation and without value (<a>, submit button ...)
-            - 5 : action with continuation and with value (special case for >input type='image'>)
-
-          - ``callback`` -- the action function or method
-          - ``with_request`` -- will the request and response objects be passed to the action ?
-          - ``render`` -- the render function or method
-
-        Return:
-          - the callback identifier
-        """
-        id = random.randint(10000000, 99999999)
-
-        # Retrieve the dictionary of the callbacks of the component
-        callbacks = self._search_by_component(component)
-        if callbacks is None:
-            # Create a new dictionary
-            callbacks = {}
-            self.callbacks.append((component, callbacks))
-
-        # Remember the action and render functions
-        callbacks[id] = (callback, with_request, render)
-
-        return '_action%d%08d' % (priority, id)
-
-    def _search_by_callback_name(self, name):
-        """Search a callback among all the component
-
-        In:
-          -- ``name`` -- callback identifier
-
-        Return:
-          -- the tuple (action function, render function)
-             or (``None``, ``None``) is not found
-        """
-        for (component, callbacks) in self.callbacks:
-            r = callbacks.get(name)
-            if r is not None:
-                return r
-
-        raise CallbackLookupError(name)
-
-    def process_response(self, request, response):
-        """Call the actions associated to the callback identifiers received
-
-        In:
-          - ``request`` -- the web request object
-          - ``response`` -- the web response object
-
-        Return:
-          - the render function
-        """
-        # The structure of a callback identifier is
-        # '_action<priority on 1 char><key into the callbacks dictionary>'
-        actions = {}
-
+    for ((callback_type, _), name, param, value) in sorted(actions.values()):
         try:
-            for (name, value) in request.params.items():
-                if isinstance(value, basestring) and value.startswith('_action'):
-                    # For the radio buttons, the callback identifier is the value,
-                    # not the name
-                    name = value
+            (f, with_request, render) = callbacks[name]
+        except KeyError:
+            raise CallbackLookupError(name)
 
-                if name and name.startswith('_action'):
-                    v = actions.get(name)
-                    if v is not None:
-                        # Multiple values for the same callback are put into a tuple
-                        v = v[3]
-                        value = (v if isinstance(v, tuple) else (v,)) + (value,)
+        if f is None:
+            continue
 
-                    actions[name] = ((int(name[7]), len(actions)), int(name[8:16]), name, value)
-        except ValueError:
-            raise CallbackLookupError(name[8:])
+        # ``callback_type``:
+        #
+        # 0 : <form>.pre_action
+        # 1 : action with value (<textarea>, checkbox ...)
+        # 2 : action without value (radio button)
+        # 3 : <form>.post_action
+        # 4 : action with continuation and without value (<a>, submit button ...)
+        # 5 : action with continuation and with value (special case for <input type='image'>)
 
-        render = None
-        callback_type = 0
+        if with_request:
+            if callback_type == 1:
+                f(request, response, value)
+            elif callback_type == 4:
+                call_wrapper(f, request, response)
+            elif callback_type == 5:
+                if param.endswith(('.x', '.y')):
+                    call_wrapper(f, request, response, param.endswith('.y'), int(value))
+            else:  # 0, 2, 3
+                f(request, response)
+        else:
+            if callback_type == 1:
+                f(value)
+            elif callback_type == 4:
+                call_wrapper(f)
+            elif callback_type == 5:
+                if param.endswith(('.x', '.y')):
+                    call_wrapper(f, param.endswith('.y'), int(value))
+            else:  # 0, 2, 3
+                f()
 
-        for ((callback_type, _), name, param, value) in sorted(actions.values()):
-            (f, with_request, render) = self._search_by_callback_name(name)
-            if f is None:
-                continue
-
-            # ``callback_type``:
-            #
-            # 0 : <form>.pre_action
-            # 1 : action with value (<textarea>, checkbox ...)
-            # 2 : action without value (radio button)
-            # 3 : <form>.post_action
-            # 4 : action with continuation and without value (<a>, submit button ...)
-            # 5 : action with continuation and with value (special case for <input type='image'>)
-
-            if with_request:
-                if callback_type == 1:
-                    f(request, response, value)
-                elif callback_type == 4:
-                    call_wrapper(f, request, response)
-                elif callback_type == 5:
-                    if param.endswith(('.x', '.y')):
-                        call_wrapper(f, request, response, param.endswith('.y'), int(value))
-                else:  # 0, 2, 3
-                    f(request, response)
-            else:
-                if callback_type == 1:
-                    f(value)
-                elif callback_type == 4:
-                    call_wrapper(f)
-                elif callback_type == 5:
-                    if param.endswith(('.x', '.y')):
-                        call_wrapper(f, param.endswith('.y'), int(value))
-                else:  # 0, 2, 3
-                    f()
-
-        return render
+    return render

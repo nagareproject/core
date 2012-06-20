@@ -19,35 +19,13 @@ import stackless
 
 from peak.rules import when
 
-from nagare import presentation
+from nagare import presentation, callbacks
 
 _marker = object()
 
 
 class AnswerWithoutCall(BaseException):
     pass
-
-
-def call_wrapper(action, *args, **kw):
-    """A wrapper that create a tasklet.
-
-    It's necessary to wrapper a callable that do directly or indirectly a
-    ``comp.call(o)`` into such a ``call_wrapper``.
-
-    .. note::
-        The actions your registred on the ``<a>`` tags or on the submit buttons
-        are already wrapped for you.
-
-    In:
-      - ``action`` -- a callable. It will be called, wrapped into a new tasklet,
-        with the ``args`` and ``kw`` parameters.
-      - ``args`` -- positional parameters of the callable
-      - ``kw`` -- keywords parameters of the callable
-
-    Return:
-      *Never*
-    """
-    stackless.tasklet(action)(*args, **kw).run()
 
 
 class Component(object):
@@ -78,6 +56,12 @@ class Component(object):
         """Return the inner object
         """
         return self.o
+
+    def register_callback(self, priority, callback, with_request, render):
+        if not hasattr(self, '_new_callbacks'):
+            self._new_callbacks = {}
+
+        return callbacks.register(priority, callback, with_request, render, self._new_callbacks)
 
     def render(self, renderer, model=0):
         """Rendering method of a component
@@ -239,7 +223,7 @@ def init_for(self, url, comp, http_method, request):
 
 # -----------------------------------------------------------------------------------------------------
 
-class Task:
+class Task(object):
     """A ``Task`` encapsulated a simple method. A ``task`` is typically used to
     manage other components by calling them.
 
@@ -271,5 +255,5 @@ def render(self, renderer, comp, *args):
 @when(presentation.render, (types.FunctionType,))
 @when(presentation.render, (types.MethodType,))
 def render(f, renderer, comp, *args):
-    call_wrapper(f, comp)
+    callbacks.call_wrapper(f, comp)
     return comp.render(renderer.parent)

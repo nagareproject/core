@@ -929,7 +929,7 @@ class Renderer(xhtml_base.Renderer):
         cls._html_parser = ET.HTMLParser()
         cls._html_parser.setElementClassLookup(cls._custom_lookup)
 
-    def __init__(self, parent=None, session=None, request=None, response=None, callbacks=None, static_url='', static_path='', url='/'):
+    def __init__(self, parent=None, session=None, request=None, response=None, static_url='', static_path='', url='/'):
         """Renderer initialisation
 
         In:
@@ -937,7 +937,6 @@ class Renderer(xhtml_base.Renderer):
           - ``session`` -- the session object
           - ``request`` -- the request object
           - ``response`` -- the response object
-          - ``callbacks`` -- the registered actions on the tags
           - ``static_url`` -- url of the static contents of the application
           - ``static_path`` -- path of the static contents of the application
           - ``url`` -- url prefix of the application
@@ -948,21 +947,18 @@ class Renderer(xhtml_base.Renderer):
             self.session = session
             self.request = request
             self.response = response
-            self._callbacks = callbacks
             self.static_path = static_path
             self.url = url
-            self._rendered = set()
+            self.component = None
+            self.model = None
         else:
             self.session = parent.session
             self.request = parent.request
             self.response = parent.response
-            self._callbacks = parent._callbacks
             self.static_path = parent.static_path
             self.url = parent.url
-            self._rendered = parent._rendered
-
-        self.component = None
-        self.model = None
+            self.component = parent.component
+            self.model = parent.model
 
     def SyncRenderer(self, *args, **kw):
         """Create an associated synchronous HTML renderer
@@ -1090,14 +1086,7 @@ class Renderer(xhtml_base.Renderer):
         self.model = model
 
         if component.url is not None:
-            self.url = self.url + '/' + component.url
-
-        # Delete all the previous callbacks registered by this component
-        if self._callbacks and (component not in self._rendered):
-            self._callbacks.unregister_callbacks(component)
-
-        # Memorize all the rendered components
-        self._rendered.add(component)
+            self.url += '/' + component.url
 
     def action(self, tag, action, with_request, permissions, subject):
         """Register a synchronous action on a tag
@@ -1115,7 +1104,7 @@ class Renderer(xhtml_base.Renderer):
     def register_callback(self, priority, f, with_request, render=None):
         """Register an action
 
-        Forward the call to the ``callbacks`` object
+        Register the action to the current rendered component
 
         In:
           - ``priority`` - -priority of the action
@@ -1123,7 +1112,7 @@ class Renderer(xhtml_base.Renderer):
           - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``render`` -- render method to generate the view after the ``f`` action will be called
         """
-        return self._callbacks.register_callback(self.component, priority, f, with_request, render)
+        return self.component.register_callback(priority, f, with_request, render)
 
     def decorate_error(self, element, error):
         """During the rendering, highlight an element that has an error
@@ -1260,7 +1249,7 @@ class AsyncRenderer(Renderer):
     """
     head_renderer_factory = AsyncHeadRenderer
 
-    def __init__(self, parent=None, session=None, request=None, response=None, callbacks=None, static_url='', static_path='', url='/', async_header=False):
+    def __init__(self, parent=None, session=None, request=None, response=None, static_url='', static_path='', url='/', async_header=False):
         """Renderer initialisation
 
         In:
@@ -1268,13 +1257,12 @@ class AsyncRenderer(Renderer):
           - ``session`` -- the session object
           - ``request`` -- the request object
           - ``response`` -- the response object
-          - ``callbacks`` -- the registered actions on the tags
           - ``static_url`` -- url of the static contents of the application
           - ``static_path`` -- path of the static contents of the application
           - ``url`` -- url prefix of the application
           - ``async_header`` -- is the head renderer to create a synchronous or an asynchronous one?
         """
-        super(AsyncRenderer, self).__init__(parent, session, request, response, callbacks, static_url, static_path, url)
+        super(AsyncRenderer, self).__init__(parent, session, request, response, static_url, static_path, url)
 
         if not (parent or async_header):
             self.head = HeadRenderer(static_url=static_url)
