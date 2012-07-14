@@ -142,5 +142,5 @@ function nagare_updateNode(id, html) {
 }
 
 function get_field_value(field) {
-    return escape(field.type=='checkbox' && !field.checked ? "" : field.value);
+    return encodeURIComponent(field.type=='checkbox' && !field.checked ? "" : field.value);
 }
