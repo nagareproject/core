@@ -387,6 +387,11 @@ class WSGIApp(object):
         # -------------------------------------------------
 
         request = self.create_request(environ)
+        try:
+            request.params, request.url
+        except UnicodeDecodeError:
+            return exc.HTTPClientError()(environ, start_response)
+
         response = self.create_response(request, 'text/html' if self.always_html else str(request.accept))
 
         channel_id = request.params.get('_channel')
