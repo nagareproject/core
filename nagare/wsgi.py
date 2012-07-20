@@ -439,7 +439,7 @@ class WSGIApp(object):
                 url = request.path_info.strip('/')
                 if session.is_new and url:
                     # If a URL is given, initialize the objects graph with it
-                    presentation.init(root, tuple([u.decode('utf-8') for u in url.split('/')]), None, request.method, request)
+                    presentation.init(root, tuple(url.split('/')), None, request.method, request)
 
                 try:
                     render = self._phase1(request, response, callbacks)
