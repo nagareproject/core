@@ -31,6 +31,9 @@ class Validator(object):
           - ``lstrip`` -- remove the characters at the beginning
           - ``chars`` -- list of characters to removed, spaces by default
         """
+        if not isinstance(v, basestring):
+            raise ValueError('Input must be a string')
+
         if strip:
             v = v.strip(chars)
 
@@ -46,7 +49,7 @@ class Validator(object):
 class IntValidator(Validator):
     """Conversion and validation of integers
     """
-    def __init__(self, v, *args, **kw):
+    def __init__(self, v, base=10, *args, **kw):
         """Initialisation
 
         Check that the value is an integer
@@ -57,7 +60,7 @@ class IntValidator(Validator):
         super(IntValidator, self).__init__(v, *args, **kw)
 
         try:
-            self.value = int(self.value)
+            self.value = int(self.value, base)
         except (ValueError, TypeError):
             raise ValueError('Must be an integer')
 
