@@ -71,19 +71,6 @@ def create_rules(app_names, error):
     return sorted(apps, key=lambda x: len(x[0]))
 
 
-def commonprefix(filenames):
-    """Return the common prefix of a list of filenames
-
-    In:
-      - ``filenames`` -- the list of filenames
-
-    Return:
-      - the common prefix
-    """
-    filenames = [filename.split(os.sep) for filename in filenames]
-    return os.sep.join(os.path.commonprefix(filenames)) or '/'
-
-
 def generate_lighttpd_rules(app_names, error):
     """Generate the lighttpd rewrite rules for the given registered applications
 
@@ -94,15 +81,9 @@ def generate_lighttpd_rules(app_names, error):
     Return:
       - yield the lighttpd configuration file fragment
     """
-    apps = create_rules(app_names, error)
-    document_root = commonprefix([static for (name, static) in apps])
-
-    yield 'server.document-root = "%s"' % document_root
-    yield ''
-
     yield 'url.rewrite = ('
-    for (app_name, static) in apps:
-        yield '  "^/static/%s/(.*)" => "%s/$1",' % (app_name, static[len(document_root):])
+    for rule in create_rules(app_names, error):
+        yield '  "^/static/%s/(.*)" => "%s/$1",' % rule
     yield ')'
 
 
@@ -133,15 +114,9 @@ def generate_apache_rules(app_names, error):
     Return:
       - yield the apache configuration file fragment
     """
-    apps = create_rules(app_names, error)
-    document_root = commonprefix([static for (name, static) in apps])
-
-    yield 'DocumentRoot %s' % document_root
-    yield ''
-
     yield 'RewriteEngine On'
-    for (app_name, static) in apps:
-        yield 'RewriteRule ^/static/%s/(.*)$ %s/$1 [L,PT]' % (app_name, static[len(document_root):])
+    for rule in create_rules(app_names, error):
+        yield 'RewriteRule ^/static/%s/(.*)$ %s/$1 [L]' % rule
 
 
 def run(parser, options, args):
