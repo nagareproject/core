@@ -17,6 +17,7 @@ from __future__ import with_statement
 
 import cStringIO
 import urllib
+import peak
 
 from lxml import etree as ET
 
@@ -37,6 +38,18 @@ focusattrs = ('accesskey', 'tabindex', 'onfocus', 'onblur')
 class _HTMLTag(xml._Tag):
     """A xhtml tag
     """
+    def write_xmlstring(self, encoding='utf-8', pipeline=True, **kw):
+        """Serialize in XML the tree beginning at this tag
+
+        In:
+          - ``encoding`` -- encoding of the XML
+          - ``pipeline`` -- if False, the ``meld:id`` attributes are deleted
+
+        Return:
+          - the XML
+        """
+        return xml._Tag.write_xmlstring(self.decorate_error(), encoding, pipeline, **kw)
+
     def write_htmlstring(self, encoding='utf-8', pipeline=True, **kw):
         """Serialize in XHTML the tree beginning at this tag
 
@@ -51,20 +64,43 @@ class _HTMLTag(xml._Tag):
             for element in self.xpath('.//*[@meld:id]', namespaces={'meld': xml._MELD_NS}):
                 del element.attrib[xml._MELD_ID]
 
-        return ET.tostring(self, encoding=encoding, method='html', **kw)
+        return ET.tostring(self.decorate_error(), encoding=encoding, method='html', **kw)
 
     def error(self, err):
-        """Decorate this tag with an error message
-
-        Forward the call to the renderer ``decorate_error()`` method
+        """Mark this tag as erroneous
 
         In:
-          - ``err`` -- the message
+          - ``err`` -- the error message
+
+        Return:
+          - ``self``
+        """
+        if err is not None:
+            self.has_error = err
+
+        return self
+
+    def decorate_error(self):
+        """Decorate this tag with an error structure
+
+        Forward the call to the renderer ``decorate_error()`` method
 
         Return:
           - a tree
         """
-        return self.renderer.decorate_error(self, err)
+        err = getattr(self, 'has_error', None)
+        return self if err is None else self.renderer.decorate_error(self, err)
+
+
+@peak.rules.when(xml.add_child, (xml._Tag, _HTMLTag))
+def add_child(next_method, self, element):
+    """Add a tag to a tag
+
+    In:
+      - ``self`` -- the tag
+      - ``element`` -- the tag to add
+    """
+    return next_method(self, element.decorate_error())
 
 
 class HeadRenderer(xml.XmlRenderer):

@@ -1124,8 +1124,11 @@ class Renderer(xhtml_base.Renderer):
         if error is None:
             return element
 
+        div = self.div(class_='nagare-error-input')
+        div.append(element)
+
         return self.div(
-                     self.div(element, class_='nagare-error-input'),
+                     div,
                      self.div(error, class_='nagare-error-message'),
                      class_='nagare-error-field'
                     )
