@@ -336,13 +336,14 @@ class WSGIApp(object):
         self.set_locale(self.default_locale)  # Set the default Locale
 
     # Processing phase
-    def _phase1(self, request, response, callbacks):
+    def _phase1(self, root, request, response, callbacks):
         """Phase 1 of the request processing:
 
           - The callbacks are processed
           - The objects graph can be modified
 
         In:
+          - ``root`` -- the application root component
           - ``request`` -- the web request object
           - ``response`` -- the web response object
           - ``callbacks`` -- the registered callbacks
@@ -449,7 +450,7 @@ class WSGIApp(object):
                     presentation.init(root, tuple(url.split('/')), None, request.method, request)
 
                 try:
-                    render = self._phase1(request, response, callbacks)
+                    render = self._phase1(root, request, response, callbacks)
                 except CallbackLookupError:
                     render = self.on_callback_lookuperror(request, response, xhr_request)
             except exc.HTTPException, response:
