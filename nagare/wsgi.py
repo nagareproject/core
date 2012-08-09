@@ -46,6 +46,8 @@ class Response(webob.Response):
 # ---------------------------------------------------------------------------
 
 class WSGIApp(object):
+    request_factory = webob.Request
+    response_factory = Response
     renderer_factory = xhtml.Renderer   # Default renderer
 
     def __init__(self, root_factory):
@@ -269,7 +271,7 @@ class WSGIApp(object):
         Return:
             - a ``webob.Request`` object
         """
-        return webob.Request(environ, charset='utf-8')
+        return self.request_factory(environ, charset='utf-8')
 
     def create_response(self, request, accept):
         """Create the ``webob.Response`` object
@@ -281,7 +283,7 @@ class WSGIApp(object):
         Return:
             - a ``webob.Response`` object
         """
-        return Response(accept)
+        return self.response_factory(accept)
 
     def create_root(self, *args, **kw):
         """Create the application root component
