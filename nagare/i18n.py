@@ -10,6 +10,7 @@
 """Internationalization service
 """
 
+import copy
 import os
 import datetime
 
@@ -99,6 +100,7 @@ except ImportError:
 
 if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
     os.environ['LC_CTYPE'] = 'en_US.utf-8'
+
 
 # -----------------------------------------------------------------------------
 
@@ -1052,11 +1054,33 @@ class NegotiatedLocale(Locale):
                                                 timezone=timezone, default_timezone=default_timezone
                                               )
 
+
 # -----------------------------------------------------------------------------
 
 def get_locale():
+    """Get the current locale for the request"""
     return getattr(local.request, 'locale', None) or Locale()
 
 
-def set_locale(locale):
+def set_locale(locale, nagare_locale_dirname=None):
+    """Set the current locale for the request. You can optionally pass the
+    nagare locale dirname to use in order to find the nagare messages
+    translations, such as the ones found in the `validator` module.
+    Otherwise, we'll use the same directory as the provided locale"""
     local.request.locale = locale
+    dirname = nagare_locale_dirname or locale.dirname
+    local.request.nagare_locale = _create_nagare_locale(locale, dirname)
+
+
+def _create_nagare_locale(locale, dirname):
+    """Create a locale object for translating the builtin nagare messages, such
+    as the ones in the validator module"""
+    nagare_locale = copy.deepcopy(locale)
+    nagare_locale.domain = 'nagare'  # nagare domain: use the 'nagare.po' files
+    nagare_locale.dirname = dirname
+    return nagare_locale
+
+
+def get_nagare_locale():
+    """Get the current nagare locale"""
+    return getattr(local.request, 'nagare_locale', None) or Locale()

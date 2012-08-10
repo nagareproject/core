@@ -64,7 +64,7 @@ def exception(msg, *args):
 
 
 def log(level, msg, *args, **kw):
-    get_logger().exception(level, msg, *args, **kw)
+    get_logger().log(level, msg, *args, **kw)
 
 # -----------------------------------------------------------------------------
 

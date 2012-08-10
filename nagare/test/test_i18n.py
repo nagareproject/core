@@ -33,7 +33,7 @@ class Locale(i18n.Locale):
     def _get_translation(self):
         translation = Translation({
             'hello': 'bonjour',
-            'Hollidays': 'Vacances %(year)d',
+            'Holidays': 'Vacances %(year)d',
             'horse': 'cheval',
             'horses': 'chevaux'
         })
@@ -57,7 +57,7 @@ def test_gettext():
 
 @with_setup(setup, teardown)
 def test_gettext_params():
-    s = i18n.gettext('Hollidays', year=2010)
+    s = i18n.gettext('Holidays', year=2010)
     assert isinstance(s, str) and (s == 'Vacances 2010')
 
 
@@ -75,7 +75,7 @@ def test_ugettext():
 
 @with_setup(setup, teardown)
 def test_ugettext_params():
-    s = i18n.ugettext('Hollidays', year=2010)
+    s = i18n.ugettext('Holidays', year=2010)
     assert isinstance(s, unicode) and (s == u'Vacances 2010')
 
 
@@ -160,7 +160,7 @@ def test_lazy_gettext():
 
 @with_setup(setup, teardown)
 def test_lazy_gettext_params():
-    s = i18n.lazy_gettext('Hollidays', year=2010)
+    s = i18n.lazy_gettext('Holidays', year=2010)
     assert s.__class__.__name__ == 'LazyProxy'
     assert isinstance(s.value, str) and (s == 'Vacances 2010')
 
@@ -174,7 +174,7 @@ def test_lazy_gettext():
 
 @with_setup(setup, teardown)
 def test_lazy_gettext_params():
-    s = i18n.lazy_gettext('Hollidays', year=2010)
+    s = i18n.lazy_gettext('Holidays', year=2010)
     assert s.__class__.__name__ == 'LazyProxy'
     assert isinstance(s.value, str) and (s == 'Vacances 2010')
 
@@ -188,7 +188,7 @@ def test_lazy_ugettext():
 
 @with_setup(setup, teardown)
 def test_lazy_ugettext_params():
-    s = i18n.lazy_ugettext('Hollidays', year=2010)
+    s = i18n.lazy_ugettext('Holidays', year=2010)
     assert s.__class__.__name__ == 'LazyProxy'
     assert isinstance(s.value, unicode) and (s == u'Vacances 2010')
 
@@ -258,7 +258,6 @@ def teardown():
 @with_setup(setup, teardown)
 def test_get_period_names():
     assert i18n.get_period_names() == {'am': u'AM', 'pm': u'PM'}
-
 
 @with_setup(setup, teardown)
 def test_get_day_names():
@@ -719,13 +718,11 @@ def test_parse_time_fr():
     assert isinstance(t, datetime.time)
     assert (t.hour == 15) and (t.minute == 30) and (t.second == 10)
 
-
 @with_setup(setup_en, teardown)
 def test_parse_time_en():
     t = i18n.parse_time('15:30:10')
     assert isinstance(t, datetime.time)
     assert (t.hour == 15) and (t.minute == 30) and (t.second == 10)
-
 
 @with_setup(setup, teardown)
 def test_parse_date_fr():

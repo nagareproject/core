@@ -9,6 +9,7 @@ dist
 *.log
 *.mo
 *.swp
+docs/*/*.html
 .DS_Store
 .project
 .pydevproject
