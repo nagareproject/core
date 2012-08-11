@@ -21,7 +21,7 @@ Structure
 For the boolean parameters, a value of ``true``, ``yes``, ``on`` or ``1`` means True
 and a value of ``false``, ``no``, ``off`` or ``0`` mean False.
 
-Comments, starting with the ``#`` character can be added to a configuration file.
+Comments start with the ``#`` character.
 
 [publisher] section
 ~~~~~~~~~~~~~~~~~~~
@@ -62,8 +62,22 @@ port                No        *publisher         Port where to listen to the req
 debug               No        off                Put the publisher in debug mode
 =================== ========= ================== ==================================================
 
-All other parameters, if present, are passed as keywords to the SQLALchemy
-``create_engine()`` call (see http://www.sqlalchemy.org/docs/core/engines.html#engine-creation-api)
+If the application is publisher by the FastCGI publisher (i.e
+``type=fastcgi``), these parameters can also be set:
+
+=================== ========= ================== ==================================================
+Name                Mandatory Default value      Description
+=================== ========= ================== ==================================================
+socket              No        *No default value* Unix socket path instead of the TCP host:port
+                                                 socket
+umask               No        *No default value* Unix permission mask of the unix socket to create
+minSpare            No        1                  Minimum number of processes ready to process new
+                                                 requests
+maxChildren         No        50                 Maximum number of running processes
+maxSpare            No        5                  Maximum number of idle processes
+maxRequest          No        *No default value* Maximum number of requests served by a process
+                                                 because to be killed
+=================== ========= ================== ==================================================
 
 .. note::
 

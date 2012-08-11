@@ -18,18 +18,19 @@ shell.
 However, this standalone mode is not suitable in a production environment, because it is not
 efficient nor fail-safe:
 
-* Since it's a threaded program, it does not fully utilize the CPU cores due to the GIL (see `this
-  discussion <http://stackoverflow.com/questions/4496680/python-threads-all-executing-on-a-single-core>`_).
-  To solve this problem, we need to use multiprocessing.
-* Static files are served by the standalone server and are not cached. They would be better served
-  by a faster Web server such as Apache, Nginx, Lighttpd, ...
-* The server processes are not monitored, and they don't cope with failures very well. For example, in a
-  production setup, it's important to detect zombie processes and restart them to prevent attacks or to limit
-  the impact of unnoticed programmation errors in the application. Of course, you should also use logging
-  to trace the origin of the problems in order to solve them.
+  - Since it's a threaded program, it does not fully utilize the CPU cores due to the GIL (see `this
+    discussion <http://stackoverflow.com/questions/4496680/python-threads-all-executing-on-a-single-core>`_).
+    To solve this problem, we need to use multiprocessing.
+  - Static files are served by the standalone server and are not cached. They would be better served
+    by a faster dedicated Web server such as Apache, Nginx, Lighttpd, ...
+  - The server processes are not monitored, and they don't cope with failures very well. For example, in a
+    production setup, it's important to detect zombie processes and restart them to prevent attacks or to limit
+    the impact of unnoticed programmation errors in the application. Of course, you should also use logging
+    to trace the origin of the problems in order to solve them.
 
-So, in a production environment, the recommended way to serve Nagare applications is through FastCGI associated
-to Web server such as Apache, Nginx or Lighttpd. We are now going to describe how to do that.
+So, in a production environment, the recommended way to serve Nagare applications
+is through *FastCGI* associated to a frontend Web server such as Apache, Nginx or
+Lighttpd.  We are now going to describe how to do that.
 
 
 Serving an application through FastCGI
@@ -42,13 +43,14 @@ the static contents of the application, such as images, CSS and javascript files
 FastCGI is a variation of the CGI protocol, which defines an interface layer between a Web server and external
 applications (such as shell or python scripts). The main difference between FastCGI and CGI is that FastCGI
 doesn't create a new worker process at the start of each request but use a pool of processes that are created
-when the FastCGI service starts, and uses sockets for exchanging information (i.e. request and response data)
+when the FastCGI service starts, and uses sockets for exchanging informations (i.e. request and response data)
 between the Web server and the external applications.
 
-This setup is particularly efficient when serving Nagare applications because the Web server uses forking or
-threading to fully utilize the CPU cores. Furthermore, Web servers are far more efficient than the standalone
-threaded server when serving the static contents of the application since they cache the data and they are
-mostly written in C.
+This setup is particularly efficient when serving Nagare applications because
+the pool of processes fully utilize the CPU cores. Furthermore, Web servers are
+far more efficient than the standalone threaded server when serving the static
+contents of the application since they cache the data and they are mostly written
+in C.
 
 
 The publisher configuration
@@ -56,9 +58,10 @@ The publisher configuration
 
 In order to serve a Nagare application through FastCGI, we must first tell the ``nagare-admin serve`` utility
 that we don't want to use the standalone server but FastCGI instead. This is done by creating a publisher
-configuration file (see :wiki:`PublisherConfiguration`) and passing it to the ``nagare-admin serve`` command.
+configuration file (see :wiki:`PublisherConfiguration`) and passing it to the ``nagare-admin serve`` command
+with the ``-c`` option.
 
-Here is a typical publisher configuration file serving an application through FastCGI:
+Here is a typical publisher configuration file to serve an application through FastCGI:
 
 .. code-block:: ini
 
@@ -66,7 +69,7 @@ Here is a typical publisher configuration file serving an application through Fa
     type = fastcgi
     host = 127.0.0.1
     port = 9000
-    
+
     [sessions]
     type = memcache
     host = 127.0.0.1
@@ -84,11 +87,22 @@ Then, the FastCGI server can be launched by running this command:
 By default, the FastCGI server forks 5 worker processes at startup to handle the incoming requests received on
 port 9000. However, the number of worker processes can grow or shrink depending on the workload.
 
-Note that when an application is served through FastCGI, you must use the ``memcache`` backend for storing sessions
-data. In fact, the default ``standalone`` session backend don't work with FastCGI because the session data is stored
-in memory, and since the processes spawned by the FastCGI server don't share memory (by definition), the sessions
-data stored in one process would not be available in the other processes, which would break the session management.
-That's why a kind of "shared memory" session backend should be used when using the FastCGI publisher.
+.. warning::
+
+  When an application is served through FastCGI, you must use a ``memcache``
+  backend for storing the sessions data. The default ``standalone`` session
+  backend will not work with FastCGI because the session data is stored
+  in memory, and since the processes spawned by the FastCGI server don't
+  share memory (by definition), the sessions data stored in one process would
+  not be available in another process.
+
+  That's why a kind of distributed "shared memory" session backend should be
+  used with the FastCGI publisher. So don't forget to launch your ``memcached``
+  server.
+
+As the sessions are shared through the memcached server, the same FastCGI
+application can be launched on several machines thus easily creating a scalable
+applicative cluster.
 
 
 Configuring the Web server
@@ -113,22 +127,20 @@ below:
     LoadModule fastcgi_module /path/to/mod_fastcgi.so
 
 
-The rewrite rules serving the static files can be generated with this command:
+The rewrite rules serving the static files of your application can be generated with this command:
 
 .. code-block:: sh
-    
-    nagare-admin create-rules <application> --apache > rewrite_rules.apache
+
+    nagare-admin create-rules --apache <application> > rewrite_rules.apache
 
 
 You should obtain something like this:
 
 .. code-block:: apache
 
-    DocumentRoot /path/to/python/site-packages
-    
     RewriteEngine On
-    RewriteRule ^/static/nagare/(.*)$ /nagare-0.4.1-py2.7.egg/static/$1 [L,PT]
-    RewriteRule ^/static/myapp/(.*)$ /myapp-0.0.1-py2.7.egg/static/$1 [L,PT]
+    RewriteRule ^/static/nagare/(.*)$ /path/to/python/site-packages/nagare-0.4.1-py2.7.egg/static/$1 [L]
+    RewriteRule ^/static/myapp/(.*)$ /path/to/python/site-packages/myapp-0.0.1-py2.7.egg/static/$1 [L]
 
 Then, you must create a ``VirtualHost`` for your application and include the rewrite rules file
 into the configuration, as shown below:
@@ -138,9 +150,9 @@ into the configuration, as shown below:
     # virtualhost configuration for http://www.myapp.com
     <VirtualHost *:80>
         ServerName www.myapp.com
-        
+
         FastCGIExternalServer /path/to/python/site-packages/fcgi -host 127.0.0.1:9000
-        
+
         Include /path/to/rewrite_rules.apache
         RewriteRule ^/(.*)$ /fcgi/$1 [QSA,L]
     </VirtualHost>
@@ -165,18 +177,18 @@ manual installation is necessary.
 The rewrite rules serving the static files can be generated with this command:
 
 .. code-block:: sh
-    
-    nagare-admin create-rules <application> --nginx > rewrite_rules.nginx
+
+    nagare-admin create-rules --nginx <application> > rewrite_rules.nginx
 
 
 You should obtain something like this:
 
 .. code-block:: nginx
-    
+
     location /static/nagare/ {
       alias /path/to/python/site-packages/nagare-0.4.1-py2.7.egg/static/;
     }
-    
+
     location /static/ipages/ {
       alias /path/to/python/site-packages/myapp-0.0.1-py2.7.egg/static/;
     }
@@ -190,10 +202,10 @@ Then, you must create a server configuration, as shown below:
         server_name www.myapp.com;
         access_log /var/log/nginx/myapp.access.log;
         error_log /var/log/nginx/myapp.error.log;
-        
+
         # serve the static files
         include /path/to/rewrite_rules.nginx;
-        
+
         # serve the application
         location / {
             include /etc/nginx/fastcgi_params;
@@ -219,8 +231,8 @@ Lighttpd has also builtin support for FastCGI thanks to the `Lighttpd's mod_fast
 The rewrite rules serving the static files can be generated with this command:
 
 .. code-block:: sh
-    
-    nagare-admin create-rules <application> --lighttpd > rewrite_rules.lighttpd
+
+    nagare-admin create-rules --lighttpd <application> > rewrite_rules.lighttpd
 
 However, it's easier the generate the rewrite rules in an ``include_shell`` directive.
 An example of Lighttpd server configuration is show below:
@@ -230,13 +242,13 @@ An example of Lighttpd server configuration is show below:
     server.modules = ( "mod_rewrite", "mod_fastcgi" )
     server.errorlog = "/tmp/lighttpd.log"
     server.indexfiles = ( "index.html" )
-    
+
     #debug.log-request-handling = "enable"
-    
+
     server.port = 8080
     server.bind = "0.0.0.0"
     #server.event-handler = "linux-sysepoll"
-    
+
     fastcgi.server = (
                      "/fcgi" =>
                      (
@@ -247,7 +259,7 @@ An example of Lighttpd server configuration is show below:
                          )
                      )
                  )
-    
+
     # Here, change the path to the ``nagare-admin`` command
     include_shell "path/to/nagare-admin create-rules --lighttpd"
     url.rewrite += (
@@ -255,7 +267,7 @@ An example of Lighttpd server configuration is show below:
     )
 
     # ---------------------------------------------------------------------------------
-    
+
     mimetype.assign = (
       ".pdf"          =>      "application/pdf",
       ".sig"          =>      "application/pgp-signature",
@@ -312,7 +324,7 @@ Then, place this config file in ``/etc/lighttpd/lighttpd.conf`` and restart Ligh
 
 
 Handling the FastCGI processes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 Since the FastCGI processes are launched externally from the Web server, you can use any monitoring
 tool to handle the processes, such as `Supervisor`_. Here is a typical configuration file that starts
@@ -322,18 +334,18 @@ a Nagare application as a daemon with Supervisor:
 
     [unix_http_server]
     file=/path/to/supervisord/supervisor.sock
-    
+
     [supervisord]
     logfile=/path/to/supervisord/supervisord.log
     pidfile=/path/to/supervisord/supervisord.pid
     directory=/path/to/supervisord
-    
+
     [rpcinterface:supervisor]
     supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
-    
+
     [supervisorctl]
     serverurl=unix:///path/to/supervisord/supervisor.sock
-    
+
     [program:myapp]
     command=/path/to/nagare-admin serve /path/to/application/conf/myapp.conf -c /path/to/application/conf/fastcgi.conf
     process_name=myapp
@@ -361,3 +373,6 @@ wrong thanks to the ``autorestart`` option.
 .. _`mod_fastcgi`: http://www.fastcgi.com/mod_fastcgi/docs/mod_fastcgi.html
 .. _`Nginx's HttpFastcgiModule`: http://wiki.nginx.org/HttpFastcgiModule
 .. _`Lighttpd's mod_fastcgi`: http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ModFastCGI
+
+.. wikiname: ApplicationDeployment
+
