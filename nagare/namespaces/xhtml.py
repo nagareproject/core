@@ -1112,7 +1112,10 @@ class Renderer(xhtml_base.Renderer):
           - ``with_request`` -- will the request and response objects be passed to the action ?
           - ``render`` -- render method to generate the view after the ``f`` action will be called
         """
-        return self.component.register_callback(priority, f, with_request, render)
+        if self.component is not None:
+            return self.component.register_callback(priority, f, with_request, render)
+
+        return ''
 
     def decorate_error(self, element, error):
         """During the rendering, highlight an element that has an error
