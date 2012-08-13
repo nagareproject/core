@@ -7,7 +7,7 @@
 # this distribution.
 #--
 
-from nagare import component, presentation
+from nagare import component, presentation, callbacks
 from nagare.namespaces import xhtml
 
 
@@ -82,7 +82,7 @@ def test2():
 # -------------------------------------------------------------------------------------------------------
 
 def call(o1, o2, model=None):
-    component.call_wrapper(lambda: o1().set_myProperty_1(o1.call(o2, model)))
+    callbacks.call_wrapper(lambda: o1().set_myProperty_1(o1.call(o2, model)))
 
 
 def test3():

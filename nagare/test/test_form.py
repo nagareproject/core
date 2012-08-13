@@ -7,7 +7,7 @@
 # this distribution.
 #--
 
-from nagare import component, editor, validator
+from nagare import component, editor, validator, callbacks
 
 
 class MyEditor(editor.Editor):
@@ -36,7 +36,7 @@ class MyApp:
 
 
 def call(o1, o2, model=None):
-    component.call_wrapper(lambda: o1.call(o2, model))
+    callbacks.call_wrapper(lambda: o1.call(o2, model))
 
 
 def test1():
@@ -56,7 +56,7 @@ def test1():
     assert o.age == 5
 
     # Validation OK
-    editor.setValues('Bar', 4, app)
+    editor.setValues('Bar', '4', app)
     assert o.name == 'Bar'
     assert o.age == 4
 
@@ -80,7 +80,7 @@ def test2():
     assert o.age == 5
 
     # Validation OK
-    editor.setValues('Bar', 10, app)
+    editor.setValues('Bar', '10', app)
     assert o.name == 'Bar'
     assert o.age == 10
 
