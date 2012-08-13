@@ -80,7 +80,6 @@ def process_request(app=None, environ={}, **kw):
 def test_request_validity2():
     """Request - invalid url"""
     r = process_request(PATH_INFO='')
-    print r.keys()
     assert (r.status_code == 301) and r['Location'] == 'http://localhost:8080/app/?_s=10&_c=42'
 
 

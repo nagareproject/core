@@ -12,7 +12,6 @@ from __future__ import with_statement
 from nagare.namespaces import xhtml
 from nagare.namespaces import xhtml_base
 from nagare.namespaces import xml
-from nagare import callbacks
 from nagare import wsgi
 from nagare import local
 from nagare.sessions.memory_sessions import SessionsWithPickledStates
@@ -930,7 +929,7 @@ def html_render_img_test2():
 
 def html_render_action_test1():
     """ XHTML namespace unit test - action - put action method on tag a """
-    h = xhtml.Renderer(callbacks=callbacks.Callbacks(), static_url='/tmp/static/')
+    h = xhtml.Renderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -942,7 +941,7 @@ def html_render_action_test1():
 
 def html_render_action_test2():
     """ XHTML namespace unit test - action - put action method on tag a (replace existing href) """
-    h = xhtml.Renderer(callbacks=callbacks.Callbacks(), static_url='/tmp/static/')
+    h = xhtml.Renderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -954,7 +953,7 @@ def html_render_action_test2():
 
 def html_render_action_test3():
     """ XHTML namespace unit test - action - put action method on tag imagge """
-    h = xhtml.Renderer(callbacks=callbacks.Callbacks(), static_url='/tmp/static/')
+    h = xhtml.Renderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -966,7 +965,7 @@ def html_render_action_test3():
 
 def html_render_action_test4():
     """ XHTML namespace unit test - action - put action method on tag a (replace existing href) """
-    h = xhtml.Renderer(callbacks=callbacks.Callbacks(), static_url='/tmp/static/')
+    h = xhtml.Renderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -978,7 +977,7 @@ def html_render_action_test4():
 
 def html_render_action_test5():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a """
-    h = xhtml.AsyncRenderer(callbacks=callbacks.Callbacks(), static_url='/tmp/static/')
+    h = xhtml.AsyncRenderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -990,7 +989,7 @@ def html_render_action_test5():
 
 def html_render_action_test6():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a (replace existing href) """
-    h = xhtml.AsyncRenderer(callbacks=callbacks.Callbacks(), static_url='/tmp/static/')
+    h = xhtml.AsyncRenderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -1002,7 +1001,7 @@ def html_render_action_test6():
 
 def html_render_action_test7():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag imagge """
-    h = xhtml.AsyncRenderer(callbacks=callbacks.Callbacks(), static_url='/tmp/static/')
+    h = xhtml.AsyncRenderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
@@ -1014,7 +1013,7 @@ def html_render_action_test7():
 
 def html_render_action_test8():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a (replace existing href) """
-    h = xhtml.AsyncRenderer(callbacks=callbacks.Callbacks(), static_url='/tmp/static/')
+    h = xhtml.AsyncRenderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
