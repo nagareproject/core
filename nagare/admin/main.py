@@ -37,15 +37,15 @@ def usage(commands):
 
 # ---------------------------------------------------------------------------
 
-def main():
+def main(entry_point_section='nagare.commands'):
     """Dispatcher for the ``nagare-admin`` commands
 
-    The commands are classed, registered under the ``nagare.commands`` entry point
+    The commands are classed, registered under the ``entry_point`` entry point
     """
 
     # Load all the commands
     commands = {}
-    for entry_point in pkg_resources.iter_entry_points('nagare.commands'):
+    for entry_point in pkg_resources.iter_entry_points(entry_point_section):
         try:
             commands[entry_point.name] = entry_point.load()
         except ImportError:
