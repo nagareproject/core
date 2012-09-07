@@ -21,8 +21,6 @@ from nagare.admin import util
 from nagare.component import Component
 from nagare.sessions import ExpirationError
 
-cPicklerClass = cPickle.Pickler().__class__
-
 
 class State(object):
     """A state (objects graph serialized / de-serialized by a sessions manager)
@@ -201,7 +199,9 @@ class Sessions(object):
         return conf
 
     def set_persistent_id(self, pickler, persistent_id):
-        if isinstance(pickler, cPicklerClass):
+        # As `inst_persistent_id` is a read-only attribute of the `cPickle.Pickler`
+        # implementation, `hasattr(pickler, 'inst_persistent')` always returns `False`
+        if 'inst_persistent_id' in dir(pickler):
             pickler.inst_persistent_id = persistent_id
         else:
             pickler.persistent_id = persistent_id
