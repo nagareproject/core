@@ -15,11 +15,10 @@ replace and call a component. It's described in `ComponentModel`
 
 import sys
 import types
-import stackless
 
 from peak.rules import when
 
-from nagare import presentation, callbacks
+from nagare import presentation, callbacks, continuation
 
 _marker = object()
 
@@ -44,7 +43,7 @@ class Component(object):
         """
         self._becomes(o, model, url)
 
-        self._channel = None
+        self._cont = None
         self._on_answer = None
 
     def __call__(self):
@@ -106,7 +105,7 @@ class Component(object):
           - ``self``
         """
         self._becomes(o, model, url or self.url)
-        self._channel = None
+        self._cont = None
 
         return self
 
@@ -131,7 +130,7 @@ class Component(object):
         previous_o = self.o
         previous_model = self.model
         previous_url = self.url
-        previous_channel = self._channel
+        previous_cont = self._cont
         previous_on_answer = self._on_answer
 
         # Set the new configuration
@@ -139,12 +138,13 @@ class Component(object):
 
         # Replace me by the object and wait its answer
         self.becomes(o, model, url)
-        self._channel = stackless.channel()
-        r = self._channel.receive()
+
+        self._cont = continuation.getcurrent()
+        r = self._cont.switch()
 
         # Restore my configuration
         self._on_answer = previous_on_answer
-        self._channel = previous_channel
+        self._cont = previous_cont
         self._becomes(previous_o, previous_model, previous_url)
 
         # Return the answer
@@ -161,11 +161,11 @@ class Component(object):
             return self._on_answer(r)
 
         # Else, check if I was called by a component
-        if self._channel is None:
+        if self._cont is None:
             raise AnswerWithoutCall(self)
 
         # Returns my answer to the calling component
-        self._channel.send(r)
+        self._cont.switch(r)
 
     def on_answer(self, f):
         """
@@ -239,7 +239,7 @@ class Task(object):
     def _go(self, comp):
         # If I was not called by an other component and nobody is listening to
         # my answer,  I'm the root component. So I call my ``go()`` method forever
-        if comp._channel is comp._on_answer is None:
+        if comp._cont is comp._on_answer is None:
             while True:
                 self.go(comp)
 
@@ -259,5 +259,5 @@ def render(self, renderer, comp, *args):
 @when(presentation.render, (types.FunctionType,))
 @when(presentation.render, (types.MethodType,))
 def render(f, renderer, comp, *args):
-    callbacks.call_wrapper(f, comp)
+    continuation.Continuation(f, comp)
     return comp.render(renderer.parent)

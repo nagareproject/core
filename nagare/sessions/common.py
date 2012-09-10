@@ -14,12 +14,12 @@ import cStringIO
 import cPickle
 
 import configobj
-from stackless import tasklet
 
 from nagare import config
 from nagare.admin import util
 from nagare.component import Component
 from nagare.sessions import ExpirationError
+from nagare.continuation import Tasklet
 
 
 class State(object):
@@ -135,7 +135,7 @@ def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
         session_data[id_] = o
         return str(id_)
 
-    if type(o) == tasklet:
+    if type(o) is Tasklet:
         tasklets.add(o)
         return None
 

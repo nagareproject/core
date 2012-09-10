@@ -11,30 +11,9 @@
 Manage the dictionary of the ids / callbacks associations
 """
 
-import stackless
 import random
 
-
-def call_wrapper(action, *args, **kw):
-    """A wrapper that create a tasklet.
-
-    It's necessary to wrapper a callable that do directly or indirectly a
-    ``comp.call(o)`` into such a ``call_wrapper``.
-
-    .. note::
-        The actions your registered on the ``<a>`` tags or on the submit buttons
-        are already wrapped for you.
-
-    In:
-      - ``action`` -- a callable. It will be called, wrapped into a new tasklet,
-        with the ``args`` and ``kw`` parameters.
-      - ``args`` -- positional parameters of the callable
-      - ``kw`` -- keywords parameters of the callable
-
-    Return:
-      *Never*
-    """
-    stackless.tasklet(action)(*args, **kw).run()
+from nagare.continuation import Continuation
 
 
 class CallbackLookupError(LookupError):
@@ -132,20 +111,20 @@ def process(callbacks, request, response):
             if callback_type == 1:
                 f(request, response, value)
             elif callback_type == 4:
-                call_wrapper(f, request, response)
+                Continuation(f, request, response)
             elif callback_type == 5:
                 if param.endswith(('.x', '.y')):
-                    call_wrapper(f, request, response, param.endswith('.y'), int(value))
+                    Continuation(f, request, response, param.endswith('.y'), int(value))
             else:  # 0, 2, 3
                 f(request, response)
         else:
             if callback_type == 1:
                 f(value)
             elif callback_type == 4:
-                call_wrapper(f)
+                Continuation(f)
             elif callback_type == 5:
                 if param.endswith(('.x', '.y')):
-                    call_wrapper(f, param.endswith('.y'), int(value))
+                    Continuation(f, param.endswith('.y'), int(value))
             else:  # 0, 2, 3
                 f()
 
