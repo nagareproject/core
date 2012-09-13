@@ -1,6 +1,15 @@
 Nagare Changelog
 ================
 
+0.4.1
+-----
+
+Bugs fixed
+~~~~~~~~~~
+
+  - #1516: `nagare-admin create-app` command not working with Stackless Python < 2.7
+
+
 0.4.0
 -----
 

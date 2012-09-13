@@ -9,15 +9,19 @@ Nagare documentation
   - :wiki:`NagareChangelog`
   - :wiki:`NagareDependencies`
   - :wiki:`DocumentationGeneration`
+  - :wiki:`WhoUsesNagare`
 
 * Using it
 
   - :wiki:`QuickStart`
   - :wiki:`NagareInstallation`
+  - :wiki:`NagareTutorial`
   - :wiki:`NagareUpgrade`
   - :wiki:`NagareAdmin`
   - :wiki:`ApplicationConfiguration`
   - :wiki:`PublisherConfiguration`
+  - :wiki:`ApplicationDeployment`
+  - :wiki:`NagareIde`
   - :wiki:`ThirdParty`
 
 * Developer documentation
@@ -29,10 +33,11 @@ Nagare documentation
   - :wiki:`CallbacksAndForms`
   - :wiki:`RendererObjects`
   - :wiki:`RestfulUrl`
-  - :wiki:`EntryPoints`
   - :wiki:`WSGIApp`
   - :wiki:`Internationalization`
   - :wiki:`LogModule`
+  - :wiki:`ObjectReferences`
+  - :wiki:`EntryPoints`
 
 * Examples
 

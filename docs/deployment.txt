@@ -189,7 +189,7 @@ You should obtain something like this:
       alias /path/to/python/site-packages/nagare-0.4.1-py2.7.egg/static/;
     }
 
-    location /static/ipages/ {
+    location /static/myapp/ {
       alias /path/to/python/site-packages/myapp-0.0.1-py2.7.egg/static/;
     }
 
