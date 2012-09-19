@@ -18,7 +18,7 @@ import types
 
 from peak.rules import when
 
-from nagare import presentation, callbacks, continuation
+from nagare import presentation, callbacks, continuation, partial
 
 _marker = object()
 
@@ -83,7 +83,7 @@ class Component(object):
         Return:
           - ``self``
         """
-        o = self if o is _marker else o
+        o = self if o.__class__ is object else o
         if isinstance(o, Component):
             o = o()
 
@@ -167,14 +167,15 @@ class Component(object):
         # Returns my answer to the calling component
         self._cont.switch(r)
 
-    def on_answer(self, f):
+    def on_answer(self, f, *args, **kw):
         """
         Register a function to listen to my answer
 
         In:
           - ``f`` -- function to call with my answer
+          - ``args``, ``kw`` -- ``f`` parameters
         """
-        self._on_answer = f
+        self._on_answer = partial.Partial(f, *args, **kw)
         return self
 
     def __repr__(self):

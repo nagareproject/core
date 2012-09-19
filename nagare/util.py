@@ -25,6 +25,10 @@ class Ask(object):
         """
         self.msg = msg
 
+    @classmethod
+    def answer(cls, comp, r):
+        comp.answer(r())
+
 
 @presentation.render_for(Ask)
 def render(self, h, comp, *args):
@@ -43,7 +47,7 @@ def render(self, h, comp, *args):
     return h.form(
                   self.msg, ' ',
                   h.input.action(r),
-                  h.input(type='submit', value='Send').action(lambda: comp.answer(r()))
+                  h.input(type='submit', value='Send').action(self.answer, comp, r)
                  )
 
 

@@ -9,7 +9,7 @@
 
 """Securiy API for the applications"""
 
-from nagare import local
+from nagare import local, partial
 
 # ---------------------------------------------------------------------------
 
@@ -122,36 +122,50 @@ def check_permissions(perm, subject=None):
     return credential
 
 
-def permissions(perm):
+def call_with_permissions(self, __action, __perm, __subject, *args, **kw):
+    """Call a function or method only if permit
+
+    In:
+      - ``self`` -- if ``None`` then ``__action`` is a function else a method
+      - ``__action`` -- function or method to call
+      - ``__perm`` -- permission(s) to check
+      - ``__subject`` -- object to check the permissions on
+      - ``args``, ``kw`` -- ``__action`` parameters
+
+    Return:
+      - ``__action`` return
+    """
+    check_permissions(__perm, __subject or self)
+    return __action(self, *args, **kw) if self else __action(*args, **kw)
+
+
+def wrapper(action, perm, subject):
+    """Wrap a function or method into a wrapper that will check the user permissions
+
+    In:
+      - ``action`` -- function or method to wrapper
+      - ``perm`` -- permission(s) to check
+      - ``subject`` -- object to check the permissions on
+
+    Return:
+      - new action
+    """
+    if perm is not None:
+        action = partial.Partial(call_with_permissions, None, action, perm, subject)
+
+    return action
+
+
+def permissions(perm, subject=None):
     """Decorator to check the permissions of the current user
 
     The ``subject`` will be the first argument of the decorated method
 
     In:
       - ``perm`` -- permission(s)
+      - ``subject`` -- object to check the permissions on or the first argument
+                       of the decorated method if ``None``
     """
-    #permissions = flatten(permissions)
-
-    def _(f):
-        def _(*args, **kw):
-            check_permissions(perm, *args[:1])
-            return f(*args, **kw)
-        return _
-    return _
-
-
-def permissions_with_subject(perm, subject):
-    """Decorator to check the permissions of the current user
-
-    In:
-      - ``perm`` -- permission(s)
-      - ``subject`` -- object to check the permissions on
-    """
-    #permissions = flatten(permissions)
-
-    def _(f):
-        def _(*args, **kw):
-            check_permissions(perm, subject)
-            return f(*args, **kw)
-        return _
-    return _
+    #perm = flatten(perm)
+    return lambda f: partial.Decorator(f, call_with_permissions, perm, subject)
+permissions_with_subject = permissions  # Obsolete

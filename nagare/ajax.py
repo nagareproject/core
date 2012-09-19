@@ -18,7 +18,7 @@ import re
 import peak.rules
 import pyjs
 
-from nagare import presentation, namespaces, serializer
+from nagare import presentation, namespaces, serializer, security, partial
 
 YUI_INTERNAL_PREFIX = '/static/nagare/yui/build'
 YUI_EXTERNAL_PREFIX = 'http://yui.yahooapis.com/2.9.0/build'
@@ -52,7 +52,7 @@ def serialize_body(view_to_js, content_type, doctype):
       - ``view_to_js`` -- the view
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - Javascript to evaluate on the client
@@ -71,7 +71,7 @@ def serialize(self, content_type, doctype, declaration):
     In:
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - a tuple ('text/plain', Javascript to evaluate on the client)
@@ -103,7 +103,12 @@ class Update(object):
     Send a XHR request that can do an action, render a component and finally
     update the HTML with the rendered view
     """
-    def __init__(self, render='', action=lambda *args: None, component_to_update=None, with_request=False):
+    @classmethod
+    def no_action(cls, *args, **kw):
+        return None
+
+    @partial.keywords_only(render='', action=None, component_to_update=None, with_request=False, permissions=None, subject=None)
+    def __init__(self, render, action, args, kw, component_to_update, with_request, permissions, subject):
         """Initialisation
 
         In:
@@ -115,6 +120,7 @@ class Update(object):
               back to the client
 
           - ``action`` -- action to call
+          - ``args``, ``kw`` -- ``action`` parameters
 
           - ``component_to_update`` -- can be:
 
@@ -122,12 +128,34 @@ class Update(object):
             - a string -- the DOM id of the HTML to update
             - a tag -- this tag will be updated
 
-          - ``with_request`` -- will the request and response objects be passed to the action ?
+          - ``with_request`` -- will the request and response objects be passed to the action?
+
+          - ``permissions`` -- permissions needed to execute the action
+          - ``subject`` -- subject to test the permissions on
         """
         self.render = render
-        self.action = action
         self.with_request = with_request
         self.component_to_update = component_to_update
+
+        # Wrap the ``action`` into a wrapper that will check the user permissions
+        action = security.wrapper(action or self.no_action, permissions, subject)
+        self.action = partial.Partial(action, *args, **kw)
+
+    @classmethod
+    def _generate_response(cls, render, args, js, component_to_update, r):
+        """Wrap the rendering of a component into a JS statement
+
+        In:
+          - ``render`` -- rendering function to call
+          - ``args`` -- `render` parameters
+          - ``js`` -- JS function to wrap the rendering into
+          - ``component_to_update`` -- id of the DOM element to update on the client
+          - ``r`` -- renderer
+
+        Return:
+          - the JS statement
+        """
+        return ViewToJs(js, component_to_update, r, render(r, *args))
 
     def _generate_render(self, renderer):
         """Generate the rendering function
@@ -139,17 +167,15 @@ class Update(object):
           - the rendering function
         """
         request = renderer.request
+        async_root = renderer.get_async_root()
 
-        if request:
-            if not request.is_xhr and ('_a' not in request.params):
-                javascript_dependencies(renderer)
-                renderer.head.javascript_url('/static/nagare/ajax.js')
+        if request and not request.is_xhr and ('_a' not in request.params):
+            javascript_dependencies(renderer)
+            renderer.head.javascript_url('/static/nagare/ajax.js')
 
         js = 'nagare_updateNode'
         component_to_update = self.component_to_update
         if component_to_update is None:
-            async_root = renderer.get_async_root()
-
             # Remember to wrap the root view into a ``<div>``
             component_to_update = async_root.id
             async_root.wrapper_to_generate = True
@@ -157,22 +183,19 @@ class Update(object):
 
         # Get the ``id`` attribute of the target element or, else, generate one
         if isinstance(component_to_update, namespaces.xml._Tag):
-            id = component_to_update.get('id')
-            if id is None:
-                id = renderer.generate_id('id')
-                component_to_update.set('id', id)
-            component_to_update = id
+            id_ = component_to_update.get('id')
+            if id_ is None:
+                id_ = renderer.generate_id('id')
+                component_to_update.set('id', id_)
+            component_to_update = id_
 
         render = self.render
-        if callable(render):
-            render = lambda r, render=render: ViewToJs(js, component_to_update, r, render(r))
-        else:
-            async_root = renderer.get_async_root()
+        model = ()
+        if not callable(render):
+            model = (render if render != '' else async_root.model,)
+            render = async_root.component.render
 
-            render = render if render != '' else async_root.model
-            render = lambda r, comp=async_root.component, render=render: ViewToJs(js, component_to_update, r, comp.render(r, model=render))
-
-        return render
+        return partial.Partial(self._generate_response, render, model, js, component_to_update)
 
     def _generate_replace(self, priority, renderer):
         """Register the action on the server and generate the javascript to
@@ -231,7 +254,7 @@ def serialize(self, content_type, doctype, declaration):
     In:
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - a tuple ('text/plain', Javascript to evaluate on the client)
@@ -250,33 +273,41 @@ def serialize(self, content_type, doctype, declaration):
 class Updates(Update):
     """A list of ``Update`` objects
     """
-    def __init__(self, *updates, **kw):
+    @partial.keywords_only(action=None, with_request=False, permissions=None, subject=None)
+    def __init__(self, args, action, kw, with_request, permissions, subject):
         """Initialization
 
         In:
-          - ``updates`` -- the list of ``Update`` objects
-          - ``action`` -- global action to execute (set by keyword call)
-          - ``with_request`` -- will the request and response objects be passed to the global action ? (set by keyword call)
+          - ``args`` -- the list of ``Update`` objects
+          - ``action`` -- global action to execute
+          - ``kw`` -- ``action`` parameters
+          - ``with_request`` -- will the request and response objects be passed to the global action?
+          - ``permissions`` -- permissions needed to execute the global action
+          - ``subject`` -- subject to test the permissions on
         """
-        self._updates = updates
-        self._with_request = kw.get('with_request', False)
-        self._action = kw.get('action', lambda *args: None)
+        self._updates = args
+        self._with_request = with_request
+        self._action = action or self.no_action
 
-        super(Updates, self).__init__(action=self.action, with_request=True)
+        super(Updates, self).__init__(action=self.action, with_request=True, permissions=permissions, subject=subject, **kw)
 
-    def action(self, request, response, *args):
+    def action(self, request, response, **kw):
         """Execute all the actions of the ``Update`` objects
         """
         if self._with_request:
-            self._action(request, response, *args)
+            self._action(request, response, **kw)
         else:
-            self._action(*args)
+            self._action(**kw)
 
         for update in self._updates:
             if update.with_request:
-                update.action(request, response, *args)
+                update.action(request, response)
             else:
-                update.action(*args)
+                update.action()
+
+    @classmethod
+    def _generate_response(cls, r, renders):
+        return ViewsToJs(render(r) for render in renders)
 
     def _generate_render(self, renderer):
         """Generate the rendering function
@@ -288,7 +319,7 @@ class Updates(Update):
           - the rendering function
         """
         renders = [update._generate_render(renderer) for update in self._updates]
-        return lambda r: ViewsToJs(render(r) for render in renders)
+        return partial.Partial(self._generate_response, renders=renders)
 
 # ---------------------------------------------------------------------------
 

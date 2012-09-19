@@ -191,10 +191,10 @@ def render(self, h, comp, *args):
     h << h.div(self.father.name, id="father")
     h << [h.div(child.name, id="child") for child in self.father.children]
 
-    h << h.a('Add Mary', id='add_mary').action(lambda: self.add_child(u'Mary Ingalls'))
-    h << h.a('Add Nancy', id='add_nancy').action(lambda: self.add_child(u'Nancy Oleson'))
-    h << h.a('Add Carrie', id='add_carrie').action(lambda: self.add_child(u'Carrie Ingalls'))
-    h << h.a('changes name', id='get_name').action(lambda: comp.becomes(self, model='name'))
+    h << h.a('Add Mary', id='add_mary').action(self.add_child, u'Mary Ingalls')
+    h << h.a('Add Nancy', id='add_nancy').action(self.add_child, u'Nancy Oleson')
+    h << h.a('Add Carrie', id='add_carrie').action(self.add_child, u'Carrie Ingalls')
+    h << h.a('changes name', id='get_name').action(comp.becomes, model='name')
 
     return h.root
 
@@ -214,6 +214,9 @@ def test6():
     myApp = My_database_app
     app = create_FixtureApp(myApp)
     res = app.get('/')
+
+    print res
+
     res = res.click(linkid="add_mary")
     assert Child.get_by(name=u"Mary Ingalls") is not None
     assert u"Charles Ingalls" in res

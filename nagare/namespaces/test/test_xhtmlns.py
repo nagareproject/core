@@ -12,6 +12,7 @@ from __future__ import with_statement
 from nagare.namespaces import xhtml
 from nagare.namespaces import xhtml_base
 from nagare.namespaces import xml
+from nagare import component
 from nagare import wsgi
 from nagare import local
 from nagare.sessions.memory_sessions import SessionsWithPickledStates
@@ -470,7 +471,7 @@ class My_app_test_form():
         self.actions_done.append('my_post_action')
         assert self.actions_done == ['my_pre_action', 'my_input_action', 'my_post_action']
 
-    def my_input_action(self):
+    def my_input_action(self, text):
         self.actions_done.append('my_input_action')
         assert self.actions_done == ['my_pre_action', 'my_input_action']
 
@@ -483,9 +484,9 @@ class My_app_test_form():
 def render(self, h, *args):
     h << h.html(h.body(h.div('My_app_test_form'),
                        h.form(
-                              h.input(type="text", name="input1", value="value").action(lambda x: self.my_input_action()),
-                              h.input(type="submit", name="submit").action(lambda: self.my_submit_action())
-                             ).pre_action(lambda: self.my_pre_action()).post_action(lambda: self.my_post_action())
+                              h.input(type="text", name="input1", value="value").action(self.my_input_action),
+                              h.input(type="submit", name="submit").action(self.my_submit_action)
+                             ).pre_action(self.my_pre_action).post_action(self.my_post_action)
          ))
     return h.root
 
@@ -620,7 +621,7 @@ def render(self, h, *args):
             with h.form:
                 h << h.select([h.option(value='option1').selected(['option2']),
                                h.option(value='option2').selected(['option2']),
-                               h.option(value='option3').selected(['option2'])], multiple=True).action(lambda opt: self.set_choices(opt))
+                               h.option(value='option3').selected(['option2'])], multiple=True).action(self.set_choices)
     return h.root
 
 
@@ -653,7 +654,7 @@ def render(self, h, *args):
             with h.form:
                 h << h.select([h.option(value="option1").selected(['option1']),
                                h.option(value="option2").selected(['option1']),
-                               h.option(value="option3").selected(['option1'])]).action(lambda opt: self.set_choice(opt))
+                               h.option(value="option3").selected(['option1'])]).action(self.set_choice)
     return h.root
 
 
@@ -930,6 +931,7 @@ def html_render_img_test2():
 def html_render_action_test1():
     """ XHTML namespace unit test - action - put action method on tag a """
     h = xhtml.Renderer(static_url='/tmp/static/')
+    h.start_rendering(component.Component(None), None)
 
     with h.html:
         with h.body:
@@ -942,6 +944,7 @@ def html_render_action_test1():
 def html_render_action_test2():
     """ XHTML namespace unit test - action - put action method on tag a (replace existing href) """
     h = xhtml.Renderer(static_url='/tmp/static/')
+    h.start_rendering(component.Component(None), None)
 
     with h.html:
         with h.body:
@@ -954,6 +957,7 @@ def html_render_action_test2():
 def html_render_action_test3():
     """ XHTML namespace unit test - action - put action method on tag imagge """
     h = xhtml.Renderer(static_url='/tmp/static/')
+    h.start_rendering(component.Component(None), None)
 
     with h.html:
         with h.body:
@@ -966,6 +970,7 @@ def html_render_action_test3():
 def html_render_action_test4():
     """ XHTML namespace unit test - action - put action method on tag a (replace existing href) """
     h = xhtml.Renderer(static_url='/tmp/static/')
+    h.start_rendering(component.Component(None), None)
 
     with h.html:
         with h.body:
@@ -978,6 +983,7 @@ def html_render_action_test4():
 def html_render_action_test5():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a """
     h = xhtml.AsyncRenderer(static_url='/tmp/static/')
+    h.start_rendering(component.Component(None), None)
 
     with h.html:
         with h.body:
@@ -990,6 +996,7 @@ def html_render_action_test5():
 def html_render_action_test6():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a (replace existing href) """
     h = xhtml.AsyncRenderer(static_url='/tmp/static/')
+    h.start_rendering(component.Component(None), None)
 
     with h.html:
         with h.body:
@@ -1002,6 +1009,7 @@ def html_render_action_test6():
 def html_render_action_test7():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag imagge """
     h = xhtml.AsyncRenderer(static_url='/tmp/static/')
+    h.start_rendering(component.Component(None), None)
 
     with h.html:
         with h.body:
@@ -1014,6 +1022,7 @@ def html_render_action_test7():
 def html_render_action_test8():
     """ XHTML namespace unit test - asynchronous render - action - put action method on tag a (replace existing href) """
     h = xhtml.AsyncRenderer(static_url='/tmp/static/')
+    h.start_rendering(component.Component(None), None)
 
     with h.html:
         with h.body:
