@@ -140,7 +140,11 @@ class Component(object):
         self.becomes(o, model, url)
 
         self._cont = continuation.getcurrent()
-        r = self._cont.switch()
+
+        try:
+            r = self._cont.switch()
+        except NotImplementedError:
+            raise NotImplementedError('Stackless Python is needed for `comp.call()`')
 
         # Restore my configuration
         self._on_answer = previous_on_answer

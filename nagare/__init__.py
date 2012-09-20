@@ -9,13 +9,6 @@
 
 import sys
 
-try:
-    import stackless
-except ImportError:
-    print 'You must use Python Stackless !'
-    print 'Get it at http://www.stackless.com'
-    sys.exit(-1)
-
 if sys.version_info < (2, 5, 2):
     print 'The version of Stackless Python must be 2.5.2 or more'
     sys.exit(-2)

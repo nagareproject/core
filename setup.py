@@ -22,9 +22,8 @@ from setuptools import setup, find_packages
 try:
     import stackless
 except ImportError:
-    print 'You must use Python Stackless !'
-    print 'Get it at http://www.stackless.com'
-    sys.exit(-1)
+    print "Warning: you are installing Nagare on CPython instead of Stackless Python (http://www.stackless.com)."
+    print "         Without 'continuation', the 'Component.call()' method will not be available."
 
 if sys.version_info < (2, 5, 2):
     print 'The version of Stackless Python must be 2.5.2 or more'
