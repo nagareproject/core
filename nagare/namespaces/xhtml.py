@@ -275,8 +275,8 @@ def render(self, h, *args):
 class _HTMLActionTag(xhtml_base._HTMLTag):
     """Base class of all the tags with a ``.action()`` method
     """
-    @partial.keywords_only(1, with_request=False, permissions=None, subject=None)
-    def action(self, action, args, kw, with_request, permissions, subject):
+    @partial.max_number_of_args(2)
+    def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
         """Register an action
 
         In:
@@ -367,8 +367,29 @@ class Form(xhtml_base._HTMLTag):
 
         super(Form, self).add_child(child)
 
-    @partial.keywords_only(1, with_request=False, permissions=None, subject=None)
-    def pre_action(self, action, args, kw, with_request, permissions, subject):
+    def _action(self, action, priority, args, with_request, permissions, subject, **kw):
+        """Register an action
+
+        In:
+          - ``action`` -- action
+          - ``priority`` - ``action`` priority
+          - ``args``, ``kw`` -- ``action`` parameters
+          - ``with_request`` -- will the request and response objects be passed to the action?
+          - ``permissions`` -- permissions needed to execute the action
+          - ``subject`` -- subject to test the permissions on
+
+        Return:
+          - ``self``
+        """
+        action = security.wrapper(action, permissions, subject or self._renderer.component())
+        action = partial.Partial(action, *args, **kw)
+
+        # Generate a hidden field with the action attached
+        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(priority, action, with_request))))
+        return self
+
+    @partial.max_number_of_args(2)
+    def pre_action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
         """Register an action that will be executed **before** the actions of the
         form elements
 
@@ -382,15 +403,10 @@ class Form(xhtml_base._HTMLTag):
         Return:
           - ``self``
         """
-        action = security.wrapper(action, permissions, subject or self._renderer.component())
-        action = partial.Partial(action, *args, **kw)
+        return self._action(action, 0, args, with_request, permissions, subject, **kw)
 
-        # Generate a hidden field with the action attached
-        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(0, action, with_request))))
-        return self
-
-    @partial.keywords_only(1, with_request=False, permissions=None, subject=None)
-    def post_action(self, action, args, kw, with_request, permissions, subject):
+    @partial.max_number_of_args(2)
+    def post_action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
         """Register an action that will be executed **after** the actions of the
         form elements
 
@@ -404,12 +420,7 @@ class Form(xhtml_base._HTMLTag):
         Return:
           - ``self``
         """
-        action = security.wrapper(action, permissions, subject or self._renderer.component())
-        action = partial.Partial(action, *args, **kw)
-
-        # Generate a hidden field with the action attached
-        self.append(self.renderer.div(self.renderer.input(type='hidden', name=self.renderer.register_callback(3, action, with_request))))
-        return self
+        return self._action(action, 3, args, with_request, permissions, subject, **kw)
 
 # ----------------------------------------------------------------------------------
 
@@ -456,8 +467,8 @@ class TextArea(_HTMLActionTag):
     def clean_input(cls, v, _action, *args, **kw):
         return _action(v.replace('\r', ''), *args, **kw)
 
-    @partial.keywords_only(1, with_request=False, permissions=None, subject=None)
-    def action(self, action, args, kw, with_request, permissions, subject):
+    @partial.max_number_of_args(2)
+    def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
         """Register an action
 
 
@@ -665,8 +676,8 @@ class Select(_HTMLActionTag):
     def normalize_input(cls, v, _action, *args, **kw):
         return _action(v if isinstance(v, (list, tuple)) else (v,), *args, **kw)
 
-    @partial.keywords_only(1, with_request=False, permissions=None, subject=None)
-    def action(self, action, args, kw, with_request, permissions, subject):
+    @partial.max_number_of_args(2)
+    def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
         """Register an action
 
         In:

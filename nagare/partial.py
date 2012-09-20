@@ -62,16 +62,15 @@ except ImportError:
 
 # -----------------------------------------------------------------------------
 
-def keywords_only(nb_args=0, **params):
+def max_number_of_args(nb):
+    """Limit the number of positional parameters
+
+    In:
+      - ``nb`` - max number of positional parameters passed to ``f``. Other
+                 positional parameters will be passed as the ``args`` tuple
+    """
     def _(f):
-        def _(self, *args, **kw):
-            return f(
-                        self,
-                        *args[:nb_args],
-                        args=args[nb_args:], kw=kw,
-                        **dict((k, kw.pop(k, v)) for k, v in params.iteritems())
-                    )
-        return _
+        return lambda *args, **kw: f(*args[:nb], args=args[nb:], **kw)
     return _
 
 # -----------------------------------------------------------------------------

@@ -107,8 +107,8 @@ class Update(object):
     def no_action(cls, *args, **kw):
         return None
 
-    @partial.keywords_only(render='', action=None, component_to_update=None, with_request=False, permissions=None, subject=None)
-    def __init__(self, render, action, args, kw, component_to_update, with_request, permissions, subject):
+    @partial.max_number_of_args(4)
+    def __init__(self, render='', action=None, component_to_update=None, with_request=False, permissions=None, subject=None, args=(), **kw):
         """Initialisation
 
         In:
@@ -167,7 +167,6 @@ class Update(object):
           - the rendering function
         """
         request = renderer.request
-        async_root = renderer.get_async_root()
 
         if request and not request.is_xhr and ('_a' not in request.params):
             javascript_dependencies(renderer)
@@ -176,6 +175,8 @@ class Update(object):
         js = 'nagare_updateNode'
         component_to_update = self.component_to_update
         if component_to_update is None:
+            async_root = renderer.get_async_root()
+
             # Remember to wrap the root view into a ``<div>``
             component_to_update = async_root.id
             async_root.wrapper_to_generate = True
@@ -193,7 +194,7 @@ class Update(object):
         model = ()
         if not callable(render):
             model = (render if render != '' else async_root.model,)
-            render = async_root.component.render
+            render = renderer.get_async_root().component.render
 
         return partial.Partial(self._generate_response, render, model, js, component_to_update)
 
@@ -273,8 +274,8 @@ def serialize(self, content_type, doctype, declaration):
 class Updates(Update):
     """A list of ``Update`` objects
     """
-    @partial.keywords_only(action=None, with_request=False, permissions=None, subject=None)
-    def __init__(self, args, action, kw, with_request, permissions, subject):
+    @partial.max_number_of_args(1)
+    def __init__(self, args, action=None, with_request=False, permissions=None, subject=None, **kw):
         """Initialization
 
         In:
