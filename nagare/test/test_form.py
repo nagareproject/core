@@ -36,7 +36,7 @@ class MyApp:
 
 
 def call(o1, o2, model=None):
-    continuation.Continuation(lambda: o1.call(o2, model))
+    continuation.call_wrapper(lambda: o1.call(o2, model))
 
 
 def test1():
