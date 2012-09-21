@@ -21,7 +21,9 @@ except ImportError:
     # CPython
     # -------
 
-    def getcurrent():
+    has_continuation = False
+
+    def get_current():
         """Return the current execution context
         """
         return Continuation(lambda: None)
@@ -53,9 +55,10 @@ else:
     # Stackless Python
     # ----------------
 
+    has_continuation = True
     Tasklet = stackless.tasklet
 
-    def getcurrent():
+    def get_current():
         """Return the current execution context
         """
         return Channel()

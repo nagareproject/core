@@ -19,14 +19,12 @@ class MyEditor(editor.Editor):
         self.name.validate(lambda v: validator.to_string(v, strip=True).not_empty().to_string())
         self.age.validate(lambda v: validator.to_int(v).lesser_than(50).greater_than(0).to_int())
 
-    def commit(self, comp):
-        if super(MyEditor, self).commit(self.fields):
-            comp.answer((self.name()))
+    def commit(self):
+        super(MyEditor, self).commit(self.fields)
 
-    def setValues(self, name, age, comp):
+    def set_values(self, name, age):
         self.name(name)
         self.age(age)
-        self.commit(comp)
 
 
 class MyApp:
@@ -35,28 +33,32 @@ class MyApp:
         self.age = 5
 
 
-def call(o1, o2, model=None):
-    continuation.call_wrapper(lambda: o1.call(o2, model))
-
-
 def test1():
     """ Form - validation OK """
     o = MyApp()
 
-    app = component.Component(o, model=None)
-    assert app().name == 'Foo'
-    assert app().age == 5
-
-    editor = MyEditor(app())
-
-    call(app, editor)
-    assert app().name() == 'Foo'
-    assert app().age() == 5
     assert o.name == 'Foo'
     assert o.age == 5
 
-    # Validation OK
-    editor.setValues('Bar', '4', app)
+    editor = MyEditor(o)
+
+    assert o.name == 'Foo'
+    assert o.age == 5
+
+    editor.set_values('Bar', '4')
+
+    # Editor values are changed
+    assert editor.name.input == editor.name() == 'Bar'
+    assert editor.age.input == editor.age() == '4'
+    assert editor.age.value == 4
+
+    # App values aren't changed
+    assert o.name == 'Foo'
+    assert o.age == 5
+
+    editor.commit()
+
+    # App values are changed
     assert o.name == 'Bar'
     assert o.age == 4
 
@@ -65,46 +67,28 @@ def test2():
     """ Form - validation KO """
     o = MyApp()
 
-    app = component.Component(o, model=None)
+    assert o.name == 'Foo'
+    assert o.age == 5
 
     editor = MyEditor(o)
-    call(app, editor)
 
-    # Validation KO
-    editor.setValues('Bar', 1000, app)
-    # Editor values changes
-    assert app().name() == 'Bar'
-    assert app().age() == 1000
-    # App values doesn't changes
     assert o.name == 'Foo'
     assert o.age == 5
 
-    # Validation OK
-    editor.setValues('Bar', '10', app)
-    assert o.name == 'Bar'
-    assert o.age == 10
+    editor.set_values('Bar', '1000')
 
+    # Editor values are changed
+    assert editor.name.input == editor.name() == 'Bar'
+    assert editor.age.input == editor.age() == '1000'
+    assert editor.age.value == 5
 
-def test3():
-    """ Form - validation KO & Cancel """
-    o = MyApp()
-
-    app = component.Component(o, model=None)
-
-    editor = MyEditor(app())
-    call(app, editor)
-
-    # Validation KO
-    editor.setValues('Bar', 1000, app)
-    # Editor values changes
-    assert app().name() == 'Bar'
-    assert app().age() == 1000
-    # App values doesn't changes
+    # App values aren't changed
     assert o.name == 'Foo'
     assert o.age == 5
 
-    # Cancel
-    app.answer()
+    editor.commit()
+
+    # App values aren't changed
     assert o.name == 'Foo'
     assert o.age == 5
 
@@ -115,37 +99,35 @@ class MyStringEditor(editor.Editor):
     def __init__(self, source):
         super(MyStringEditor, self).__init__(source, self.fields)
 
-    def commit(self, comp):
-        if super(MyStringEditor, self).commit(self.fields):
-            comp.answer((self.name()))
+    def commit(self):
+        super(MyStringEditor, self).commit(self.fields)
 
-    def setValues(self, name, comp):
+    def set_values(self, name):
         self.name(name)
-        self.commit(comp)
 
 
 class MyStringEditor1(MyStringEditor):
-
     def __init__(self, source):
         super(MyStringEditor1, self).__init__(source)
+
         self.name.validate(lambda v: validator.to_string(v, strip=True).not_empty())
 
 
 def test4():
     """ Form - test string validators - not_empty """
-    o = MyApp()
+    editor = MyStringEditor1(MyApp())
 
-    app = component.Component(o, model=None)
-
-    editor = MyStringEditor1(app())
-    call(app, editor)
+    # Validation OK
+    editor.set_values('abcd')
+    assert editor.name.error is None
+    assert editor.name.input == editor.name() == 'abcd'
+    assert editor.name.value == 'abcd'
 
     # Validation KO
-    editor.setValues('', app)
+    editor.set_values('')
     assert editor.name.error == "Can't be empty"
-
-    editor.setValues('abcd', app)
-    assert editor.name.error is None
+    assert editor.name.input == editor.name() == ''
+    assert editor.name.value == 'abcd'
 
 
 class MyStringEditor2(MyStringEditor):
@@ -156,19 +138,19 @@ class MyStringEditor2(MyStringEditor):
 
 def test5():
     """ Form - test string validators - match """
-    o = MyApp()
+    editor = MyStringEditor2(MyApp())
 
-    app = component.Component(o, model=None)
-
-    editor = MyStringEditor2(app())
-    call(app, editor)
+    # Validation OK
+    editor.set_values('abab')
+    assert editor.name.error is None
+    assert editor.name.input == editor.name() == 'abab'
+    assert editor.name.value == 'abab'
 
     # Validation KO
-    editor.setValues('abrab', app)
+    editor.set_values('abrab')
     assert editor.name.error == "test5 - Incorrect format"
-
-    editor.setValues('abab', app)
-    assert editor.name.error is None
+    assert editor.name.input == editor.name() == 'abrab'
+    assert editor.name.value == 'abab'
 
 
 class MyStringEditor3(MyStringEditor):
@@ -179,19 +161,20 @@ class MyStringEditor3(MyStringEditor):
 
 def test6():
     """ Form - test string validators - shorter_than """
-    o = MyApp()
+    editor = MyStringEditor3(MyApp())
 
-    app = component.Component(o, model=None)
-
-    editor = MyStringEditor3(app())
-    call(app, editor)
+    # Validation OK
+    editor.set_values('1234')
+    assert editor.name.error is None
+    assert editor.name.input == editor.name() == '1234'
+    assert editor.name.value == '1234'
 
     # Validation KO
-    editor.setValues('123456', app)
+    editor.set_values('123456')
     assert editor.name.error == "test6 - Length must be shorter than 5 characters"
+    assert editor.name.input == editor.name() == '123456'
+    assert editor.name.value == '1234'
 
-    editor.setValues('1234', app)
-    assert editor.name.error is None
 
 
 class MyStringEditor4(MyStringEditor):
@@ -202,22 +185,25 @@ class MyStringEditor4(MyStringEditor):
 
 def test7():
     """ Form - test string validators - length_equal  """
-    o = MyApp()
+    editor = MyStringEditor4(MyApp())
 
-    app = component.Component(o, model=None)
-
-    editor = MyStringEditor4(app())
-    call(app, editor)
+    # Validation OK
+    editor.set_values('12345')
+    assert editor.name.error is None
+    assert editor.name.input == editor.name() == '12345'
+    assert editor.name.value == '12345'
 
     # Validation KO
-    editor.setValues('123456', app)
+    editor.set_values('123456')
     assert editor.name.error == "test7 - Length must be 5 characters"
+    assert editor.name.input == editor.name() == '123456'
+    assert editor.name.value == '12345'
 
-    editor.setValues('1234', app)
+    # Validation KO
+    editor.set_values('1234')
     assert editor.name.error == "test7 - Length must be 5 characters"
-
-    editor.setValues('12345', app)
-    assert editor.name.error is None
+    assert editor.name.input == editor.name() == '1234'
+    assert editor.name.value == '12345'
 
 
 class MyStringEditor5(MyStringEditor):
@@ -228,38 +214,47 @@ class MyStringEditor5(MyStringEditor):
 
 def test8():
     """ Form - test string validators - multiple validators """
-    o = MyApp()
+    editor = MyStringEditor5(MyApp())
 
-    app = component.Component(o, model=None)
-
-    editor = MyStringEditor5(app())
-    call(app, editor)
+    # Validation OK
+    editor.set_values('123456')
+    assert editor.name.error is None
+    assert editor.name.input == editor.name() == '123456'
+    assert editor.name.value == '123456'
 
     # Validation KO
-    editor.setValues('', app)
+    editor.set_values('')
     assert editor.name.error is not None
+    assert editor.name.input == editor.name() == ''
+    assert editor.name.value == '123456'
 
-    editor.setValues('1234', app)
+    # Validation KO
+    editor.set_values('1234')
     assert editor.name.error is not None
+    assert editor.name.input == editor.name() == '1234'
+    assert editor.name.value == '123456'
 
-    editor.setValues('123456789', app)
+    # Validation KO
+    editor.set_values('123456789')
     assert editor.name.error is not None
+    assert editor.name.input == editor.name() == '123456789'
+    assert editor.name.value == '123456'
 
-    editor.setValues('abcdefg', app)
+    # Validation KO
+    editor.set_values('abcdefg')
     assert editor.name.error is not None
-
-    editor.setValues('123456', app)
-    assert editor.name.error is None
+    assert editor.name.input == editor.name() == 'abcdefg'
+    assert editor.name.value == '123456'
 
 
 def test9():
     p = editor.Property()
-    assert (p.input is None) and (p.value is None) and (p.error is None)
+    assert (p.input is None) and (p() is None) and (p.value is None) and (p.error is None)
 
 
 def test10():
     p = editor.Property(5)
-    assert (p.input == p.value == 5) and (p.error is None)
+    assert (p.input == p() == p.value == 5) and (p.error is None)
 
 
 def check(v):
@@ -270,21 +265,22 @@ def check(v):
 
 def test11():
     p = editor.Property(5).validate(check)
-    assert (p.input == p.value == 5) and (p.error is None)
+    assert (p.input == p() == p.value == 5) and (p.error is None)
 
 
 def test12():
     p = editor.Property(15).validate(check)
-    assert (p.input == 15) and (p.value == 15) and (p.error is None)
+    assert (p.input == p() == p.value == 15) and (p.error is None)
 
 
 def test13():
     p = editor.Property().validate(check)
-    p.set(5)
-    assert (p.input == p.value == 5) and (p.error is None)
+    p(5)
+    assert (p.input == p() == p.value == 5) and (p.error is None)
 
 
 def test14():
     p = editor.Property().validate(check)
-    p.set(15)
-    assert (p.input == 15) and (p.value is None) and (p.error == 'invalid')
+    p(15)
+    assert (p.input == p() == 15) and (p.value is None) and (p.error == 'invalid')
+

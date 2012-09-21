@@ -139,7 +139,7 @@ class Component(object):
         # Replace me by the object and wait its answer
         self.becomes(o, model, url)
 
-        self._cont = continuation.getcurrent()
+        self._cont = continuation.get_current()
 
         try:
             r = self._cont.switch()
