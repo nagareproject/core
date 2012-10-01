@@ -218,7 +218,7 @@ def read_application_options(cfgfile, error, default={}):
     # Activate variables interpolation only for the known sections
     main = type('', (), dict(interpolation='Template' if default else False))()
     for section in application_options_spec:
-        conf[section].main = main
+        conf[section].walk(lambda section, key: setattr(section, 'main', main))
 
     if not conf['sessions']['type']:
         del conf['sessions']['type']
