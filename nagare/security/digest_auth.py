@@ -49,11 +49,13 @@ class Authentication(common.Authentication):
 
                 encoding = request.accept_charset.best_match(['iso-8859-1', 'utf-8'])
                 data['encoding'] = encoding
+                data['http_method'] = request.method
+
                 return (data.pop('username').decode(encoding), data)
 
         return (None, {'response': None, 'encoding': None})
 
-    def check_password(self, username, password, response, encoding, realm='', uri='', nonce='', nc='', cnonce='', qop='', **kw):
+    def check_password(self, username, password, response, encoding, realm='', uri='', nonce='', nc='', cnonce='', qop='', http_method='', **kw):
         """Authentication
 
         In:
@@ -72,7 +74,8 @@ class Authentication(common.Authentication):
 
         # Make our side hash
         hda1 = hashlib.md5('%s:%s:%s' % (username.encode(encoding), realm, password.encode(encoding))).hexdigest()
-        hda2 = hashlib.md5('GET:' + uri).hexdigest()
+        hda2 = hashlib.md5(http_method + ':' + uri).hexdigest()
+
         sig = '%s:%s:%s:%s:%s:%s' % (hda1, nonce, nc, cnonce, qop, hda2)
 
         # Compare our hash with the response
