@@ -135,7 +135,7 @@ def call_with_permissions(self, __action, __perm, __subject, *args, **kw):
     Return:
       - ``__action`` return
     """
-    check_permissions(__perm, __subject or self)
+    check_permissions(__perm, *((__subject,) if __subject else args[:1]))
     return __action(self, *args, **kw) if self else __action(*args, **kw)
 
 
