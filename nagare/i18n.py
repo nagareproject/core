@@ -10,10 +10,10 @@
 """Internationalization service
 """
 
-import copy
 import os
 import datetime
 
+import pkg_resources
 from peak.rules import when
 
 from nagare.namespaces import xml
@@ -101,45 +101,44 @@ except ImportError:
 if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
     os.environ['LC_CTYPE'] = 'en_US.utf-8'
 
-
 # -----------------------------------------------------------------------------
 
 # Service API
 # -----------
 
-def gettext(msg, **kw):
-    return get_locale().gettext(msg, **kw)
+def gettext(msg, domain=None, **kw):
+    return get_locale().gettext(msg, domain, **kw)
 
 
-def ugettext(msg, **kw):
-    return get_locale().ugettext(msg, **kw)
+def ugettext(msg, domain=None, **kw):
+    return get_locale().ugettext(msg, domain, **kw)
 _ = ugettext
 
 
-def ngettext(singular, plural, n, **kw):
-    return get_locale().ngettext(singular, plural, n, **kw)
+def ngettext(singular, plural, n, domain=None, **kw):
+    return get_locale().ngettext(singular, plural, n, domain, **kw)
 
 
-def ungettext(singular, plural, n, **kw):
-    return get_locale().ungettext(singular, plural, n, **kw)
+def ungettext(singular, plural, n, domain=None, **kw):
+    return get_locale().ungettext(singular, plural, n, domain, **kw)
 _N = ungettext
 
 
-def lazy_gettext(msg, **kw):
-    return LazyProxy(gettext, msg, **kw)
+def lazy_gettext(msg, domain=None, **kw):
+    return LazyProxy(gettext, msg, domain, **kw)
 
 
-def lazy_ugettext(msg, **kw):
-    return LazyProxy(ugettext, msg, **kw)
+def lazy_ugettext(msg, domain=None, **kw):
+    return LazyProxy(ugettext, msg, domain, **kw)
 _L = lazy_ugettext
 
 
-def lazy_ngettext(singular, plural, n, **kw):
-    return LazyProxy(ngettext, singular, plural, n, **kw)
+def lazy_ngettext(singular, plural, n, domain=None, **kw):
+    return LazyProxy(ngettext, singular, plural, n, domain, **kw)
 
 
-def lazy_ungettext(singular, plural, n, **kw):
-    return LazyProxy(ungettext, singular, plural, n, **kw)
+def lazy_ungettext(singular, plural, n, domain=None, **kw):
+    return LazyProxy(ungettext, singular, plural, n, domain, **kw)
 _LN = lazy_ungettext
 
 
@@ -319,8 +318,9 @@ class Locale(CoreLocale):
         else:
             self.language = self.territory = self.script = self.variant = None
 
-        self.dirname = dirname
-        self.domain = domain
+        self.translation_directories = {}
+        if dirname is not None:
+            self.add_translation_directory(dirname, domain)
 
         if isinstance(timezone, basestring):
             timezone = pytz.timezone(timezone)
@@ -335,49 +335,79 @@ class Locale(CoreLocale):
 
         self._previous_locale = None
 
-    def _get_translation(self):
+    def add_translation_directory(self, dirname=None, domain=None):
+        """Associate a directory to a translation domain
+
+        In:
+          - ``dirname`` -- the directory
+          - ``domain`` -- the translation domain
+        """
+        self.translation_directories[domain] = dirname
+
+    def has_translation_directory(self, domain):
+        """Test if a domain has an associated directory
+
+        In:
+          - ``domain`` -- the translation domain
+
+        Return:
+          - bool
+        """
+        return domain in self.translation_directories
+
+    def _get_translation(self, domain=None):
         """Load the translation object, if not already loaded
+
+        In:
+          - ``domain`` -- translation domain
+
+        Return:
+          - translation object
         """
         if self.language is None:
             return DummyTranslation()
 
-        key = (self.dirname, self.language, self.domain)
-        translation = _translations_cache.get(key)
-        if not translation:
-            translation = support.Translations.load(*key)
-            _translations_cache[key] = translation
+        dirname = self.translation_directories.get(domain) or self.translation_directories.get(None)
+        args = (dirname, self.language, domain)
+
+        translation = _translations_cache.get(args)
+        if translation is None:
+            translation = support.Translations.load(*args)
+            _translations_cache[args] = translation
 
         return translation
 
-    def gettext(self, msg, **kw):
+    def gettext(self, msg, domain=None, **kw):
         """Return the localized translation of a message
 
         In:
           - ``msg`` -- message to translate
+          - ``domain`` -- translation domain
           - ``kw`` -- optional values to substitute into the translation
 
         Return:
           - the localized translation, as a 8-bit string encoded with the
             catalog's charset encoding
         """
-        msg = self._get_translation().gettext(msg)
+        msg = self._get_translation(domain).gettext(msg)
         return msg % kw if kw else msg
 
-    def ugettext(self, msg, **kw):
+    def ugettext(self, msg, domain=None, **kw):
         """Return the localized translation of a message
 
         In:
           - ``msg`` -- message to translate
+          - ``domain`` -- translation domain
           - ``kw`` -- optional values to substitute into the translation
 
         Return:
           - the localized translation, as an unicode string
         """
-        msg = self._get_translation().ugettext(msg)
+        msg = self._get_translation(domain).ugettext(msg)
         return msg % kw if kw else msg
     _ = ugettext
 
-    def ngettext(self, singular, plural, n, **kw):
+    def ngettext(self, singular, plural, n, domain=None, **kw):
         """Return the plural-forms localized translation of a message
 
         If a translation is found, apply the ``plural`` formula to ``n``, and
@@ -385,17 +415,20 @@ class Locale(CoreLocale):
         ``singular`` if ``n`` is 1; return ``plural`` otherwise
 
         In:
-          - ``msg`` -- message to translate
+          - ``singular`` -- singular form of the message
+          - ``plural`` -- plural form of the message
+          - ``n`` -- singular or plural form wanted?
+          - ``domain`` -- translation domain
           - ``kw`` -- optional values to substitute into the translation
 
         Return:
           - the localized translation, as a 8-bit string encoded with the
             catalog's charset encoding
         """
-        msg = self._get_translation().ngettext(singular, plural, n)
+        msg = self._get_translation(domain).ngettext(singular, plural, n)
         return msg % kw if kw else msg
 
-    def ungettext(self, singular, plural, n, **kw):
+    def ungettext(self, singular, plural, n, domain=None, **kw):
         """Return the plural-forms localized translation of a message
 
         If a translation is found, apply the ``plural`` formula to ``n``, and
@@ -403,43 +436,49 @@ class Locale(CoreLocale):
         ``singular`` if ``n`` is 1; return ``plural`` otherwise
 
         In:
-          - ``msg`` -- message to translate
+          - ``singular`` -- singular form of the message
+          - ``plural`` -- plural form of the message
+          - ``n`` -- singular or plural form wanted?
+          - ``domain`` -- translation domain
+          - ``domain`` -- translation domain
           - ``kw`` -- optional values to substitute into the translation
 
         Return:
           - the localized translation, as an unicode string
         """
-        msg = self._get_translation().ungettext(singular, plural, n)
+        msg = self._get_translation(domain).ungettext(singular, plural, n)
         return msg % kw if kw else msg
     _N = ungettext
 
-    def lazy_gettext(self, msg, **kw):
+    def lazy_gettext(self, msg, domain=None, **kw):
         """Return the lazy localized translation of a message
 
         In:
           - ``msg`` -- message to translate
+          - ``domain`` -- translation domain
           - ``kw`` -- optional values to substitute into the translation
 
         Return:
           - the lazy localized translation, as a 8-bit string encoded with the
             catalog's charset encoding
         """
-        return LazyProxy(self.gettext, msg, **kw)
+        return LazyProxy(self.gettext, msg, domain, **kw)
 
-    def lazy_ugettext(self, msg, **kw):
+    def lazy_ugettext(self, msg, domain=None, **kw):
         """Return the lazy localized translation of a message
 
         In:
           - ``msg`` -- message to translate
+          - ``domain`` -- translation domain
           - ``kw`` -- optional values to substitute into the translation
 
         Return:
           - the lazy localized translation, as an unicode string
         """
-        return LazyProxy(self.ugettext, msg, **kw)
+        return LazyProxy(self.ugettext, msg, domain, **kw)
     _L = lazy_ugettext
 
-    def lazy_ngettext(self, singular, plural, n, **kw):
+    def lazy_ngettext(self, singular, plural, n, domain=None, **kw):
         """Return the lazy plural-forms localized translation of a message
 
         If a translation is found, apply the ``plural`` formula to ``n``, and
@@ -447,16 +486,19 @@ class Locale(CoreLocale):
         ``singular`` if ``n`` is 1; return ``plural`` otherwise
 
         In:
-          - ``msg`` -- message to translate
+          - ``singular`` -- singular form of the message
+          - ``plural`` -- plural form of the message
+          - ``n`` -- singular or plural form wanted?
+          - ``domain`` -- translation domain
           - ``kw`` -- optional values to substitute into the translation
 
         Return:
           - the lazy localized translation, as a 8-bit string encoded with the
             catalog's charset encoding
         """
-        return LazyProxy(self.ngettext, singular, plural, n, **kw)
+        return LazyProxy(self.ngettext, singular, plural, n, domain, **kw)
 
-    def lazy_ungettext(self, singular, plural, n, **kw):
+    def lazy_ungettext(self, singular, plural, n, domain=None, **kw):
         """Return the lazy plural-forms localized translation of a message
 
         If a translation is found, apply the ``plural`` formula to ``n``, and
@@ -464,13 +506,16 @@ class Locale(CoreLocale):
         ``singular`` if ``n`` is 1; return ``plural`` otherwise
 
         In:
-          - ``msg`` -- message to translate
+          - ``singular`` -- singular form of the message
+          - ``plural`` -- plural form of the message
+          - ``n`` -- singular or plural form wanted?
+          - ``domain`` -- translation domain
           - ``kw`` -- optional values to substitute into the translation
 
         Return:
           - the lazy localized translation, as an unicode string
         """
-        return LazyProxy(self.ungettext, singular, plural, n, **kw)
+        return LazyProxy(self.ungettext, singular, plural, n, domain, **kw)
     _LN = lazy_ungettext
 
     def get_period_names(self):
@@ -990,8 +1035,8 @@ class Locale(CoreLocale):
         """
         previous_locale = get_locale()
 
-        if self.dirname is None:
-            self.dirname = previous_locale.dirname
+        if not self.translation_directories:
+            self.translation_directories.update(previous_locale.translation_directories)
 
         self._previous_locale = previous_locale
         set_locale(self)
@@ -1037,7 +1082,7 @@ class NegotiatedLocale(Locale):
                                  )
 
         if not locale:
-            (language, territory) = default_locale
+            (language, territory) = (default_locale + (None,))[:2]
         else:
             locale = core.LOCALE_ALIASES.get(locale, locale).replace('_', '-')
 
@@ -1054,33 +1099,11 @@ class NegotiatedLocale(Locale):
                                                 timezone=timezone, default_timezone=default_timezone
                                               )
 
-
 # -----------------------------------------------------------------------------
 
 def get_locale():
-    """Get the current locale for the request"""
     return getattr(local.request, 'locale', None) or Locale()
 
 
-def set_locale(locale, nagare_locale_dirname=None):
-    """Set the current locale for the request. You can optionally pass the
-    nagare locale dirname to use in order to find the nagare messages
-    translations, such as the ones found in the `validator` module.
-    Otherwise, we'll use the same directory as the provided locale"""
+def set_locale(locale):
     local.request.locale = locale
-    dirname = nagare_locale_dirname or locale.dirname
-    local.request.nagare_locale = _create_nagare_locale(locale, dirname)
-
-
-def _create_nagare_locale(locale, dirname):
-    """Create a locale object for translating the builtin nagare messages, such
-    as the ones in the validator module"""
-    nagare_locale = copy.deepcopy(locale)
-    nagare_locale.domain = 'nagare'  # nagare domain: use the 'nagare.po' files
-    nagare_locale.dirname = dirname
-    return nagare_locale
-
-
-def get_nagare_locale():
-    """Get the current nagare locale"""
-    return getattr(local.request, 'nagare_locale', None) or Locale()
