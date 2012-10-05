@@ -17,7 +17,7 @@ if sys.version_info < (2, 5, 2):
 
 import pkg_resources
 
-pkg_resources.declare_namespace('nagare')
+pkg_resources.declare_namespace(__name__)
 
 # -----------------------------------------------------------------------------
 

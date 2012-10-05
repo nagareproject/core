@@ -335,6 +335,11 @@ class Locale(CoreLocale):
 
         self._previous_locale = None
 
+        # By default, load the translation files for the 'nagare' domain
+        # from the nagare directories
+        nagare_translations_dir = pkg_resources.resource_filename(pkg_resources.Requirement.parse('nagare'), 'data/locale')
+        self.add_translation_directory(nagare_translations_dir, 'nagare')
+
     def add_translation_directory(self, dirname=None, domain=None):
         """Associate a directory to a translation domain
 
