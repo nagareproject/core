@@ -14,16 +14,10 @@ Suitable to be the validating functions of ``editor.property`` objects
 
 import re
 
-from nagare import i18n
+from nagare import i18n, partial
 
 
-# Specific translation functions for nagare messages
-def ugettext(msg, **kw):
-    return i18n.get_nagare_locale().ugettext(msg, **kw)
-
-
-def _L(msg, **kw):
-    return i18n.LazyProxy(ugettext, msg, **kw)
+_L = partial.Partial(i18n._L, domain='nagare')
 
 
 class Validator(object):
@@ -57,7 +51,7 @@ class Validator(object):
         self.value = v
 
 
-class IntValidator(Validator):
+class _IntValidator(Validator):
     """Conversion and validation of integers
     """
     def __init__(self, v, base=10, *args, **kw):
@@ -68,7 +62,7 @@ class IntValidator(Validator):
         In:
           - ``v`` -- value to validate
         """
-        super(IntValidator, self).__init__(v, *args, **kw)
+        super(_IntValidator, self).__init__(v, *args, **kw)
 
         try:
             self.value = int(self.value, base)
@@ -145,7 +139,7 @@ class IntValidator(Validator):
         raise ValueError(msg % {'value': self.value, 'min': min})
 
 
-class StringValidator(Validator):
+class _StringValidator(Validator):
     """Conversion and validation of string
     """
     def to_string(self):
@@ -307,6 +301,102 @@ class StringValidator(Validator):
             return self
 
         raise ValueError(msg % {'value': self.value})
+
+
+class DualCallable(object):
+    """"A hackish base class to allow both direct and lazy calls of methods
+
+    For compatibility with the old and new way to built a validation chain.
+
+    Examples:
+
+      - Old validation with direct calls: valid = lambda v: IntValidator(v).greater_than(10)
+      - New validation with lazy calls: valid = IntValidator().greater_than(10)
+    """
+    @classmethod
+    def init(cls):
+        """Class Initialization
+
+        Read all the methods belonging to the ``cls`` class and extend this class
+        with methods of the same names
+
+        In:
+          - ``cls`` -- class to proxy
+        """
+        for method in cls.get_cls().__dict__:
+            if not method.startswith('_'):
+
+                def _(m):
+                    return lambda self, *args, **kw: self.add_validation(_method=m, *args, **kw)
+
+                setattr(cls, method, _(method))
+
+        return cls
+
+    @classmethod
+    def get_cls(cls):
+        """Return the class where the methods to call are located
+        """
+        return cls.__bases__[1]
+
+    def __init__(self, v=None, *args, **kw):
+        """Initialization
+
+        If a value is passed, all the methods will be directly called
+        else, the method calls will be recorded and called later
+
+        In:
+          - ``v`` -- optional value
+          - ``args``, ``kw`` -- parameters of ``__init__``
+        """
+        if v is None:
+            self.args = args
+            self.kw = kw
+
+            self.methods_chain = []
+        else:
+            self.args = self.kw = self.methods_chain = None
+            super(DualCallable, self).__init__(v, *args, **kw)
+
+    def add_validation(self, *args, **kw):
+        """Directly call or record the call to a method
+
+        In:
+          - ``_method`` -- method to call (keyword parameter)
+          - ``args``, ``kw`` -- parameters of ``_method``
+        """
+        method = kw.pop('_method')
+        if self.methods_chain is None:
+            # Call the method
+            r = getattr(self.get_cls(), method)(self, *args, **kw)
+        else:
+            # Record the call
+            self.methods_chain.append((method, args, kw))
+            r = self
+
+        return r
+
+    def __call__(self, v=None):
+        """Final call. Call all the recorded methods
+
+        In:
+          - ``v`` -- value to start with
+
+        Return:
+          - the final result of all the calls
+        """
+        if self.methods_chain:
+            super(DualCallable, self).__init__(v, *self.args, **self.kw)
+
+            for method, args, kw in self.methods_chain:
+                getattr(self.get_cls(), method)(self, *args, **kw)
+
+        return super(DualCallable, self).__call__()
+
+
+# Mixins
+IntValidator = type.__new__(type, 'IntValidator', (DualCallable, _IntValidator), {}).init()
+StringValidator = type.__new__(type, 'StringValidator', (DualCallable, _StringValidator), {}).init()
 
 # Aliases
 to_int = IntValidator
