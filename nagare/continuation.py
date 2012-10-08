@@ -16,19 +16,98 @@ and the captured one, thus resuming where the context was captured.
 Tasklet = None
 
 try:
-    import stackless
+    from _continuation import continulet
 except ImportError:
-    # CPython
-    # -------
+    try:
+        import stackless
+    except ImportError:
+        # CPython
+        # -------
 
-    has_continuation = False
+        has_continuation = False
+
+        def get_current():
+            """Return the current execution context
+            """
+            return Continuation(lambda: None)
+
+        class Continuation(object):
+            """A ``Continuation()`` object launches a function in a new execution context"""
+
+            def __init__(self, f, *args, **kw):
+                """Create a new execution context where ``f`` is launched.
+
+                This new execution context became the current one.
+
+                In:
+                  - ``f`` -- function to call
+                  - ``args``, ``kw`` -- ``f`` arguments
+                """
+                # CPython: don't create an execution context. Only call the function
+                f(*args, **kw)
+
+            def switch(self, value=None):
+                """Permute this execution context with the current one
+
+                In:
+                  - ``value`` - value returned to the captured execution context
+                """
+                # No continuation objects in CPython :(
+                raise NotImplementedError('Stackless Python is needed to create continuations')
+    else:
+        # Stackless Python
+        # ----------------
+
+        has_continuation = True
+        Tasklet = stackless.tasklet
+
+        def get_current():
+            """Return the current execution context
+            """
+            return Channel()
+
+        def Continuation(f, *args, **kw):
+            """Create a new execution context where ``f`` is launched.
+
+            This new execution context became the current one.
+
+            In:
+              - ``f`` -- function to call
+              - ``args``, ``kw`` -- ``f`` arguments
+            """
+            stackless.tasklet(f)(*args, **kw).run()
+
+        class Channel(stackless.channel):
+            def switch(self, value=None):
+                """Permute this execution context with the current one
+
+                In:
+                  - ``value`` - value returned to the captured execution context
+                """
+                if self.balance:
+                    self.send(value)
+                else:
+                    return self.receive()
+else:
+    # PyPy
+    # ----
+
+    import threading
+
+    has_continuation = True
+    _tls = threading.local()
 
     def get_current():
         """Return the current execution context
         """
-        return Continuation(lambda: None)
+        return getattr(_tls, 'current', None)
 
-    class Continuation(object):
+    def set_current(cont):
+        """Set the current execution context
+        """
+        _tls.current = cont
+
+    class Continuation(continulet):
         """A ``Continuation()`` object launches a function in a new execution context"""
 
         def __init__(self, f, *args, **kw):
@@ -40,8 +119,8 @@ except ImportError:
               - ``f`` -- function to call
               - ``args``, ``kw`` -- ``f`` arguments
             """
-            # CPython: don't create an execution context. Only call the function
-            f(*args, **kw)
+            super(Continuation, self).__init__(lambda cont: f(*args, **kw))
+            self.switch()
 
         def switch(self, value=None):
             """Permute this execution context with the current one
@@ -49,42 +128,11 @@ except ImportError:
             In:
               - ``value`` - value returned to the captured execution context
             """
-            # No continuation objects in CPython :(
-            raise NotImplementedError('Stackless Python is needed to create continuations')
-else:
-    # Stackless Python
-    # ----------------
-
-    has_continuation = True
-    Tasklet = stackless.tasklet
-
-    def get_current():
-        """Return the current execution context
-        """
-        return Channel()
-
-    def Continuation(f, *args, **kw):
-        """Create a new execution context where ``f`` is launched.
-
-        This new execution context became the current one.
-
-        In:
-          - ``f`` -- function to call
-          - ``args``, ``kw`` -- ``f`` arguments
-        """
-        stackless.tasklet(f)(*args, **kw).run()
-
-    class Channel(stackless.channel):
-        def switch(self, value=None):
-            """Permute this execution context with the current one
-
-            In:
-              - ``value`` - value returned to the captured execution context
-            """
-            if self.balance:
-                self.send(value)
-            else:
-                return self.receive()
+            previous = get_current()
+            set_current(self)
+            r = super(Continuation, self).switch(value)
+            set_current(previous)
+            return r
 
 
 def call_wrapper(action, *args, **kw):
