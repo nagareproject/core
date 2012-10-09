@@ -318,6 +318,7 @@ class Locale(CoreLocale):
         else:
             self.language = self.territory = self.script = self.variant = None
 
+        self.domain = domain
         self.translation_directories = {}
         if dirname is not None:
             self.add_translation_directory(dirname, domain)
@@ -372,6 +373,7 @@ class Locale(CoreLocale):
         if self.language is None:
             return DummyTranslation()
 
+        domain = domain or self.domain
         dirname = self.translation_directories.get(domain) or self.translation_directories.get(None)
         args = (dirname, self.language, domain)
 
