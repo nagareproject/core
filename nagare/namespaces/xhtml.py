@@ -293,7 +293,7 @@ class _HTMLActionTag(xhtml_base._HTMLTag):
             self._async_action(self.renderer, action, with_request)
         else:
             # Wrap the ``action`` into a wrapper that will check the user permissions
-            action = security.wrapper(action, permissions, subject or self._renderer.component())
+            action = security.wrapper(action, permissions, subject or self.renderer.component())
             action = partial.Partial(action, *args, **kw)
 
             # Double dispatch with the renderer
