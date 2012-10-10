@@ -350,7 +350,7 @@ class Form(xhtml_base._HTMLTag):
         #self.append(renderer.input(name='_charset_', value='utf-8', type='hidden'))
 
         # Add into the form the hidden fields of the session and continuation ids
-        self._renderer.add_sessionid_in_form(self)
+        self.renderer.add_sessionid_in_form(self)
         return self
 
     def add_child(self, child):
@@ -381,7 +381,7 @@ class Form(xhtml_base._HTMLTag):
         Return:
           - ``self``
         """
-        action = security.wrapper(action, permissions, subject or self._renderer.component())
+        action = security.wrapper(action, permissions, subject or self.renderer.component())
         action = partial.Partial(action, *args, **kw)
 
         # Generate a hidden field with the action attached
@@ -750,7 +750,7 @@ class A(_HTMLActionTag):
 @peak.rules.when(xml.add_attribute, (A, basestring, basestring))
 def add_attribute(next_method, self, name, value):
     if name == 'href':
-        value = absolute_url(value, self._renderer.url)
+        value = absolute_url(value, self.renderer.url)
 
     next_method(self, name, value)
 
