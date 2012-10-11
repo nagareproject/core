@@ -57,6 +57,23 @@ class Component(object):
 
         return callbacks.register(priority, callback, with_request, render, self._new_callbacks)
 
+    def serialize_callbacks(self, clean_callbacks):
+        """Return the callbacks to serialize
+
+        In:
+          - ``clean_callbacks`` -- do we have to forget the old callbacks?
+
+        Return:
+          - the callbacks of this component
+        """
+        old = self.__dict__.pop('_callbacks', {})
+        new = self.__dict__.pop('_new_callbacks', {} if clean_callbacks else old)
+
+        if new:
+            self._callbacks = new
+
+        return new
+
     def render(self, renderer, model=0):
         """Rendering method of a component
 

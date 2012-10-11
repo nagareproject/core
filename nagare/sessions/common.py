@@ -130,26 +130,20 @@ def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
     Return:
       - the persistent id or ``None``
     """
+    r = None
+
     id_ = getattr(o, '_persistent_id', None)
     if id_ is not None:
         session_data[id_] = o
-        return str(id_)
+        r = str(id_)
 
-    if type(o) is Tasklet:
+    elif type(o) is Tasklet:
         tasklets.add(o)
-        return None
 
-    if isinstance(o, Component):
-        old = o.__dict__.pop('_callbacks', None)
-        new = o.__dict__.pop('_new_callbacks', None if clean_callbacks else old)
+    elif isinstance(o, Component):
+        callbacks.update(o.serialize_callbacks(clean_callbacks))
 
-        if new:
-            o._callbacks = new
-            callbacks.update(new)
-
-        return None
-
-    return None
+    return r
 
 
 class Sessions(object):
