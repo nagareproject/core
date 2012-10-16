@@ -13,6 +13,7 @@ Suitable to be the validating functions of ``editor.property`` objects
 """
 
 import re
+import functools
 
 from nagare import i18n, partial
 
@@ -20,7 +21,113 @@ from nagare import i18n, partial
 _L = partial.Partial(i18n._L, domain='nagare')
 
 
-class Validator(object):
+class DualCallable(type):
+    """"A hackish metaclass to allow both direct and deferred calls of methods
+
+    For compatibility with the old and new way to built a validation chain.
+
+    Examples:
+
+      - Old validation with direct calls: valid = lambda v: IntValidator(v).greater_than(10)
+      - New validation with lazy calls: valid = IntValidator().greater_than(10)
+    """
+    def __new__(cls, name, bases, ns):
+        """Class Initialization
+
+        Wrap all the methods in ``ns``
+
+        In:
+          - ``name`` -- name of the class to create
+          - ``bases`` -- base classes of the class to create
+          - ``ns`` -- namespace of the class to create
+
+        Return:
+          - a new class
+        """
+        for method_name, method in ns.iteritems():
+            if method_name == '__init__' or not method_name.startswith('_'):
+
+                def _(m):
+                    f = lambda self, *args, **kw: self._call_or_defer(m, *args, **kw)
+                    functools.update_wrapper(f, m)
+                    return f
+
+                ns[method_name] = _(method)
+
+        return super(DualCallable, cls).__new__(cls, name, bases, ns)
+
+
+class ValidatorBase(object):
+    """"A hackish base class to allow both direct and deferred calls of methods
+
+    For compatibility with the old and new way to built a validation chain.
+
+    Examples:
+
+      - Old validation with direct calls: valid = lambda v: IntValidator(v).greater_than(10)
+      - New validation with lazy calls: valid = IntValidator().greater_than(10)
+    """
+
+    __metaclass__ = DualCallable
+
+    def __new__(cls, v=None, *args, **kw):
+        """Method called before ``__init__``
+
+        If a ``v`` value is passed, all the methods will be directly called
+        else, the method calls will be recorded and called later
+
+        In:
+          - ``v`` -- optional value to validate
+          - ``args``, ``kw`` -- ``__init__`` parameters
+
+        Return:
+          - an instance
+        """
+        o = super(ValidatorBase, cls).__new__(cls)
+        o._defer = v is None
+        o._methods_chain = []
+        return o
+
+    def _call_or_defer(self, _method, *args, **kw):
+        """Directly call or record the call to a method
+
+        In:
+          - ``_method`` -- method to call (keyword parameter)
+          - ``args``, ``kw`` -- parameters of ``_method``
+        """
+        if self._defer:
+            # Record the call to the method
+            self._methods_chain.append((_method, args, kw))
+            return None if _method.__name__ == '__init__' else self
+
+        # Directly call the method
+        return _method(self, *args, **kw)
+
+    def __call__(self, v=None):
+        """Return the already validated value or call now all the deferred methods
+
+        In:
+          - ``v`` -- optional value to validate
+
+        Return:
+          - the final result of all the calls
+        """
+        if self._defer:
+            self._defer = False
+
+            try:
+                method, args, kw = self._methods_chain[0]
+                method(self, v, *args, **kw)
+
+                for method, args, kw in self._methods_chain[1:]:
+                    method(self, *args, **kw)
+            finally:
+                self._defer = True
+
+        return self.value
+
+
+class Validator(ValidatorBase):
     """Base class for the validation objects
     """
     def __init__(self, v, strip=False, rstrip=False, lstrip=False, chars=None):
@@ -51,7 +158,7 @@ class Validator(object):
         self.value = v
 
 
-class _IntValidator(Validator):
+class IntValidator(Validator):
     """Conversion and validation of integers
     """
     def __init__(self, v, base=10, *args, **kw):
@@ -62,21 +169,14 @@ class _IntValidator(Validator):
         In:
           - ``v`` -- value to validate
         """
-        super(_IntValidator, self).__init__(v, *args, **kw)
+        super(IntValidator, self).__init__(v, *args, **kw)
 
         try:
             self.value = int(self.value, base)
         except (ValueError, TypeError):
             raise ValueError('Must be an integer')
 
-    def to_int(self):
-        """Return the value, converted to an integer
-
-        Return:
-          - the integer value
-        """
-        return self.value
-    __call__ = to_int
+    to_int = Validator.__call__
 
     def lesser_than(self, max, msg=_L('Must be lesser than %(max)d')):
         """Check that the value is lesser than a limit
@@ -139,17 +239,10 @@ class _IntValidator(Validator):
         raise ValueError(msg % {'value': self.value, 'min': min})
 
 
-class _StringValidator(Validator):
+class StringValidator(Validator):
     """Conversion and validation of string
     """
-    def to_string(self):
-        """Return the value, converted to a string
-
-        Return:
-          - the string value
-        """
-        return self.value
-    __call__ = to_string
+    to_string = Validator.__call__
 
     def to_int(self, base=10):
         """Return the value, converted to an integer
@@ -160,7 +253,8 @@ class _StringValidator(Validator):
         Return:
           - the integer value
         """
-        return int(self.value, base=base)
+        self.value = int(self.value, base=base)
+        return self.value
 
     def not_empty(self, msg=_L("Can't be empty")):
         """Check that the value is not empty
@@ -301,102 +395,6 @@ class _StringValidator(Validator):
             return self
 
         raise ValueError(msg % {'value': self.value})
-
-
-class DualCallable(object):
-    """"A hackish base class to allow both direct and lazy calls of methods
-
-    For compatibility with the old and new way to built a validation chain.
-
-    Examples:
-
-      - Old validation with direct calls: valid = lambda v: IntValidator(v).greater_than(10)
-      - New validation with lazy calls: valid = IntValidator().greater_than(10)
-    """
-    @classmethod
-    def init(cls):
-        """Class Initialization
-
-        Read all the methods belonging to the ``cls`` class and extend this class
-        with methods of the same names
-
-        In:
-          - ``cls`` -- class to proxy
-        """
-        for method in cls.get_cls().__dict__:
-            if not method.startswith('_'):
-
-                def _(m):
-                    return lambda self, *args, **kw: self.add_validation(_method=m, *args, **kw)
-
-                setattr(cls, method, _(method))
-
-        return cls
-
-    @classmethod
-    def get_cls(cls):
-        """Return the class where the methods to call are located
-        """
-        return cls.__bases__[1]
-
-    def __init__(self, v=None, *args, **kw):
-        """Initialization
-
-        If a value is passed, all the methods will be directly called
-        else, the method calls will be recorded and called later
-
-        In:
-          - ``v`` -- optional value
-          - ``args``, ``kw`` -- parameters of ``__init__``
-        """
-        if v is None:
-            self.args = args
-            self.kw = kw
-
-            self.methods_chain = []
-        else:
-            self.args = self.kw = self.methods_chain = None
-            super(DualCallable, self).__init__(v, *args, **kw)
-
-    def add_validation(self, *args, **kw):
-        """Directly call or record the call to a method
-
-        In:
-          - ``_method`` -- method to call (keyword parameter)
-          - ``args``, ``kw`` -- parameters of ``_method``
-        """
-        method = kw.pop('_method')
-        if self.methods_chain is None:
-            # Call the method
-            r = getattr(self.get_cls(), method)(self, *args, **kw)
-        else:
-            # Record the call
-            self.methods_chain.append((method, args, kw))
-            r = self
-
-        return r
-
-    def __call__(self, v=None):
-        """Final call. Call all the recorded methods
-
-        In:
-          - ``v`` -- value to start with
-
-        Return:
-          - the final result of all the calls
-        """
-        if self.methods_chain:
-            super(DualCallable, self).__init__(v, *self.args, **self.kw)
-
-            for method, args, kw in self.methods_chain:
-                getattr(self.get_cls(), method)(self, *args, **kw)
-
-        return super(DualCallable, self).__call__()
-
-
-# Mixins
-IntValidator = type.__new__(type, 'IntValidator', (DualCallable, _IntValidator), {}).init()
-StringValidator = type.__new__(type, 'StringValidator', (DualCallable, _StringValidator), {}).init()
 
 # Aliases
 to_int = IntValidator
