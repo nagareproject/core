@@ -32,11 +32,14 @@ class Admin(object):
 @presentation.render_for(Admin)
 def render(self, h, *args):
     """Display informations about the running framework environment"""
+    version = sys.version.split('\n')
+
     return h.div(
         h.h2('Informations'),
 
         h.p('Nagare - version %s - %s -' % (pkg_resources.get_distribution('nagare').version, time.strftime('%c'))),
         # h.p('Installed options: ', ', '.join(pkg_resources.get_distribution('fw-ng').extras)),
 
-        h.p(sys.subversion[0], ' ', sys.version.split('\n')[0])
+        h.p(sys.subversion[0], ' ', version[0]),
+        [h.p(v) for v in version[1:]]
     )
