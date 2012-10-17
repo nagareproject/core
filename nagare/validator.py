@@ -45,7 +45,7 @@ class DualCallable(type):
           - a new class
         """
         for method_name, method in ns.iteritems():
-            if method_name == '__init__' or not method_name.startswith('_'):
+            if callable(method) and (method_name == '__init__' or not method_name.startswith('_')):
 
                 def _(m):
                     f = lambda self, *args, **kw: self._call_or_defer(m, *args, **kw)
