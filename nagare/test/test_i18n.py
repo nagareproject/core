@@ -30,7 +30,7 @@ class Translation(dict):
 
 
 class Locale(i18n.Locale):
-    def _get_translation(self):
+    def _get_translation(self, domain=None):
         translation = Translation({
             'hello': 'bonjour',
             'Holidays': 'Vacances %(year)d',
