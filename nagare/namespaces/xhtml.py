@@ -1111,7 +1111,7 @@ class Renderer(xhtml_base.Renderer):
           - ``render`` -- render method to generate the view after the ``f`` action will be called
         """
         if self.component is not None:
-            return self.component.register_callback(priority, f, with_request, render)
+            return self.component.register_callback(self.model or None, priority, f, with_request, render)
 
         return ''
 

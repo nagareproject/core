@@ -51,23 +51,54 @@ class Component(object):
         """
         return self.o
 
-    def register_callback(self, priority, callback, with_request, render):
-        if not hasattr(self, '_new_callbacks'):
-            self._new_callbacks = {}
+    def register_callback(self, model, priority, callback, with_request, render):
+        """Register a callback for this component
 
-        return callbacks.register(priority, callback, with_request, render, self._new_callbacks)
+        In:
+          - ``model`` -- name of the view which registers this callback (``None`` for the default view)
+          - ``priority`` -- type and priority of the callback
+          - ``callback`` -- the action function or method
+          - ``with_request`` -- will the request and response objects be passed to the action?
+          - ``render`` -- the render function or method
+        """
+        self.__dict__.setdefault('_new_callbacks', {})
+        return callbacks.register(model, priority, callback, with_request, render, self._new_callbacks)
 
     def serialize_callbacks(self, clean_callbacks):
         """Return the callbacks to serialize
 
         In:
-          - ``clean_callbacks`` -- do we have to forget the old callbacks?
+          - ``clean_callbacks`` -- do we have to forget all the old callbacks?
 
         Return:
           - the callbacks of this component
         """
         old = self.__dict__.pop('_callbacks', {})
-        new = self.__dict__.pop('_new_callbacks', {} if clean_callbacks else old)
+        new = self.__dict__.pop('_new_callbacks', {})
+
+        if not clean_callbacks:
+            # Selectively keep some old callbacks
+
+            # --
+            # Policy #1: keep the old callbacks only if no view was rendered
+            # => simple cleanup but can lead to ``CallbackLookup`` errors
+            #if not new:
+            #    new = old
+            # --
+
+            # --
+            # Policy #2: no cleanup, always keep all the old callbacks
+            # => no ``CallbackLookup`` errors but the sessions can keep growing
+            #    in size as they are only reset when a new complete synchronous
+            #    page rendering is done
+            #new.update(old)
+            # --
+
+            # --
+            # Policy #3: keep the old callbacks registered by a view only if
+            # this view was not rendered again
+            new.update(callbacks.clean(old, new))
+            # --
 
         if new:
             self._callbacks = new

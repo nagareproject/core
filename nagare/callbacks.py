@@ -20,10 +20,11 @@ class CallbackLookupError(LookupError):
     pass
 
 
-def register(priority, callback, with_request, render, callbacks):
+def register(model, priority, callback, with_request, render, callbacks):
     """Register a callback
 
     In:
+      - ``model`` -- name of the view which registers this callback (``None`` for the default view)
       - ``priority`` -- type of the callback
 
         - 0 : <form>.pre_action
@@ -34,7 +35,7 @@ def register(priority, callback, with_request, render, callbacks):
         - 5 : action with continuation and with value (special case for >input type='image'>)
 
       - ``callback`` -- the action function or method
-      - ``with_request`` -- will the request and response objects be passed to the action ?
+      - ``with_request`` -- will the request and response objects be passed to the action?
       - ``render`` -- the render function or method
 
     Out:
@@ -46,10 +47,24 @@ def register(priority, callback, with_request, render, callbacks):
     """
     id_ = random.randint(10000000, 99999999)
 
-    # Remember the action and the rendering function
-    callbacks[id_] = (callback, with_request, render)
+    # Remember the model, the action and the rendering function
+    callbacks[id_] = (model, callback, with_request, render)
 
     return '_action%d%08d' % (priority, id_)
+
+
+def clean(old, new):
+    """Keep the old callbacks registered by a view only if this view has not registered new callbacks
+
+    In:
+      - ``old`` -- the old registered callbacks
+      - ``new`` -- the new registered callbacks
+    """
+    # Retrieve all views which has registered new callbacks
+    models = set(callback[0] for callback in new.itervalues())
+
+    # Keep only the old callbacks of a view if no new callbacks were registered
+    return dict((k, v) for k, v in old.iteritems() if v[0] not in models)
 
 
 def process(callbacks, request, response):
@@ -91,7 +106,7 @@ def process(callbacks, request, response):
 
     for ((callback_type, _), name, param, value) in sorted(actions.values()):
         try:
-            (f, with_request, render) = callbacks[name]
+            (model, f, with_request, render) = callbacks[name]
         except KeyError:
             raise CallbackLookupError(name)
 
