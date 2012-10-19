@@ -52,6 +52,7 @@ def setup_func():
 
 
 def teardown_func():
+    session.expunge_all()
     drop_all()
 
 

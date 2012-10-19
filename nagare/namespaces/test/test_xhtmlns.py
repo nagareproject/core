@@ -9,6 +9,13 @@
 
 from __future__ import with_statement
 
+import os
+from types import ListType
+from StringIO import StringIO
+
+from paste.fixture import TestApp
+from lxml import etree as ET
+
 from nagare.namespaces import xhtml
 from nagare.namespaces import xhtml_base
 from nagare.namespaces import xml
@@ -17,12 +24,6 @@ from nagare import wsgi
 from nagare import local
 from nagare.sessions.memory_sessions import SessionsWithPickledStates
 from nagare import presentation
-
-from types import ListType
-
-from paste.fixture import TestApp
-
-import os
 
 
 def create_FixtureApp(app):
@@ -34,6 +35,17 @@ def create_FixtureApp(app):
     app.start()
 
     return TestApp(app)
+
+
+def c14n(node):
+    if not isinstance(node, basestring):
+        node = node.write_xmlstring()
+
+    node = ET.fromstring(node).getroottree()
+
+    buf = StringIO()
+    node.write_c14n(buf)
+    return buf.getvalue().replace('\n', '')
 
 # Test for XHTML namespace
 
@@ -170,21 +182,21 @@ def head_render_render_test1():
     """ XHTML namespace unit test - HeadRender - Render - render only style tag """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     h << h.style()
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head><style></style></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head><style></style></head>')
 
 
 def head_render_render_test2():
     """ XHTML namespace unit test - HeadRender - Render - render only css_url method """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     h << h.css_url('css')
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head><link href="/tmp/static_directory/css" type="text/css" rel="stylesheet"></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head><link href="/tmp/static_directory/css" type="text/css" rel="stylesheet"/></head>')
 
 
 def head_render_render_test3():
     """ XHTML namespace unit test - HeadRender - Render - render only css method """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     h << h.css('css_test', 'test')
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head><style type="text/css">test</style></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head><style type="text/css">test</style></head>')
 
 
 def head_render_render_test4():
@@ -194,28 +206,28 @@ def head_render_render_test4():
     presentation.render(h, None, None, None)
     renderResult = presentation.render(h, None, None, None)
     assert not isinstance(renderResult, ListType)
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head><link href="/tmp/static_directory/css" type="text/css" rel="stylesheet"></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head><link href="/tmp/static_directory/css" type="text/css" rel="stylesheet"/></head>')
 
 
 def head_render_render_test5():
     """ XHTML namespace unit test - HeadRender - Render - render only css method """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     h << h.css('css_test', 'test')
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head><style type="text/css">test</style></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head><style type="text/css">test</style></head>')
 
 
 def head_render_render_test6():
     """ XHTML namespace unit test - HeadRender - Render - render only javascript_url method """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     h << h.javascript_url('test.js')
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head><script src="/tmp/static_directory/test.js" type="text/javascript"></script></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head><script src="/tmp/static_directory/test.js" type="text/javascript"></script></head>')
 
 
 def head_render_render_test7():
     """ XHTML namespace unit test - HeadRender - Render - render only string js method """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     h << h.javascript('test.js', 'function test() { return True }')
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head><script type="text/javascript">function test() { return True }</script></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head><script type="text/javascript">function test() { return True }</script></head>')
 
 
 def head_render_render_test8():
@@ -227,14 +239,14 @@ def head_render_render_test8():
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     with h.head({'lang': 'lang', 'dir': 'dir', 'id': 'id', 'profile': 'profile'}):
         h << h.javascript('test', js_method)
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head lang="lang" profile="profile" id="id" dir="dir"><script src="/static/nagare/pyjslib.js" type="text/javascript"></script><script type="text/javascript">function nagare_namespaces_test_test_xhtmlns_js_method(arg1) {    return true;}</script></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head lang="lang" profile="profile" id="id" dir="dir"><script src="/static/nagare/pyjslib.js" type="text/javascript"></script><script type="text/javascript">function nagare_namespaces_test_test_xhtmlns_js_method(arg1) {    return true;}</script></head>')
 
 
 def head_render_render_test9():
     """ XHTML namespace unit test - HeadRender - Render - render with head """
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     h << h.head({'id': 'id'})
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head id="id"></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head id="id"></head>')
 
 
 def head_render_render_test10():
@@ -242,7 +254,7 @@ def head_render_render_test10():
     h = xhtml.HeadRenderer('/tmp/static_directory/')
     with h.head({'id': 'id'}):
         h << h.style('test', {'id': 'id'})
-    assert presentation.render(h, None, None, None).write_htmlstring().replace('\n', '') == '<head id="id"><style id="id">test</style></head>'
+    assert c14n(presentation.render(h, None, None, None)) == c14n('<head id="id"><style id="id">test</style></head>')
 
 
 def html_render_init_test1():
@@ -290,14 +302,14 @@ def html_render_parse_html_test3():
     """ XHTML namespace unit test - HTMLRender - parse_htmlstring - bad html (auto correct)"""
     h = xhtml.Renderer()
     root = h.parse_htmlstring('<html><head><body></body></head><html>')
-    assert root.write_htmlstring() == '<html><head></head><body></body></html>'
+    assert c14n(root) == c14n('<html><head></head><body></body></html>')
 
 
 def html_render_parse_html_test4():
     """ XHTML namespace unit test - HTMLRender - parse_htmlstring - bad html"""
     h = xhtml.Renderer()
     root = h.parse_htmlstring('test')
-    assert root.write_htmlstring() == '<html><body><p>test</p></body></html>'
+    assert c14n(root) == c14n('<html><body><p>test</p></body></html>')
 
 
 def html_render_parse_html_test5():
@@ -394,28 +406,28 @@ def htmltag_write_xmlstring_test1():
     """ XHTML namespace unit test - HTMLRender - write_htmlstring - without argument """
     h = xhtml.Renderer()
     h << h.table(h.tr(h.td()), h.tr(h.td()))
-    assert h.root.write_htmlstring() == '<table><tr><td></td></tr><tr><td></td></tr></table>'
+    assert c14n(h.root) == c14n('<table><tr><td></td></tr><tr><td></td></tr></table>')
 
 
 def htmltag_write_xmlstring_test2():
     """ XHTML namespace unit test - HTMLRender - write_htmlstring - with pipeline == True"""
     h = xhtml.Renderer()
     h << h.table(h.tr(h.td().meld_id('test'), h.tr(h.td().meld_id('test'))))
-    assert h.root.write_htmlstring(pipeline=True) == '<table><tr><td xmlns:ns0="http://www.plope.com/software/meld3" ns0:id="test"></td><tr><td xmlns:ns0="http://www.plope.com/software/meld3" ns0:id="test"></td></tr></tr></table>'
+    assert c14n(h.root.write_htmlstring(pipeline=True)) == c14n('<table><tr><td xmlns:ns0="http://www.plope.com/software/meld3" ns0:id="test"></td><tr><td xmlns:ns0="http://www.plope.com/software/meld3" ns0:id="test"></td></tr></tr></table>')
 
 
 def htmltag_write_xmlstring_test3():
     """ XHTML namespace unit test - HTMLRender - write_htmlstring - with pipeline == False """
     h = xhtml.Renderer()
     h << h.table(h.tr(h.td().meld_id('false'), h.tr(h.td().meld_id('false'))))
-    assert h.root.write_htmlstring(pipeline=False) == '<table><tr><td xmlns:ns0="http://www.plope.com/software/meld3"></td><tr><td xmlns:ns0="http://www.plope.com/software/meld3"></td></tr></tr></table>'
+    assert c14n(h.root.write_htmlstring(pipeline=False)) == c14n('<table><tr><td xmlns:ns0="http://www.plope.com/software/meld3"></td><tr><td xmlns:ns0="http://www.plope.com/software/meld3"></td></tr></tr></table>')
 
 
 def html_render_add_tag_test1():
     """ XHTML namespace unit test - HTMLRender - add tag - create simple html """
     h = xhtml.Renderer()
     h << h.html(h.body(h.table(h.tr(h.td()), h.tr(h.td()))))
-    assert h.root.write_htmlstring().replace('\n', '') == '<html><body><table><tr><td></td></tr><tr><td></td></tr></table></body></html>'
+    assert c14n(h.root) == c14n('<html><body><table><tr><td></td></tr><tr><td></td></tr></table></body></html>')
 
 
 def html_render_form_test1():
@@ -429,7 +441,7 @@ def html_render_form_test1():
     assert attributes['enctype'] == "multipart/form-data"
     assert attributes['action'] == "?"
 
-    assert h.root.write_htmlstring().replace('\n', '') == '<html><body><form enctype="multipart/form-data" method="post" accept-charset="utf-8" action="?"><input type="string" name="input1" value="value"><input type="submit" name="submit"></form></body></html>'
+    assert c14n(h.root) == c14n('<html><body><form enctype="multipart/form-data" method="post" accept-charset="utf-8" action="?"><input type="string" name="input1" value="value"/><input type="submit" name="submit"/></form></body></html>')
 
 
 def html_render_form_test2():
@@ -868,7 +880,7 @@ def html_render_img_test1():
         with h.body:
             h << h.img(src="http://www.google.com/intl/en_ALL/images/logo.gif")
 
-    assert h.root.write_htmlstring() == '<html><body><img src="http://www.google.com/intl/en_ALL/images/logo.gif"></body></html>'
+    assert c14n(h.root) == c14n('<html><body><img src="http://www.google.com/intl/en_ALL/images/logo.gif"/></body></html>')
 
 
 def html_render_img_test2():
@@ -879,7 +891,7 @@ def html_render_img_test2():
         with h.body:
             h << h.img(src="logo.gif")
 
-    assert h.root.write_htmlstring() == '<html><body><img src="/tmp/static/logo.gif"></body></html>'
+    assert c14n(h.root) == c14n('<html><body><img src="/tmp/static/logo.gif"></body></html>')
 
 
 def html_render_img_test3():
@@ -890,7 +902,7 @@ def html_render_img_test3():
         with h.body:
             h << h.img(src="/logo.gif")
 
-    assert h.root.write_htmlstring() == '<html><body><img src="/logo.gif"></body></html>'
+    assert c14n(h.root) == c14n('<html><body><img src="/logo.gif"/></body></html>')
 
 
 def html_render_select_test8():
@@ -914,7 +926,7 @@ def html_render_a_test1():
 
     a = h.root.xpath('.//a')[0]
     assert isinstance(a, xhtml.A)
-    assert h.root.write_htmlstring() == '<html><body><a href="http://www.google.com">google</a></body></html>'
+    assert c14n(h.root) == c14n('<html><body><a href="http://www.google.com">google</a></body></html>')
 
 
 def html_render_img_test2():
@@ -925,7 +937,7 @@ def html_render_img_test2():
         with h.body:
             h << h.img(src="logo.gif")
 
-    assert h.root.write_htmlstring() == '<html><body><img src="/tmp/static/logo.gif"></body></html>'
+    assert c14n(h.root) == c14n('<html><body><img src="/tmp/static/logo.gif"/></body></html>')
 
 
 def html_render_action_test1():
@@ -1032,7 +1044,7 @@ def html_render_action_test8():
     assert a.attrib['src'] != 'http://www.google.com'
 
 
-xml_test1_out = """<html><body onload="javascript:alert()">
+xml_test1_out = c14n("""<html><body onload="javascript:alert()">
 <ul>
 <li>Hello</li>
 <li>world</li>
@@ -1055,7 +1067,7 @@ xml_test1_out = """<html><body onload="javascript:alert()">
 <td>c</td>
 </tr>
 </table>
-</body></html>"""
+</body></html>""")
 
 
 def global_test1():
@@ -1089,8 +1101,7 @@ def global_test1():
                             with h.td:
                                 h << column
 
-    xmlToTest = h.root.write_htmlstring(pretty_print=True).strip()
-    assert xmlToTest == xml_test1_out
+    assert c14n(h.root) == xml_test1_out
 
 
 def global_test2():
@@ -1106,6 +1117,4 @@ def global_test2():
 
     html = h.html([h.body([helloWorld, totoDiv, yeah012, table], {'onload':'javascript:alert()'})])
 
-    xmlToTest = html.write_htmlstring(pretty_print=True).strip()
-
-    assert xmlToTest == xml_test1_out
+    assert c14n(html) == xml_test1_out
