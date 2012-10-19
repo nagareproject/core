@@ -53,7 +53,7 @@ except ImportError:
                   - ``value`` - value returned to the captured execution context
                 """
                 # No continuation objects in CPython :(
-                raise NotImplementedError('Stackless Python is needed to create continuations')
+                raise NotImplementedError('Stackless Python or PyPy is needed to create continuations')
     else:
         # Stackless Python
         # ----------------

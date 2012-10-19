@@ -22,11 +22,11 @@ from setuptools import setup, find_packages
 try:
     import stackless
 except ImportError:
-    print "Warning: you are installing Nagare on CPython instead of Stackless Python (http://www.stackless.com)."
+    print "Warning: you are installing Nagare on CPython instead of Stackless Python (http://www.stackless.com) or PyPy (http://pypy.org)."
     print "         Without 'continuation', the 'Component.call()' method will not be available."
 
 if sys.version_info < (2, 5, 2):
-    print 'The version of Stackless Python must be 2.5.2 or more'
+    print 'The version of Python must be 2.5.2 or more'
     sys.exit(-2)
 
 # -----------------------------------------------------------------------------
@@ -66,25 +66,22 @@ setup(
       use_hg_version=True,
       package_data={'': ['nagare/static/*']},
       namespace_packages=('nagare',),
-      zip_safe = False,
-      dependency_links=('http://www.nagare.org/download/',),
-      install_requires=('PEAK-Rules', 'ConfigObj', 'lxml==2.3.0', 'WebOb>=1.2b1', 'Paste', 'flup', 'python-memcached'),
+      zip_safe=False,
+      dependency_links=('http://www.nagare.org/download/', 'http://www.lfd.uci.edu/~gohlke/pythonlibs'),
+      install_requires=('PEAK-Rules', 'ConfigObj', 'lxml>=3.0.1', 'WebOb>=1.2.3', 'Paste', 'flup', 'python-memcached'),
       message_extractors={'nagare': [
           ('test/**', 'ignore', None),
           ('**.py', 'python', None),
       ]},
       extras_require={
         'debug': ('WebError',),
-        # The SQLAlchemy==0.5.8 version restriction can be removed if you want to test a newer version.
-        # Nagare 0.4.0 is compatible with SQLAlchemy 0.6.x and 0.7.x.
-        # But we observe an important performance drop on our projects, at least with Oracle.
-        'database': ('SQLAlchemy==0.5.8', 'Elixir'),
+        'database': ('SQLAlchemy', 'Elixir'),
         'doc': ('Pygments==1.1', 'docutils', 'RstDoc'),
         'test': ('nose',),
         'i18n': ('Babel', 'pytz'),
         'full': (
                   'WebError',
-                  'SQLAlchemy==0.5.8', 'Elixir',
+                  'SQLAlchemy', 'Elixir',
                   'Pygments==1.1', 'docutils', 'RstDoc',
                   'nose',
                   'Babel', 'pytz'

@@ -10,7 +10,7 @@
 import sys
 
 if sys.version_info < (2, 5, 2):
-    print 'The version of Stackless Python must be 2.5.2 or more'
+    print 'The version of Python must be 2.5.2 or more'
     sys.exit(-2)
 
 # -----------------------------------------------------------------------------

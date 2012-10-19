@@ -192,7 +192,7 @@ class Component(object):
         try:
             r = self._cont.switch()
         except NotImplementedError:
-            raise NotImplementedError('Stackless Python is needed for `comp.call()`')
+            raise NotImplementedError('Stackless Python or PyPy is needed for `comp.call()`')
 
         # Restore my configuration
         self._on_answer = previous_on_answer
