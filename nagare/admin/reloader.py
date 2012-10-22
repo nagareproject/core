@@ -11,6 +11,7 @@ importation errors into the modified file.
 import os
 import sys
 import time
+import platform
 import threading
 import traceback
 import subprocess
@@ -72,7 +73,7 @@ def restart_with_monitor():
                 #    raise
                 return 1
         finally:
-            if (proc is not None) and hasattr(os, 'kill'):
+            if (proc is not None) and hasattr(os, 'kill') and (platform.system() != 'Windows'):
                 import signal
                 try:
                     os.kill(proc.pid, signal.SIGTERM)
