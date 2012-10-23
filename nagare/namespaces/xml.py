@@ -372,7 +372,7 @@ def add_child(self, element):
 
     Do nothing
     """
-    pass
+    self.append(element)
 
 
 @peak.rules.when(add_child, (_Tag, dict))
@@ -412,6 +412,10 @@ def add_attribute(self, name, value):
 @peak.rules.when(add_attribute, (_Tag, basestring, basestring))
 def add_attribute(self, name, value):
     self.set(name, value)
+
+@peak.rules.when(add_attribute, (ET._ProcessingInstruction, basestring, basestring))
+def add_attribute(self, name, value):
+    self.text += (' %s="%s"' % (name, value))
 
 # ---------------------------------------------------------------------------
 
@@ -650,6 +654,27 @@ class XmlRenderer(common.Renderer):
           - the new comment element
         """
         return ET.Comment(text)
+
+    def processing_instruction(self, target, text=None, **kw):
+        """Create a processing instruction element
+
+        In:
+          - ``target`` -- the PI target
+          - ``text`` -- the PI text
+          - ``kw`` -- pseudo attributes
+
+        Return:
+          - the new processing instruction element
+        """
+        pi = ET.ProcessingInstruction(target, text)
+
+        for name, value in kw.iteritems():
+            if name.endswith('_'):
+                name = name[:-1]
+
+            add_attribute(pi, name, value)
+
+        return pi
 
     def parse_xml(self, source, fragment=False, no_leading_text=False, **kw):
         """Parse a XML file
