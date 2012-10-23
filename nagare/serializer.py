@@ -9,6 +9,8 @@
 
 """Generate the content to return to the browser"""
 
+from lxml import etree
+
 import peak.rules
 import lxml.html
 
@@ -33,7 +35,7 @@ def serialize(output, content_type, doctype, declaration):
 
 @peak.rules.when(serialize, (xhtml_base._HTMLTag,))
 def serialize(next_method, output, content_type, doctype, declaration):
-    """Generic method to generate (X)HTML from a tree
+    """Generic method to generate a (X)HTML text from a tree
 
     In:
       - ``output`` -- the rendered content
@@ -62,7 +64,7 @@ def serialize(next_method, output, content_type, doctype, declaration):
 
 @peak.rules.when(serialize, (xml._Tag,))
 def serialize(output, content_type, doctype, declaration):
-    """Generic method to generate XML from a tree
+    """Generic method to generate a XML text from a tree
 
     In:
       - ``output`` -- the rendered content
@@ -75,6 +77,38 @@ def serialize(output, content_type, doctype, declaration):
     """
     r = ('<?xml version="1.0" encoding="UTF-8"?>\n' + doctype + '\n') if declaration else ''
     return (content_type, r + output.write_xmlstring())
+
+
+@peak.rules.when(serialize, (etree._Comment,))
+def serialize(output, content_type, doctype, declaration):
+    """Generic method to generate a XML text from a comment element
+
+    In:
+      - ``output`` -- the comment element
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
+
+    Return:
+      - a tuple (content_type, content)
+    """
+    return (content_type, etree.tostring(output))
+
+
+@peak.rules.when(serialize, (etree._ProcessingInstruction,))
+def serialize(output, content_type, doctype, declaration):
+    """Generic method to generate a XML test from a processing instruction
+
+    In:
+      - ``output`` -- the processing instruction
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed ?
+
+    Return:
+      - a tuple (content_type, content)
+    """
+    return (content_type, etree.tostring(output))
 
 
 @peak.rules.when(serialize, (str,))
