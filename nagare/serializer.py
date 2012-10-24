@@ -25,7 +25,7 @@ def serialize(output, content_type, doctype, declaration):
       - ``output`` -- the rendered content
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - a tuple (content_type, content)
@@ -41,7 +41,7 @@ def serialize(next_method, output, content_type, doctype, declaration):
       - ``output`` -- the rendered content
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - a tuple (content_type, content)
@@ -57,12 +57,33 @@ def serialize(next_method, output, content_type, doctype, declaration):
         # The browser only accepts HTML
         lxml.html.xhtml_to_html(output)
 
-        output = (doctype + '\n' if declaration else '') + output.write_htmlstring(pretty_print=True)
+        output = output.write_htmlstring(pretty_print=True, doctype=doctype if declaration else None)
 
     return (content_type, output)
 
 
 @peak.rules.when(serialize, (xml._Tag,))
+def serialize(next_method, output, content_type, doctype, declaration):
+    """Generic method to generate a XML text from a tree
+
+    In:
+      - ``output`` -- the rendered content
+      - ``content_type`` -- the rendered content type
+      - ``doctype`` -- the (optional) doctype
+      - ``declaration`` -- is the XML declaration to be outputed?
+
+    Return:
+      - a tuple (content_type, content)
+    """
+    if content_type == 'text/html':
+        output = next_method(output, content_type, doctype, declaration)[1]
+    else:
+        output = output.write_xmlstring(xml_declaration=declaration, doctype=doctype if declaration else None)
+
+    return (content_type, output)
+
+
+@peak.rules.when(serialize, (etree._Element,))
 def serialize(output, content_type, doctype, declaration):
     """Generic method to generate a XML text from a tree
 
@@ -70,45 +91,26 @@ def serialize(output, content_type, doctype, declaration):
       - ``output`` -- the rendered content
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - a tuple (content_type, content)
     """
-    r = ('<?xml version="1.0" encoding="UTF-8"?>\n' + doctype + '\n') if declaration else ''
-    return (content_type, r + output.write_xmlstring())
+    if content_type == 'text/html':
+        lxml.html.xhtml_to_html(output)
+        method = 'html'
+        pretty_print = True
+    else:
+        method = 'xml'
+        pretty_print = False
 
-
-@peak.rules.when(serialize, (etree._Comment,))
-def serialize(output, content_type, doctype, declaration):
-    """Generic method to generate a XML text from a comment element
-
-    In:
-      - ``output`` -- the comment element
-      - ``content_type`` -- the rendered content type
-      - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
-
-    Return:
-      - a tuple (content_type, content)
-    """
-    return (content_type, etree.tostring(output))
-
-
-@peak.rules.when(serialize, (etree._ProcessingInstruction,))
-def serialize(output, content_type, doctype, declaration):
-    """Generic method to generate a XML test from a processing instruction
-
-    In:
-      - ``output`` -- the processing instruction
-      - ``content_type`` -- the rendered content type
-      - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
-
-    Return:
-      - a tuple (content_type, content)
-    """
-    return (content_type, etree.tostring(output))
+    return (
+            content_type,
+            etree.tostring(
+                output, encoding='utf-8', method=method, pretty_print=pretty_print,
+                xml_declaration=declaration, doctype=doctype if declaration else None
+                )
+            )
 
 
 @peak.rules.when(serialize, (str,))
@@ -119,7 +121,7 @@ def serialize(output, content_type, doctype, declaration):
       - ``output`` -- the rendered content
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - a tuple (content_type, content)
@@ -135,7 +137,7 @@ def serialize(output, content_type, doctype, declaration):
       - ``output`` -- the rendered content
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - a tuple (content_type, content)
@@ -145,13 +147,13 @@ def serialize(output, content_type, doctype, declaration):
 
 @peak.rules.when(serialize, ((list, tuple),))
 def serialize(output, content_type, doctype, declaration):
-    """Generic method to generate from a list or a tuple
+    """Generic method to generate a text from a list or a tuple
 
     In:
       - ``output`` -- the rendered content
       - ``content_type`` -- the rendered content type
       - ``doctype`` -- the (optional) doctype
-      - ``declaration`` -- is the XML declaration to be outputed ?
+      - ``declaration`` -- is the XML declaration to be outputed?
 
     Return:
       - a tuple (content_type, content)
@@ -159,7 +161,7 @@ def serialize(output, content_type, doctype, declaration):
     if not output:
         return (content_type, '')
 
-    (content_type, first) = serialize(output[0], content_type, doctype, declaration)
+    first = serialize(output[0], content_type, doctype, declaration)[1]
     second = ''.join(serialize(e, content_type, doctype, False)[1] for e in output[1:])
 
     return (content_type, first + second)
