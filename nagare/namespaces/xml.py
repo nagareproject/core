@@ -253,88 +253,34 @@ def add_child(self, s):
     self.append_text(s)
 
 
-@peak.rules.when(add_child, (_Tag, tuple))
-def add_child(self, t):
-    """Add a tuple to a tag
-
-    In:
-      - ``self`` -- the tag
-      - ``t`` -- tuple to add
-
-    Add each items of the tuple
-    """
-    for child in t:
-        self.add_child(child)
-
-
-@peak.rules.when(add_child, (_Tag, list))
-def add_child(self, l):
-    """Add a list to a tag
-
-    In:
-      - ``self`` -- the tag
-      - ``l`` -- list to add
-
-    Add each items of the list
-    """
-    for child in l:
-        self.add_child(child)
-
-
-@peak.rules.when(add_child, (_Tag, types.GeneratorType))
-def add_child(self, g):
-    """Add a generator to a tag
-
-    In:
-      - ``self`` -- the tag
-      - ``l`` -- generator to add
-
-    Add each items produced
-    """
-    for child in g:
-        self.add_child(child)
-
-
-@peak.rules.when(add_child, (_Tag, int))
+@peak.rules.when(add_child, (_Tag, (list, tuple, types.GeneratorType)))
 def add_child(self, i):
-    """Add an integer to a tag
+    """Add elements to a tag
 
     In:
       - ``self`` -- the tag
-      - ``i`` -- integer to add
+      - ``i`` -- elements to add
 
-    Convert the integer to string and then add it
+    Add each element as a child
     """
-    self.append_text(str(i))
+    for child in i:
+        self.add_child(child)
 
 
-@peak.rules.when(add_child, (_Tag, long))
-def add_child(self, l):
-    """Add a long integer to a tag
+@peak.rules.when(add_child, (_Tag, (int, long, float)))
+def add_child(self, n):
+    """Add a number to a tag
 
     In:
       - ``self`` -- the tag
-      - ``l`` -- long integer to add
+      - ``n`` -- number to add
 
-    Convert the long integer to string and then add it
+    Convert the number to string and then add it
     """
-    self.append_text(str(l))
+    self.append_text(str(n))
 
 
-@peak.rules.when(add_child, (_Tag, float))
-def add_child(self, f):
-    """Add a float to a tag
-
-    In:
-      - ``self`` -- the tag
-      - ``f`` -- float to add
-
-    Convert the float to string and then add it
-    """
-    self.append_text(str(f))
-
-
-@peak.rules.when(add_child, (_Tag, ET.ElementBase))
+@peak.rules.when(add_child, (_Tag, ET._Element))
 def add_child(self, element):
     """Add a tag to a tag
 
