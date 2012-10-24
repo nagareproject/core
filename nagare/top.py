@@ -9,53 +9,84 @@
 
 """Add ``<html><head><body>`` around a tree"""
 
-#import pkg_resources
+import types
+
+from lxml import etree
 
 from nagare import presentation
-from nagare.namespaces import xhtml_base
-
-#VERSION = pkg_resources.get_distribution('nagare').version
 
 
-def wrap(content_type, h, body):
-    """Add the tags is they don't exist or merge them into the existing ones
+def search_element(element_name, l):
+    """Search an element with ``element_name`` name as the first element in ``l``
+
+    Skip the comments and processing instructions at the start of ``l``
+
+    In:
+      - ``element_name`` -- name of the element to search
+      - ``l`` -- list of elements
+
+    Return:
+      - if found: (position of the next element, element found)
+      - else: (0, None)
+    """
+    for i, element in enumerate(l):
+        if isinstance(element, (etree._Comment, etree._ProcessingInstruction)):
+            continue
+
+        if isinstance(element, etree._Element) and element.tag.endswith(element_name):
+            return (i + 1, element)
+
+    return (0, None)
+
+
+def wrap(content_type, h, content):
+    """Add the tags ``<html>``, ``<head>`` and ``<body>`` is they don't exist
 
     In:
       - ``content_type`` -- the content type to send to the browser
       - ``h`` -- the current renderer
-      - ``body`` -- the rendered tree
+      - ``content`` -- the rendered tree
 
     Return:
       - new tree with ``<html>``, ``<head>`` and ``<body>``
     """
-    if 'html' in content_type:
-        # Add the tags only for a (x)html content
+    if 'html' not in content_type:
+        return content
 
-        if not isinstance(body, xhtml_base._HTMLTag) or not body.tag.endswith('html'):
-            # No ``<html>`` found, add it
-            if h.response.xml_output:
-                h.namespaces = {None: 'http://www.w3.org/1999/xhtml'}
+    if h.response.xml_output:
+        h.namespaces = {None: 'http://www.w3.org/1999/xhtml'}
 
-            if not isinstance(body, xhtml_base._HTMLTag) or not body.tag.endswith('body'):
-                # No ``<body>`` found, add it
-                body = h.body(body)
-            body = h.html(body)
+    if not isinstance(content, (list, tuple, types.GeneratorType)):
+        content = [content]
 
-        head1 = presentation.render(h.head, None, None, None)  # The automatically generated ``<head>``
+    i, html = search_element('html', content)
+    if html is None:
+        html = content
 
-        url = h.request.path_info.strip('/')
-        if url:
-            head1.append(h.head.link(rel='canonical', href=h.request.script_name + '/' + url))
+    j, head = search_element('head', html)
+    _, body = search_element('body', html[j:])
 
-        head2 = body[0]
+    if body is None:
+        # No ``<body>`` found, add it
+        html[j:] = [h.body(html[j:])]
 
-        if not head2.tag.endswith('head'):
-            # No ``<head>`` found, add the automatically generated ``<head>``
-            body.insert(0, head1)
-        else:
-            # ``<head>`` found, merge the attributes and child of the automatically
-            # generated ``<head>`` to it
-            head2.attrib.update(head1.attrib.items())
-            head2.add_child(head1[:])
+    if head is None:
+        # No ``<head>`` found, add it
+        head = h.head.head
+        html.insert(0, head)
 
-    return body
+    if i == 0:
+        # No ``<html>`` found, add it
+        content = h.html(content)
+
+    head1 = presentation.render(h.head, None, None, None)  # The automatically generated ``<head>``
+
+    url = h.request.upath_info.strip('/')
+    if url and not head1.xpath('./link[@rel="canonical"]'):
+        head1.append(h.head.link(rel='canonical', href=h.request.uscript_name + '/' + url))
+
+    # Merge the attributes and child of the automatically generated ``<head>``
+    head.attrib.update(head1.attrib.items())
+    head.add_child(head1[:])
+
+    return content
