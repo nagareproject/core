@@ -274,4 +274,4 @@ logging configuration will display all the generated SQL queries:
 .. _`logging`: http://docs.python.org/library/logging.html
 .. _`Configuration file format`: http://docs.python.org/library/logging.config.html#configuration-file-format
 
-.. wikiname: NagareLogging
+.. wikiname: LogService

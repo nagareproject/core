@@ -35,7 +35,7 @@ Nagare documentation
   - :wiki:`RestfulUrl`
   - :wiki:`WSGIApp`
   - :wiki:`Internationalization`
-  - :wiki:`LogModule`
+  - :wiki:`LogService`
   - :wiki:`ObjectReferences`
   - :wiki:`EntryPoints`
 
