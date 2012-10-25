@@ -1,248 +1,277 @@
-The log module
-==============
+The log service
+===============
 
-
-It's often useful to log some information during the execution of a Web application to trace
-the execution of the requests and to provide useful information for debugging when something goes
-wrong. The most common use-case is to log the exceptions stacktraces to a file on the server
-that provide the context where the error occured so that we can fix the problem without disclosing
+It's often useful to log some information during the execution of a Web
+application to trace the execution of the requests and to provide useful
+information for debugging when something goes wrong. The most common use-case is
+to log the exceptions tracebacks to a file on the server that provide the context
+where the error occurred so that we can fix the problem without disclosing
 sensitive information to the end-users.
 
-Python ships with a `logging`_ module that provides everything we need in a Web development
-context. However, it is relatively complex to configure and it's configuration is a
-singleton, which is problematic in a multi-applications setup (that is, when the same 
-``nagare-admin serve`` process serves more than one application).
+Python ships with a `logging`_ module that provides everything we need in a Web
+development context. However, it is relatively complex to configure and it's
+configuration is a singleton, which is problematic in a multi-applications setup
+(that is, when the same ``nagare-admin serve`` process serves more than one
+application).
 
-In order to solve these problems, Nagare provides its own ``log`` module (see :apidoc:`log`),
-which is built on top of the `logging`_ module but greatly simplifies its usage and
-configuration for common use-cases.
+In order to solve these problems, Nagare provides its own ``log`` service
+(see :apidoc:`log`), which is built on top of the `logging`_ module but greatly
+simplifies its usage and configuration for common use-cases.
 
 
-Basic Usage
------------
+Basic Usages
+------------
 
-By default, when you serve Web applications with the ``nagare-admin serve`` utility, Nagare
-creates a dedicated logger, handler and formatter for each application, and activates them: this
-is the purpose of the :apidoc:`log#log.configure` and :apidoc:`log#log.activate` functions.
+Using The default logger
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can use the module level functions of the ``log`` module to write messages to the
-default logger of the *currently running* application, as shown in the example below:
+By default, when you serve Web applications with the ``nagare-admin serve``
+utility, Nagare creates a dedicated logger, handler and formatter for each
+application, and activates them: this is the purpose of the
+:apidoc:`log#log.configure` and :apidoc:`log#log.activate` functions.
+
+You can use the module level functions of the ``log`` module to write messages
+to the default logger of the *currently running* application, as shown in the
+example below:
 
 .. code-block:: python
     :hl_lines: 8
-    
+
     from nagare import presentation, log
-    
+
     class Root(object):
         pass
-    
+
     @presentation.render_for(Root)
     def render(self, h, *args):
         log.info('Rendering the Root component')
         # some rendering code...
         return h.root
-        
+
     app = Root
 
 
-Then, each time the default view of the ``Root`` component is rendered, this line should appear
-in the console shell (which is the output of the default logger):
+Then, each time the default view of the ``Root`` component is rendered, this
+line should appear in the console shell (which is the output of the default
+logger):
 
 .. code-block:: text
 
     2012-06-14 10:22:38,379 - nagare.application.myapp - INFO - Rendering the root component
 
-As you see, the messages are issued in the ``nagare.application.myapp`` namespace, which is the
-namespace of the messages coming from the Nagare application called ``myapp``.
+As you see, the messages are issued in the ``nagare.application.myapp``
+namespace, which is the namespace of the messages coming from the Nagare
+application called ``myapp``.
 
-Here is the full listing of the module-level functions of the ``nagare.log`` module:
+Here is the full listing of the module-level functions of the ``nagare.log``
+module:
 
 ====================================== =================================================================
               Function                                             Effect
 ====================================== =================================================================
-``log.debug(msg, *args, **kw)``        Logs a message with level ``DEBUG`` on the application logger
-``log.info(msg, *args, **kw)``         Logs a message with level ``INFO`` on the application logger
-``log.warning(msg, *args, **kw)``      Logs a message with level ``WARNING`` on the application logger
-``log.error(msg, *args, **kw)``        Logs a message with level ``ERROR`` on the application logger
-``log.critical(msg, *args, **kw)``     Logs a message with level ``CRITICAL`` on the application logger
-``log.exception(msg, *args, **kw)``    Logs a message with level ``ERROR`` on the application logger,
+``log.debug(msg, *args, **kw)``        Logs a message with ``DEBUG`` level on the application logger
+``log.info(msg, *args, **kw)``         Logs a message with ``INFO`` level on the application logger
+``log.warning(msg, *args, **kw)``      Logs a message with ``WARNING`` level on the application logger
+``log.error(msg, *args, **kw)``        Logs a message with ``ERROR`` level on the application logger
+``log.critical(msg, *args, **kw)``     Logs a message with ``CRITICAL`` level on the application logger
+``log.exception(msg, *args, **kw)``    Logs a message with ``ERROR`` level on the application logger,
                                        and also logs the current exception information
 ``log.log(level, msg, *args, **kw)``   Logs a message with the specified level on the application
                                        logger
 ====================================== =================================================================
 
-All these functions accept variable arguments and keyword arguments, which are documented in the
-``logging`` module, `here <http://docs.python.org/library/logging.html#logging.Logger.debug>`_.
+All these functions accept variable arguments and keyword arguments, which are
+documented in the ``logging`` module, `here <http://docs.python.org/library/logging.html#logging.Logger.debug>`_.
 
+Overriding the default configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Overriding the default logging configuration
---------------------------------------------
+The ``[[logger]]``, ``[[hander]]`` and ``[[formatter]]`` sub-sections of the
+``[logging]`` section in the application configuration file are dedicated to
+configure the default application logger.
 
-The default logging setup that Nagare uses for an application is equivalent to the following
-``logging`` configuration file, where ``<name>`` is replaced by the name of the application (please
-refer to the ``logging``'s module `configuration file format`_ for a better understanding of the
-configuration of loggers, handlers and formatters):
-
-.. code-block:: ini
-
-    [loggers]
-    keys=root,app_<name>
-
-    [handlers]
-    keys=app_<name>
-
-    [formatters]
-    keys=app_<name>
-    
-    [logger_root]
-    handlers=""
-
-    [logger_app_<name>]
-    qualname=nagare.application.<name>
-    level=INFO
-    handlers=app_<name>
-    propagate=1
-
-    [handler_app_<name>]
-    class=StreamHandler
-    formatter=app_<name>
-    args=(sys.stderr,)
-
-    [formatter_app_<name>]
-    format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
-
-As you can see, by default, the log messages of a Nagare application are printed on ``sys.stderr``
-via a ``StreamHandler``.
-
-It's possible to override the default ``logging`` configuration that Nagare provides by 
-adding a ``[logging]`` section in the application configuration file (e.g. ``myapp.cfg``),
-as shown in the example below:
+The default logging setup is equivalent to the following ``[logging]`` section,
+where ``<name>`` is replaced by the name of the application (please
+refer to the ``logging``'s module `configuration file format`_ for a better
+understanding of the configuration of loggers, handlers and formatters):
 
 .. code-block:: ini
-
-    [application]
-    path = app myapp
-    name = myapp
 
     [logging]
-    [[handlers]]
-    keys=logfile
-    
+
+    [[logger]]
+    qualname=nagare.application.<name>
+    level=INFO
+    propagate=1
+
+    [[handler]]
+    class=StreamHandler
+    args=(sys.stderr,)
+
+    [[formatter]]
+    format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+
+As you can see, by default, the log messages with a level greater or equal to
+``INFO`` are printed to ``sys.stderr`` via a ``StreamHandler``.
+
+It's possible to override this default ``logging`` configuration by adding your
+own ``[logging]`` section to the application configuration file. Here, the
+logging level of the application is set to ``DEBUG``:
+
+.. code-block:: ini
+
+    [logging]
     [[logger]]
     level=DEBUG
-    handlers=logfile
-    
-    [[handler_logfile]]
-    formatter=app_$name
+
+Here, a new handler is defined to log the messages to the file ``/tmp/myapp.log``.
+We use a ``RotatingFileHandler`` instead of the classical ``FileHandler`` since
+we want the file to be log-rotated in order to prevent it from becoming too large:
+
+.. code-block:: ini
+
+    [logging]
+    [[handler]]
     class=handlers.RotatingFileHandler
     args="('/tmp/myapp.log', 'a', 10485760, 10, 'UTF-8')"
 
-The logging configuration of a Nagare application is similar to a classical ``logging`` configuration
-file except that the logging sections are nested in a ``[logging]`` section in order to separate the
-concerns in the application configuration file.
+Using the Nagare IDE
+~~~~~~~~~~~~~~~~~~~~
 
-The ``[[handler_logfile]]`` section defines a handler that logs the messages to the file ``/tmp/myapp.log``
-using the application's default formatter, which is called ``app_$name`` (``$name`` is substituted by the
-application name by Nagare). We use a ``RotatingFileHandler`` instead of the classical ``FileHandler``
-since we want the file to be log-rotated in order to prevent it from becoming too large.
+When the Nagare IDE is launched at the same time than your application
+(i.e ``nagare-admin serve <name> ide``), a second handler is bound to the default
+logger so that all the messages are also sent to the
+`IDE log panel <http://www.nagare.org/trac/wiki/NagareIde#logger>`_.
 
-Then, the new handler should be added to the global list of handlers: this is the purpose of the
-``[[handlers]]`` sub-section. Please note that there's no need to add the application's dedicated handler
-there because Nagare will add it automatically.
+Advanced Usages
+---------------
 
-Finally, we must add this new handler as an output of the default logger where the log messages of the
-application are sent. This is done in the ``[[logger]]`` sub-section. The keys/values found in this section
-override those of the dedicated logger of the application, except for the ``handlers`` key whose value is
-added to the default one. Note that we also set the log level to DEBUG in order to see the DEBUG-level
-messages in both our logfile and ``sys.stderr`` (thanks to the application's dedicated handler).
+Creating other application loggers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As a general rule, the ``[[logger]]``, ``[[handler]]`` and ``[[formatter]]`` sub-sections override the 
-application's dedicated logger, handler and formatter respectively, whereas the ``[[logger_xxx]]``,
-``[[handler_xxx]]`` and ``[[formatter_xxx]]`` sub-sections define your own loggers, handlers and
-formatters.
+As seen above, Nagare makes it easy to log messages in an application. However,
+as your application becomes more complex and is broken down in several modules
+and packages, it may become hard to track down where you sent a particular message
+or to analyze the log file which is now filled with numerous log messages.
 
-In a multi-applications setup, since the logging configurations are merged together by Nagare, the names
-of your own loggers, handlers and formatters should not collide except if that's what you want.
+In this situation, it's generally useful to organize the log messages into
+namespaces, so that we can enable/disable the logging of messages in some
+namespaces or send messages with different namespaces to different handlers.
 
+For this purpose, Nagare offers a ``log.get_logger(namespace)`` function that
+creates a logger which puts the messages into the specified namespace. To create a
+new logger for your application, use a relative name starting with a dot. In this
+case, the new namespace is relative to the application namespace, e.g.
+``nagare.application.myapp``.
 
-Advanced Usage
---------------
+The logger object offers the same functions as the ``log`` module for writing
+messages, that is ``logger.debug``, ``logger.info``, ``logger.warning``,
+``logger.error``, ``logger.critical``, ``logger.exception`` and ``logger.log``,
+with the same parameters.
 
-Nagare makes it easy to log messages in an application. However, as your application becomes more complex
-and is broken down in several modules and packages, it may become hard to track down where you sent a
-particular message or to analyze the log file which is now filled with numerous log messages.
-
-In this situation, it's generally useful to organize the log messages into namespaces, so that we can
-enable/disable the logging of messages in some namespaces or send messages with different namespaces into
-different loggers.
-
-For that purpose, Nagare offers a ``log.get_logger`` function that creates a logger object which puts
-the messages into the specified namespace. The namespace can be specified as an absolute name, such as 
-``"category.subcategory.subsubcategory"``, or as a relative name starting with a dot. In this case, the
-name is relative to the application namespace, e.g. ``nagare.application.myapp``. The logger object offers
-the same functions as the ``log`` module for writing messages, that is ``logger.debug``, ``logger.info``,
-``logger.warning``, ``logger.error``, ``logger.critical``, ``logger.exception`` and ``logger.log``, with
-the same parameters as the module-level functions.
-
-In the following example, we put the messages from the component ``Root`` in a namespace derived from
-the name of its module.
+In this example, we will log all the messages generated in the views to a
+specific ``nagare.application.myapp.ui`` namespace:
 
 .. code-block:: python
-    
-    from nagare import presentation, log
-    
-    class Root(object):
-        @property
-        def logger():
-            # use the module __name__ as namespace, relative to the application namespace
-            return log.get_logger('.' + __name__)
-    
+
+    from nagare import log
+
     @presentation.render_for(Root)
     def render(self, h, *args):
-        self.logger.debug('Rendering the Root component')
+        log.get_logger('.ui').debug('Rendering the Root component')
         # some rendering code...
         return h.root
 
-Then, given that this code is located in the ``myapp.ui`` module, you should see something like this
-in the log output:
+and you can see, the message is now attached to the ``nagare.application.myapp.myapp.ui``
+namespace:
 
 .. code-block:: text
 
-    2012-06-14 10:22:38,379 - nagare.application.myapp.myapp.ui - INFO - Rendering the root component
+    2012-06-14 10:22:38,379 - nagare.application.myapp.ui - INFO - Rendering the root component
 
-As you see, the message is now attached to the ``nagare.application.myapp.myapp.ui`` namespace. Now,
-you can decide to log the messages with ``DEBUG`` level coming from the ``myapp.ui`` module but only the
-messages with ``INFO`` level from the other modules:
+Being under the ``nagare.application.myapp`` namespace, this logger propagates
+the messages to the default logger. Also this logger inherits the default logger
+configuration, which can be overridden:
+
+.. code-block:: ini
+
+    [[logging]]
+    [loggers]
+    keys=ui   # Declare the new logger
+
+    [[logger_ui]]
+    qualname=.ui    # Relative namespace
+    level=CRITICAL
+    # No specific handler: propagate the messages to the default application logger
+    handlers=
+
+Here the log level of the logger is set to ``CRITICAL``.
+
+Or a more complex configuration can be created, for example to log the messages
+to a specific log file:
 
 .. code-block:: ini
 
     [logging]
     [[loggers]]
-    # activate the ui logger
-    keys=ui
-    
-    [[logger]]
-    # by default, we log the messages at INFO level
-    level=INFO
-    
-    [[logger_ui]]
-    # we log the ui messages at DEBUG level
-    level=DEBUG
-    handlers=app_$name
-    qualname=nagare.application.$name.myapp.ui
-    propagate=0
-    
-    [[logger_domain]]
-    level=DEBUG
-    handlers=app_$name
-    qualname=nagare.application.$name.myapp.domain
-    propagate=0
+    keys=ui   # Declare the new logger
 
-If you want to show only the messages from ``myapp.domain`` at ``DEBUG`` level, comment out the ``ui`` logger
-and activate the ``domain`` logger instead.
+    [[handlers]]
+    keys=logfile   # Declare the new handler
+
+    [[formatters]]
+    keys=simple   # Declare the new formatter
+
+    [[logger_ui]]
+    qualname=.ui    # Relative namespace
+    handlers=logfile
+    propagate=0   # Don't propagate the messages to the default application logger
+
+    [[handler_logfile]]
+    class=handlers.RotatingFileHandler
+    args="('/tmp/myapp_ui.log', 'a', 10485760, 10, 'UTF-8')"  # Specific log file
+    formatter=simple
+
+    [[formatter_simple]]
+    format=%(levelname)s: %(message)s
+
+Creating other loggers
+~~~~~~~~~~~~~~~~~~~~~~
+
+Any other general loggers can be created the same way, by just giving a full
+absolute namespace.
+
+For example the `SQLAlchemy documentation <http://docs.sqlalchemy.org/en/rel_0_7/core/engines.html#configuring-logging>`_
+states the name of the SQL query logger is ``sqlalchemy.engine``. So this
+logging configuration will display all the generated SQL queries:
+
+.. code-block:: ini
+
+    [logging]
+    [[loggers]]
+    keys=sa
+
+    [[handlers]]
+    keys=stderr
+
+    [[formatters]]
+    keys=multilines
+
+    [[logger_sa]]
+    qualname=sqlalchemy.engine   # The absolute SQLAlchemy logger namespace
+    level=INFO
+    handlers=stderr
+
+    [[handler_stderr]]
+    class=StreamHandler
+    args=(sys.stderr,)
+    formatter=multilines
+
+    [[formatter_multilines]]
+    format={ %(message)s }
 
 
 .. _`logging`: http://docs.python.org/library/logging.html
 .. _`Configuration file format`: http://docs.python.org/library/logging.config.html#configuration-file-format
 
-.. wikiname: LogModule
+.. wikiname: NagareLogging
