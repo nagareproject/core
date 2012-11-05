@@ -334,9 +334,6 @@ def add_child(self, d):
     Attribute name can end with a '_' which is removed
     """
     for (name, value) in d.items():
-        if name.endswith('_'):
-            name = name[:-1]
-
         add_attribute(self, name, value)
 
 # ---------------------------------------------------------------------------
@@ -357,10 +354,16 @@ def add_attribute(self, name, value):
 
 @peak.rules.when(add_attribute, (_Tag, basestring, basestring))
 def add_attribute(self, name, value):
+    if name.endswith('_'):
+        name = name[:-1]
+
     self.set(name, value)
 
 @peak.rules.when(add_attribute, (ET._ProcessingInstruction, basestring, basestring))
 def add_attribute(self, name, value):
+    if name.endswith('_'):
+        name = name[:-1]
+
     self.text += (' %s="%s"' % (name, value))
 
 # ---------------------------------------------------------------------------
@@ -579,7 +582,7 @@ class XmlRenderer(common.Renderer):
         return self._makeelement(tag, self._xml_parser)
 
     def __lshift__(self, current):
-        """Add a tag tag the last tag pushed by a ``with`` statement
+        """Add a tag to the last tag pushed by a ``with`` statement
 
         In:
           - ``current`` -- tag to add
@@ -614,10 +617,7 @@ class XmlRenderer(common.Renderer):
         """
         pi = ET.ProcessingInstruction(target, text)
 
-        for name, value in kw.iteritems():
-            if name.endswith('_'):
-                name = name[:-1]
-
+        for name, value in kw.items():
             add_attribute(pi, name, value)
 
         return pi

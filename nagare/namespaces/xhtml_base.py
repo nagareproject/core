@@ -92,7 +92,7 @@ class _HTMLTag(xml._Tag):
         return self if err is None else self.renderer.decorate_error(self, err)
 
 
-@peak.rules.when(xml.add_child, (xml._Tag, _HTMLTag))
+@peak.rules.when(xml.add_child, (_HTMLTag, _HTMLTag))
 def add_child(next_method, self, element):
     """Add a tag to a tag
 
@@ -101,6 +101,14 @@ def add_child(next_method, self, element):
       - ``element`` -- the tag to add
     """
     return next_method(self, element.decorate_error())
+
+
+@peak.rules.when(xml.add_attribute, (_HTMLTag, basestring, basestring))
+def add_attribute(next_method, self, name, value):
+    if name.startswith('data_'):
+        name = 'data-' + name[5:]
+
+    next_method(self, name, value)
 
 
 class HeadRenderer(xml.XmlRenderer):
