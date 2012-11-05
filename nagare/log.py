@@ -72,7 +72,35 @@ loggers = ['root']
 handlers = []
 formatters = []
 
-apps_log_conf = configobj.ConfigObj({
+
+class ConfigObjToConfigParser(configobj.ConfigObj):
+    """Output a ``ConfigParser`` format from a ``ConfigObj`` input"""
+
+    def _get_triple_quote(self, value):
+        """Return the format string to format a multi-lines value
+
+        In:
+          - ``value`` -- the multi-lines value to format
+
+        Return:
+          - format object
+        """
+        # ``self.__mod__()`` will be called by the ``%``  operation
+        return self
+
+    def __mod__(self, value):
+        """Format a multi-line value
+
+        In:
+          - ``value`` -- the multi-lines value to format
+
+        Return:
+          - the formatted multi-lines value
+        """
+        return '\n '.join(s.strip() for s in value.split('\n'))
+
+
+apps_log_conf = ConfigObjToConfigParser({
                                             'loggers': {'keys': ''},
                                             'handlers': {'keys': ''},
                                             'formatters': {'keys': ''},
