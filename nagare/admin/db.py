@@ -17,7 +17,7 @@ from __future__ import with_statement
 import pkg_resources
 
 from nagare import local, log, database
-from nagare.admin import util
+from nagare.admin import reference, util, command
 
 
 def read_options(debug, args, error):
@@ -83,7 +83,7 @@ def create(parser, options, args):
             database_settings[0].create_all()
 
             if options.populate and populate:
-                util.load_object(populate)[0]()
+                reference.load_object(populate)[0]()
 
 
 def drop(parser, options, args):
@@ -102,7 +102,7 @@ def drop(parser, options, args):
 
 # ---------------------------------------------------------------------------
 
-class DBCreate(util.Command):
+class DBCreate(command.Command):
     desc = 'Create the database of an application'
 
     @staticmethod
@@ -116,7 +116,7 @@ class DBCreate(util.Command):
     run = staticmethod(create)
 
 
-class DBDrop(util.Command):
+class DBDrop(command.Command):
     desc = 'Drop the database of an application'
 
     @staticmethod

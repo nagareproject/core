@@ -26,11 +26,12 @@ import code
 import pkg_resources
 
 from nagare import database, log, local
-from nagare.admin import util
+from nagare.admin import util, reference, command
 
 
-def create_globals(cfgfiles, debug, error):
-    """
+def activate_applications(cfgfiles, debug, error):
+    """Initialize applications
+
     In:
       - ``cfgfile`` -- paths to application configuration files or names of
         registered applications
@@ -38,7 +39,8 @@ def create_globals(cfgfiles, debug, error):
       - ``error`` -- the function to call in case of configuration errors
 
     Return:
-      - the namespace with the ``apps`` and ``session`` variables defined
+      - database session
+      - {application name -> application object}
     """
     # Configure the local service
     local.worker = local.Process()
@@ -75,7 +77,41 @@ def create_globals(cfgfiles, debug, error):
 
     session = database.session
     session.begin()
-    return dict(session=session, apps=apps)
+    return (session, apps)
+
+
+def activate_application(cfgfile, debug, error):
+    """Initialize one application
+
+    In:
+      - ``cfgfile`` -- path to an application configuration file or name of
+        a registered application
+      - ``debug`` -- enable the display of the generated SQL statements
+      - ``error`` -- the function to call in case of configuration errors
+
+    Return:
+      - database session
+      - application name
+      - application object
+    """
+    session, apps = activate_applications([cfgfile], debug, error)
+    return (session,) + apps.items()[0]
+
+
+def create_globals(cfgfiles, debug, error):
+    """Return a namespace with the initialized applications
+
+    In:
+      - ``cfgfile`` -- paths to application configuration files or names of
+        registered applications
+      - ``debug`` -- enable the display of the generated SQL statements
+      - ``error`` -- the function to call in case of configuration errors
+
+    Return:
+      - the namespace with the ``apps`` and ``session`` variables defined
+    """
+    session, apps = activate_applications(cfgfiles, debug, error)
+    return {'session': session, 'apps': apps}
 
 # -----------------------------------------------------------------------------
 
@@ -122,7 +158,7 @@ class IPythonShellV2(object):
         """
         config = ipython.config.loader.Config()
         prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
-        config.InteractiveShellEmbed.prompt_in1 = 'Nagare%s [\\#]: ' % prompt
+        config.PromptManager.in_template = 'Nagare%s [\\#]: ' % prompt
 
         self.shell = ipython.frontend.terminal.embed.InteractiveShellEmbed(config=config, user_ns=ns, banner1=banner)
         self.shell.confirm_exit = False
@@ -230,7 +266,7 @@ def shell(parser, options, args):
     create_python_shell(options.ipython, banner, [app.name for app in ns['apps'].values()], ns)
 
 
-class Shell(util.Command):
+class Shell(command.Command):
     desc = 'Launch a shell'
 
     set_options = staticmethod(set_shell_options)
@@ -280,10 +316,10 @@ def batch(parser, options, args):
     ns = create_globals(args[:1], options.debug, parser.error)
     __builtin__.__dict__.update(ns)
 
-    util.load_file(args[1], None)
+    reference.load_file(args[1], None)
 
 
-class Batch(util.Command):
+class Batch(command.Command):
     desc = 'Execute Python statements from a file'
 
     set_options = staticmethod(set_batch_options)

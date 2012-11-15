@@ -95,7 +95,7 @@ setup(
       generate_html = nagare.doc.setuplib:GenerateHTML [doc]
 
       [console_scripts]
-      nagare-admin = nagare.admin.main:main
+      nagare-admin = nagare.admin.command:run
 
       [nagare.commands]
       info = nagare.admin.info:Info

@@ -9,7 +9,7 @@
 
 """The ``nagare-admin`` executable
 
-The ``main()`` function is called by the ``nagare-admin`` console script, created
+The ``run()`` function is called by the ``nagare-admin`` console script, created
 by  ``setuptools``
 """
 
@@ -18,13 +18,28 @@ import optparse
 
 import pkg_resources
 
+# ---------------------------------------------------------------------------
+
+class Command(object):
+    """The base class of all the commands"""
+    desc = ''
+
+    @classmethod
+    def set_options(cls, parser):
+        pass
+
+    @classmethod
+    def run(cls, parser, options, args):
+        pass
+
+# ---------------------------------------------------------------------------
 
 def usage(commands):
     """
     Display the usage of ``nagare-admin``
 
     In:
-      - ``commands`` -- list of the classes implementing the commands
+      - ``commands`` -- dict of {command name -> command class}
     """
     yield '%prog <command>'
     yield ''
@@ -37,10 +52,10 @@ def usage(commands):
 
 # ---------------------------------------------------------------------------
 
-def main(entry_point_section='nagare.commands'):
+def run(entry_point_section='nagare.commands'):
     """Dispatcher for the ``nagare-admin`` commands
 
-    The commands are classed, registered under the ``entry_point`` entry point
+    The commands are classes, registered under the ``entry_point_section`` entry point
     """
 
     # Load all the commands
@@ -68,4 +83,4 @@ def main(entry_point_section='nagare.commands'):
     argv = command.set_options(parser)  # Let the command register its command line options
     (options, args) = parser.parse_args((argv if argv is not None else sys.argv)[2:])   # Parse the command line
 
-    command.run(parser, options, args)  # Run the command
+    return command.run(parser, options, args)  # Run the command

@@ -21,7 +21,7 @@ import re
 from StringIO import StringIO
 
 from configobj import ConfigObj
-from nagare.admin import util
+from nagare.admin import command
 
 
 def set_options(optparser):
@@ -289,7 +289,7 @@ def run(parser, options, args):
         """ % params)
 
 
-class Create(util.Command):
+class Create(command.Command):
     desc = 'Create an application skeleton'
 
     set_options = staticmethod(set_options)

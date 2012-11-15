@@ -18,7 +18,7 @@ instead of the applications themselves.
 import os
 import pkg_resources
 
-from nagare.admin import util
+from nagare.admin import util, command
 
 
 def set_options(optparser):
@@ -124,7 +124,7 @@ def run(parser, options, args):
 
 # ---------------------------------------------------------------------------
 
-class CreateRules(util.Command):
+class CreateRules(command.Command):
     desc = 'Create the rewrite rules'
 
     set_options = staticmethod(set_options)

@@ -31,7 +31,7 @@ import os
 import pkg_resources
 
 from nagare import wsgi, log
-from nagare.admin import util, reloader
+from nagare.admin import reference, command, reloader
 
 try:
     from weberror.evalexception import EvalException
@@ -77,7 +77,7 @@ def run(parser, options, args):
       - ``args`` -- arguments in the command lines
 
     The unique argument is the path of the object to launch. The path syntax is described
-    into the module ``nagare.admin.util``. For example, ``/tmp/counter.py:Counter``
+    into the module ``nagare.admin.reference``. For example, ``/tmp/counter.py:Counter``
     is the path to the class ``Counter`` of the module ``tmp.counter.py``
 
     """
@@ -95,7 +95,7 @@ def run(parser, options, args):
         path = 'file ' + args[0]
     else:
         path = 'python ' + args[0]
-    app = util.load_object(path)[0]
+    app = reference.load_object(path)[0]
 
     # Wrap it into a WSGIApp
     app = wsgi.create_WSGIApp(app)
@@ -127,7 +127,7 @@ def run(parser, options, args):
 
 # ---------------------------------------------------------------------------
 
-class Serve(util.Command):
+class Serve(command.Command):
     desc = 'Launch a python module'
 
     set_options = staticmethod(set_options)

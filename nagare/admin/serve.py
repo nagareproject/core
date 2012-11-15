@@ -18,7 +18,7 @@ import pkg_resources
 import configobj
 
 from nagare import config, log
-from nagare.admin import reloader, util
+from nagare.admin import reloader, util, reference, command
 
 # ---------------------------------------------------------------------------
 
@@ -121,7 +121,7 @@ def create_wsgi_pipe(app, options, config_filename, config, error):
     if not wsgi_pipe:
         return app
 
-    return util.load_object(wsgi_pipe)[0](app, options, config_filename, config, error)
+    return reference.load_object(wsgi_pipe)[0](app, options, config_filename, config, error)
 
 # ---------------------------------------------------------------------------
 
@@ -290,7 +290,7 @@ def run(parser, options, args):
 
 # ---------------------------------------------------------------------------
 
-class Serve(util.Command):
+class Serve(command.Command):
     desc = 'Launch an application'
 
     set_options = staticmethod(set_options)

@@ -15,10 +15,10 @@ Display informations about the framework environment
 import sys
 import pkg_resources
 
-from nagare.admin import util
+from nagare.admin import command
 
 
-class Info(util.Command):
+class Info(command.Command):
     """Display informations about the framework environment"""
 
     desc = 'Display various informations'
