@@ -16,7 +16,7 @@ import cPickle
 import configobj
 
 from nagare import config
-from nagare.admin import util
+from nagare.admin import reference
 from nagare.component import Component
 from nagare.sessions import ExpirationError
 from nagare.continuation import Tasklet
@@ -187,8 +187,8 @@ class Sessions(object):
         self.security_cookie_name = conf['security_cookie_name']
         self.states_history = conf['states_history']
 
-        self.pickler = util.load_object(conf['pickler'])[0]
-        self.unpickler = util.load_object(conf['unpickler'])[0]
+        self.pickler = reference.load_object(conf['pickler'])[0]
+        self.unpickler = reference.load_object(conf['unpickler'])[0]
 
         return conf
 
