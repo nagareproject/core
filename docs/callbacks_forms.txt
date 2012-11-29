@@ -91,8 +91,8 @@ Element                      Callback registration      Callback parameters
 ``h.input(type='text)``      ``.action(callback)``      the text received
 ``h.input(type='password')`` ``.action(callback)``      the text received
 ``h.input(type='radio')``    ``.action(callback)``      boolean: is the radio button selected ?
-``h.input(type='checkbox')`` ``.action(callback)``      *no parameter* (only the callbacks of the
-                                                        selected checkboxes are called)
+``h.input(type='checkbox')`` ``.action(callback)``      the value of the ``value`` attribute (``on`` if not
+                                                        ``value`` attribute is set)
 ``h.input(type='submit')``   ``.action(callback)``      *no parameter*
 ``h.input(type='hidden')``   ``.action(callback)``      *no parameter*
 ``h.input(type='file')``     ``.action(callback)``      an empty string if no file was uploaded, else
