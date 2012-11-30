@@ -67,7 +67,7 @@ setup(
       package_data={'': ['nagare/static/*']},
       namespace_packages=('nagare',),
       zip_safe=False,
-      dependency_links=('http://www.nagare.org/download/', 'http://www.lfd.uci.edu/~gohlke/pythonlibs'),
+      dependency_links=('http://www.nagare.org/download/',),
       install_requires=('PEAK-Rules', 'ConfigObj', 'lxml>=3.0.1', 'WebOb>=1.2.3', 'Paste', 'flup', 'python-memcached'),
       message_extractors={'nagare': [
           ('test/**', 'ignore', None),
