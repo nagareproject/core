@@ -25,7 +25,7 @@ from nagare.admin import command
 
 
 def set_options(optparser):
-    optparser.usage += ' application'
+    optparser.usage += ' <application>'
 
 
 def create_empty_file(filename):

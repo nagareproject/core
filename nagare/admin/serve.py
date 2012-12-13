@@ -40,7 +40,7 @@ publisher_options_spec = {
 # ---------------------------------------------------------------------------
 
 def set_options(optparser):
-    optparser.usage += ' application'
+    optparser.usage += ' [application ...]'
 
     optparser.add_option('-c', '--conf', dest='conf', help='configuration file')
     optparser.add_option('--host', action='store', type='string', help='Name of the interface to listen on ("0.0.0.0" to listen on all the interfaces)')
@@ -291,7 +291,7 @@ def run(parser, options, args):
 # ---------------------------------------------------------------------------
 
 class Serve(command.Command):
-    desc = 'Launch an application'
+    desc = 'Launch applications'
 
     set_options = staticmethod(set_options)
     run = staticmethod(run)

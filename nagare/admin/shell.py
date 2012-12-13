@@ -116,7 +116,7 @@ def create_globals(cfgfiles, debug, error):
 # -----------------------------------------------------------------------------
 
 def set_shell_options(optparser):
-    optparser.usage += ' <application>'
+    optparser.usage += ' [application ...]'
 
     optparser.add_option('-d', '--debug', action='store_const', const=True, default=False, dest='debug', help='debug mode for the database engine')
     optparser.add_option('--plain', action='store_const', const=False, default=True, dest='ipython', help='launch a plain Python interpreter instead of IPython')

@@ -33,7 +33,7 @@ def set_options(optparser):
     In:
       - ``optparser`` -- the options parser
     """
-    optparser.usage += ' [applications ...]'
+    optparser.usage += ' [application ...]'
 
     optparser.add_option('-a', '--apache', action='store_const', const=generate_apache_rules, dest='generate', help='generate apache rules', default=generate_apache_rules)
     optparser.add_option('-l', '--lighttpd', action='store_const', const=generate_lighttpd_rules, dest='generate', help='generate lighttpd rules')

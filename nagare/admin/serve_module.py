@@ -61,7 +61,7 @@ def get_file_from_package(package, path):
 
 
 def set_options(optparser):
-    optparser.usage += ' module_or_file name'
+    optparser.usage += ' <module_or_file> <name>'
 
     optparser.add_option('--host', action='store', type='string', default='127.0.0.1', help='Name of the interface to listen on ("0.0.0.0" to listen on all the interfaces)')
     optparser.add_option('-p', '--port', action='store', type='int', dest='port', default=8080, help='Port to listen on')
