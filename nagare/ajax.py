@@ -61,8 +61,7 @@ def serialize_body(view_to_js, content_type, doctype):
     body = serializer.serialize(view_to_js.output, content_type, doctype, False)[1]
 
     # Wrap it into a javascript code
-    js = "%s('%s', %s)" % (view_to_js.js, view_to_js.id, py2js(body, view_to_js.renderer))
-    return js.encode('utf-8')
+    return "%s('%s', %s)" % (view_to_js.js, view_to_js.id.encode('utf-8'), py2js(body, view_to_js.renderer))
 
 
 @peak.rules.when(serializer.serialize, (ViewToJs,))
