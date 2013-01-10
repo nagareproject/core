@@ -147,7 +147,7 @@ class Update(object):
 
         In:
           - ``render`` -- rendering function to call
-          - ``args`` -- `render` parameters
+          - ``args`` -- ``render`` parameters
           - ``js`` -- JS function to wrap the rendering into
           - ``component_to_update`` -- id of the DOM element to update on the client
           - ``r`` -- renderer

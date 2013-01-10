@@ -14,6 +14,8 @@ Add:
   - the ``code-block`` directive that highlight a piece of core
   - the Trac roles ``:wiki:``, ``:ticket:``, ``:report:`` ...
 """
+import re
+
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
@@ -91,6 +93,12 @@ def apidoc_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
     return r
 
 
+pattern, replace = wiki_filter.patterns[0]
+pattern = pattern.pattern
+if not pattern.endswith('[^_]'):
+    wiki_filter.patterns[0] = (re.compile(pattern+'[^_]'), replace)
+
+
 def register_role(trac_url):
     roles.roles.register_local_role('apidoc', apidoc_role)
     roles.roles.register_local_role('wiki', apidoc_role)
@@ -99,4 +107,3 @@ def register_role(trac_url):
     roles.setTracRef(lambda *path, **query: tracRef(trac_ref, *path, **query))
     roles.setTracRef = lambda f: None
 
-    setDocStringFilter(wiki_filter.wikiFilter)

@@ -115,7 +115,7 @@ class State(object):
 
 
 def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
-    """The object with a `_persistent_id` attribute are stored into the session
+    """The object with a ``_persistent_id`` attribute are stored into the session
     not into the state snapshot
 
     In:

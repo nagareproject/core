@@ -49,7 +49,7 @@ class LRUDict(object):
 
         In:
            - ``k`` -- the key
-           -- ``o`` -- the value
+           - ``o`` -- the value
         """
         self.age_to_items[self.newest] = k
         self.items[k] = (self.newest, o)
