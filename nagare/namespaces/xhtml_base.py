@@ -106,7 +106,7 @@ def add_child(next_method, self, element):
 @peak.rules.when(xml.add_attribute, (_HTMLTag, basestring, basestring))
 def add_attribute(next_method, self, name, value):
     if name.startswith('data_'):
-        name = 'data-' + name[5:]
+        name = name.replace('_', '-')
 
     next_method(self, name, value)
 
