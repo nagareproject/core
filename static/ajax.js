@@ -1,5 +1,5 @@
 //--
-// Copyright (c) 2008-2013, Net-ng.
+// Copyright (c) 2008-2012, Net-ng.
 // All rights reserved.
 //
 // This software is licensed under the BSD License, as described in
@@ -15,7 +15,7 @@ var nagare_callbacks = {
 
     success : function (o) { setTimeout(o.responseText, 0); },
     failure : function (o) {
-                            var url = o.getResponseHeader["X-Debug-URL"];
+                            var url = o.status ? o.getResponseHeader["X-Debug-URL"] : undefined;
                             if(url) {
                                         window.location = url;
                                     } else {
@@ -69,7 +69,7 @@ var nagare_loaded_named_css = {};
 var nagare_loaded_named_js = {};
 
 function nagare_filter(items, filter) {
-    var not_in_filter = new Array();
+    var not_in_filter = [];
 
     for(var i=0; i<items.length; i++)
         if(!filter[items[i][0]])
@@ -80,7 +80,7 @@ function nagare_filter(items, filter) {
 
 
 function nagare_itemgetter(l, x) {
-    var r = new Array();
+    var r = [];
     for(var i=0; i<l.length; i++) r[r.length] = l[i][x];
     return r;
 }
