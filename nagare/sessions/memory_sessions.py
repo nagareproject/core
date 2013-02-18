@@ -9,27 +9,25 @@
 
 """Sessions managed in memory
 
-These sessions managers keeps:
+These sessions managers keep:
   - the last recently used ``DEFAULT_NB_SESSIONS`` sessions
   - for each session, the last recently used ``DEFAULT_NB_STATES`` states
 """
 
 from nagare import local
 from nagare.sessions import ExpirationError, common, lru_dict
+from nagare.sessions.serializer import Pickle
 
 DEFAULT_NB_SESSIONS = 10000
 DEFAULT_NB_STATES = 20
 
 
-class SessionsBase(common.Sessions):
-    """Sessions manager for sessions kept in memory
+class Sessions(common.Sessions):
+    """Sessions manager for states kept in memory
     """
-    spec = {
-            'nb_sessions': 'integer(default=%d)' % DEFAULT_NB_SESSIONS,
-            'nb_states': 'integer(default=%d)' % DEFAULT_NB_STATES
-           }
-
-    spec.update(common.Sessions.spec)
+    spec = common.Sessions.spec.copy()
+    spec['nb_sessions'] = 'integer(default=%d)' % DEFAULT_NB_SESSIONS
+    spec['nb_states'] = 'integer(default=%d)' % DEFAULT_NB_STATES
 
     def __init__(self, nb_sessions=DEFAULT_NB_SESSIONS, nb_states=DEFAULT_NB_STATES, **kw):
         """Initialization
@@ -38,7 +36,7 @@ class SessionsBase(common.Sessions):
           - ``nb_sessions`` -- maximum number of sessions kept in memory
           - ``nb_states`` -- maximum number of states, for each sessions, kept in memory
         """
-        super(SessionsBase, self).__init__(**kw)
+        super(Sessions, self).__init__(**kw)
 
         self.nb_states = nb_states
         self._sessions = lru_dict.ThreadSafeLRUDict(nb_sessions)
@@ -47,92 +45,103 @@ class SessionsBase(common.Sessions):
         """Read the configuration parameters
 
         In:
-          - ``filename`` -- the path to the configuration file
-          - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
-          - ``error`` -- the function to call in case of configuration errors
+          - ``filename`` -- path to the configuration file
+          - ``conf`` -- ``ConfigObj`` object created from the configuration file
+          - ``error`` -- function to call in case of configuration errors
         """
         # Let's the super class validate the configuration file
-        conf = super(SessionsBase, self).set_config(filename, conf, error)
+        conf = super(Sessions, self).set_config(filename, conf, error)
 
         self.nb_states = conf['nb_states']
         self._sessions = lru_dict.ThreadSafeLRUDict(conf['nb_sessions'])
 
         return conf
 
-    def is_session_exist(self, session_id):
-        """Test if a session id is invalid
+    def check_session_id(self, session_id):
+        """Test if a session exist
 
         In:
-          - ``session_id`` -- id of the session
+          - ``session_id`` -- id of a session
 
         Return:
-          - a boolean
+          - is ``session_id`` the id of an existing session?
         """
         return session_id in self._sessions
 
-    def _create(self, session_id, secure_id):
+    def create_lock(self, session_id):
+        """Create a new lock for a session
+
+        In:
+          - ``session_id`` -- session id
+
+        Return:
+          - the lock
+        """
+        return local.worker.create_lock()
+
+    def get_lock(self, session_id):
+        """Retrieve the lock of a session
+
+        In:
+          - ``session_id`` -- session id
+
+        Return:
+          - the lock
+        """
+        try:
+            return self._sessions[session_id][1]
+        except KeyError:
+            raise ExpirationError()
+
+    def create(self, session_id, secure_id, lock):
         """Create a new session
 
         In:
           - ``session_id`` -- id of the session
           - ``secure_id`` -- the secure number associated to the session
-
-        Return:
-          - the tuple:
-            - id of this state,
-            - session lock
+          - ``lock`` -- the lock of the session
         """
-        lock = local.worker.create_lock()
-        lock.acquire()
-
         self._sessions[session_id] = [0, lock, secure_id, None, lru_dict.LRUDict(self.nb_states)]
-        return (0, lock)
 
-    def _get(self, session_id, state_id, use_same_state):
-        """Retrieve the state
+    def delete(self, session_id):
+        """Delete a session
+
+        In:
+          - ``session_id`` -- id of the session to delete
+        """
+        del self._sessions[session_id]
+
+    def fetch_state(self, session_id, state_id):
+        """Retrieve a state with its associated objects graph
 
         In:
           - ``session_id`` -- session id of this state
           - ``state_id`` -- id of this state
-          - ``use_same_state`` -- is a copy of this state to create ?
 
         Return:
-          - the tuple:
-            - id of this state,
-            - session lock,
-            - secure number associated to the session,
-            - data keept into the session
-            - data keept into the state
+          - id of the latest state
+          - secure number associated to the session
+          - data kept into the session
+          - data kept into the state
         """
         try:
-            lock = self._sessions[session_id][1]
+            last_state_id, _, secure_id, session_data, states = self._sessions[session_id]
+            state_data = states[state_id]
         except KeyError:
             raise ExpirationError()
 
-        lock.acquire()
+        return last_state_id, secure_id, session_data, state_data
 
-        try:
-            state_id = int(state_id)
-            (last_state_id, lock, secure_id, session_data, states) = self._sessions[session_id]
-            state_data = states[state_id]
-        except (KeyError, ValueError, TypeError):
-            raise ExpirationError()
-
-        if not use_same_state:
-            state_id = last_state_id
-
-        return (state_id, lock, secure_id, session_data, state_data)
-
-    def _set(self, session_id, state_id, secure_id, use_same_state, session_data, state_data):
-        """Store the state
+    def store_state(self, session_id, state_id, secure_id, use_same_state, session_data, state_data):
+        """Store a state and its associated objects graph
 
         In:
           - ``session_id`` -- session id of this state
           - ``state_id`` -- id of this state
           - ``secure_id`` -- the secure number associated to the session
-          - ``use_same_state`` -- is this state to be stored in the previous snapshot ?
-          - ``session_data`` -- data keept into the session
-          - ``state_data`` -- data keept into the state
+          - ``use_same_state`` -- is this state to be stored in the previous snapshot?
+          - ``session_data`` -- data to keep into the session
+          - ``state_data`` -- data to keep into the state
         """
         session = self._sessions[session_id]
 
@@ -142,40 +151,17 @@ class SessionsBase(common.Sessions):
         session[3] = session_data
         session[4][state_id] = state_data
 
-    def _delete(self, session_id):
-        """Delete the session
 
-        In:
-          - ``session_id`` -- id of the session to delete
-        """
-        del self._sessions[session_id]
-
-
-class SessionsWithPickledStates(SessionsBase):
-    """Sessions managers that pickle / unpickle the objects graph
+class SessionsWithPickledStates(Sessions):
+    """Sessions manager for states pickled / unpickled in memory
     """
-    def serialize(self, data, clean_callbacks):
-        """Pickle an objects graph
+    spec = Sessions.spec.copy()
+    spec['serializer'] = 'string(default="nagare.sessions.serializer:Pickle")'
+
+    def __init__(self, serializer=None, **kw):
+        """Initialization
 
         In:
-          - ``data`` -- the objects graphs
-          - ``clean_callbacks`` -- do we have to forget the old callbacks?
-
-        Return:
-          - the tuple:
-            - data to keep into the session
-            - data to keep into the state
+          - ``serializer`` -- serializer / deserializer of the states
         """
-        return self.pickle(data, clean_callbacks)
-
-    def deserialize(self, session_data, state_data):
-        """Unpickle an objects graph
-
-        In:
-          - ``session_data`` -- data from the session
-          - ``state_data`` -- data from the state
-
-        Out:
-          - tuple (the objects graph, the callbacks)
-        """
-        return self.unpickle(session_data, state_data)
+        super(Sessions, self).__init__(serializer=serializer or Pickle, **kw)

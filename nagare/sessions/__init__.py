@@ -9,6 +9,12 @@
 
 
 class ExpirationError(LookupError):
-    """Raised when a session or a state is no longer valid
+    """Raised when a session or a state id is no longer valid
+    """
+    pass
+
+
+class SessionSecurityError(LookupError):
+    """Raised when the secure id of a session is not valid
     """
     pass

@@ -13,8 +13,9 @@ import memcache
 
 from nagare import local
 from nagare.sessions import ExpirationError, common
+from nagare.sessions.serializer import Pickle
 
-KEY_PREFIX = 'nagare_'
+KEY_PREFIX = 'nagare_%d_'
 
 
 class Lock(object):
@@ -29,7 +30,7 @@ class Lock(object):
           - ``max_wait_time`` -- maximum time to wait to acquire the lock, in seconds
         """
         self.connection = connection
-        self.lock = '%slock_%s' % (KEY_PREFIX, lock_id)
+        self.lock = (KEY_PREFIX + 'lock') % lock_id
         self.ttl = ttl
         self.poll_time = poll_time
         self.max_wait_time = max_wait_time
@@ -50,7 +51,8 @@ class Lock(object):
 class Sessions(common.Sessions):
     """Sessions manager for sessions kept in an external memcached server
     """
-    spec = dict(
+    spec = common.Sessions.spec.copy()
+    spec.update(dict(
                 host='string(default="127.0.0.1")',
                 port='integer(default=11211)',
                 ttl='integer(default=0)',
@@ -60,8 +62,8 @@ class Sessions(common.Sessions):
                 min_compress_len='integer(default=0)',
                 reset='boolean(default=True)',
                 debug='boolean(default=False)',
-               )
-    spec.update(common.Sessions.spec)
+                serializer='string(default="nagare.sessions.serializer:Pickle")'
+               ))
 
     def __init__(
                  self,
@@ -71,6 +73,7 @@ class Sessions(common.Sessions):
                  min_compress_len=0,
                  reset=False,
                  debug=True,
+                 serializer=None,
                  **kw
                 ):
         """Initialization
@@ -85,8 +88,9 @@ class Sessions(common.Sessions):
           - ``min_compress_len`` -- data longer than this value are sent compressed
           - ``reset`` -- do a reset of all the sessions on startup ?
           - ``debug`` -- display the memcache requests / responses
+          - ``serializer`` -- serializer / deserializer of the states
         """
-        super(Sessions, self).__init__(**kw)
+        super(Sessions, self).__init__(serializer or Pickle, **kw)
 
         self.host = ['%s:%d' % (host, port)]
         self.ttl = ttl
@@ -144,114 +148,80 @@ class Sessions(common.Sessions):
         memcached = memcache.Client(self.host, debug=self.debug)
         memcached.flush_all()
 
-    def _create(self, session_id, secure_id):
+    def get_lock(self, session_id):
+        """Retrieve the lock of a session
+
+        In:
+          - ``session_id`` -- session id
+
+        Return:
+          - the lock
+        """
+        connection = self._get_connection()
+        return Lock(connection, session_id, self.lock_ttl, self.lock_poll_time, self.lock_max_wait_time)
+
+    def create(self, session_id, secure_id, lock):
         """Create a new session
 
         In:
           - ``session_id`` -- id of the session
           - ``secure_id`` -- the secure number associated to the session
-
-        Return:
-          - the tuple:
-            - id of this state,
-            - session lock
+          - ``lock`` -- the lock of the session
         """
-        connection = self._get_connection()
-        lock = Lock(connection, session_id, self.lock_ttl, self.lock_poll_time, self.lock_max_wait_time)
-        lock.acquire()
-
-        connection.set_multi({
-            '_sess': (secure_id, None),
-            '_state': '0',
+        self._get_connection().set_multi({
+            'state': 0,
+            'sess': (secure_id, None),
             '00000': {}
-        }, self.ttl, KEY_PREFIX + session_id, self.min_compress_len)
+        }, self.ttl, KEY_PREFIX % session_id, self.min_compress_len)
 
-        return (0, lock)
+    def delete(self, session_id):
+        """Delete a session
 
-    def _get(self, session_id, state_id, use_same_state):
-        """Retrieve the state
+        In:
+          - ``session_id`` -- id of the session to delete
+        """
+        self._get_connection().delete((KEY_PREFIX + 'sess') % session_id)
+
+    def fetch_state(self, session_id, state_id):
+        """Retrieve a state with its associated objects graph
 
         In:
           - ``session_id`` -- session id of this state
           - ``state_id`` -- id of this state
-          - ``use_same_state`` -- is a copy of this state to create ?
 
         Return:
-          - the tuple:
-            - id of this state,
-            - session lock,
-            - secure number associated to the session,
-            - data keept into the session
-            - data keept into the state
+          - id of the latest state
+          - secure number associated to the session
+          - data kept into the session
+          - data kept into the state
         """
-        connection = self._get_connection()
-        lock = Lock(connection, session_id, self.lock_ttl, self.lock_poll_time, self.lock_max_wait_time)
-        lock.acquire()
-
-        state_id = state_id.zfill(5)
-        session = connection.get_multi(('_sess', '_state', state_id), KEY_PREFIX + session_id)
+        state_id = '%05d' % state_id
+        session = self._get_connection().get_multi(('state', 'sess', state_id), KEY_PREFIX % session_id)
 
         if len(session) != 3:
             raise ExpirationError()
 
-        (secure_id, session_data) = session['_sess']
-        last_state_id = int(session['_state'])
+        last_state_id = session['state']
+        secure_id, session_data = session['sess']
         state_data = session[state_id]
 
-        if not use_same_state:
-            state_id = last_state_id
+        return last_state_id, secure_id, session_data, state_data
 
-        return (int(state_id), lock, secure_id, session_data, state_data)
-
-    def _set(self, session_id, state_id, secure_id, use_same_state, session_data, state_data):
-        """Store the state
+    def store_state(self, session_id, state_id, secure_id, use_same_state, session_data, state_data):
+        """Store a state and its associated objects graph
 
         In:
           - ``session_id`` -- session id of this state
           - ``state_id`` -- id of this state
           - ``secure_id`` -- the secure number associated to the session
-          - ``use_same_state`` -- is this state to be stored in the previous snapshot ?
-          - ``session_data`` -- data keept into the session
-          - ``state_data`` -- data keept into the state
+          - ``use_same_state`` -- is this state to be stored in the previous snapshot?
+          - ``session_data`` -- data to keep into the session
+          - ``state_data`` -- data to keep into the state
         """
         if not use_same_state:
-            self._get_connection().incr(KEY_PREFIX + session_id + '_state')
+            self._get_connection().incr((KEY_PREFIX + 'state') % session_id)
 
         self._get_connection().set_multi({
-            '_sess': (secure_id, session_data),
+            'sess': (secure_id, session_data),
             '%05d' % state_id: state_data
-        }, self.ttl, KEY_PREFIX + session_id, self.min_compress_len)
-
-    def _delete(self, session_id):
-        """Delete the session
-
-        In:
-          - ``session_id`` -- id of the session to delete
-        """
-        self._get_connection().delete(KEY_PREFIX + session_id)
-
-    def serialize(self, data, clean_callbacks):
-        """Pickle an objects graph
-
-        In:
-          - ``data`` -- the objects graphs
-          - ``clean_callbacks`` -- do we have to forget the old callbacks?
-
-        Return:
-          - the tuple:
-            - data to keep into the session
-            - data to keep into the state
-        """
-        return self.pickle(data, clean_callbacks)
-
-    def deserialize(self, session_data, state_data):
-        """Unpickle an objects graph
-
-        In:
-          - ``session_data`` -- data from the session
-          - ``state_data`` -- data from the state
-
-        Out:
-          - tuple (the objects graph, the callbacks)
-        """
-        return self.unpickle(session_data, state_data)
+        }, self.ttl, KEY_PREFIX % session_id, self.min_compress_len)
