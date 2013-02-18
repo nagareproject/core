@@ -28,7 +28,7 @@ from nagare.callbacks import CallbackLookupError
 from nagare.callbacks import process as process_callbacks
 from nagare.namespaces import xhtml
 
-from nagare.sessions import ExpirationError
+from nagare.sessions import ExpirationError, SessionSecurityError
 
 
 # ---------------------------------------------------------------------------
@@ -193,8 +193,21 @@ class WSGIApp(object):
         """
         raise exc.HTTPMovedPermanently(add_slash=True)
 
-    def on_session_expired(self, request, response):
-        """The session id received is invalid
+    def on_expired_session(self, request, response):
+        """The session or state id received is expired
+
+        In:
+          - ``request`` -- the web request object
+          - ``response`` -- the web response object
+
+        Return:
+          - raise a ``webob.exc`` object, used to generate the response to the browser
+        """
+        raise exc.HTTPMovedPermanently()
+    on_session_expired = on_expired_session
+
+    def on_invalid_session(self, request, response):
+        """The secure id received is invalid
 
         In:
           - ``request`` -- the web request object
@@ -409,7 +422,7 @@ class WSGIApp(object):
 
         xhr_request = request.is_xhr or ('_a' in request.params)
 
-        session = None
+        state = None
         self.last_exception = None
 
         log.set_logger('nagare.application.' + self.name)  # Set the dedicated application logger
@@ -425,27 +438,31 @@ class WSGIApp(object):
                     self.on_incomplete_url(request, response)
 
                 try:
-                    session = self.sessions.get(request, response, xhr_request)
+                    state = self.sessions.get_state(request, response, xhr_request)
                 except ExpirationError:
-                    self.on_session_expired(request, response)
+                    self.on_expired_session(request, response)
+                except SessionSecurityError:
+                    self.on_invalid_session(request, response)
 
-                if session.is_new:
-                    # A new session is created
-                    root = self.create_root()  # Create a new application root component
-                    callbacks = {}
-                else:
-                    # An existing session is used, retrieve the application root component
-                    # and the callbacks registry
-                    root, callbacks = session.data
+                state.acquire()
+
+                try:
+                    root = state.get_root()
+                except ExpirationError:
+                    self.on_expired_session(request, response)
+                except SessionSecurityError:
+                    self.on_invalid_session(request, response)
+
+                root, callbacks = root or (self.create_root(), {})
 
                 request.method = request.params.get('_method', request.method)
-                if not session.is_new and request.method not in ('GET', 'POST'):
+                if not state.is_new and request.method not in ('GET', 'POST'):
                     self.on_bad_http_method(request, response)
 
                 self.start_request(root, request, response)
 
                 url = request.path_info.strip('/')
-                if session.is_new and url:
+                if state.is_new and url:
                     # If a URL is given, initialize the objects graph with it
                     presentation.init(root, tuple(url.split('/')), None, request.method, request)
 
@@ -472,17 +489,17 @@ class WSGIApp(object):
                 try:
                     if (request.method == 'POST') and not xhr_request and self.redirect_after_post:
                         use_same_state = True
-                        response = self.on_after_post(request, response, session.sessionid_in_url(request, response))
+                        response = self.on_after_post(request, response, state.sessionid_in_url(request, response))
                     else:
                         use_same_state = xhr_request
 
                         # Create a new renderer
-                        renderer = self.create_renderer(xhr_request, session, request, response)
+                        renderer = self.create_renderer(xhr_request, state, request, response)
                         # If the phase 1 has returned a render function, use it
                         # else, start the rendering by the application root component
                         output = render(renderer) if render else root.render(renderer)
 
-                        if session.back_used:
+                        if state.back_used:
                             output = self.on_back(request, response, renderer, output)
 
                         if not xhr_request:
@@ -490,10 +507,10 @@ class WSGIApp(object):
 
                         self._phase2(output, renderer.content_type, renderer.doctype, render is not None, response)
 
-                    # Store the session
-                    session.set(use_same_state, root)
+                    # Store the state
+                    state.set_root(use_same_state, root)
 
-                    security.get_manager().end_rendering(request, response, session)
+                    security.get_manager().end_rendering(request, response, state)
                 except exc.HTTPException, response:
                     # When a ``webob.exc`` object is raised during phase 2, stop immediately
                     # use it as the response object
@@ -502,8 +519,8 @@ class WSGIApp(object):
                     self.last_exception = (request,  sys.exc_info())
                     response = self.on_exception(request, response)
             finally:
-                if session:
-                    session.release()
+                if state:
+                    state.release()
 
         return response(environ, start_response)
 
