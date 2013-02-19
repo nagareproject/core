@@ -364,7 +364,7 @@ class WSGIApp(object):
         Return:
           - function to render the objects graph or ``None``
         """
-        return process_callbacks(callbacks, request, response)
+        return process_callbacks(callbacks or {}, request, response)
 
     # Rendering phase
     def _phase2(self, output, content_type, doctype, is_xhr, response):
@@ -447,24 +447,24 @@ class WSGIApp(object):
                 state.acquire()
 
                 try:
-                    root = state.get_root()
+                    root, callbacks = state.get_root() or (self.create_root(), None)
                 except ExpirationError:
                     self.on_expired_session(request, response)
                 except SessionSecurityError:
                     self.on_invalid_session(request, response)
 
-                root, callbacks = root or (self.create_root(), {})
-
-                request.method = request.params.get('_method', request.method)
-                if not state.is_new and request.method not in ('GET', 'POST'):
-                    self.on_bad_http_method(request, response)
-
                 self.start_request(root, request, response)
 
-                url = request.path_info.strip('/')
-                if state.is_new and url:
-                    # If a URL is given, initialize the objects graph with it
-                    presentation.init(root, tuple(url.split('/')), None, request.method, request)
+                if callbacks is None:
+                    # New state
+                    request.method = request.params.get('_method', request.method)
+                    if request.method not in ('GET', 'POST'):
+                        self.on_bad_http_method(request, response)
+
+                    url = request.path_info.strip('/')
+                    if url:
+                        # If a URL is given, initialize the objects graph with it
+                        presentation.init(root, tuple(url.split('/')), None, request.method, request)
 
                 try:
                     render = self._phase1(root, request, response, callbacks)

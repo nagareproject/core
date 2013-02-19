@@ -42,19 +42,20 @@ class Response(dict):
         return '%d %s - %s' % (self.status_code, self.status, super(Response, self).__repr__())
 
 
-class Session(object):
-    def is_new(self):
-        return True
-
-
 class SessionManager(common.Sessions):
-    def get(self, request, response):
-        assert self._get_ids(request) == ('10', '42')
+    pass
+
+
+class Lock(object):
+    acquire = release = lambda self: None
 
 
 class ExpiredSessionManager(common.Sessions):
-    def get(self, request, response, use_same_state):
-        assert self._get_ids(request) == ('10', '42')
+    def get_lock(self, session_id):
+        return Lock()
+
+    def get_state(self, request, response, use_same_state):
+        assert self._get_ids(request) == (10, 42)
         raise ExpirationError()
 
 

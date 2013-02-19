@@ -38,11 +38,7 @@ class State(object):
         self.use_same_state = use_same_state
 
         self.back_used = False  # Is this state a snapshot of a previous objects graph?
-        self.lock = (sessions_manager.create_lock if self.is_new else sessions_manager.get_lock)(self.session_id)
-
-    @property
-    def is_new(self):
-        return self.state_id is None
+        self.lock = (sessions_manager.create_lock if state_id is None else sessions_manager.get_lock)(self.session_id)
 
     def sessionid_in_url(self, request, response):
         """Return the session and states ids to put into an URL

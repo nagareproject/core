@@ -164,4 +164,4 @@ class SessionsWithPickledStates(Sessions):
         In:
           - ``serializer`` -- serializer / deserializer of the states
         """
-        super(Sessions, self).__init__(serializer=serializer or Pickle, **kw)
+        super(SessionsWithPickledStates, self).__init__(serializer=serializer or Pickle, **kw)
