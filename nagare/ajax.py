@@ -292,19 +292,19 @@ class Updates(Update):
 
         super(Updates, self).__init__(action=self.action, with_request=True, permissions=permissions, subject=subject, **kw)
 
-    def action(self, request, response, **kw):
+    def action(self, request, response, *args, **kw):
         """Execute all the actions of the ``Update`` objects
         """
         if self._with_request:
-            self._action(request, response, **kw)
+            self._action(request, response, *args, **kw)
         else:
-            self._action(**kw)
+            self._action(*args, **kw)
 
         for update in self._updates:
             if update.with_request:
-                update.action(request, response)
+                update.action(request, response, *args, **kw)
             else:
-                update.action()
+                update.action(*args, **kw)
 
     @classmethod
     def _generate_response(cls, r, renders):
