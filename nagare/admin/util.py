@@ -76,13 +76,8 @@ def read_application_options(cfgfile, error, default={}):
                             metadata='string(default=%s)' % str(conf['database']['metadata']),
                             debug='boolean(default=%s)' % str(conf['database']['debug']),
                            ))
-    conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation=False)
+    conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)
     config.validate(cfgfile, conf, error)
-
-    # Activate variables interpolation only for the known sections
-    main = type('', (), dict(interpolation='Template' if default else False))()
-    for section in application_options_spec:
-        conf[section].walk(lambda section, key: setattr(section, 'main', main))
 
     if not conf['sessions']['type']:
         del conf['sessions']['type']

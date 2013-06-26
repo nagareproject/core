@@ -62,7 +62,7 @@ def read_publisher_options(parser, options):
       - a ``ConfigObj`` with the publisher parameters
     """
     if options.conf and not os.path.isfile(options.conf):
-        parser.error('Configuration file "%s" doesn\'t exit' % options.conf)
+        parser.error('Configuration file "%s" doesn\'t exist' % options.conf)
 
     configspec = configobj.ConfigObj(publisher_options_spec)
 
