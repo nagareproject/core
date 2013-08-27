@@ -28,7 +28,8 @@ application_options_spec = {
 
         redirect_after_post='boolean(default=False)',  # Follow the PRG pattern ?
         always_html='boolean(default=True)',  # Don't generate xhtml, even if it's a browser capability ?
-        wsgi_pipe='string(default="")'  # Method to create the WSGI middlewares pipe
+        wsgi_pipe='string(default="")',  # Method to create the WSGI middlewares pipe
+        static='string(default="$root/static")'  # Default directory of the static files
     ),
 
     'database': dict(

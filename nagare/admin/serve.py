@@ -232,22 +232,13 @@ def run(parser, options, args):
             watcher.watch_file(aconf.filename)
 
         requirement = None if not dist else pkg_resources.Requirement.parse(dist.project_name)
-
         data_path = None if not requirement else pkg_resources.resource_filename(requirement, '/data')
 
         # Create the function to get the static contents of the application
-        static_path = aconf['application'].get('static')
         get_file = None
+        static_path = aconf['application']['static']
         if static_path is not None and os.path.isdir(static_path):
-            # If a ``static`` parameter exists, under the ``[application]`` section,
-            # serve the static contents from this root
             get_file = lambda path, static_path=static_path: get_file_from_root(static_path, path)
-        else:
-            # Else, serve the static from the ``static`` directory
-            # of the application package
-            if requirement:
-                get_file = lambda path, requirement=requirement: get_file_from_package(requirement, path)
-                static_path = pkg_resources.resource_filename(requirement, '/static')
 
         # Register the function to serve the static contents of the application
         static_url = publisher.register_static(aconf['application']['name'], get_file)
