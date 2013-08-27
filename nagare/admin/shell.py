@@ -160,7 +160,7 @@ class IPythonShellV2(object):
         prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
         config.PromptManager.in_template = 'Nagare%s [\\#]: ' % prompt
 
-        self.shell = ipython.frontend.terminal.embed.InteractiveShellEmbed(config=config, user_ns=ns, banner1=banner)
+        self.shell = getattr(ipython, 'frontend', ipython).terminal.embed.InteractiveShellEmbed(config=config, user_ns=ns, banner1=banner)
         self.shell.confirm_exit = False
 
     def __call__(self):
