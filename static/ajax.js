@@ -131,8 +131,9 @@ function nagare_replaceNode(id, html) {
     if(n && html) {
         var e = document.createElement("div");
         e.innerHTML = html;
-        n.parentNode.replaceChild(e.firstChild, n);
 
+        while(e.children.length) n.parentNode.insertBefore(e.children[0], n);
+        n.parentNode.removeChild(n);
     }
 }
 
