@@ -1143,7 +1143,7 @@ class Renderer(xhtml_base.Renderer):
           - ``form`` -- the form tag
         """
         if self.session:
-            form(self.div(self.session.sessionid_in_form(self, self.request, self.response)))
+            form(self.div(self.session.sessionid_in_form(self, self.request, self.response), class_='nagare-generated nagare-session-data'))
 
     def add_sessionid_in_url(self, u='', params=None, sep='&'):
         """Add the session and continuation ids into an url
@@ -1333,7 +1333,7 @@ class AsyncRenderer(Renderer):
           - rendered tree
         """
         if self.wrapper_to_generate:
-            output = self.div(output, id=self.id)
+            output = self.div(output, id=self.id, class_='nagare-generated nagare-async-view')
 
         return output
 
