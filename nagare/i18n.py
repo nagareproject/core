@@ -334,7 +334,7 @@ class Locale(CoreLocale):
             default_timezone = pytz.timezone(default_timezone)
         self.default_timezone = default_timezone
 
-        self._previous_locale = None
+        self._previous_locales = []
 
         # By default, load the translation files for the 'nagare' domain
         # from the nagare directories
@@ -1045,13 +1045,13 @@ class Locale(CoreLocale):
         if not self.translation_directories:
             self.translation_directories.update(previous_locale.translation_directories)
 
-        self._previous_locale = previous_locale
+        self._previous_locales.append(previous_locale)
         set_locale(self)
 
     def __exit__(self, *args, **kw):
         """Pop this locale from the stack
         """
-        set_locale(self._previous_locale)
+        set_locale(self._previous_locales.pop())
 
 # -----------------------------------------------------------------------------
 

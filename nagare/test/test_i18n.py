@@ -744,3 +744,16 @@ def test_parse_date_en():
     d = i18n.parse_date('4/1/2004')
     assert isinstance(d, datetime.date)
     assert (d.year == 2004) and (d.month == 4) and (d.day == 1)
+
+
+def test_context_manager():
+    locale1 = i18n.Locale('fr', 'FR', domain='domain1')
+    locale2 = i18n.Locale('fr', 'FR', domain='domain2')
+    i18n.set_locale(locale1)
+    assert i18n.get_locale().domain == 'domain1', i18n.get_locale().domain
+    with locale2:
+        assert i18n.get_locale().domain == 'domain2', i18n.get_locale().domain
+        with locale2:
+            assert i18n.get_locale().domain == 'domain2', i18n.get_locale().domain
+
+    assert i18n.get_locale().domain == 'domain1', i18n.get_locale().domain
