@@ -505,7 +505,7 @@ class WSGIApp(object):
                         if not xhr_request:
                             output = top.wrap(renderer.content_type, renderer, output)
 
-                        self._phase2(output, renderer.content_type, renderer.doctype, render is not None, response)
+                        self._phase2(output, renderer.content_type, renderer.doctype, xhr_request, response)
 
                     # Store the state
                     state.set_root(use_same_state, root)
