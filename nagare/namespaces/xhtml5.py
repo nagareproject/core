@@ -74,6 +74,7 @@ class Renderer(xhtml.Renderer):
     source = TagProp('source', factory=Source)
     embed = TagProp('embed')
     mark = TagProp('mark')
+    meta = TagProp('meta')
     progress = TagProp('progress')
     meter = TagProp('meter')
     ruby = TagProp('ruby')
