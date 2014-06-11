@@ -28,7 +28,7 @@ try:
     import sqlalchemy
     from sqlalchemy import orm
 
-    class Mapper(sqlalchemy.orm.Mapper):
+    class Mapper(orm.Mapper):
         def __init__(self, cls, *args, **kw):
             super(Mapper, self).__init__(cls, *args, **kw)
 
@@ -41,7 +41,10 @@ try:
                 cls.__setstate__ = entity_setstate
 
     # Hot-patching the SQLAlchemy ``Mapper`` class
-    sqlalchemy.orm.Mapper = Mapper
+    orm.Mapper = Mapper
+
+    # ``sqlalchemy.orm.ScopedSession`` is needed by ``elixir``
+    orm.__dict__.setdefault('ScopedSession', orm.scoped_session)
 
     session = orm.scoped_session(orm.sessionmaker())
 except ImportError:
