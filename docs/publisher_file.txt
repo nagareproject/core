@@ -76,7 +76,7 @@ minSpare            No        1                  Minimum number of processes rea
 maxChildren         No        50                 Maximum number of running processes
 maxSpare            No        5                  Maximum number of idle processes
 maxRequest          No        *No default value* Maximum number of requests served by a process
-                                                 because to be killed
+                                                 before being killed
 =================== ========= ================== ==================================================
 
 .. note::
