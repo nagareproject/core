@@ -460,12 +460,12 @@ class TextArea(_HTMLActionTag):
     async_action = _HTMLActionTag.sync_action
 
     @classmethod
-    def clean_input_with_request(cls, request, response, v, _action, *args, **kw):
-        return _action(request, response, v.replace('\r', ''), *args, **kw)
+    def clean_input(cls, action, args, v, **kw):
+        return action(*(args + (v.replace('\r', ''),)), **kw)
 
     @classmethod
-    def clean_input(cls, v, _action, *args, **kw):
-        return _action(v.replace('\r', ''), *args, **kw)
+    def clean_input_with_request(cls, action, args, request, response, v, **kw):
+        return cls.clean_input(action, (request, response) + args, v, **kw)
 
     @partial.max_number_of_args(2)
     def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
@@ -485,7 +485,8 @@ class TextArea(_HTMLActionTag):
         # The content sent to the action will have the '\r' characters deleted
         if not isinstance(action, ajax.Update):
             f = self.clean_input_with_request if with_request else self.clean_input
-            action = partial.Partial(f, _action=action, *args, **kw)
+            action = partial.Partial(f, action, args)
+            args = ()
 
         return super(TextArea, self).action(action, with_request=with_request, permissions=permissions, subject=subject, *args, **kw)
 
