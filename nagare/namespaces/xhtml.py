@@ -670,12 +670,12 @@ class Select(_HTMLActionTag):
     async_action = _HTMLActionTag.sync_action
 
     @classmethod
-    def normalize_input_with_request(cls, request, response, v, _action, *args, **kw):
-        return _action(request, response, v if isinstance(v, (list, tuple)) else (v,), *args, **kw)
+    def normalize_input(cls, action, args, v, **kw):
+        return action(*(args + (v if isinstance(v, (list, tuple)) else (v,),)), **kw)
 
     @classmethod
-    def normalize_input(cls, v, _action, *args, **kw):
-        return _action(v if isinstance(v, (list, tuple)) else (v,), *args, **kw)
+    def normalize_input_with_request(cls, action, args, request, response, v, **kw):
+        return cls.normalize_input(action, (request, response) + args,  v, **kw)
 
     @partial.max_number_of_args(2)
     def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
@@ -695,7 +695,8 @@ class Select(_HTMLActionTag):
             # If this is a multiple select, the value sent to the action will
             # always be a list, even if only 1 item was selected
             f = self.normalize_input_with_request if with_request else self.normalize_input
-            action = partial.Partial(f, _action=action, *args, **kw)
+            action = partial.Partial(f, action, args)
+            args = ()
 
         return super(Select, self).action(action, with_request=with_request, permissions=permissions, subject=subject, *args, **kw)
 
