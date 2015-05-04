@@ -161,7 +161,7 @@ class Validator(ValidatorBase):
 class IntValidator(Validator):
     """Conversion and validation of integers
     """
-    def __init__(self, v, base=10, *args, **kw):
+    def __init__(self, v, base=10, msg=i18n._L('Must be an integer'), *args, **kw):
         """Initialisation
 
         Check that the value is an integer
@@ -174,7 +174,7 @@ class IntValidator(Validator):
         try:
             self.value = int(self.value, base)
         except (ValueError, TypeError):
-            raise ValueError('Must be an integer')
+            raise ValueError(msg)
 
     to_int = Validator.__call__
 
