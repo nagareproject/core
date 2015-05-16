@@ -24,24 +24,41 @@ session = DummySession()
 def setup_all():
     pass
 
+
+def add_pickle_hooks(mapper, cls):
+    # Dynamically add a ``__getstate__()`` and ``__setstate__()`` method
+    # to the SQLAlchemy entities
+    if not hasattr(cls, '__getstate__'):
+        cls.__getstate__ = entity_getstate
+
+    if not hasattr(cls, '__setstate__'):
+        cls.__setstate__ = entity_setstate
+
 try:
+    # SQLAlchemy >= 0.7.6
     import sqlalchemy
+    from sqlalchemy import event, orm
+
+    event.listen(orm.Mapper, 'mapper_configured', add_pickle_hooks)
+except ImportError:
+    pass
+
+try:
+    # SQLAlchemy <= 0.8.7
     from sqlalchemy import orm
 
     class Mapper(orm.Mapper):
         def __init__(self, cls, *args, **kw):
             super(Mapper, self).__init__(cls, *args, **kw)
-
-            # Dynamically add a ``__getstate__()`` and ``__setstate__()`` method
-            # to the SQLAlchemy entities
-            if not hasattr(cls, '__getstate__'):
-                cls.__getstate__ = entity_getstate
-
-            if not hasattr(cls, '__setstate__'):
-                cls.__setstate__ = entity_setstate
+            add_pickle_hooks(self, cls)
 
     # Hot-patching the SQLAlchemy ``Mapper`` class
     orm.Mapper = Mapper
+except ImportError:
+    pass
+
+try:
+    from sqlalchemy import orm
 
     # ``sqlalchemy.orm.ScopedSession`` is needed by ``elixir``
     orm.__dict__.setdefault('ScopedSession', orm.scoped_session)
@@ -131,3 +148,4 @@ def set_metadata(metadata, database_uri, database_debug, engine_settings):
     if not metadata.bind:
         metadata.bind = _engines.setdefault(database_uri, sqlalchemy.engine_from_config(engine_settings, '', echo=database_debug, url=database_uri))
         setup_all()
+
