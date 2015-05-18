@@ -91,6 +91,9 @@ Each element in ``children`` can be a:
     string and added as data to the DOM object
   - list, tuple or generator which each elements are added to the DOM object
   - dictionary which each items are added as attributes of the DOM object
+  - :wiki:`ComponentModel component` ``comp`` wich will be rendered with its
+    default view (i.e ``comp.render(h)``) and the resulting DOM tree added
+    to the DOM object
 
 Each items in ``attributes`` are added as attributes of the DOM object.
 
