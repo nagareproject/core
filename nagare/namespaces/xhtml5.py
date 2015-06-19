@@ -68,6 +68,7 @@ class Renderer(xhtml.Renderer):
     nav = TagProp('nav')
     figure = TagProp('figure')
     figcaption = TagProp('figcaption')
+    main = TagProp('main')
     time = TagProp('time')
     video = TagProp('video')
     audio = TagProp('audio')
