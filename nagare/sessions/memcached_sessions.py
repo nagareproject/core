@@ -62,6 +62,7 @@ class Sessions(common.Sessions):
                 min_compress_len='integer(default=0)',
                 reset='boolean(default=True)',
                 debug='boolean(default=False)',
+                server_max_value_length='integer(default=%d)' % memcache.SERVER_MAX_VALUE_LENGTH,
                 serializer='string(default="nagare.sessions.serializer:Pickle")'
                ))
 
@@ -73,6 +74,7 @@ class Sessions(common.Sessions):
                  min_compress_len=0,
                  reset=False,
                  debug=True,
+                 server_max_value_length=memcache.SERVER_MAX_VALUE_LENGTH,
                  serializer=None,
                  **kw
                 ):
@@ -88,6 +90,7 @@ class Sessions(common.Sessions):
           - ``min_compress_len`` -- data longer than this value are sent compressed
           - ``reset`` -- do a reset of all the sessions on startup ?
           - ``debug`` -- display the memcache requests / responses
+          - ``server_max_value_length`` -- Hard limit for sessions / states sizes
           - ``serializer`` -- serializer / deserializer of the states
         """
         super(Sessions, self).__init__(serializer or Pickle, **kw)
@@ -99,6 +102,7 @@ class Sessions(common.Sessions):
         self.lock_max_wait_time = lock_max_wait_time
         self.min_compress_len = min_compress_len
         self.debug = debug
+        self.server_max_value_length = server_max_value_length
 
         if reset:
             self.flush_all()
@@ -118,7 +122,7 @@ class Sessions(common.Sessions):
 
         for arg_name in (
                             'ttl', 'lock_ttl', 'lock_poll_time', 'lock_max_wait_time',
-                            'min_compress_len', 'debug'
+                            'min_compress_len', 'debug', 'server_max_value_length'
                           ):
             setattr(self, arg_name, conf[arg_name])
 
@@ -137,7 +141,8 @@ class Sessions(common.Sessions):
         connection = getattr(local.worker, 'memcached_connection', None)
 
         if connection is None:
-            connection = memcache.Client(self.host, debug=self.debug)
+            connection = memcache.Client(self.host, debug=self.debug,
+                                         server_max_value_length=self.server_max_value_length)
             local.worker.memcached_connection = connection
 
         return connection
