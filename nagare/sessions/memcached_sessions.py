@@ -11,7 +11,7 @@ import time
 
 import memcache
 
-from nagare import local
+from nagare import local, log
 from nagare.sessions import ExpirationError, common
 from nagare.sessions.serializer import Pickle
 
@@ -221,7 +221,14 @@ class Sessions(common.Sessions):
         if not use_same_state:
             self._get_connection().incr((KEY_PREFIX + 'state') % session_id)
 
-        self._get_connection().set_multi({
+        failures = self._get_connection().set_multi({
             'sess': (secure_id, session_data),
             '%05d' % state_id: state_data
         }, self.ttl, KEY_PREFIX % session_id, self.min_compress_len)
+        if failures:
+            # Log and fail early
+            log.error(
+                'Failed to store keys %r in memcached, please check the size of your session or state (must be < %s bytes)' % (
+                failures,
+                self._get_connection().server_max_value_length))
+            raise ExpirationError()  # FIXME: Create a new exception type?
