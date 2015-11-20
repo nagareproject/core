@@ -38,6 +38,18 @@ def render(self, renderer, comp, model):
         raise ModelError('No default model for %r' % self)
 
 
+def render_for_cond(cond):
+    """Decorator helper to register a view for a given condition
+
+    In:
+      - ``cond`` -- the condition
+
+    Return:
+      - closure
+    """
+    return when(render, cond)
+
+
 def render_for(cls, model=None):
     """Decorator helper to register a view for a class of objects
 
@@ -54,7 +66,7 @@ def render_for(cls, model=None):
         # No name give, dispatch only on the arguments type
         cond = (cls, object, object, types.NoneType)
 
-    return when(render, cond)
+    return render_for_cond(cond)
 
 
 @when(render, (object, object, object, int))

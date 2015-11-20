@@ -227,7 +227,7 @@ class Component(object):
           - ``f`` -- function to call with my answer
           - ``args``, ``kw`` -- ``f`` parameters
         """
-        self._on_answer = partial.Partial(f, *args, **kw)
+        self._on_answer = partial.Partial(f, *args, **kw) if args or kw else f
         return self
 
     def __repr__(self):
