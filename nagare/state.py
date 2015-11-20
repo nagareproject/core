@@ -26,3 +26,19 @@ def stateless(o):
         o._persistent_id = random.randint(0, 99999999)
 
     return o
+
+
+def stateful(o):
+    """Mark an object as stateful
+
+    In:
+      - ``o`` -- the object
+
+    Return:
+      - ``o``
+    """
+    if hasattr(o, '_persistent_id'):
+        del o._persistent_id
+
+    return o
+
