@@ -33,6 +33,19 @@ from nagare.sessions import ExpirationError, SessionSecurityError
 
 # ---------------------------------------------------------------------------
 
+class Request(webob.Request):
+    @property
+    def is_xhr(self):
+        return super(Request, self).is_xhr or ('_a' in self.params)
+
+    def create_redirect_response(self, location=None):
+        r = webob.exc.HTTPTemporaryRedirect(location=location)
+        if self.is_xhr:
+            r.status = exc.HTTPUnavailableService.code
+
+        return r
+
+
 class Response(webob.Response):
     def __init__(self, accept):
         super(Response, self).__init__(headerlist=[])
@@ -46,7 +59,7 @@ class Response(webob.Response):
 # ---------------------------------------------------------------------------
 
 class WSGIApp(object):
-    request_factory = webob.Request
+    request_factory = Request
     response_factory = Response
     renderer_factory = xhtml.Renderer   # Default renderer
 
@@ -216,7 +229,7 @@ class WSGIApp(object):
         Return:
           - raise a ``webob.exc`` object, used to generate the response to the browser
         """
-        raise exc.HTTPMovedPermanently()
+        raise request.create_redirect_response()
 
     def on_back(self, request, response, h, output):
         """The user used the back button
@@ -420,7 +433,7 @@ class WSGIApp(object):
 
             return response(environ, start_response)
 
-        xhr_request = request.is_xhr or ('_a' in request.params)
+        xhr_request = request.is_xhr
 
         state = None
         self.last_exception = None
