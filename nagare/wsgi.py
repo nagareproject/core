@@ -41,7 +41,7 @@ class Request(webob.Request):
     def create_redirect_response(self, location=None):
         r = webob.exc.HTTPTemporaryRedirect(location=location)
         if self.is_xhr:
-            r.status = exc.HTTPUnavailableService.code
+            r.status = exc.HTTPServiceUnavailable.code
 
         return r
 
