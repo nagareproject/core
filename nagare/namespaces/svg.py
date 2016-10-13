@@ -20,7 +20,7 @@ ANIMATION_TIMING_ATTRIBUTES = ('begin', 'dur', 'end', 'min', 'max', 'restart', '
 ANIMATION_VALUE_ATTRIBUTES = ('calcMode', 'values', 'keyTimes', 'keySplines', 'from', 'to', 'by', 'autoReverse',
                               'accelerate', 'decelerate')
 CONDITIONAL_PROCESSING_ATTRIBUTES = ('requiredExtensions', 'requiredFeatures', 'systemLanguage')
-CORE_ATTRIBUTES = ('id', 'xml:base', 'xml:lang', 'xml:space')
+CORE_ATTRIBUTES = ('id', 'xml:base', 'xml:lang', 'xml:space', 'tabindex')
 DOCUMENT_EVENT_ATTRIBUTES = ('onabort', 'onerror', 'onresize', 'onscroll', 'onunload', 'onzoom')
 FILTER_PRIMITIVE_ATTRIBUTES = ('height', 'result', 'width', 'x', 'y')
 GRAPHICAL_EVENT_ATTRIBUTES = (
@@ -42,7 +42,7 @@ XLINK_ATTRIBUTES = ('xlink:href', 'xlink:type', 'xlink:role', 'xlink:arcrole', '
 
 
 def merge_attrs(*tuples):
-    return set(reduce(tuple.__add__, tuples))
+    return set(sum(tuples, ()))
 
 
 class SVGRenderer(XmlRenderer):
