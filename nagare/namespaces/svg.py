@@ -111,11 +111,13 @@ class SVGRenderer(XmlRenderer):
     circle = TagProp('circle', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                            CORE_ATTRIBUTES,
                                            GRAPHICAL_EVENT_ATTRIBUTES,
-                                           ('class', 'style', 'externalResourcesRequired', 'transform', 'cx', 'cy', 'r')))
+                                           ('class', 'style', 'externalResourcesRequired', 'transform', 'cx', 'cy',
+                                            'r')))
     clipPath = TagProp('clipPath', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                                CORE_ATTRIBUTES,
                                                PRESENTATION_ATTRIBUTES,
-                                               ('class', 'style', 'externalResourcesRequired', 'transform', 'clipPathUnits')))
+                                               ('class', 'style', 'externalResourcesRequired', 'transform',
+                                                'clipPathUnits')))
     color_profile = TagProp('color-profile', merge_attrs(CORE_ATTRIBUTES,
                                                          XLINK_ATTRIBUTES,
                                                          ('local', 'name', 'rendering-intent', 'xlink:href')))
@@ -133,7 +135,8 @@ class SVGRenderer(XmlRenderer):
     ellipse = TagProp('ellipse', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                              CORE_ATTRIBUTES,
                                              GRAPHICAL_EVENT_ATTRIBUTES,
-                                             ('class', 'style', 'externalResourcesRequired', 'transform', 'cx', 'cy', 'rx', 'ry')))
+                                             ('class', 'style', 'externalResourcesRequired', 'transform', 'cx', 'cy',
+                                              'rx', 'ry')))
     feBlend = TagProp('feBlend', merge_attrs(CORE_ATTRIBUTES,
                                              PRESENTATION_ATTRIBUTES,
                                              FILTER_PRIMITIVE_ATTRIBUTES,
@@ -150,22 +153,26 @@ class SVGRenderer(XmlRenderer):
     feComposite = TagProp('feComposite', merge_attrs(CORE_ATTRIBUTES,
                                                      PRESENTATION_ATTRIBUTES,
                                                      FILTER_PRIMITIVE_ATTRIBUTES,
-                                                     ('class', 'style', 'in', 'in2', 'operator', 'k1', 'k2', 'k3', 'k4')))
+                                                     ('class', 'style', 'in', 'in2', 'operator', 'k1', 'k2', 'k3',
+                                                      'k4')))
     feConvolveMatrix = TagProp('feConvolveMatrix',
                                merge_attrs(CORE_ATTRIBUTES,
                                            PRESENTATION_ATTRIBUTES,
                                            FILTER_PRIMITIVE_ATTRIBUTES,
-                                           ('class', 'style', 'in', 'order', 'kernelMatrix', 'divisor', 'bias', 'targetX', 'targetY', 'edgeMode', 'kernelUnitLength', 'preserveAlpha')))
+                                           ('class', 'style', 'in', 'order', 'kernelMatrix', 'divisor', 'bias',
+                                            'targetX', 'targetY', 'edgeMode', 'kernelUnitLength', 'preserveAlpha')))
     feDiffuseLighting = TagProp('feDiffuseLighting',
                                 merge_attrs(CORE_ATTRIBUTES,
                                             PRESENTATION_ATTRIBUTES,
                                             FILTER_PRIMITIVE_ATTRIBUTES,
-                                            ('class', 'style', 'in', 'surfaceScale', 'diffuseConstant', 'kernelUnitLength')))
+                                            ('class', 'style', 'in', 'surfaceScale', 'diffuseConstant',
+                                             'kernelUnitLength')))
     feDisplacementMap = TagProp('feDisplacementMap',
                                 merge_attrs(CORE_ATTRIBUTES,
                                             PRESENTATION_ATTRIBUTES,
                                             FILTER_PRIMITIVE_ATTRIBUTES,
-                                            ('class', 'style', 'in', 'in2', 'scale', 'xChannelSelector', 'yChannelSelector')))
+                                            ('class', 'style', 'in', 'in2', 'scale', 'xChannelSelector',
+                                             'yChannelSelector')))
     feDistantLight = TagProp('feDistantLight', merge_attrs(CORE_ATTRIBUTES,
                                                            ('azimuth', 'elevation')))
     feFlood = TagProp('feFlood', merge_attrs(CORE_ATTRIBUTES,
@@ -211,10 +218,12 @@ class SVGRenderer(XmlRenderer):
                                  merge_attrs(CORE_ATTRIBUTES,
                                              PRESENTATION_ATTRIBUTES,
                                              FILTER_PRIMITIVE_ATTRIBUTES,
-                                             ('class', 'style', 'in', 'surfaceScale', 'specularConstant', 'specularExponent', 'kernelUnitLength')))
+                                             ('class', 'style', 'in', 'surfaceScale', 'specularConstant',
+                                              'specularExponent', 'kernelUnitLength')))
     feSpotLight = TagProp('feSpotLight',
                           merge_attrs(CORE_ATTRIBUTES,
-                                      ('x', 'y', 'z', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'specularExponent', 'limitingConeAngle')))
+                                      ('x', 'y', 'z', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'specularExponent',
+                                       'limitingConeAngle')))
     feTile = TagProp('feTile', merge_attrs(CORE_ATTRIBUTES,
                                            PRESENTATION_ATTRIBUTES,
                                            FILTER_PRIMITIVE_ATTRIBUTES,
@@ -223,17 +232,27 @@ class SVGRenderer(XmlRenderer):
                            merge_attrs(CORE_ATTRIBUTES,
                                        PRESENTATION_ATTRIBUTES,
                                        FILTER_PRIMITIVE_ATTRIBUTES,
-                                       ('class', 'style', 'baseFrequency', 'numOctaves', 'seed', 'stitchTiles', 'type')))
+                                       ('class', 'style', 'baseFrequency', 'numOctaves', 'seed', 'stitchTiles',
+                                        'type')))
     filter = TagProp('filter', merge_attrs(CORE_ATTRIBUTES,
                                            PRESENTATION_ATTRIBUTES,
                                            XLINK_ATTRIBUTES,
-                                           ('class', 'style', 'externalResourcesRequired', 'x', 'y', 'width', 'height', 'filterRes', 'filterUnits', 'primitiveUnits', 'xlink:href')))
+                                           ('class', 'style', 'externalResourcesRequired', 'x', 'y', 'width', 'height',
+                                            'filterRes', 'filterUnits', 'primitiveUnits', 'xlink:href')))
     font = TagProp('font', merge_attrs(CORE_ATTRIBUTES,
                                        PRESENTATION_ATTRIBUTES,
-                                       ('class', 'style', 'externalResourcesRequired', 'horiz-origin-x', 'horiz-origin-y', 'horiz-adv-z', 'vert-origin-x', 'vert-origin-y', 'vert-adv-z')))
+                                       ('class', 'style', 'externalResourcesRequired', 'horiz-origin-x',
+                                        'horiz-origin-y', 'horiz-adv-z', 'vert-origin-x', 'vert-origin-y',
+                                        'vert-adv-z')))
     font_face = TagProp('font-face',
                         merge_attrs(CORE_ATTRIBUTES,
-                                    ('font-family', 'font-style', 'font-variant', 'font-weight', 'font-stretch', 'font-size', 'unicode-range', 'units-per-em', 'panose-1', 'stemv', 'stemh', 'slope', 'cap-height', 'x-height', 'accent-height', 'ascent', 'descent', 'widths', 'bbox', 'ideographic', 'alphabetic', 'mathematical', 'hanging', 'v-ideographic', 'v-alphabetic', 'v-mathematical', 'v-hanging', 'underline-position', 'underline-thickness', 'strikethrough-position', 'strikethrough-thickness', 'overline-position', 'overline-thickness')))
+                                    ('font-family', 'font-style', 'font-variant', 'font-weight', 'font-stretch',
+                                     'font-size', 'unicode-range', 'units-per-em', 'panose-1', 'stemv', 'stemh',
+                                     'slope', 'cap-height', 'x-height', 'accent-height', 'ascent', 'descent', 'widths',
+                                     'bbox', 'ideographic', 'alphabetic', 'mathematical', 'hanging', 'v-ideographic',
+                                     'v-alphabetic', 'v-mathematical', 'v-hanging', 'underline-position',
+                                     'underline-thickness', 'strikethrough-position', 'strikethrough-thickness',
+                                     'overline-position', 'overline-thickness')))
     font_face_format = TagProp('font-face-format', merge_attrs(CORE_ATTRIBUTES,
                                                                ('string',)))
     font_face_name = TagProp('font-face-name', merge_attrs(CORE_ATTRIBUTES,
@@ -247,7 +266,8 @@ class SVGRenderer(XmlRenderer):
                                         CORE_ATTRIBUTES,
                                         GRAPHICAL_EVENT_ATTRIBUTES,
                                         PRESENTATION_ATTRIBUTES,
-                                        ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'width', 'height')))
+                                        ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'width',
+                                         'height')))
     g = TagProp('g', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                  CORE_ATTRIBUTES,
                                  GRAPHICAL_EVENT_ATTRIBUTES,
@@ -255,11 +275,13 @@ class SVGRenderer(XmlRenderer):
                                  ('class', 'style', 'externalResourcesRequired', 'transform')))
     glyph = TagProp('glyph', merge_attrs(CORE_ATTRIBUTES,
                                          PRESENTATION_ATTRIBUTES,
-                                         ('class', 'style', 'd', 'horiz-adv-x', 'vert-origin-x', 'vert-origin-y', 'vert-adv-y', 'unicode', 'glyph-name', 'orientation', 'arabic-form', 'lang')))
+                                         ('class', 'style', 'd', 'horiz-adv-x', 'vert-origin-x', 'vert-origin-y',
+                                          'vert-adv-y', 'unicode', 'glyph-name', 'orientation', 'arabic-form', 'lang')))
     glyphRef = TagProp('glyphRef', merge_attrs(CORE_ATTRIBUTES,
                                                PRESENTATION_ATTRIBUTES,
                                                XLINK_ATTRIBUTES,
-                                               ('class', 'style', 'x', 'y', 'dx', 'dy', 'glyphRef', 'format', 'xlink:href')))
+                                               ('class', 'style', 'x', 'y', 'dx', 'dy', 'glyphRef', 'format',
+                                                'xlink:href')))
     hkern = TagProp('hkern', merge_attrs(CORE_ATTRIBUTES,
                                          ('u1', 'g1', 'u2', 'g2', 'k')))
     image = TagProp('image', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
@@ -267,27 +289,34 @@ class SVGRenderer(XmlRenderer):
                                          GRAPHICAL_EVENT_ATTRIBUTES,
                                          XLINK_ATTRIBUTES,
                                          PRESENTATION_ATTRIBUTES,
-                                         ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'width', 'height', 'xlink:href', 'preserveAspectRatio')))
+                                         ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'width',
+                                          'height', 'xlink:href', 'preserveAspectRatio')))
     line = TagProp('line', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                        CORE_ATTRIBUTES,
                                        GRAPHICAL_EVENT_ATTRIBUTES,
-                                       ('class', 'style', 'externalResourcesRequired', 'transform', 'x1', 'x2', 'y1', 'y2')))
+                                       ('class', 'style', 'externalResourcesRequired', 'transform', 'x1', 'x2', 'y1',
+                                        'y2')))
     linearGradient = TagProp('linearGradient',
                              merge_attrs(CORE_ATTRIBUTES,
                                          PRESENTATION_ATTRIBUTES,
                                          XLINK_ATTRIBUTES,
-                                         ('class', 'style', 'externalResourcesRequired', 'gradientUnits', 'gradientTransform', 'x1', 'y1', 'x2', 'y2', 'spreadMethod', 'xlink:href')))
+                                         ('class', 'style', 'externalResourcesRequired', 'gradientUnits',
+                                          'gradientTransform', 'x1', 'y1', 'x2', 'y2', 'spreadMethod', 'xlink:href')))
     marker = TagProp('marker', merge_attrs(CORE_ATTRIBUTES,
                                            PRESENTATION_ATTRIBUTES,
-                                           ('class', 'style', 'externalResourcesRequired', 'viewBox', 'preserveAspectRatio', 'transform', 'markerUnits', 'refX', 'refY', 'markerWidth', 'markerHeight', 'orient')))
+                                           ('class', 'style', 'externalResourcesRequired', 'viewBox',
+                                            'preserveAspectRatio', 'transform', 'markerUnits', 'refX', 'refY',
+                                            'markerWidth', 'markerHeight', 'orient')))
     mask = TagProp('mask', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                        CORE_ATTRIBUTES,
                                        PRESENTATION_ATTRIBUTES,
-                                       ('class', 'style', 'externalResourcesRequired', 'maskUnits', 'maskContentUnits', 'x', 'y', 'width', 'height')))
+                                       ('class', 'style', 'externalResourcesRequired', 'maskUnits', 'maskContentUnits',
+                                        'x', 'y', 'width', 'height')))
     metadata = TagProp('metadata', merge_attrs(CORE_ATTRIBUTES))
     missing_glyph = TagProp('missing-glyph', merge_attrs(CORE_ATTRIBUTES,
                                                          PRESENTATION_ATTRIBUTES,
-                                                         ('class', 'style', 'd', 'horiz-adv-x', 'vert-origin-x', 'vert-origin-y', 'vert-adv-y')))
+                                                         ('class', 'style', 'd', 'horiz-adv-x', 'vert-origin-x',
+                                                          'vert-origin-y', 'vert-adv-y')))
     mpath = TagProp('mpath', merge_attrs(CORE_ATTRIBUTES,
                                          XLINK_ATTRIBUTES,
                                          ('externalResourcesRequired',),
@@ -302,7 +331,9 @@ class SVGRenderer(XmlRenderer):
                                   CORE_ATTRIBUTES,
                                   PRESENTATION_ATTRIBUTES,
                                   XLINK_ATTRIBUTES,
-                                  ('class', 'style', 'externalResourcesRequired', 'viewBox', 'patternUnits', 'patterContentUnits', 'patternTransform', 'x', 'y', 'width', 'height', 'xlink:href', 'preserveAspectRatio')))
+                                  ('class', 'style', 'externalResourcesRequired', 'viewBox', 'patternUnits',
+                                   'patterContentUnits', 'patternTransform', 'x', 'y', 'width', 'height', 'xlink:href',
+                                   'preserveAspectRatio')))
     polygon = TagProp('polygon', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                              CORE_ATTRIBUTES,
                                              GRAPHICAL_EVENT_ATTRIBUTES,
@@ -316,11 +347,14 @@ class SVGRenderer(XmlRenderer):
                              merge_attrs(CORE_ATTRIBUTES,
                                          PRESENTATION_ATTRIBUTES,
                                          XLINK_ATTRIBUTES,
-                                         ('class', 'style', 'externalResourcesRequired', 'gradientUnits', 'gradientTransform', 'cx', 'cy', 'r', 'fx', 'fy', 'spreadMethod', 'xlink:href')))
+                                         ('class', 'style', 'externalResourcesRequired', 'gradientUnits',
+                                          'gradientTransform', 'cx', 'cy', 'r', 'fx', 'fy', 'spreadMethod',
+                                          'xlink:href')))
     rect = TagProp('rect', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                        CORE_ATTRIBUTES,
                                        GRAPHICAL_EVENT_ATTRIBUTES,
-                                       ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'width', 'height', 'rx', 'ry')))
+                                       ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'width',
+                                        'height', 'rx', 'ry')))
     script = TagProp('script', merge_attrs(CORE_ATTRIBUTES,
                                            XLINK_ATTRIBUTES,
                                            ('externalResourcesRequired', 'type', 'xlink:href')))
@@ -335,27 +369,33 @@ class SVGRenderer(XmlRenderer):
                                      DOCUMENT_EVENT_ATTRIBUTES,
                                      GRAPHICAL_EVENT_ATTRIBUTES,
                                      PRESENTATION_ATTRIBUTES,
-                                     ('class', 'style', 'externalResourcesRequired', 'version', 'baseProfile', 'x', 'y', 'width', 'height', 'preserveAspectRatio', 'contentScriptType', 'contentStyleType', 'viewBox')))
+                                     ('class', 'style', 'externalResourcesRequired', 'version', 'baseProfile', 'x', 'y',
+                                      'width', 'height', 'preserveAspectRatio', 'contentScriptType', 'contentStyleType',
+                                      'viewBox')))
     switch = TagProp('switch', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                            CORE_ATTRIBUTES,
                                            GRAPHICAL_EVENT_ATTRIBUTES,
                                            PRESENTATION_ATTRIBUTES,
-                                           ('class', 'style', 'externalResourcesRequired', 'transform', 'allowReorder')))
+                                           ('class', 'style', 'externalResourcesRequired', 'transform',
+                                            'allowReorder')))
     symbol = TagProp('symbol', merge_attrs(CORE_ATTRIBUTES,
                                            GRAPHICAL_EVENT_ATTRIBUTES,
                                            PRESENTATION_ATTRIBUTES,
-                                           ('class', 'style', 'externalResourcesRequired', 'preserveAspectRatio', 'viewBox')))
+                                           ('class', 'style', 'externalResourcesRequired', 'preserveAspectRatio',
+                                            'viewBox')))
     text = TagProp('text', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                        CORE_ATTRIBUTES,
                                        GRAPHICAL_EVENT_ATTRIBUTES,
                                        PRESENTATION_ATTRIBUTES,
-                                       ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'dx', 'dy', 'text-anchor', 'rotate', 'textLength', 'lengthAdjust')))
+                                       ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'dx',
+                                        'dy', 'text-anchor', 'rotate', 'textLength', 'lengthAdjust')))
     textPath = TagProp('textPath', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                                CORE_ATTRIBUTES,
                                                GRAPHICAL_EVENT_ATTRIBUTES,
                                                PRESENTATION_ATTRIBUTES,
                                                XLINK_ATTRIBUTES,
-                                               ('class', 'style', 'externalResourcesRequired', 'startOffset', 'method', 'spacing', 'xlink:href')))
+                                               ('class', 'style', 'externalResourcesRequired', 'startOffset', 'method',
+                                                'spacing', 'xlink:href')))
     title = TagProp('title', merge_attrs(CORE_ATTRIBUTES,
                                          ('class', 'style')))
     tref = TagProp('tref', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
@@ -368,15 +408,18 @@ class SVGRenderer(XmlRenderer):
                                          CORE_ATTRIBUTES,
                                          GRAPHICAL_EVENT_ATTRIBUTES,
                                          PRESENTATION_ATTRIBUTES,
-                                         ('class', 'style', 'externalResourcesRequired', 'x', 'y', 'dx', 'dy', 'rotate', 'textLength', 'lengthAdjust')))
+                                         ('class', 'style', 'externalResourcesRequired', 'x', 'y', 'dx', 'dy', 'rotate',
+                                          'textLength', 'lengthAdjust')))
     use = TagProp('use', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                      CORE_ATTRIBUTES,
                                      GRAPHICAL_EVENT_ATTRIBUTES,
                                      PRESENTATION_ATTRIBUTES,
                                      XLINK_ATTRIBUTES,
-                                     ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'width', 'height', 'xlink:href')))
+                                     ('class', 'style', 'externalResourcesRequired', 'transform', 'x', 'y', 'width',
+                                      'height', 'xlink:href')))
     view = TagProp('view', merge_attrs(CORE_ATTRIBUTES,
-                                       ('externalResourcesRequired', 'viewBox', 'preserveAspectRatio', 'zoomAndPan', 'viewTarget')))
+                                       ('externalResourcesRequired', 'viewBox', 'preserveAspectRatio', 'zoomAndPan',
+                                        'viewTarget')))
     vkern = TagProp('vkern', merge_attrs(CORE_ATTRIBUTES,
                                          ('u1', 'g1', 'u2', 'g2', 'k')))
     set = TagProp('set', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,

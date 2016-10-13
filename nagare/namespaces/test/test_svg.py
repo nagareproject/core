@@ -37,7 +37,14 @@ class SVG(unittest.TestCase):
     def test_load(self):
         r = SVGRenderer()
         with open(os.path.join(os.path.dirname(__file__),
-                               'Ghostscript_Tiger.svg')) as f:
+                               'simple.svg')) as f:
             data = f.read()
             root = r.parse_xmlstring(data)
         self.assertIsNotNone(root.xpath('svg'))
+        self.assertIsNotNone(root.xpath('svg//ellipse'))
+
+    def test_simple_programmatic(self):
+        h = SVGRenderer()
+        with h.svg:
+            h << h.ellipse(rx=100, ry=75, cx=50, cy=60)
+        self.assertEqual('<svg:svg xmlns:svg="http://www.w3.org/2000/svg"><svg:ellipse cy="60" cx="50" rx="100" ry="75"/></svg:svg>', h.root.write_xmlstring())
