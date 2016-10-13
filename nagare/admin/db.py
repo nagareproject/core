@@ -57,7 +57,7 @@ def read_options(debug, args, error):
     log.activate()
     log.set_logger('nagare.application.' + aconf['application']['name'])
 
-    return util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)[1]
+    return util.activate_WSGIApp(app, cfgfile, aconf, error, debug=debug)
 
 
 def create(parser, options, args):
@@ -73,7 +73,8 @@ def create(parser, options, args):
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines : application name
     """
-    for (database_settings, populate) in read_options(options.debug, args, parser.error):
+    app, databases = read_options(options.debug, args, parser.error)
+    for (database_settings, populate) in databases:
         database.set_metadata(*database_settings)
 
         with database.session.begin():
@@ -83,7 +84,8 @@ def create(parser, options, args):
             database_settings[0].create_all()
 
             if options.populate and populate:
-                reference.load_object(populate)[0]()
+                populate_function = reference.load_object(populate)[0]
+                populate_function(app)
 
 
 def drop(parser, options, args):
@@ -94,7 +96,7 @@ def drop(parser, options, args):
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines : application name
     """
-    for (database_settings, populate) in read_options(options.debug, args, parser.error):
+    for (database_settings, populate) in read_options(options.debug, args, parser.error)[1]:
         database.set_metadata(*database_settings)
 
         with database.session.begin():
