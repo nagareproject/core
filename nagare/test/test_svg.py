@@ -29,6 +29,6 @@ class SVG(unittest.TestCase):
                        'switch', 'symbol', 'text', 'textPath', 'view', 'title', 'tref', 'vkern', 'tspan', 'use')
         for attr in all_attribs:
             attr_name = attr.replace('-', '_')
-            attrib = getattr(SVGRenderer, attr_name)
-            self.assertIsNotNone(attrib, '{} not fount in SVGRenderer'.format(attr))
-            self.assertEqual(attrib._name, attr)
+            attrib = SVGRenderer.__dict__.get(attr_name)
+            self.assertIsNotNone(attrib, '{} not found in SVGRenderer'.format(attr))
+            self.assertEqual(attrib._name, attr, '{} has wrong name in SVGRenderer'.format(attr))
