@@ -46,6 +46,14 @@ def merge_attrs(*tuples):
 
 
 class SVGRenderer(XmlRenderer):
+    doctype = 'svg'
+    content_type = 'image/svg+xml'
+
+    def __init__(self, parent=None):
+        super(SVGRenderer, self).__init__(parent)
+        self.namespaces = {'svg': 'http://www.w3.org/2000/svg'}
+        self._set_default_namespace('svg')
+
     a = TagProp('a', merge_attrs(CONDITIONAL_PROCESSING_ATTRIBUTES,
                                  CORE_ATTRIBUTES,
                                  GRAPHICAL_EVENT_ATTRIBUTES,

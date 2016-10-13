@@ -9,6 +9,7 @@
 # this distribution.
 #--
 
+import os
 import unittest
 
 from nagare.namespaces.svg import SVGRenderer
@@ -32,3 +33,11 @@ class SVG(unittest.TestCase):
             attrib = SVGRenderer.__dict__.get(attr_name)
             self.assertIsNotNone(attrib, '{} not found in SVGRenderer'.format(attr))
             self.assertEqual(attrib._name, attr, '{} has wrong name in SVGRenderer'.format(attr))
+
+    def test_load(self):
+        r = SVGRenderer()
+        with open(os.path.join(os.path.dirname(__file__),
+                               'Ghostscript_Tiger.svg')) as f:
+            data = f.read()
+            root = r.parse_xmlstring(data)
+        self.assertIsNotNone(root.xpath('svg'))
