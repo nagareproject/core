@@ -169,6 +169,27 @@ class IPythonShellV2(object):
         self.shell()
 
 
+class IPythonShellV3(object):
+    """A IPython >= 5.0 interpreter
+    """
+    def __init__(self, ipython, banner, app_names, ns):
+
+        class NagarePrompts(ipython.terminal.prompts.Prompts):
+            def in_prompt_tokens(self, cli=None):
+                prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
+                return [
+                    (ipython.terminal.prompts.Token.Prompt, 'Nagare%s [' % prompt),
+                    (ipython.terminal.prompts.Token.PromptNum, str(self.shell.execution_count)),
+                    (ipython.terminal.prompts.Token.Prompt, ']: '),
+                ]
+
+        self.shell = ipython.terminal.embed.InteractiveShellEmbed(banner1=banner, user_ns=ns, confirm_exit=False)
+        self.shell.prompts = NagarePrompts(self.shell)
+
+    def __call__(self):
+        self.shell()
+
+
 class PythonShell(code.InteractiveConsole):
     """A plain Python interpreter
     """
@@ -233,7 +254,14 @@ def create_python_shell(ipython, banner, app_names, ns):
         except ImportError:
             pass
         else:
-            shell_factory = IPythonShellV1 if map(int, IPython.__version__.split('.')) < [0, 11] else IPythonShellV2
+            ipython_version = pkg_resources.parse_version(IPython.__version__)
+            if ipython_version < pkg_resources.parse_version('0.11'):
+                shell_factory = IPythonShellV1
+            elif ipython_version < pkg_resources.parse_version('5.0'):
+                shell_factory =  IPythonShellV2
+            else:
+                shell_factory = IPythonShellV3
+
             shell_factory(IPython, banner, app_names, ns)()
             return
 
