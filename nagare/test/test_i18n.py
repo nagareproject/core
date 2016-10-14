@@ -1,3 +1,4 @@
+# coding: utf-8
 #--
 # Copyright (c) 2008-2013 Net-ng.
 # All rights reserved.
@@ -257,7 +258,14 @@ def teardown():
 
 @with_setup(setup, teardown)
 def test_get_period_names():
-    assert i18n.get_period_names() == {'am': u'AM', 'pm': u'PM'}
+    assert i18n.get_period_names() == {'afternoon1': u'après-midi',
+                                       'am': u'AM',
+                                       'evening1': u'soir',
+                                       'midnight': u'minuit',
+                                       'morning1': u'matin',
+                                       'night1': u'nuit',
+                                       'noon': u'midi',
+                                       'pm': u'PM'}
 
 @with_setup(setup, teardown)
 def test_get_day_names():
