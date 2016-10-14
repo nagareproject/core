@@ -730,7 +730,7 @@ class Locale(CoreLocale):
         Return:
           - the currency name
         """
-        return numbers.get_currency_name(currency, self)
+        return numbers.get_currency_name(currency, locale=self)
 
     def get_currency_symbol(self, currency):
         """Return the symbol used for the specified currency
