@@ -531,7 +531,7 @@ class Locale(CoreLocale):
         >>> Locale('en', 'US').get_period_names()['am']
         u'AM'
         """
-        return dates.get_period_names(self)
+        return dates.get_period_names(locale=self)
 
     def get_day_names(self, width='wide', context='format'):
         """Return the day names for the specified format
