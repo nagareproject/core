@@ -59,6 +59,9 @@ publisher_options_spec = {
     ),
 }
 
+full_spec = application_options_spec.copy()
+full_spec.update(publisher_options_spec)
+
 
 def read_application_options(cfgfile, error, default={}):
     """Read the configuration file for the application
