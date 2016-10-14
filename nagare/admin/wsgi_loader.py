@@ -12,7 +12,7 @@ import os
 import sys
 
 from nagare import local, log
-from nagare.admin import util
+from nagare.admin import util, serve
 
 
 def error(*args, **kw):
@@ -34,6 +34,25 @@ def init_session_manager(conf_path, conf):
     return sessions_manager
 
 
+def init_publisher(conf_path, conf):
+    # Create the function to get the static contents of the application
+    nagare_req = pkg_resources.Requirement.parse('nagare')
+
+    publishers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.publishers')])
+    t = conf['publisher'].get('type', 'standalone')
+    publisher = publishers[t].load()()
+
+    get_file = None
+    static_path = conf['application']['static']
+    if static_path is not None and os.path.isdir(static_path):
+        get_file = lambda path, static_path=static_path: serve.get_file_from_root(static_path, path)
+
+    # Register the function to serve the static contents of the application
+    static_url = publisher.register_static(conf['application']['name'], get_file)
+    publisher.register_static('nagare', lambda path, r=nagare_req: serve.get_file_from_package(r, path))
+    return publisher, static_url
+
+
 def init_logs(conf_path, conf):
     log.configure(conf['logging'].dict(), conf['application']['name'])
     log.activate()
@@ -48,6 +67,7 @@ def load(app):
     config = util.read_application_options(NAGARE_SETTINGS, error)
 
     sessions_manager = init_session_manager(NAGARE_SETTINGS, config)
+    publisher, static_url = init_publisher(NAGARE_SETTINGS, config)
     init_logs(NAGARE_SETTINGS, config)
 
     project_name = config['application']['name']
@@ -57,8 +77,9 @@ def load(app):
     (app, metadatas) = util.activate_WSGIApp(app, NAGARE_SETTINGS, config, error,
                                              project_name=project_name,
                                              static_path=project_name,
-                                             static_url=project_name,
+                                             static_url=static_url,
                                              data_path=data_path,
+                                             publisher=publisher,
                                              sessions_manager=sessions_manager,
                                              debug=config['application']['debug'])
     init_local()
