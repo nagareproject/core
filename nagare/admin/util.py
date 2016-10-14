@@ -47,6 +47,18 @@ application_options_spec = {
     'logging': dict()
 }
 
+publisher_options_spec = {
+    'publisher': dict(
+        host='string(default="127.0.0.1")',  # Listen only on the loopback interface
+        port='integer(default=-1)'  # The default port depends of the publisher used
+    ),
+
+    'reloader': dict(
+        activated='boolean(default=False)',  # No automatic reload
+        interval='integer(default=1)',
+    ),
+}
+
 
 def read_application_options(cfgfile, error, default={}):
     """Read the configuration file for the application
@@ -64,6 +76,7 @@ def read_application_options(cfgfile, error, default={}):
 
     spec = configobj.ConfigObj(default)
     spec.merge(application_options_spec)
+    spec.merge(publisher_options_spec)
 
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
     spec.merge({'sessions': {'type': 'option(%s, default="")' % (choices + ', ""')}})
