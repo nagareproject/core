@@ -945,7 +945,9 @@ class Locale(CoreLocale):
           - the formatted time string
         """
         if isinstance(t, datetime.time):
-            t = datetime.time(t.hour, t.minute, t.second)
+            d = datetime.datetime.now()
+            d = d.replace(hour=t.hour, minute=t.minute, second=t.second)
+            t = self.to_utc(d)
 
         if isinstance(t, datetime.datetime):
             t = self.to_utc(t)
