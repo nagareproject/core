@@ -442,13 +442,13 @@ def test_to_timezone_no_timezone_datetime():
     d2 = i18n.to_timezone(d)
     assert (d2.tzinfo is None) and (d2.strftime('%H:%M') == '15:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
     d2 = i18n.to_timezone(d)
-    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '15:30')
+    assert (str(d2.tzinfo) == 'Africa/Niamey') and (d2.strftime('%H:%M') == '15:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey', default_timezone=pytz.UTC))
     d2 = i18n.to_timezone(d)
-    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '17:30')
+    assert (str(d2.tzinfo) == 'Africa/Niamey') and (d2.strftime('%H:%M') == '16:30')
 
 
 def test_to_timezone_utc_datetime():
@@ -458,13 +458,13 @@ def test_to_timezone_utc_datetime():
     d2 = i18n.to_timezone(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '15:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
     d2 = i18n.to_timezone(d)
-    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '17:30')
+    assert (str(d2.tzinfo) == 'Africa/Niamey') and (d2.strftime('%H:%M') == '16:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey', default_timezone=pytz.UTC))
     d2 = i18n.to_timezone(d)
-    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '17:30')
+    assert (str(d2.tzinfo) == 'Africa/Niamey') and (d2.strftime('%H:%M') == '16:30')
 
 
 def test_to_timezone_local_datetime():
@@ -475,13 +475,13 @@ def test_to_timezone_local_datetime():
     d2 = i18n.to_timezone(d)
     assert (str(d2.tzinfo) == 'Pacific/Pitcairn') and (d2.strftime('%H:%M') == '15:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
     d2 = i18n.to_timezone(d)
-    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '01:30')
+    assert (str(d2.tzinfo) == 'Africa/Niamey') and (d2.strftime('%H:%M') == '00:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey', default_timezone=pytz.UTC))
     d2 = i18n.to_timezone(d)
-    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '01:30')
+    assert (str(d2.tzinfo) == 'Africa/Niamey') and (d2.strftime('%H:%M') == '00:30')
 
 
 def test_to_utc_no_timezone_datetime():
@@ -491,11 +491,11 @@ def test_to_utc_no_timezone_datetime():
     d2 = i18n.to_utc(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '15:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
     d2 = i18n.to_utc(d)
-    assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '13:30')
+    assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '14:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey', default_timezone=pytz.UTC))
     d2 = i18n.to_utc(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '15:30')
 
@@ -507,11 +507,11 @@ def test_to_utc_utc_datetime():
     d2 = i18n.to_utc(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '15:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
     d2 = i18n.to_utc(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '15:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey', default_timezone=pytz.UTC))
     d2 = i18n.to_utc(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '15:30')
 
@@ -524,11 +524,11 @@ def test_to_utc_local_datetime():
     d2 = i18n.to_utc(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '23:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
     d2 = i18n.to_utc(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '23:30')
 
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey', default_timezone=pytz.UTC))
     d2 = i18n.to_utc(d)
     assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '23:30')
 
@@ -546,11 +546,11 @@ def test_format_time_time_fr1():
 
 
 def test_format_time_time_fr2():
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
 
     t = datetime.time(15, 30)
 
-    assert i18n.format_time(t, format='full') == u'15:30:00 heure normale d’Europe centrale'
+    assert i18n.format_time(t, format='full') == u'15:30:00 heure normale d’Afrique de l’Ouest'
     assert i18n.format_time(t, format='long') == '15:30:00 +0100'
     assert i18n.format_time(t, format='medium') == '15:30:00'
     assert i18n.format_time(t) == '15:30:00'
@@ -570,11 +570,11 @@ def test_format_time_time_fr3():
 
 
 def test_format_time_time_fr4():
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
 
     t = datetime.time(15, 30, tzinfo=pytz.timezone('Pacific/Pitcairn'))
 
-    assert i18n.format_time(t, format='full') == u'15:30:00 heure normale d’Europe centrale'
+    assert i18n.format_time(t, format='full') == u'15:30:00 heure normale d’Afrique de l’Ouest'
     assert i18n.format_time(t, format='long') == '15:30:00 +0100'
     assert i18n.format_time(t, format='medium') == '15:30:00'
     assert i18n.format_time(t) == '15:30:00'
@@ -599,7 +599,7 @@ def test_format_time_time_with_format():
     t = datetime.time(15, 30)
     assert i18n.format_time(t, format="hh 'o''clock' a, zzzz") == "03 o'clock PM, Pitcairn Time"
 
-    t = datetime.time(15, 30, tzinfo=pytz.timezone('Europe/Paris'))
+    t = datetime.time(15, 30, tzinfo=pytz.timezone('Africa/Niamey'))
     assert i18n.format_time(t, format="hh 'o''clock' a, zzzz") == "03 o'clock PM, Pitcairn Time"
 
 
@@ -616,27 +616,27 @@ def test_format_time_datetime_fr1():
 
 
 def test_format_time_datetime_fr2():
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
 
     d = datetime.datetime(2007, 4, 1, 15, 30)
 
-    assert i18n.format_time(d, format='full') == u'15:30:00 heure d’été d’Europe centrale'
-    assert i18n.format_time(d, format='long') == '15:30:00 +0200'
+    assert i18n.format_time(d, format='full') == u'15:30:00 heure normale d’Afrique de l’Ouest'
+    assert i18n.format_time(d, format='long') == '15:30:00 +0100'
     assert i18n.format_time(d, format='medium') == '15:30:00'
     assert i18n.format_time(d) == '15:30:00'
     assert i18n.format_time(d, format='short') == '15:30'
 
 
 def test_format_time_datetime_fr3():
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey', default_timezone=pytz.UTC))
 
     d = datetime.datetime(2007, 4, 1, 15, 30)
 
-    assert i18n.format_time(d, format='full') == u'17:30:00 heure d’été d’Europe centrale'
-    assert i18n.format_time(d, format='long') == '17:30:00 +0200'
-    assert i18n.format_time(d, format='medium') == '17:30:00'
-    assert i18n.format_time(d) == '17:30:00'
-    assert i18n.format_time(d, format='short') == '17:30'
+    assert i18n.format_time(d, format='full') == u'16:30:00 heure normale d’Afrique de l’Ouest'
+    assert i18n.format_time(d, format='long') == '16:30:00 +0100'
+    assert i18n.format_time(d, format='medium') == '16:30:00'
+    assert i18n.format_time(d) == '16:30:00'
+    assert i18n.format_time(d, format='short') == '16:30'
 
 
 def test_format_time_datetime_fr4():
@@ -653,16 +653,16 @@ def test_format_time_datetime_fr4():
 
 
 def test_format_time_datetime_fr5():
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
 
     tz = pytz.timezone('Pacific/Pitcairn')
     d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
-    assert i18n.format_time(d, format='full') == u'01:30:00 heure d’été d’Europe centrale'
-    assert i18n.format_time(d, format='long') == '01:30:00 +0200'
-    assert i18n.format_time(d, format='medium') == '01:30:00'
-    assert i18n.format_time(d) == '01:30:00'
-    assert i18n.format_time(d, format='short') == '01:30'
+    assert i18n.format_time(d, format='full') == u'00:30:00 heure normale d’Afrique de l’Ouest'
+    assert i18n.format_time(d, format='long') == '00:30:00 +0100'
+    assert i18n.format_time(d, format='medium') == '00:30:00'
+    assert i18n.format_time(d) == '00:30:00'
+    assert i18n.format_time(d, format='short') == '00:30'
 
 
 def test_format_time_datetime_with_format():
@@ -671,9 +671,9 @@ def test_format_time_datetime_with_format():
     d = datetime.datetime(2007, 4, 1, 15, 30)
     assert i18n.format_time(d, format="hh 'o''clock' a, zzzz") == "03 o'clock PM, Pitcairn Time"
 
-    tz = pytz.timezone('Europe/Paris')
+    tz = pytz.timezone('Africa/Niamey')
     d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
-    assert i18n.format_time(d, format="hh 'o''clock' a, zzzz") == "05 o'clock AM, Pitcairn Time"
+    assert i18n.format_time(d, format="hh 'o''clock' a, zzzz") == "06 o'clock AM, Pitcairn Time"
 
 
 @with_setup(setup, teardown)
@@ -708,16 +708,16 @@ def test_format_date_date_with_format():
 
 @with_setup(setup, teardown)
 def test_format_datetime():
-    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
+    i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Africa/Niamey'))
 
     tz = pytz.timezone('Pacific/Pitcairn')
     d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
-    assert i18n.format_datetime(d, format='full') == u'lundi 2 avril 2007 à 01:30:00 heure d’été d’Europe centrale'
-    assert i18n.format_datetime(d, format='long') == u'2 avril 2007 à 01:30:00 +0200'
-    assert i18n.format_datetime(d, format='medium') == u'2 avr. 2007 à 01:30:00'
-    assert i18n.format_datetime(d) == u'2 avr. 2007 à 01:30:00'
-    assert i18n.format_datetime(d, format='short') == u'02/04/2007 01:30'
+    assert i18n.format_datetime(d, format='full') == u'lundi 2 avril 2007 à 00:30:00 heure normale d’Afrique de l’Ouest'
+    assert i18n.format_datetime(d, format='long') == u'2 avril 2007 à 00:30:00 +0100'
+    assert i18n.format_datetime(d, format='medium') == u'2 avr. 2007 à 00:30:00'
+    assert i18n.format_datetime(d) == u'2 avr. 2007 à 00:30:00'
+    assert i18n.format_datetime(d, format='short') == u'02/04/2007 00:30'
 
 
 def test_format_datetime_with_format():
@@ -726,9 +726,9 @@ def test_format_datetime_with_format():
     d = datetime.datetime(2007, 4, 1, 15, 30)
     assert i18n.format_datetime(d, format="yyyy.MM.dd G 'at' HH:mm:ss zzz") == '2007.04.01 AD at 15:30:00 -0800'
 
-    tz = pytz.timezone('Europe/Paris')
+    tz = pytz.timezone('Africa/Niamey')
     d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
-    assert i18n.format_datetime(d, format="yyyy.MM.dd G 'at' HH:mm:ss zzz") == '2007.04.01 AD at 05:30:00 -0800'
+    assert i18n.format_datetime(d, format="yyyy.MM.dd G 'at' HH:mm:ss zzz") == '2007.04.01 AD at 06:30:00 -0800'
 
 
 @with_setup(setup, teardown)
