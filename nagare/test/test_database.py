@@ -46,6 +46,8 @@ __metadata__.bind.echo = False
 def setup():
     setup_all()
 
+setup_module = setup
+
 
 def setup_func():
     create_all()
