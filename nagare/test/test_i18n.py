@@ -332,17 +332,17 @@ def test_get_time_format():
 @with_setup(setup, teardown)
 def test_get_timezone_gmt():
     tz = pytz.timezone('America/Los_Angeles')
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=tz)
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
-    assert i18n.get_timezone_gmt(d, width='long') == 'UTC-08:07'
-    assert i18n.get_timezone_gmt(d) == 'UTC-08:07'
-    assert i18n.get_timezone_gmt(d, width='short') == '-0807'
+    assert i18n.get_timezone_gmt(d, width='long') == 'UTC-07:00'
+    assert i18n.get_timezone_gmt(d) == 'UTC-07:00'
+    assert i18n.get_timezone_gmt(d, width='short') == '-0700'
 
     setup_en()
 
-    assert i18n.get_timezone_gmt(d, width='long') == 'GMT-08:07'
-    assert i18n.get_timezone_gmt(d) == 'GMT-08:07'
-    assert i18n.get_timezone_gmt(d, width='short') == '-0807'
+    assert i18n.get_timezone_gmt(d, width='long') == 'GMT-07:00'
+    assert i18n.get_timezone_gmt(d) == 'GMT-07:00'
+    assert i18n.get_timezone_gmt(d, width='short') == '-0700'
 
 
 @with_setup(setup, teardown)
@@ -354,11 +354,11 @@ def test_get_timezone_location():
 @with_setup(setup_en, teardown)
 def test_get_timezone_name():
     tz = pytz.timezone('America/Los_Angeles')
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=tz)
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
-    assert i18n.get_timezone_name(d, width='long') == 'Pacific Standard Time'
-    assert i18n.get_timezone_name(d) == 'Pacific Standard Time'
-    assert i18n.get_timezone_name(d, width='short') == 'PST'
+    assert i18n.get_timezone_name(d, width='long') == 'Pacific Daylight Time'
+    assert i18n.get_timezone_name(d) == 'Pacific Daylight Time'
+    assert i18n.get_timezone_name(d, width='short') == 'PDT'
 
 # -----------------------------------------------------------------------------
 
@@ -451,7 +451,7 @@ def test_to_timezone_no_timezone_datetime():
 
 
 def test_to_timezone_utc_datetime():
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=pytz.UTC)
+    d = pytz.UTC.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
     i18n.set_locale(i18n.Locale('fr', 'FR'))
     d2 = i18n.to_timezone(d)
@@ -468,7 +468,7 @@ def test_to_timezone_utc_datetime():
 
 def test_to_timezone_local_datetime():
     tz = pytz.timezone('America/Los_Angeles')
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=tz)
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
     i18n.set_locale(i18n.Locale('fr', 'FR'))
     d2 = i18n.to_timezone(d)
@@ -476,11 +476,11 @@ def test_to_timezone_local_datetime():
 
     i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
     d2 = i18n.to_timezone(d)
-    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '01:23')
+    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '00:30')
 
     i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
     d2 = i18n.to_timezone(d)
-    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '01:23')
+    assert (str(d2.tzinfo) == 'Europe/Paris') and (d2.strftime('%H:%M') == '00:30')
 
 
 def test_to_utc_no_timezone_datetime():
@@ -500,7 +500,7 @@ def test_to_utc_no_timezone_datetime():
 
 
 def test_to_utc_utc_datetime():
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=pytz.UTC)
+    d = pytz.UTC.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
     i18n.set_locale(i18n.Locale('fr', 'FR'))
     d2 = i18n.to_utc(d)
@@ -517,19 +517,19 @@ def test_to_utc_utc_datetime():
 
 def test_to_utc_local_datetime():
     tz = pytz.timezone('America/Los_Angeles')
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=tz)
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
     i18n.set_locale(i18n.Locale('fr', 'FR'))
     d2 = i18n.to_utc(d)
-    assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '23:23')
+    assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '22:30')
 
     i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
     d2 = i18n.to_utc(d)
-    assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '23:23')
+    assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '22:30')
 
     i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris', default_timezone=pytz.UTC))
     d2 = i18n.to_utc(d)
-    assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '23:23')
+    assert (str(d2.tzinfo) == 'UTC') and (d2.strftime('%H:%M') == '22:30')
 
 
 def test_format_time_time_fr1():
@@ -641,25 +641,27 @@ def test_format_time_datetime_fr3():
 def test_format_time_datetime_fr4():
     i18n.set_locale(i18n.Locale('fr', 'FR'))
 
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=pytz.timezone('America/Los_Angeles'))
+    tz = pytz.timezone('America/Los_Angeles')
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
-    assert i18n.format_time(d, format='full') == '23:23:00 UTC+00:00'
-    assert i18n.format_time(d, format='long') == '23:23:00 +0000'
-    assert i18n.format_time(d, format='medium') == '23:23:00'
-    assert i18n.format_time(d) == '23:23:00'
-    assert i18n.format_time(d, format='short') == '23:23'
+    assert i18n.format_time(d, format='full') == '22:30:00 UTC+00:00'
+    assert i18n.format_time(d, format='long') == '22:30:00 +0000'
+    assert i18n.format_time(d, format='medium') == '22:30:00'
+    assert i18n.format_time(d) == '22:30:00'
+    assert i18n.format_time(d, format='short') == '22:30'
 
 
 def test_format_time_datetime_fr5():
     i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
 
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=pytz.timezone('America/Los_Angeles'))
+    tz = pytz.timezone('America/Los_Angeles')
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
-    assert i18n.format_time(d, format='full') == u'01:23:00 heure d’été d’Europe centrale'
-    assert i18n.format_time(d, format='long') == '01:23:00 +0200'
-    assert i18n.format_time(d, format='medium') == '01:23:00'
-    assert i18n.format_time(d) == '01:23:00'
-    assert i18n.format_time(d, format='short') == '01:23'
+    assert i18n.format_time(d, format='full') == u'00:30:00 heure d’été d’Europe centrale'
+    assert i18n.format_time(d, format='long') == '00:30:00 +0200'
+    assert i18n.format_time(d, format='medium') == '00:30:00'
+    assert i18n.format_time(d) == '00:30:00'
+    assert i18n.format_time(d, format='short') == '00:30'
 
 
 def test_format_time_datetime_with_format():
@@ -668,8 +670,9 @@ def test_format_time_datetime_with_format():
     d = datetime.datetime(2007, 4, 1, 15, 30)
     assert i18n.format_time(d, format="hh 'o''clock' a, zzzz") == "03 o'clock PM, Pacific Daylight Time"
 
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=pytz.timezone('Europe/Paris'))
-    assert i18n.format_time(d, format="hh 'o''clock' a, zzzz") == "08 o'clock AM, Pacific Daylight Time"
+    tz = pytz.timezone('Europe/Paris')
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
+    assert i18n.format_time(d, format="hh 'o''clock' a, zzzz") == "06 o'clock AM, Pacific Daylight Time"
 
 
 @with_setup(setup, teardown)
@@ -685,7 +688,8 @@ def test_format_date_date():
 
 @with_setup(setup, teardown)
 def test_format_date_datetime():
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=pytz.timezone('America/Los_Angeles'))
+    tz = pytz.timezone('America/Los_Angeles')
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
     assert i18n.format_date(d, format='full') == 'dimanche 1 avril 2007'
     assert i18n.format_date(d, format='long') == '1 avril 2007'
@@ -705,13 +709,14 @@ def test_format_date_date_with_format():
 def test_format_datetime():
     i18n.set_locale(i18n.Locale('fr', 'FR', timezone='Europe/Paris'))
 
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=pytz.timezone('America/Los_Angeles'))
+    tz = pytz.timezone('America/Los_Angeles')
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
 
-    assert i18n.format_datetime(d, format='full') == u'lundi 2 avril 2007 à 01:23:00 heure d’été d’Europe centrale'
-    assert i18n.format_datetime(d, format='long') == u'2 avril 2007 à 01:23:00 +0200'
-    assert i18n.format_datetime(d, format='medium') == u'2 avr. 2007 à 01:23:00'
-    assert i18n.format_datetime(d) == u'2 avr. 2007 à 01:23:00'
-    assert i18n.format_datetime(d, format='short') == u'02/04/2007 01:23'
+    assert i18n.format_datetime(d, format='full') == u'lundi 2 avril 2007 à 00:30:00 heure d’été d’Europe centrale'
+    assert i18n.format_datetime(d, format='long') == u'2 avril 2007 à 00:30:00 +0200'
+    assert i18n.format_datetime(d, format='medium') == u'2 avr. 2007 à 00:30:00'
+    assert i18n.format_datetime(d) == u'2 avr. 2007 à 00:30:00'
+    assert i18n.format_datetime(d, format='short') == u'02/04/2007 00:30'
 
 
 def test_format_datetime_with_format():
@@ -720,8 +725,9 @@ def test_format_datetime_with_format():
     d = datetime.datetime(2007, 4, 1, 15, 30)
     assert i18n.format_datetime(d, format="yyyy.MM.dd G 'at' HH:mm:ss zzz") == '2007.04.01 AD at 16:23:00 PDT'
 
-    d = datetime.datetime(2007, 4, 1, 15, 30, tzinfo=pytz.timezone('Europe/Paris'))
-    assert i18n.format_datetime(d, format="yyyy.MM.dd G 'at' HH:mm:ss zzz") == '2007.04.01 AD at 08:21:00 PDT'
+    tz = pytz.timezone('Europe/Paris')
+    d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))
+    assert i18n.format_datetime(d, format="yyyy.MM.dd G 'at' HH:mm:ss zzz") == '2007.04.01 AD at 06:30:00 PDT'
 
 
 @with_setup(setup, teardown)
