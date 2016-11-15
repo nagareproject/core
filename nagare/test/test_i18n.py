@@ -723,7 +723,7 @@ def test_format_datetime_with_format():
     i18n.set_locale(i18n.Locale('en', 'US', timezone='America/Los_Angeles'))
 
     d = datetime.datetime(2007, 4, 1, 15, 30)
-    assert i18n.format_datetime(d, format="yyyy.MM.dd G 'at' HH:mm:ss zzz") == '2007.04.01 AD at 16:23:00 PDT'
+    assert i18n.format_datetime(d, format="yyyy.MM.dd G 'at' HH:mm:ss zzz") == '2007.04.01 AD at 15:30:00 PDT'
 
     tz = pytz.timezone('Europe/Paris')
     d = tz.localize(datetime.datetime(2007, 4, 1, 15, 30))

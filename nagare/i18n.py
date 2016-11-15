@@ -904,7 +904,7 @@ class Locale(CoreLocale):
             return dt
 
         if not dt.tzinfo:
-            dt = dt.replace(tzinfo=self.default_timezone)
+            dt = self.default_timezone.localize(dt)
 
         return dt.astimezone(self.tzinfo)
 
