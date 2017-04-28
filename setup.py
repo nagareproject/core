@@ -68,7 +68,7 @@ setup(
       namespace_packages=('nagare',),
       zip_safe=False,
       dependency_links=('http://www.nagare.org/download/',),
-      install_requires=('PEAK-Rules', 'ConfigObj', 'lxml>=3.0.1', 'WebOb>=1.2.3', 'Paste', 'flup', 'python-memcached'),
+      install_requires=('PEAK-Rules', 'ConfigObj', 'lxml>=3.0.1', 'WebOb>=1.2.3', 'Paste', 'flup', 'python-memcached', 'nagare-namespaces'),
       message_extractors={'nagare': [
           ('test/**', 'ignore', None),
           ('**.py', 'python', None),
