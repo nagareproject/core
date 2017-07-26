@@ -23,6 +23,7 @@ class Input(xhtml._HTMLActionTag):
     """Class of all the new input types of HTML5
     """
     _actions = (1, 'name', 'onchange')
+    async_action = xhtml._HTMLActionTag.sync_action
 
 
 class ObsoleteTagProp(TagProp):
