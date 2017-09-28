@@ -288,7 +288,7 @@ class DummyTranslation(object):
 class Locale(CoreLocale):
     def __init__(
                     self,
-                    language=None, territory=None, script=None, variant=None,
+                    language, territory=None, script=None, variant=None,
                     dirname=None, domain=None,
                     timezone=None, default_timezone=None
                 ):
@@ -313,10 +313,7 @@ class Locale(CoreLocale):
             no associated timezone. If no default timezone is given, the ``timezone``
             value is used
         """
-        if language is not None:
-            super(Locale, self).__init__(language, territory, script, variant)
-        else:
-            self.language = self.territory = self.script = self.variant = None
+        super(Locale, self).__init__(language, territory, script, variant)
 
         self.domain = domain
         self.translation_directories = {}
@@ -340,6 +337,8 @@ class Locale(CoreLocale):
         # from the nagare directories
         nagare_translations_dir = pkg_resources.resource_filename(pkg_resources.Requirement.parse('nagare'), 'data/locale')
         self.add_translation_directory(nagare_translations_dir, 'nagare')
+
+        self.zone_formats['region'] = '%s'
 
     def add_translation_directory(self, dirname=None, domain=None):
         """Associate a directory to a translation domain
@@ -718,7 +717,7 @@ class Locale(CoreLocale):
         """
         return dates.get_timezone_name(dt_or_timezone, width, uncommon, self)
 
-    def get_currency_name(self, currency):
+    def get_currency_name(self, currency, count=None):
         """Return the name used for the specified currency
 
         >>> Locale('en', 'US').get_currency_name('USD')
@@ -726,11 +725,12 @@ class Locale(CoreLocale):
 
         In:
           - ``currency`` -- the currency code
+          - ``count`` -- If provided the currency name will be pluealized to that number
 
         Return:
           - the currency name
         """
-        return numbers.get_currency_name(currency, locale=self)
+        return numbers.get_currency_name(currency, count, self)
 
     def get_currency_symbol(self, currency):
         """Return the symbol used for the specified currency
@@ -904,7 +904,7 @@ class Locale(CoreLocale):
             return dt
 
         if not dt.tzinfo:
-            dt = self.default_timezone.localize(dt)
+            dt = (self.default_timezone or pytz.UTC).localize(dt)
 
         return dt.astimezone(self.tzinfo)
 
@@ -946,8 +946,7 @@ class Locale(CoreLocale):
         """
         if isinstance(t, datetime.time):
             d = datetime.datetime.now()
-            d = d.replace(hour=t.hour, minute=t.minute, second=t.second)
-            t = self.to_utc(d)
+            t = d.replace(hour=t.hour, minute=t.minute, second=t.second)
 
         if isinstance(t, datetime.datetime):
             t = self.to_utc(t)
