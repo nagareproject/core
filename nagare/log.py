@@ -16,9 +16,11 @@ import configobj
 
 from nagare import local
 
+
 # -----------------------------------------------------------------------------
 
 logging._srcfile = __file__[:-1] if __file__.endswith(('.pyc', '.pyo')) else __file__
+
 
 # -----------------------------------------------------------------------------
 
@@ -66,6 +68,7 @@ def exception(msg, *args):
 def log(level, msg, *args, **kw):
     get_logger().log(level, msg, *args, **kw)
 
+
 # -----------------------------------------------------------------------------
 
 loggers = ['root']
@@ -101,11 +104,11 @@ class ConfigObjToConfigParser(configobj.ConfigObj):
 
 
 apps_log_conf = ConfigObjToConfigParser({
-                                            'loggers': {'keys': ''},
-                                            'handlers': {'keys': ''},
-                                            'formatters': {'keys': ''},
-                                            'logger_root': {'handlers': ''}
-                                        }, list_values=False, indent_type='')
+    'loggers': {'keys': ''},
+    'handlers': {'keys': ''},
+    'formatters': {'keys': ''},
+    'logger_root': {'handlers': ''}
+}, list_values=False, indent_type='')
 
 
 def configure(log_conf, app_name=None):

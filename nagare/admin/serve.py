@@ -37,6 +37,7 @@ publisher_options_spec = {
     ),
 }
 
+
 # ---------------------------------------------------------------------------
 
 def set_options(optparser):
@@ -80,25 +81,28 @@ def read_publisher_options(parser, options):
 
     # The options in the command line overwrite the parameters read into the configuration file
     for (name, section, key) in (
-                                    ('host', 'publisher', 'host'),
-                                    ('port', 'publisher', 'port'),
-                                    ('debug', 'publisher', 'debug'),
-                                    ('reload', 'reloader', 'activated')
-                                ):
+        ('host', 'publisher', 'host'),
+        ('port', 'publisher', 'port'),
+        ('debug', 'publisher', 'debug'),
+        ('reload', 'reloader', 'activated')
+    ):
         option = getattr(options, name)
         if option is not None:
             conf[section][key] = option
 
     return conf
 
+
 # ---------------------------------------------------------------------------
 
 try:
     from weberror.evalexception import EvalException
 
-    debugged_app = lambda app: EvalException(app, xmlhttp_key='_a')
+    def debugged_app(app):
+        return EvalException(app, xmlhttp_key='_a')
 except ImportError:
-    debugged_app = lambda app: app
+    def debugged_app(app):
+        return app
 
 
 def create_wsgi_pipe(app, options, config_filename, config, error):
@@ -122,6 +126,7 @@ def create_wsgi_pipe(app, options, config_filename, config, error):
         return app
 
     return reference.load_object(wsgi_pipe)[0](app, options, config_filename, config, error)
+
 
 # ---------------------------------------------------------------------------
 
@@ -161,6 +166,7 @@ def get_file_from_package(package, path):
         return None
 
     return pkg_resources.resource_filename(package, path)
+
 
 # ---------------------------------------------------------------------------
 
@@ -226,7 +232,7 @@ def run(parser, options, args):
 
     # Configure each application and register it to the publisher
     for (cfgfile, app, dist, aconf) in configs:
-        #log.set_logger('nagare.application.'+aconf['application']['name'])
+        # log.set_logger('nagare.application.'+aconf['application']['name'])
 
         if watcher:
             watcher.watch_file(aconf.filename)
@@ -238,7 +244,8 @@ def run(parser, options, args):
         get_file = None
         static_path = aconf['application']['static']
         if static_path is not None and os.path.isdir(static_path):
-            get_file = lambda path, static_path=static_path: get_file_from_root(static_path, path)
+            def get_file(path, static_path=static_path):
+                return get_file_from_root(static_path, path)
 
         # Register the function to serve the static contents of the application
         static_url = publisher.register_static(aconf['application']['name'], get_file)
@@ -253,31 +260,32 @@ def run(parser, options, args):
         sessions_manager.set_config(options.conf, conf, parser.error)
 
         (app, metadatas) = util.activate_WSGIApp(
-                                                    app,
-                                                    cfgfile, aconf, parser.error,
-                                                    '' if not dist else dist.project_name,
-                                                    static_path, static_url,
-                                                    data_path,
-                                                    publisher,
-                                                    sessions_manager
-                                                )
+            app,
+            cfgfile, aconf, parser.error,
+            '' if not dist else dist.project_name,
+            static_path, static_url,
+            data_path,
+            publisher,
+            sessions_manager
+        )
 
         # Register the application to the publisher
         publisher.register_application(
-                                       aconf['application']['path'],
-                                       aconf['application']['name'],
-                                       app,
-                                       create_wsgi_pipe(app, options, cfgfile, aconf, parser.error)
-                                      )
+            aconf['application']['path'],
+            aconf['application']['name'],
+            app,
+            create_wsgi_pipe(app, options, cfgfile, aconf, parser.error)
+        )
 
     # Register the function to serve the static contents of the framework
     publisher.register_static(
-                                'nagare',
-                                lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path)
-                             )
+        'nagare',
+        lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path)
+    )
 
     # Launch all the applications
     publisher.serve(options.conf, pconf['publisher'], parser.error)
+
 
 # ---------------------------------------------------------------------------
 

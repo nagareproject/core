@@ -15,15 +15,15 @@ local.request = local.Process()
 
 def create_environ():
     return {
-            'REQUEST_METHOD': 'GET',
-            'SCRIPT_NAME': '/app',
-            'PATH_INFO': '/',
-            'QUERY_STRING': '_s=10&_c=42',
-            'SERVER_PROTOCOL': 'HTTP/1.0',
-            'SERVER_NAME': 'localhost',
-            'SERVER_PORT': 8080,
-            'wsgi.url_scheme': 'http'
-            }
+        'REQUEST_METHOD': 'GET',
+        'SCRIPT_NAME': '/app',
+        'PATH_INFO': '/',
+        'QUERY_STRING': '_s=10&_c=42',
+        'SERVER_PROTOCOL': 'HTTP/1.0',
+        'SERVER_NAME': 'localhost',
+        'SERVER_PORT': 8080,
+        'wsgi.url_scheme': 'http'
+    }
 
 
 class Response(dict):

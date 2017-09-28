@@ -12,11 +12,13 @@
 # If the framework haven't the SQLAlchemy or Elixir packages installed,
 # the default database session is a dummy one
 
+
 class DummySession(object):
     def begin(self):
         return self
 
     __enter__ = __exit__ = clear = query = remove = close = configure = lambda *args, **kw: None
+
 
 session = DummySession()
 
@@ -34,6 +36,7 @@ def add_pickle_hooks(mapper, cls):
     if not hasattr(cls, '__setstate__'):
         cls.__setstate__ = entity_setstate
 
+
 try:
     # SQLAlchemy >= 0.7.6
     import sqlalchemy
@@ -42,6 +45,7 @@ try:
     event.listen(orm.Mapper, 'mapper_configured', add_pickle_hooks)
 except ImportError:
     pass
+
 
 try:
     # SQLAlchemy <= 0.8.7
@@ -57,6 +61,7 @@ try:
 except ImportError:
     pass
 
+
 try:
     from sqlalchemy import orm
 
@@ -67,13 +72,16 @@ try:
 except ImportError:
     pass
 
+
 try:
-    from elixir import setup_all, session
+    from elixir import setup_all, session  # noqa: F811
 except ImportError:
     pass
 
+
 session.configure(autoflush=True, expire_on_commit=True, autocommit=True)
 query = session.query
+
 
 # -----------------------------------------------------------------------------
 
@@ -130,11 +138,14 @@ def entity_setstate(entity, d):
         # Add the entity to the current database session
         session.add(entity)
 
+
 # -----------------------------------------------------------------------------
 
 # Cache of the already created database engines
 # dictionary: database uri -> database engine
+
 _engines = {}
+
 
 def set_metadata(metadata, database_uri, database_debug, engine_settings):
     """Activate the metadatas (bind them to a database engine)
@@ -148,4 +159,3 @@ def set_metadata(metadata, database_uri, database_debug, engine_settings):
     if not metadata.bind:
         metadata.bind = _engines.setdefault(database_uri, sqlalchemy.engine_from_config(engine_settings, '', echo=database_debug, url=database_uri))
         setup_all()
-

@@ -45,10 +45,10 @@ def render(self, h, comp, *args):
     r = var.Var()
 
     return h.form(
-                  self.msg, ' ',
-                  h.input.action(r),
-                  h.input(type='submit', value='Send').action(self.answer, comp, r)
-                 )
+        self.msg, ' ',
+        h.input.action(r),
+        h.input(type='submit', value='Send').action(self.answer, comp, r)
+    )
 
 
 class Confirm(object):
@@ -65,7 +65,7 @@ class Confirm(object):
 
 
 @presentation.render_for(Confirm)
-def render(self, h, comp, *args):
+def render_confirm(self, h, comp, *args):
     """The view is a simple form with the text and a submit button
 
     In:
@@ -77,9 +77,9 @@ def render(self, h, comp, *args):
       - a tree
     """
     return h.form(
-                  self.msg, h.br,
-                  h.input(type='submit', value='ok').action(comp.answer)
-                 )
+        self.msg, h.br,
+        h.input(type='submit', value='ok').action(comp.answer)
+    )
 
 
 class View(object):
@@ -97,7 +97,7 @@ class View(object):
 
 
 @presentation.render_for(View)
-def render(self, h, *args):
+def render_view(self, h, *args):
     """To render this object, call the differed view function
 
     In:

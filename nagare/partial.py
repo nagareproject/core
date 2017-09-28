@@ -15,7 +15,7 @@ import pickle
 import copy_reg
 
 try:
-    import stackless
+    import stackless  # noqa: F401
 except ImportError:
     def pickle_method(m):
         """Serialize a method
@@ -27,7 +27,6 @@ except ImportError:
           - tuple to pickle (class of the method, name of the method, self)
         """
         return unpickle_method, (m.im_class, m.__name__, m.im_self)
-
 
     def unpickle_method(cls, name, o):
         """Deserialize a method
@@ -42,9 +41,7 @@ except ImportError:
         """
         return getattr(o if isinstance(o, type) else cls, name).__get__(o, cls)
 
-
     copy_reg.pickle(types.MethodType, pickle_method)
-
 
     def pickle_function(f):
         """Serialize a function
@@ -57,8 +54,8 @@ except ImportError:
         msg = "Can't pickle %r, file \"%s\", line %d" % (f, f.func_code.co_filename, f.func_code.co_firstlineno)
         raise pickle.PicklingError(msg)
 
-
     copy_reg.pickle(types.FunctionType, pickle_function)
+
 
 # -----------------------------------------------------------------------------
 
@@ -72,6 +69,7 @@ def max_number_of_args(nb):
     def _(f):
         return lambda *args, **kw: f(*args[:nb], args=args[nb:], **kw)
     return _
+
 
 # -----------------------------------------------------------------------------
 
@@ -110,6 +108,7 @@ class _Partial(object):
 def Partial(__f, *args, **kw):
     """Don't double wrap a ``_Partial()`` object if not needed"""
     return _Partial(__f, *args, **kw) if (not isinstance(__f, _Partial) or args or kw) else __f
+
 
 # -----------------------------------------------------------------------------
 

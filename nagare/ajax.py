@@ -240,6 +240,7 @@ class Update(object):
         else:
             return ''
 
+
 # ---------------------------------------------------------------------------
 
 class ViewsToJs(list):
@@ -249,7 +250,7 @@ class ViewsToJs(list):
 
 
 @peak.rules.when(serializer.serialize, (ViewsToJs,))
-def serialize(self, content_type, doctype, declaration):
+def serialize_views(self, content_type, doctype, declaration):
     """Wrap a view into a javascript code
 
     In:
@@ -321,6 +322,7 @@ class Updates(Update):
         """
         renders = [update._generate_render(renderer) for update in self._updates]
         return partial.Partial(self._generate_response, renders=renders)
+
 
 # ---------------------------------------------------------------------------
 
@@ -402,7 +404,9 @@ class JS(object):
 
         return self.name + '(this)'
 
+
 javascript = JS
+
 
 # ---------------------------------------------------------------------------
 
@@ -554,6 +558,7 @@ def py2js(value, h):
       - transcoded javascript
     """
     return py2js(value.encode('utf-8'), h)
+
 
 not_ascii = re.compile(r'\\x(..)')
 

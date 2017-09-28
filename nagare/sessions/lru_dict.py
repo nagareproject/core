@@ -92,7 +92,7 @@ class LRUDict(object):
         if len(self.items) > self.size:
             # Maximum number of keys reached
             # Delete the last recently used key
-            while not self.oldest in self.age_to_items:
+            while self.oldest not in self.age_to_items:
                 self.oldest += 1
 
             del self.items[self.age_to_items.pop(self.oldest)]
@@ -136,6 +136,7 @@ class ThreadSafeLRUDict(LRUDict):
     def __setitem__(self, k, o):
         with self.lock:
             super(ThreadSafeLRUDict, self).__setitem__(k, o)
+
 
 # ----------------------------------------------------------------------------
 

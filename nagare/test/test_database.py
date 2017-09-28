@@ -11,7 +11,8 @@ import os
 import csv
 import operator
 
-from elixir import *
+from elixir import setup_all, create_all, drop_all, session
+from elixir import Entity, Field, Unicode, has_many, belongs_to
 from sqlalchemy import MetaData
 
 from nose import with_setup
@@ -36,6 +37,7 @@ def create_FixtureApp(app):
     app.start()
 
     return TestApp(app)
+
 
 __metadata__ = MetaData()
 __metadata__.bind = "sqlite:///:memory:"
@@ -70,8 +72,8 @@ class App1:
 
 
 @presentation.render_for(App1)
-def render(self, h, *args):
-    return h.helloWorlds([h.helloWorld(language.label, {'language':language.id}) for language in self.languages])
+def render_app1(self, h, *args):
+    return h.helloWorlds([h.helloWorld(language.label, {'language': language.id}) for language in self.languages])
 
 
 @with_setup(setup_func, teardown_func)
@@ -188,7 +190,7 @@ def render(self, h, *args):
 
 
 @presentation.render_for(My_database_app)
-def render(self, h, comp, *args):
+def render_database_app(self, h, comp, *args):
     h << h.div(self.father.name, id="father")
     h << [h.div(child.name, id="child") for child in self.father.children]
 

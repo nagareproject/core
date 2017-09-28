@@ -26,12 +26,12 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
     # ------------------------------------------------------
 
     spec = dict(
-                host='string(default=None)', port='integer(default=9000)',
-                socket='string(default="")', umask='integer(default=None)',
-                multiplexed='boolean(default=None)', minSpare='integer(default=None)',
-                maxSpare='integer(default=None)', maxChildren='integer(default=None)',
-                maxRequests='integer(default=None)',
-               )
+        host='string(default=None)', port='integer(default=9000)',
+        socket='string(default="")', umask='integer(default=None)',
+        multiplexed='boolean(default=None)', minSpare='integer(default=None)',
+        maxSpare='integer(default=None)', maxChildren='integer(default=None)',
+        maxRequests='integer(default=None)',
+    )
 
     def __init__(self):
         """Initialization

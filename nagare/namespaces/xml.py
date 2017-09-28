@@ -28,6 +28,7 @@ CHECK_ATTRIBUTES = False
 _MELD_NS = 'http://www.plope.com/software/meld3'
 _MELD_ID = '{%s}id' % _MELD_NS
 
+
 # ---------------------------------------------------------------------------
 
 class _Tag(ET.ElementBase):
@@ -221,6 +222,7 @@ class _Tag(ET.ElementBase):
         if exception is None:
             self.renderer.exit()
 
+
 # ---------------------------------------------------------------------------
 
 # Generic methods to add a child to a tag
@@ -336,6 +338,7 @@ def add_child(self, d):
     for (name, value) in d.items():
         add_attribute(self, name, value)
 
+
 # ---------------------------------------------------------------------------
 
 # Generic methods to add an attribute to a tag
@@ -359,12 +362,14 @@ def add_attribute(self, name, value):
 
     self.set(name, value)
 
+
 @peak.rules.when(add_attribute, (ET._ProcessingInstruction, basestring, basestring))
 def add_attribute(self, name, value):
     if name.endswith('_'):
         name = name[:-1]
 
     self.text += (' %s="%s"' % (name, value))
+
 
 # ---------------------------------------------------------------------------
 
@@ -435,6 +440,7 @@ class RendererMetaClass(type):
         cls.class_init(special_tags)
 
         return cls
+
 
 # -----------------------------------------------------------------------
 
@@ -694,6 +700,7 @@ class XmlRenderer(common.Renderer):
 
         return self.parse_xml(cStringIO.StringIO(text), fragment, no_leading_text, **kw)
 
+
 # ---------------------------------------------------------------------------
 
 class Renderer(XmlRenderer):
@@ -717,6 +724,7 @@ class Renderer(XmlRenderer):
           - the generated tag
         """
         return self.makeelement(name)
+
 
 # ---------------------------------------------------------------------------
 
@@ -760,7 +768,7 @@ if __name__ == '__main__':
     ''')
 
     t1[1].replace(t2[0])
-    #t1[1].replace('new')
-    #t1[1].replace()
+    # t1[1].replace('new')
+    # t1[1].replace()
 
     print t1.write_xmlstring()

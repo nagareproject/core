@@ -16,7 +16,7 @@ from __future__ import with_statement
 
 import operator
 import types
-#import urllib
+# import urllib
 import imghdr
 
 from lxml import etree as ET
@@ -29,13 +29,14 @@ from nagare.namespaces import xml
 from nagare.namespaces.xml import TagProp
 from nagare.namespaces import xhtml_base
 
+
 # ---------------------------------------------------------------------------
 
 # Generic methods to add an attribute to a tag
 # --------------------------------------------
 
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, ajax.Update))
-def add_attribute(self, name, value):
+def add_ajax_attribute(self, name, value):
     """Add an attribute with a ``ajax.Update`` value
 
     In:
@@ -48,7 +49,7 @@ def add_attribute(self, name, value):
 
 
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.FunctionType))
-def add_attribute(self, name, value):
+def add_function_attribute(self, name, value):
     """Add an attribute with a function value
 
     In:
@@ -61,7 +62,7 @@ def add_attribute(self, name, value):
 
 
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, types.MethodType))
-def add_attribute(self, name, value):
+def add_method_attribute(self, name, value):
     """Add an attribute with a method value
 
     In:
@@ -74,7 +75,7 @@ def add_attribute(self, name, value):
 
 
 @peak.rules.when(xml.add_attribute, (xml._Tag, basestring, ajax.JS))
-def add_attribute(self, name, value):
+def add_js_attribute(self, name, value):
     """Add an attribute with a ``ajax.JS`` value
 
     In:
@@ -83,6 +84,7 @@ def add_attribute(self, name, value):
       - ``value`` -- ``ajax.JS`` value
     """
     self.set(name, value.generate_action(None, self.renderer))
+
 
 # ---------------------------------------------------------------------------
 
@@ -270,6 +272,7 @@ def render(self, h, *args):
 
     return head
 
+
 # ----------------------------------------------------------------------------------
 
 class _HTMLActionTag(xhtml_base._HTMLTag):
@@ -325,6 +328,7 @@ class _HTMLActionTag(xhtml_base._HTMLTag):
         self.set(self._actions[2], action.generate_action(self._actions[0], renderer))
     _async_action = async_action
 
+
 # ----------------------------------------------------------------------------------
 
 class Form(xhtml_base._HTMLTag):
@@ -347,7 +351,7 @@ class Form(xhtml_base._HTMLTag):
         self.set('accept-charset', 'utf-8')
 
         self.set('action', '?')
-        #self.append(renderer.input(name='_charset_', value='utf-8', type='hidden'))
+        # self.append(renderer.input(name='_charset_', value='utf-8', type='hidden'))
 
         # Add into the form the hidden fields of the session and continuation ids
         self.renderer.add_sessionid_in_form(self)
@@ -421,6 +425,7 @@ class Form(xhtml_base._HTMLTag):
           - ``self``
         """
         return self._action(action, 3, args, with_request, permissions, subject, **kw)
+
 
 # ----------------------------------------------------------------------------------
 
@@ -632,6 +637,7 @@ class ImageInput(_HTMLActionTag):
         if src is not None:
             self.set('src', absolute_url(src, self.renderer.head.static_url))
 
+
 # ----------------------------------------------------------------------------------
 
 class Option(xhtml_base._HTMLTag):
@@ -675,7 +681,7 @@ class Select(_HTMLActionTag):
 
     @classmethod
     def normalize_input_with_request(cls, action, args, request, response, v, **kw):
-        return cls.normalize_input(action, (request, response) + args,  v, **kw)
+        return cls.normalize_input(action, (request, response) + args, v, **kw)
 
     @partial.max_number_of_args(2)
     def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
@@ -699,6 +705,7 @@ class Select(_HTMLActionTag):
             args = ()
 
         return super(Select, self).action(action, with_request=with_request, permissions=permissions, subject=subject, *args, **kw)
+
 
 # ----------------------------------------------------------------------------------
 
@@ -755,6 +762,7 @@ def add_attribute(next_method, self, name, value):
         value = absolute_url(value, self.renderer.url)
 
     next_method(self, name, value)
+
 
 # ----------------------------------------------------------------------------------
 
@@ -817,6 +825,7 @@ class Img(_HTMLActionTag):
         if src is not None:
             self.set('src', absolute_url(src, self.renderer.head.static_url))
 
+
 # ----------------------------------------------------------------------------------
 
 class Label(xhtml_base._HTMLTag):
@@ -837,6 +846,7 @@ class Label(xhtml_base._HTMLTag):
         self.set('for', renderer.generate_id('id'))
         return self
 
+
 # ----------------------------------------------------------------------------------
 
 class Script(xhtml_base._HTMLTag):
@@ -844,7 +854,7 @@ class Script(xhtml_base._HTMLTag):
 
 
 @peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, Script))
-def add_child(next_method, self, script):
+def add_script_child(next_method, self, script):
     """Add a <script> to a tag
 
     In:
@@ -860,7 +870,7 @@ class Style(xhtml_base._HTMLTag):
 
 
 @peak.rules.when(xml.add_child, (xhtml_base._HTMLTag, Style))
-def add_child(next_method, self, style):
+def add_style_child(next_method, self, style):
     """Add a <style> to a tag
 
     In:
@@ -888,10 +898,14 @@ class Renderer(xhtml_base.Renderer):
     area = TagProp('area', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('shape', 'coords', 'href', 'nohref', 'alt', 'target')), A)
     button = TagProp('button', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('name', 'value', 'type', 'disabled')), SubmitInput)
     form = TagProp('form', set(xhtml_base.allattrs + ('action', 'method', 'name', 'enctype', 'onsubmit', 'onreset', 'accept_charset', 'target')), Form)
-    img = TagProp('img', set(xhtml_base.allattrs + ('src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
-                                                              'align', 'border', 'hspace', 'vspace', 'lowsrc')), Img)
-    input = TagProp('input', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength', 'src'
-                                                     'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border')), TextInput)
+    img = TagProp('img', set(xhtml_base.allattrs + (
+        'src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
+        'align', 'border', 'hspace', 'vspace', 'lowsrc')
+    ), Img)
+    input = TagProp('input', set(xhtml_base.allattrs + xhtml_base.focusattrs + (
+        'type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength', 'src'
+        'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border')
+    ), TextInput)
     label = TagProp('label', set(xhtml_base.allattrs + ('for', 'accesskey', 'onfocus', 'onblur')), Label)
     option = TagProp('option', set(xhtml_base.allattrs + ('selected', 'disabled', 'label', 'value')), Option)
     select = TagProp('select', set(xhtml_base.allattrs + ('name', 'size', 'multiple', 'disabled', 'tabindex', 'onfocus', 'onblur', 'onchange', 'rows')), Select)
@@ -901,15 +915,15 @@ class Renderer(xhtml_base.Renderer):
     style = TagProp('style', set(xhtml_base.i18nattrs + ('id', 'type', 'media', 'title')), Style)
 
     _specialTags = dict(
-                    text_input=TextInput,
-                    radio_input=RadioInput,
-                    checkbox_input=CheckboxInput,
-                    submit_input=SubmitInput,
-                    hidden_input=HiddenInput,
-                    file_input=FileInput,
-                    password_input=PasswordInput,
-                    image_input=ImageInput
-                   )
+        text_input=TextInput,
+        radio_input=RadioInput,
+        checkbox_input=CheckboxInput,
+        submit_input=SubmitInput,
+        hidden_input=HiddenInput,
+        file_input=FileInput,
+        password_input=PasswordInput,
+        image_input=ImageInput
+    )
 
     @classmethod
     def class_init(cls, specialTags):
@@ -1131,10 +1145,10 @@ class Renderer(xhtml_base.Renderer):
         div.append(element)
 
         return self.div(
-                     div,
-                     self.div(error, class_='nagare-error-message'),
-                     class_='nagare-error-field'
-                    )
+            div,
+            self.div(error, class_='nagare-error-message'),
+            class_='nagare-error-field'
+        )
 
     def add_sessionid_in_form(self, form):
         """Add the session and continuation ids into a ``<form>``
@@ -1231,7 +1245,7 @@ class AsyncHeadRenderer(HeadRenderer):
 
 
 @presentation.render_for(AsyncHeadRenderer)
-def render(self, h, *args):
+def render_async_head(self, h, *args):
     """Generate a javascript view of the head
 
     In:
@@ -1241,13 +1255,13 @@ def render(self, h, *args):
       - a javascript string
     """
     return "nagare_loadAll(%s, %s, %s, %s, %s, %s)" % (
-                                                         ajax.py2js(self._get_named_css(), h),
-                                                         ajax.py2js(r'\n'.join(self._get_anonymous_css()), h),
-                                                         ajax.py2js(self._get_css_url(), h),
-                                                         ajax.py2js(self._get_named_javascript(), h),
-                                                         ajax.py2js(';'.join(self._get_anonymous_javascript()), h),
-                                                         ajax.py2js(self._get_javascript_url(), h)
-                                                      )
+        ajax.py2js(self._get_named_css(), h),
+        ajax.py2js(r'\n'.join(self._get_anonymous_css()), h),
+        ajax.py2js(self._get_css_url(), h),
+        ajax.py2js(self._get_named_javascript(), h),
+        ajax.py2js(';'.join(self._get_anonymous_javascript()), h),
+        ajax.py2js(self._get_javascript_url(), h)
+    )
 
 
 class AsyncRenderer(Renderer):
@@ -1341,13 +1355,14 @@ class AsyncRenderer(Renderer):
 
     def get_async_root(self):
         if not isinstance(self.parent, AsyncRenderer):
-            #return None
+            # return None
             return self
 
         if self.parent.async_root:
             return self
 
         return self.parent.get_async_root()
+
 
 # ---------------------------------------------------------------------------
 

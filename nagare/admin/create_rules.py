@@ -122,6 +122,7 @@ def generate_apache_rules(app_names, error):
 def run(parser, options, args):
     print '\n'.join(options.generate(args, parser.error))
 
+
 # ---------------------------------------------------------------------------
 
 class CreateRules(command.Command):

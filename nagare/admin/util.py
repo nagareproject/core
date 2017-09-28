@@ -73,10 +73,10 @@ def read_application_options(cfgfile, error, default={}):
 
     # The database sub-sections inherit from the database section
     spec['database']['__many__'].merge(dict(
-                            uri='string(default=%s)' % str(conf['database']['uri']),
-                            metadata='string(default=%s)' % str(conf['database']['metadata']),
-                            debug='boolean(default=%s)' % str(conf['database']['debug']),
-                           ))
+        uri='string(default=%s)' % str(conf['database']['uri']),
+        metadata='string(default=%s)' % str(conf['database']['metadata']),
+        debug='boolean(default=%s)' % str(conf['database']['debug']),
+    ))
     conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)
     config.validate(cfgfile, conf, error)
 
@@ -131,6 +131,7 @@ def read_application(cfgfile, error):
 
     return (cfgfile, app, dist, aconf)
 
+
 # ---------------------------------------------------------------------------
 
 def get_database(conf, debug):
@@ -165,14 +166,14 @@ def get_database(conf, debug):
 
 
 def activate_WSGIApp(
-                        app,
-                        cfgfile, aconf, error,
-                        project_name='',
-                        static_path=None, static_url=None,
-                        data_path=None,
-                        publisher=None, sessions_manager=None,
-                        debug=False
-                    ):
+    app,
+    cfgfile, aconf, error,
+    project_name='',
+    static_path=None, static_url=None,
+    data_path=None,
+    publisher=None, sessions_manager=None,
+    debug=False
+):
     """Set all the properties of a WSGIApp application
 
     In:

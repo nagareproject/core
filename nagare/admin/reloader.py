@@ -69,8 +69,8 @@ def restart_with_monitor():
                 proc = None
             except KeyboardInterrupt:
                 print '^C caught in monitor process'
-                #if self.verbose > 1:
-                #    raise
+                # if self.verbose > 1:
+                #     raise
                 return 1
         finally:
             if (proc is not None) and hasattr(os, 'kill') and (platform.system() != 'Windows'):

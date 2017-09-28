@@ -55,7 +55,13 @@ class Authentication(common.Authentication):
 
         return (None, {'response': None, 'encoding': None})
 
-    def check_password(self, username, password, response, encoding, realm='', uri='', nonce='', nc='', cnonce='', qop='', http_method='', **kw):
+    def check_password(
+            self,
+            username, password,
+            response, encoding, realm='', uri='',
+            nonce='', nc='', cnonce='', qop='', http_method='',
+            **kw
+    ):
         """Authentication
 
         In:
@@ -90,6 +96,6 @@ class Authentication(common.Authentication):
         nonce = hashlib.md5('%s:%s' % (str(time.time()), self.private_key)).hexdigest()
 
         raise webob.exc.HTTPUnauthorized(
-                                         str(detail),
-                                         [('WWW-Authenticate', 'Digest realm="%s", nonce="%s", qop="auth"' % (self.realm, nonce))]
-                                        )
+            str(detail),
+            [('WWW-Authenticate', 'Digest realm="%s", nonce="%s", qop="auth"' % (self.realm, nonce))]
+        )

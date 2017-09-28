@@ -200,6 +200,7 @@ class TextChannel(Channel):
         msgs = self.history[max(nb, self.history_nb) - self.history_nb:]
         return (len(self.history) + self.history_nb, ''.join(msgs) if msgs else None)
 
+
 # ----------------------------------------------------------------------------
 
 @presentation.render_for(Channel)
@@ -208,6 +209,7 @@ def render(self, h, *args):
     h.head.javascript_url('/static/nagare/comet.js')
 
     return h.script('setTimeout(function () { comet_getAndEval("%s", 0, %s, %d) }, 300)' % (self.id, self.js, self.poll_time))
+
 
 # ----------------------------------------------------------------------------
 
@@ -272,5 +274,6 @@ class Channels(dict):
 
 class TextChannels(Channels):
     channel_factory = TextChannel
+
 
 channels = TextChannels()

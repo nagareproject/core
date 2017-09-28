@@ -158,16 +158,16 @@ class Authentication(basic_auth.Authentication):
         if user:
             if not user.expired:
                 response.set_cookie(
-                                self.key, self.cookie_encode(*user.get_id()),
-                                max_age=self.max_age,
-                                path=self.path,
-                                domain=self.domain,
-                                secure=self.secure,
-                                httponly=self.httponly,
-                                comment=self.comment,
-                                expires=self.expires,
-                                overwrite=self.overwrite
-                            )
+                    self.key, self.cookie_encode(*user.get_id()),
+                    max_age=self.max_age,
+                    path=self.path,
+                    domain=self.domain,
+                    secure=self.secure,
+                    httponly=self.httponly,
+                    comment=self.comment,
+                    expires=self.expires,
+                    overwrite=self.overwrite
+                )
             else:
                 response.delete_cookie(self.key, self.path, self.domain)
 

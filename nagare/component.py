@@ -82,8 +82,8 @@ class Component(object):
             # --
             # Policy #1: keep the old callbacks only if no view was rendered
             # => simple cleanup but can lead to ``CallbackLookup`` errors
-            #if not new:
-            #    new = old
+            # if not new:
+            #     new = old
             # --
 
             # --
@@ -91,7 +91,7 @@ class Component(object):
             # => no ``CallbackLookup`` errors but the sessions can keep growing
             #    in size as they are only reset when a new complete synchronous
             #    page rendering is done
-            #new.update(old)
+            # new.update(old)
             # --
 
             # --
@@ -232,11 +232,11 @@ class Component(object):
 
     def __repr__(self):
         return '<%s with %s at 0x%x on object %r>' % (
-                                            self.__class__.__name__.lower(),
-                                            "model '%s'" % self.model if self.model else 'default model',
-                                            id(self),
-                                            self.o
-                                           )
+            self.__class__.__name__.lower(),
+            "model '%s'" % self.model if self.model else 'default model',
+            id(self),
+            self.o
+        )
 
 
 @when(presentation.render, (Component, object, object, int))
@@ -278,6 +278,7 @@ def init_for(self, url, comp, http_method, request):
     """
     presentation.init(self(), url, self, http_method, request)
 
+
 # -----------------------------------------------------------------------------------------------------
 
 class Task(object):
@@ -304,13 +305,14 @@ class Task(object):
 
 
 @presentation.render_for(Task)
-def render(self, renderer, comp, *args):
+def render_task(self, renderer, comp, *args):
     return presentation.render(self._go, renderer, comp, *args)
+
 
 # -----------------------------------------------------------------------------------------------------
 
 @when(presentation.render, (types.FunctionType,))
 @when(presentation.render, (types.MethodType,))
-def render(f, renderer, comp, *args):
+def render_function(f, renderer, comp, *args):
     continuation.Continuation(f, comp)
     return comp.render(renderer.parent)

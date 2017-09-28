@@ -53,29 +53,29 @@ class Sessions(common.Sessions):
     """
     spec = common.Sessions.spec.copy()
     spec.update(dict(
-                host='string(default="127.0.0.1")',
-                port='integer(default=11211)',
-                ttl='integer(default=0)',
-                lock_ttl='float(default=0.)',
-                lock_poll_time='float(default=0.1)',
-                lock_max_wait_time='float(default=5.)',
-                min_compress_len='integer(default=0)',
-                reset='boolean(default=True)',
-                debug='boolean(default=False)',
-                serializer='string(default="nagare.sessions.serializer:Pickle")'
-               ))
+        host='string(default="127.0.0.1")',
+        port='integer(default=11211)',
+        ttl='integer(default=0)',
+        lock_ttl='float(default=0.)',
+        lock_poll_time='float(default=0.1)',
+        lock_max_wait_time='float(default=5.)',
+        min_compress_len='integer(default=0)',
+        reset='boolean(default=True)',
+        debug='boolean(default=False)',
+        serializer='string(default="nagare.sessions.serializer:Pickle")'
+    ))
 
     def __init__(
-                 self,
-                 host='127.0.0.1', port=11211,
-                 ttl=0,
-                 lock_ttl=0, lock_poll_time=0.1, lock_max_wait_time=5,
-                 min_compress_len=0,
-                 reset=False,
-                 debug=True,
-                 serializer=None,
-                 **kw
-                ):
+        self,
+        host='127.0.0.1', port=11211,
+        ttl=0,
+        lock_ttl=0, lock_poll_time=0.1, lock_max_wait_time=5,
+        min_compress_len=0,
+        reset=False,
+        debug=True,
+        serializer=None,
+        **kw
+    ):
         """Initialization
 
         In:
@@ -117,9 +117,9 @@ class Sessions(common.Sessions):
         self.host = ['%s:%d' % (conf['host'], conf['port'])]
 
         for arg_name in (
-                            'ttl', 'lock_ttl', 'lock_poll_time', 'lock_max_wait_time',
-                            'min_compress_len', 'debug'
-                          ):
+            'ttl', 'lock_ttl', 'lock_poll_time', 'lock_max_wait_time',
+            'min_compress_len', 'debug'
+        ):
             setattr(self, arg_name, conf[arg_name])
 
         if conf['reset']:

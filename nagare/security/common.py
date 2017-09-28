@@ -12,6 +12,7 @@ import webob
 
 from nagare import security
 
+
 # ---------------------------------------------------------------------------
 
 # The application can used anything for the permission objects
@@ -38,9 +39,11 @@ class Public(Permission):
     """
     pass
 
+
 # The singleton permissions
 private = Private()
 public = Public()
+
 
 # ---------------------------------------------------------------------------
 
@@ -64,6 +67,7 @@ class Denial(BaseException):
 
     def __str__(self):
         return 'security.Denial(%s)' % str(self.args[0])
+
 
 # --------------------------------------------------------------
 
@@ -94,6 +98,7 @@ class User(object):
         """Pop this user from the stack
         """
         security.set_user(self._previous_user)
+
 
 # ---------------------------------------------------------------------------
 
@@ -134,21 +139,21 @@ class Rules(object):
         return True
 
     @when(has_permission, (User, tuple))
-    def check_access(self, user, perms, subject):
+    def check_access_tuple(self, user, perms, subject):
         """If several permissions are to be checked, the access must be granted
         for at least one permission
         """
         return any((self.has_permission(user, perm, subject) for perm in perms)) or Denial('Access forbidden')
 
     @when(has_permission, (User, list))
-    def check_access(self, user, perms, subject):
+    def check_access_list(self, user, perms, subject):
         """If several permissions are to be checked, the access must be granted
         for at least one permission
         """
         return self.has_permission(user, tuple(perms), subject)
 
     @when(has_permission, (User, set))
-    def check_access(self, user, perms, subject):
+    def check_access_set(self, user, perms, subject):
         """If several permissions are to be checked, the access must be granted
         for at least one permission
         """
@@ -164,6 +169,7 @@ class Rules(object):
         """Pop these security rules from the stack
         """
         security.set_manager(self._previous_rules)
+
 
 # ---------------------------------------------------------------------------
 

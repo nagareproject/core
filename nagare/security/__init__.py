@@ -11,6 +11,7 @@
 
 from nagare import local, partial
 
+
 # ---------------------------------------------------------------------------
 
 # API to access the security context
@@ -62,10 +63,11 @@ def set_manager(manager):
     """
     local.request.security_manager = manager
 
+
 # ---------------------------------------------------------------------------
 
-#def flatten(*args):
-#    return sum([flatten(*x) if hasattr(x, '__iter__') else (x,) for x in args], ())
+# def flatten(*args):
+#     return sum([flatten(*x) if hasattr(x, '__iter__') else (x,) for x in args], ())
 
 
 def has_permissions(perm, subject=None):
@@ -166,6 +168,8 @@ def permissions(perm, subject=None):
       - ``subject`` -- object to check the permissions on or the first argument
                        of the decorated method if ``None``
     """
-    #perm = flatten(perm)
+    # perm = flatten(perm)
     return lambda f: partial.Decorator(f, call_with_permissions, perm, subject)
+
+
 permissions_with_subject = permissions  # Obsolete

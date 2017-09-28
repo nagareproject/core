@@ -7,7 +7,7 @@
 # this distribution.
 # --
 
-from nagare import component, editor, validator, continuation
+from nagare import editor, validator
 
 
 class MyEditor(editor.Editor):
@@ -176,7 +176,6 @@ def test6():
     assert editor.name.value == '1234'
 
 
-
 class MyStringEditor4(MyStringEditor):
     def __init__(self, source):
         super(MyStringEditor4, self).__init__(source)
@@ -283,4 +282,3 @@ def test14():
     p = editor.Property().validate(check)
     p(15)
     assert (p.input == p() == 15) and (p.value is None) and (p.error == 'invalid')
-

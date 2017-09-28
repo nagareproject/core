@@ -31,9 +31,13 @@ from nagare.namespaces.xml import TagProp
 
 componentattrs = ('id', 'class', 'style', 'title')
 i18nattrs = ('lang', 'dir')
-eventattrs = ('onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmousemove', 'onmouseover', 'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup')
+eventattrs = (
+    'onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmousemove',
+    'onmouseover', 'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup'
+)
 allattrs = componentattrs + i18nattrs + eventattrs
 focusattrs = ('accesskey', 'tabindex', 'onfocus', 'onblur')
+
 
 class _HTMLTag(xml._Tag):
     """A xhtml tag
@@ -145,7 +149,10 @@ class Renderer(xml.XmlRenderer):
 
     componentattrs = ('id', 'class', 'style', 'title')
     i18nattrs = ('lang', 'dir')
-    eventattrs = ('onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmousemove', 'onmouseover', 'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup')
+    eventattrs = (
+        'onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmousemove',
+        'onmouseover', 'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup'
+    )
     focusattrs = ('accesskey', 'tabindex', 'onfocus', 'onblur')
     cellhalignattrs = ('align', 'char', 'charoff')
     cellvalignattrs = ('valign',)
@@ -154,20 +161,27 @@ class Renderer(xml.XmlRenderer):
     # The HTML tags
     # -------------
 
-    a = TagProp('a', set(allattrs + focusattrs + ('charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu')))
+    a = TagProp('a', set(allattrs + focusattrs + (
+        'charset', 'type', 'name', 'href', 'hreflang', 'rel',
+        'rev', 'shape', 'coords', 'target', 'oncontextmenu'
+    )))
     abbr = TagProp('abbr', set(allattrs))
     acronym = TagProp('acronym', set(allattrs))
     address = TagProp('address', set(allattrs))
-    applet = TagProp('applet', set(componentattrs + ('codebase', 'archive', 'code', 'object', 'alt', 'name', 'width'
-                                                                  'height', 'align', 'hspace', 'vspace')))
+    applet = TagProp('applet', set(componentattrs + (
+        'codebase', 'archive', 'code', 'object', 'alt', 'name', 'width',
+        'height', 'align', 'hspace', 'vspace'
+    )))
     area = TagProp('area', set(allattrs + focusattrs + ('shape', 'coords', 'href', 'nohref', 'alt', 'target')))
     b = TagProp('b', set(allattrs))
     basefont = TagProp('basefont', set(componentattrs + i18nattrs + ('id', 'size', 'color', 'face')))
     bdo = TagProp('bdo', set(componentattrs + eventattrs + ('lang', 'dir')))
     big = TagProp('big', set(allattrs))
     blockquote = TagProp('blockquote', set(allattrs + ('cite',)))
-    body = TagProp('body', set(allattrs + ('onload', 'onunload', 'onfocus', 'background', 'bgcolor', 'text'
-                                                               'link', 'vlink', 'alink', 'leftmargin', 'topmargin', 'marginwidth', 'marginheight')))
+    body = TagProp('body', set(allattrs + (
+        'onload', 'onunload', 'onfocus', 'background', 'bgcolor', 'text',
+        'link', 'vlink', 'alink', 'leftmargin', 'topmargin', 'marginwidth', 'marginheight'
+    )))
     br = TagProp('br', set(componentattrs + ('clear',)))
     button = TagProp('button', set(allattrs + focusattrs + ('name', 'value', 'type', 'disabled')))
     caption = TagProp('caption', set(allattrs + ('align',)))
@@ -184,14 +198,21 @@ class Renderer(xml.XmlRenderer):
     dl = TagProp('dl', set(allattrs + ('compact',)))
     dt = TagProp('dt', set(allattrs))
     em = TagProp('em', set(allattrs))
-    embed = TagProp('embed', set(('width', 'height', 'src', 'controller', 'href', 'target', 'border', 'pluginspage',
-                                                      'quality', 'type', 'bgcolor', 'menu')))
+    embed = TagProp('embed', set((
+        'width', 'height', 'src', 'controller', 'href', 'target',
+        'border', 'pluginspage', 'quality', 'type', 'bgcolor', 'menu'
+    )))
     fieldset = TagProp('fieldset', set(allattrs))
     font = TagProp('font', set(componentattrs + i18nattrs + ('face', 'size', 'color')))
-    form = TagProp('form', set(allattrs + ('action', 'method', 'name', 'enctype', 'onsubmit', 'onreset', 'accept_charset', 'target')))
+    form = TagProp('form', set(allattrs + (
+        'action', 'method', 'name', 'enctype',
+        'onsubmit', 'onreset', 'accept_charset', 'target'
+    )))
     frame = TagProp('frame', set())
-    frameset = TagProp('frameset', set(componentattrs + ('rows', 'cols', 'onload', 'onunload', 'framespacing', 'border', 'marginwidth'
-                                                                      'marginheight', 'frameborder', 'noresize', 'scrolling')))
+    frameset = TagProp('frameset', set(componentattrs + (
+        'rows', 'cols', 'onload', 'onunload', 'framespacing', 'border',
+        'marginwidth', 'marginheight', 'frameborder', 'noresize', 'scrolling'
+    )))
     h1 = TagProp('h1', set(allattrs + ('align',)))
     h2 = TagProp('h2', set(allattrs + ('align',)))
     h3 = TagProp('h3', set(allattrs + ('align',)))
@@ -201,12 +222,18 @@ class Renderer(xml.XmlRenderer):
     hr = TagProp('hr', set(allattrs + ('align', 'noshade', 'size', 'width', 'color')))
     html = TagProp('html', set(i18nattrs + ('id',)))
     i = TagProp('i', set(allattrs))
-    iframe = TagProp('iframe', set(componentattrs + ('longdesc', 'name', 'src', 'frameborder', 'marginwidth', 'marginheight'
-                                                                 'noresize', 'scrolling', 'align', 'height', 'width', 'hspace', 'vspace', 'bordercolor')))
-    img = TagProp('img', set(allattrs + ('src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
-                                                              'align', 'border', 'hspace', 'vspace', 'lowsrc')))
-    input = TagProp('input', set(allattrs + focusattrs + ('type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength', 'src'
-                                                     'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border')))
+    iframe = TagProp('iframe', set(componentattrs + (
+        'longdesc', 'name', 'src', 'frameborder', 'marginwidth', 'marginheight',
+        'noresize', 'scrolling', 'align', 'height', 'width', 'hspace', 'vspace', 'bordercolor',
+    )))
+    img = TagProp('img', set(allattrs + (
+        'src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap',
+        'ismap', 'align', 'border', 'hspace', 'vspace', 'lowsrc'
+    )))
+    input = TagProp('input', set(allattrs + focusattrs + (
+        'type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength',
+        'src', 'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border'
+    )))
     ins = TagProp('ins', set(allattrs + ('cite', 'datetime')))
     isindex = TagProp('isindex', set(componentattrs + i18nattrs + ('prompt',)))
     kbd = TagProp('kbd', set(allattrs))
@@ -217,9 +244,11 @@ class Renderer(xml.XmlRenderer):
     menu = TagProp('menu', set(allattrs + ('compact',)))
     noframes = TagProp('noframes', set(allattrs))
     noscript = TagProp('noscript', set(allattrs))
-    object = TagProp('object', set(allattrs + ('declare', 'classid', 'codebase', 'data', 'type', 'codetype'
-                                                                   'archive', 'standby', 'height', 'width', 'usemap', 'name'
-                                                                   'tabindex', 'align', 'border', 'hspace', 'vspace')))
+    object = TagProp('object', set(allattrs + (
+        'declare', 'classid', 'codebase', 'data', 'type', 'codetype',
+        'archive', 'standby', 'height', 'width', 'usemap', 'name',
+        'tabindex', 'align', 'border', 'hspace', 'vspace'
+    )))
     ol = TagProp('ol', set(allattrs + ('type', 'compact', 'start')))
     optgroup = TagProp('optgroup', set(allattrs + ('disabled', 'label')))
     option = TagProp('option', set(allattrs + ('selected', 'disabled', 'label', 'value')))
@@ -230,7 +259,10 @@ class Renderer(xml.XmlRenderer):
     s = TagProp('s', set(allattrs))
     samp = TagProp('samp', set(allattrs))
     script = TagProp('script', set(('id', 'charset', 'type', 'language', 'src', 'defer')))
-    select = TagProp('select', set(allattrs + ('name', 'size', 'multiple', 'disabled', 'tabindex', 'onfocus', 'onblur', 'onchange', 'rows')))
+    select = TagProp('select', set(allattrs + (
+        'name', 'size', 'multiple', 'disabled', 'tabindex',
+        'onfocus', 'onblur', 'onchange', 'rows'
+    )))
     small = TagProp('small', set(allattrs))
     span = TagProp('span', set(allattrs))
     strike = TagProp('strike', set(allattrs))
@@ -240,14 +272,21 @@ class Renderer(xml.XmlRenderer):
     sup = TagProp('sup', set(allattrs))
     table = TagProp('table', set(componentattrs + i18nattrs + ('prompt',)))
     tbody = TagProp('tbody', set(allattrs + cellhalignattrs + cellvalignattrs))
-    td = TagProp('td', set(allattrs + cellhalignattrs + cellvalignattrs + ('abbr', 'axis', 'headers', 'scope', 'rowspan'
-                                                                                                   'colspan', 'nowrap', 'bgcolor', 'width', 'height'
-                                                                                                   'background', 'bordercolor')))
-    textarea = TagProp('textarea', set(allattrs + focusattrs + ('name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap')))
+    td = TagProp('td', set(allattrs + cellhalignattrs + cellvalignattrs + (
+        'abbr', 'axis', 'headers', 'scope', 'rowspan',
+        'colspan', 'nowrap', 'bgcolor', 'width', 'height',
+        'background', 'bordercolor'
+    )))
+    textarea = TagProp('textarea', set(allattrs + focusattrs + (
+        'name', 'rows', 'cols', 'disabled',
+        'readonly', 'onselect', 'onchange', 'wrap'
+    )))
     tfoot = TagProp('tfoot', set(allattrs + cellhalignattrs + cellvalignattrs))
-    th = TagProp('th', set(allattrs + cellhalignattrs + cellvalignattrs + ('abbr', 'axis', 'headers', 'scope', 'rowspan'
-                                                                                                   'colspan', 'nowrap', 'bgcolor', 'width', 'height'
-                                                                                                   'background', 'bordercolor')))
+    th = TagProp('th', set(allattrs + cellhalignattrs + cellvalignattrs + (
+        'abbr', 'axis', 'headers', 'scope', 'rowspan',
+        'colspan', 'nowrap', 'bgcolor', 'width', 'height'
+        'background', 'bordercolor'
+    )))
     thead = TagProp('thead', set(allattrs + cellhalignattrs + cellvalignattrs))
     tr = TagProp('tr', set(allattrs + cellhalignattrs + cellvalignattrs + ('bgcolor', 'nowrap', 'width', 'background')))
     tt = TagProp('tt', set(allattrs))
@@ -384,6 +423,7 @@ class Renderer(xml.XmlRenderer):
             text = text.encode(kw.setdefault('encoding', 'utf-8'))
 
         return self.parse_html(cStringIO.StringIO(text), fragment, no_leading_text, xhtml, **kw)
+
 
 # ---------------------------------------------------------------------------
 

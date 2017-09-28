@@ -17,6 +17,7 @@ from lxml import etree as ET
 from nagare.namespaces.xml import TagProp
 from nagare.namespaces import xhtml_base, xhtml
 
+
 # -----------------------------------------------------------------------------
 
 class Input(xhtml._HTMLActionTag):
@@ -33,6 +34,7 @@ class ObsoleteTagProp(TagProp):
         # Raise the same exception as when an attribute doesn't exist
         raise AttributeError("'%s' object has no attribute '%s'" % (renderer.__class__.__name__, self._name))
 
+
 # -----------------------------------------------------------------------------
 
 class Source(xhtml_base._HTMLTag):
@@ -48,6 +50,7 @@ class Source(xhtml_base._HTMLTag):
         src = self.get('src')
         if src is not None:
             self.set('src', xhtml.absolute_url(src, self.renderer.head.static_url))
+
 
 # -----------------------------------------------------------------------------
 
@@ -113,10 +116,10 @@ class Renderer(xhtml.Renderer):
     # ---------------
 
     _specialTags = dict([(input_type + '_input', Input) for input_type in (
-                    'tel', 'search', 'url', 'email',
-                    'datetime', 'date', 'datetime-local_input',
-                    'month', 'week', 'time', 'number', 'range', 'color'
-                   )])
+        'tel', 'search', 'url', 'email',
+        'datetime', 'date', 'datetime-local_input',
+        'month', 'week', 'time', 'number', 'range', 'color'
+    )])
     _specialTags.update(xhtml.Renderer._specialTags)
 
     @classmethod
@@ -153,6 +156,7 @@ class Renderer(xhtml.Renderer):
 
         return AsyncRenderer(*args, **kw)
 
+
 # -----------------------------------------------------------------------------
 
 class AsyncRenderer(xhtml.AsyncRenderer, Renderer):
@@ -171,11 +175,12 @@ class AsyncRenderer(xhtml.AsyncRenderer, Renderer):
 
         return Renderer(*args, **kw)
 
+
 # ---------------------------------------------------------------------------
 
-from nagare import presentation
-
 if __name__ == '__main__':
+    from nagare import presentation
+
     t = ((1, 'a'), (2, 'b'), (3, 'c'))
 
     h = Renderer()

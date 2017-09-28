@@ -48,7 +48,8 @@ class DualCallable(type):
             if callable(method) and (method_name == '__init__' or not method_name.startswith('_')):
 
                 def _(m):
-                    f = lambda self, *args, **kw: self._call_or_defer(m, *args, **kw)
+                    def f(self, *args, **kw):
+                        return self._call_or_defer(m, *args, **kw)
                     functools.update_wrapper(f, m)
                     return f
 
@@ -395,6 +396,7 @@ class StringValidator(Validator):
             return self
 
         raise ValueError(msg % {'value': self.value})
+
 
 # Aliases
 to_int = IntValidator

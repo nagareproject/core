@@ -41,6 +41,7 @@ class Process(object):
     def create_lock(self):
         return DummyLock()
 
+
 # ----------------------------------------------------------------------------
 
 worker = None

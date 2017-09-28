@@ -36,9 +36,11 @@ from nagare.admin import reference, command, reloader
 try:
     from weberror.evalexception import EvalException
 
-    debugged_app = lambda app: EvalException(app, xmlhttp_key='_a')
+    def debugged_app(app):
+        return EvalException(app, xmlhttp_key='_a')
 except ImportError:
-    debugged_app = lambda app: app
+    def debugged_app(app):
+        return app
 
 
 def get_file_from_package(package, path):
@@ -124,6 +126,7 @@ def run(parser, options, args):
 
     # Launch the object
     publisher.serve(None, dict(host=options.host, port=options.port), None)
+
 
 # ---------------------------------------------------------------------------
 

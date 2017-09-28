@@ -56,6 +56,7 @@ class Response(webob.Response):
         self.content_type = ''
         self.doctype = None
 
+
 # ---------------------------------------------------------------------------
 
 class WSGIApp(object):
@@ -329,22 +330,22 @@ class WSGIApp(object):
           - ``response`` -- the web response object
         """
         renderer = self.renderer_factory(
-                                            None,
-                                            session,
-                                            request, response,
-                                            self.static_url, self.static_path,
-                                            request.script_name
-                                        )
+            None,
+            session,
+            request, response,
+            self.static_url, self.static_path,
+            request.script_name
+        )
 
         if async:
             renderer = renderer.AsyncRenderer(
-                                                None,
-                                                session,
-                                                request, response,
-                                                self.static_url, self.static_path,
-                                                request.script_name,
-                                                async_header=True
-                                             )
+                None,
+                session,
+                request, response,
+                self.static_url, self.static_path,
+                request.script_name,
+                async_header=True
+            )
 
         return renderer
 
@@ -488,7 +489,7 @@ class WSGIApp(object):
                 # phase 2 and use it as the response object
                 pass
             except Exception:
-                self.last_exception = (request,  sys.exc_info())
+                self.last_exception = (request, sys.exc_info())
                 response = self.on_exception(request, response)
             else:
                 # Phase 2
@@ -529,13 +530,14 @@ class WSGIApp(object):
                     # use it as the response object
                     pass
                 except Exception:
-                    self.last_exception = (request,  sys.exc_info())
+                    self.last_exception = (request, sys.exc_info())
                     response = self.on_exception(request, response)
             finally:
                 if state:
                     state.release()
 
         return response(environ, start_response)
+
 
 # ---------------------------------------------------------------------------
 
@@ -557,7 +559,8 @@ def create_WSGIApp(app, with_component=True):
                 if not isinstance(o, component.Component):
                     o = component.Component(o)
                 return o
-            app = lambda app=app: wrap_in_component(app)
+
+            app = lambda app=app: wrap_in_component(app)  # noqa: E731
 
         app = WSGIApp(app)
 

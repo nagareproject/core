@@ -34,44 +34,46 @@ def create_empty_file(filename):
 
 def create_or_update(path, create=None, update=None, *args, **kw):
     if not create:
-        create = lambda *args, **kw: None
+        def create(*args, **kw):
+            pass
 
     if not update:
-        update = lambda *args, **kw: None
+        def update(*args, **kw):
+            pass
 
     return (update if os.path.exists(path) else create)(path, *args, **kw)
 
 
 def create_setup_py(filename, params):
     upgrade_setup_py(
-                     filename,
-                     params,
-                     textwrap.dedent('''\
-                        VERSION = '0.0.1'
+        filename,
+        params,
+        textwrap.dedent('''\
+        from setuptools import setup, find_packages
 
-                        from setuptools import setup, find_packages
+        VERSION = '0.0.1'
 
-                        setup(
-                              name='%(name)s',
-                              version=VERSION,
-                              author='',
-                              author_email='',
-                              description='',
-                              license='',
-                              keywords='',
-                              url='',
-                              packages=find_packages(),
-                              include_package_data=True,
-                              package_data={'': ['*.cfg']},
-                              zip_safe=False,
-                              install_requires=('nagare',),
-                              entry_points="""
-                              [nagare.applications]
-                              %(id)s = %(id)s.app:app
-                              """
-                             )
-                     ''' % params)
-                    )
+
+        setup(
+            name='%(name)s',
+            version=VERSION,
+            author='',
+            author_email='',
+            description='',
+            license='',
+            keywords='',
+            url='',
+            packages=find_packages(),
+            include_package_data=True,
+            package_data={'': ['*.cfg']},
+            zip_safe=False,
+            install_requires=('nagare',),
+            entry_points="""
+            [nagare.applications]
+            %(id)s = %(id)s.app:app
+            """
+        )''' % params)
+    )
 
 
 def upgrade_setup_py(filename, params, setup_py=None):
@@ -112,7 +114,7 @@ def upgrade_setup_cfg(filename):
             ''')), list_values=False)
     new_conf.merge(old_conf)
 
-    if(new_conf != old_conf):
+    if new_conf != old_conf:
         if os.path.exists(filename):
             os.rename(filename, filename + '.old')
 
@@ -131,7 +133,7 @@ def create_manifest_in(filename):
 
 def create_app_py(filename, params):
     with open(filename, 'w') as f:
-        f.write(textwrap.dedent('''\
+        f.write(textwrap.dedent("""\
             from __future__ import with_statement
 
             import os
@@ -144,6 +146,9 @@ def create_app_py(filename, params):
 
             @presentation.render_for(%(Id)s)
             def render(self, h, *args):
+                NAGARE = 'http://www.nagare.org/'
+                NAGARE_DOC = NAGARE + 'trac/wiki/'
+
                 this_file = __file__
                 if this_file.endswith('.pyc'):
                     this_file = __file__[:-1]
@@ -153,10 +158,21 @@ def create_app_py(filename, params):
                 h.head << h.head.title('Up and Running !')
 
                 h.head.css_url('/static/nagare/application.css')
-                h.head.css('defaultapp', '#main { margin-left: 20px; padding-bottom: 100px; background: url(/static/nagare/img/sakura.jpg) no-repeat 123px 100%% }')
+                h.head.css(
+                    'defaultapp',
+                    '''#main {
+                           margin-left: 20px;
+                           padding-bottom: 100px;
+                           background: url(/static/nagare/img/sakura.jpg) no-repeat 123px 100%%;
+                    }'''  # noqa: E501
+                )
 
                 with h.div(id='body'):
-                    h << h.a(h.img(src='/static/nagare/img/logo.png'), id='logo', href='http://www.nagare.org/', title='Nagare home')
+                    h << h.a(
+                        h.img(src='/static/nagare/img/logo.png'),
+                        id='logo',
+                        href=NAGARE, title='Nagare home'
+                    )
 
                     with h.div(id='content'):
                         h << h.div('Congratulations!', id='title')
@@ -166,8 +182,14 @@ def create_app_py(filename, params):
 
                             h << 'You can now:'
                             with h.ul:
-                                h << h.li('If your application uses a database, add your database entities into ', h.em(models_file))
-                                h << h.li('Add your application components into ', h.em(this_file), ' or create new files')
+                                with h.li:
+                                    h << 'If your application uses a database, '
+                                    h << 'add your database entities into '
+                                    h << h.em(models_file)
+                                with h.li:
+                                    h << 'Add your application components into ',
+                                    h << h.em(this_file)
+                                    h << ' or create new files'
 
                             h << h.em("Have fun!")
 
@@ -181,37 +203,37 @@ def create_app_py(filename, params):
                         with h.tr:
                             with h.td:
                                 with h.ul:
-                                    h << h.li(h.a('Description', href='http://www.nagare.org/trac/wiki/NagareDescription'))
-                                    h << h.li(h.a('Features', href='http://www.nagare.org/trac/wiki/NagareFeatures'))
-                                    h << h.li(h.a('Who uses Nagare?', href='http://www.nagare.org/trac/wiki/WhoUsesNagare'))
-                                    h << h.li(h.a('Licence', href='http://www.nagare.org/trac/wiki/NagareLicence'))
+                                    h << h.li(h.a('Description', href=NAGARE_DOC+'NagareDescription'))  # noqa: E501
+                                    h << h.li(h.a('Features', href=NAGARE_DOC+'NagareFeatures'))  # noqa: E501
+                                    h << h.li(h.a('Who uses Nagare?', href=NAGARE_DOC+'WhoUsesNagare'))  # noqa: E501
+                                    h << h.li(h.a('Licence', href=NAGARE_DOC+'NagareLicence'))  # noqa: E501
 
                             with h.td:
                                 with h.ul:
-                                    h << h.li(h.a('Blogs', href='http://www.nagare.org/trac/blog'))
-                                    h << h.li(h.a('Mailing list', href='http://www.nagare.org/trac/wiki/MailingLists'))
-                                    h << h.li(h.a('IRC', href='http://www.nagare.org/trac/wiki/IrcChannel'))
-                                    h << h.li(h.a('Bug report', href='http://www.nagare.org/trac/wiki/BugReport'))
+                                    h << h.li(h.a('Blogs', href=NAGARE+'trac/blog'))  # noqa: E501
+                                    h << h.li(h.a('Mailing list', href=NAGARE_DOC+'MailingLists'))  # noqa: E501
+                                    h << h.li(h.a('Bug report', href=NAGARE_DOC+'BugReport'))  # noqa: E501
 
                             with h.td(class_='last'):
                                 with h.ul:
-                                    h << h.li(h.a('Documentation', href='http://www.nagare.org/trac/wiki'))
-                                    h << h.li(h.a('Demonstrations portal', href='http://www.nagare.org/portal'))
-                                    h << h.li(h.a('Demonstrations', href='http://www.nagare.org/demo'))
-                                    h << h.li(h.a('Wiki Tutorial', href='http://www.nagare.org/wiki'))
+                                    h << h.li(h.a('Documentation', href=NAGARE_DOC))  # noqa: E501
+                                    h << h.li(h.a('Demonstrations portal', href=NAGARE+'portal'))  # noqa: E501
+                                    h << h.li(h.a('Demonstrations', href=NAGARE+'demo'))  # noqa: E501
+                                    h << h.li(h.a('Wiki Tutorial', href=NAGARE+'wiki'))  # noqa: E501
 
                 return h.root
+
 
             # ---------------------------------------------------------------
 
             app = %(Id)s
-        ''' % params))
+        """ % params))
 
 
 def create_models_py(filename):
     with open(filename, 'w') as f:
         f.write(textwrap.dedent('''\
-            from elixir import *
+            from elixir import *  # noqa: F403, F401
             from sqlalchemy import MetaData
 
             __metadata__ = MetaData()

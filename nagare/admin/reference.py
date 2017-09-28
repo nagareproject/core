@@ -109,12 +109,12 @@ def load_module(module, app):
 
 
 loaders = {
-            '': load_module,
-            'python': load_module,
-            'egg': load_egg,
-            'file': load_file,
-            'app': load_app
-          }
+    '': load_module,
+    'python': load_module,
+    'egg': load_egg,
+    'file': load_file,
+    'app': load_app
+}
 
 
 def load_object(reference):

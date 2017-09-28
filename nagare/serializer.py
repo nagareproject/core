@@ -105,12 +105,12 @@ def serialize(output, content_type, doctype, declaration):
         pretty_print = False
 
     return (
-            content_type,
-            etree.tostring(
-                output, encoding='utf-8', method=method, pretty_print=pretty_print,
-                xml_declaration=declaration, doctype=doctype if declaration else None
-                )
-            )
+        content_type,
+        etree.tostring(
+            output, encoding='utf-8', method=method, pretty_print=pretty_print,
+            xml_declaration=declaration, doctype=doctype if declaration else None
+        )
+    )
 
 
 @peak.rules.when(serialize, (str,))

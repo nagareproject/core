@@ -152,18 +152,6 @@ class TestTranslations(unittest.TestCase):
         self.assertIsInstance(s.value, str)
         self.assertEqual(s, 'Vacances 2010')
 
-    def test_lazy_gettext(self):
-        s = i18n.lazy_gettext('hello')
-        self.assertEqual(s.__class__.__name__, 'LazyProxy')
-        self.assertIsInstance(s.value, str)
-        self.assertEqual(s, 'bonjour')
-
-    def test_lazy_gettext_params(self):
-        s = i18n.lazy_gettext('Holidays', year=2010)
-        self.assertEqual(s.__class__.__name__, 'LazyProxy')
-        self.assertIsInstance(s.value, str)
-        self.assertEqual(s, 'Vacances 2010')
-
     def test_lazy_ugettext(self):
         s = i18n.lazy_ugettext('hello')
         self.assertEqual(s.__class__.__name__, 'LazyProxy')

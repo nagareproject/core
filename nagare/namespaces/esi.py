@@ -48,6 +48,7 @@ class Renderer(xml.XmlRenderer):
         """
         return ET.Comment('esi ' + text)
 
+
 if __name__ == '__main__':
     from nagare.namespaces import xhtml
 

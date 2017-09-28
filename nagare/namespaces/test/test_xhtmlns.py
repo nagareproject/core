@@ -322,6 +322,7 @@ def html_render_parse_html_test5():
     else:
         assert True
 
+
 xml_tree_1 = "<a>text</a>"
 
 
@@ -494,12 +495,10 @@ class My_app_test_form():
 
 @presentation.render_for(My_app_test_form)
 def render(self, h, *args):
-    h << h.html(h.body(h.div('My_app_test_form'),
-                       h.form(
-                              h.input(type="text", name="input1", value="value").action(self.my_input_action),
-                              h.input(type="submit", name="submit").action(self.my_submit_action)
-                             ).pre_action(self.my_pre_action).post_action(self.my_post_action)
-         ))
+    h << h.html(h.body(h.div('My_app_test_form'), h.form(
+        h.input(type="text", name="input1", value="value").action(self.my_input_action),
+        h.input(type="submit", name="submit").action(self.my_submit_action)
+    ).pre_action(self.my_pre_action).post_action(self.my_post_action)))
     return h.root
 
 
@@ -626,7 +625,7 @@ class My_app_test_select_multiple():
 
 
 @presentation.render_for(My_app_test_select_multiple)
-def render(self, h, *args):
+def render_2(self, h, *args):
     with h.html:
         with h.body:
             h << h.div("choice:", self.choices)
@@ -659,7 +658,7 @@ class My_app_test_select_single():
 
 
 @presentation.render_for(My_app_test_select_single)
-def render(self, h, *args):
+def render_3(self, h, *args):
     with h.html:
         with h.body:
             h << h.div("choice:", self.choices)
@@ -860,18 +859,6 @@ def html_render_text_test1():
     assert isinstance(input, xhtml.TextInput)
 
 
-def html_render_text_test1():
-    """ XHTML namespace unit test - Input text - init """
-    h = xhtml.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                input = h.input(name="text1", type="text")
-                h << input
-
-    assert isinstance(input, xhtml.TextInput)
-
-
 def html_render_img_test1():
     """ XHTML namespace unit test - Tag img - init - external source """
     h = xhtml.Renderer()
@@ -905,17 +892,6 @@ def html_render_img_test3():
     assert c14n(h.root) == c14n('<html><body><img src="/logo.gif"/></body></html>')
 
 
-def html_render_select_test8():
-    """ XHTML namespace unit test - Select - test selected method with single attribute """
-    myApp = My_app_test_select_single
-    app = create_FixtureApp(myApp)
-    res = app.get('/')
-    assert 'choice:default' in res
-    form = res.forms[0]
-    res = form.submit()
-    assert 'choice:option1' in res
-
-
 def html_render_a_test1():
     """ XHTML namespace unit test - Tag a - init """
     h = xhtml.Renderer()
@@ -927,17 +903,6 @@ def html_render_a_test1():
     a = h.root.xpath('.//a')[0]
     assert isinstance(a, xhtml.A)
     assert c14n(h.root) == c14n('<html><body><a href="http://www.google.com">google</a></body></html>')
-
-
-def html_render_img_test2():
-    """ XHTML namespace unit test - Tag a - init - relative source """
-    h = xhtml.Renderer(static_url='/tmp/static/')
-
-    with h.html:
-        with h.body:
-            h << h.img(src="logo.gif")
-
-    assert c14n(h.root) == c14n('<html><body><img src="/tmp/static/logo.gif"/></body></html>')
 
 
 def html_render_action_test1():
@@ -1115,6 +1080,6 @@ def global_test2():
     yeah012 = h.div('yeah012')
     table = h.table([h.tr([h.td(elt1), h.td(elt2)]) for elt1, elt2 in t], {'toto': 'toto'})
 
-    html = h.html([h.body([helloWorld, totoDiv, yeah012, table], {'onload':'javascript:alert()'})])
+    html = h.html([h.body([helloWorld, totoDiv, yeah012, table], {'onload': 'javascript:alert()'})])
 
     assert c14n(html) == xml_test1_out

@@ -118,23 +118,23 @@ class Sessions(object):
     """The sessions managers
     """
     spec = {
-            'security_cookie_httponly': 'boolean(default=True)',
-            'security_cookie_name': 'string(default="_nagare")',
-            'security_cookie_secure': 'boolean(default=False)',
-            'states_history': 'boolean(default=True)',
-            'pickler': 'string(default="cPickle:Pickler")',
-            'unpickler': 'string(default="cPickle:Unpickler")',
-            'serializer': 'string(default="nagare.sessions.serializer:Dummy")'
-           }
+        'security_cookie_httponly': 'boolean(default=True)',
+        'security_cookie_name': 'string(default="_nagare")',
+        'security_cookie_secure': 'boolean(default=False)',
+        'states_history': 'boolean(default=True)',
+        'pickler': 'string(default="cPickle:Pickler")',
+        'unpickler': 'string(default="cPickle:Unpickler")',
+        'serializer': 'string(default="nagare.sessions.serializer:Dummy")'
+    }
 
     def __init__(
-                    self,
-                    states_history=True,
-                    security_cookie_httponly=True,
-                    security_cookie_name='_nagare',
-                    security_cookie_secure=False,
-                    serializer=serializer.Dummy, pickler=None, unpickler=None
-                ):
+        self,
+        states_history=True,
+        security_cookie_httponly=True,
+        security_cookie_name='_nagare',
+        security_cookie_secure=False,
+        serializer=serializer.Dummy, pickler=None, unpickler=None
+    ):
         """Initialization
 
         In:
@@ -202,9 +202,9 @@ class Sessions(object):
           - a DOM tree
         """
         return (
-                    h.input(name='_s', value=session_id, type='hidden'),
-                    h.input(name='_c', value='%05d' % state_id, type='hidden')
-                )
+            h.input(name='_s', value=session_id, type='hidden'),
+            h.input(name='_c', value='%05d' % state_id, type='hidden')
+        )
 
     def _get_ids(self, request):
         """Search the session id and the state id into the request parameters
@@ -217,9 +217,9 @@ class Sessions(object):
           - state id
         """
         return (
-                    int(request.params['_s']),
-                    int(request.params['_c']) if self.states_history else 0
-                )
+            int(request.params['_s']),
+            int(request.params['_c']) if self.states_history else 0
+        )
 
     def check_session_id(self, session_id):
         """Test if a session exist

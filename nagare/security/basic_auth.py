@@ -15,6 +15,7 @@ from webob import exc
 
 from nagare.security import common
 
+
 class Authentication(common.Authentication):
     """Authentication manager for the basic HTTP authentication scheme
     """
@@ -80,6 +81,6 @@ class Authentication(common.Authentication):
           - ``details`` -- a ``security.common.denial`` object
         """
         raise exc.HTTPUnauthorized(
-                                   str(detail),
-                                   [('WWW-Authenticate', 'Basic realm="%s"' % self.realm)]
-                                  )
+            str(detail),
+            [('WWW-Authenticate', 'Basic realm="%s"' % self.realm)]
+        )

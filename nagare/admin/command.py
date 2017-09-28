@@ -19,6 +19,7 @@ import optparse
 
 import pkg_resources
 
+
 # ---------------------------------------------------------------------------
 
 class Command(object):
@@ -165,6 +166,7 @@ class Commands(dict):
         for name, command in self.items():
             for r in command.get_description(commands + (name,)):
                 yield r
+
 
 # ---------------------------------------------------------------------------
 

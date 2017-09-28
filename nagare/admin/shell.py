@@ -113,6 +113,7 @@ def create_globals(cfgfiles, debug, error):
     session, apps = activate_applications(cfgfiles, debug, error)
     return {'session': session, 'apps': apps}
 
+
 # -----------------------------------------------------------------------------
 
 def set_shell_options(optparser):
@@ -258,7 +259,7 @@ def create_python_shell(ipython, banner, app_names, ns):
             if ipython_version < pkg_resources.parse_version('0.11'):
                 shell_factory = IPythonShellV1
             elif ipython_version < pkg_resources.parse_version('5.0'):
-                shell_factory =  IPythonShellV2
+                shell_factory = IPythonShellV2
             else:
                 shell_factory = IPythonShellV3
 
@@ -287,9 +288,11 @@ def shell(parser, options, args):
     ns = create_globals(args, options.debug, parser.error)
     ns['__name__'] = '__console__'
 
-    banner = "Python %s on %s\nNagare %s\n\nVariables 'apps' and 'session' are available" % (sys.version,
-                sys.platform,
-                pkg_resources.get_distribution('nagare').version)
+    banner = "Python %s on %s\nNagare %s\n\nVariables 'apps' and 'session' are available" % (
+        sys.version,
+        sys.platform,
+        pkg_resources.get_distribution('nagare').version
+    )
 
     create_python_shell(options.ipython, banner, [app.name for app in ns['apps'].values()], ns)
 
@@ -299,6 +302,7 @@ class Shell(command.Command):
 
     set_options = staticmethod(set_shell_options)
     run = staticmethod(shell)
+
 
 # -----------------------------------------------------------------------------
 

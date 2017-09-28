@@ -185,7 +185,7 @@ def add_child_test6():
     x = xml.Renderer()
 
     child = x.child()
-    node = x.node(['test', child, 'test', {'test':'test'}])
+    node = x.node(['test', child, 'test', {'test': 'test'}])
 
     assert node.attrib == {'test': 'test'}
     assert node.text == 'test'
@@ -391,6 +391,7 @@ def replace_test6():
     node.replace('test')
     assert node.write_xmlstring() == '<node/>'
 
+
 xml_test1_in = """
     <node xmlns:meld="http://www.plope.com/software/meld3">
     <child meld:id="child"/>
@@ -547,6 +548,7 @@ def findmeld_test3():
     child = node.findmeld('child', 'test')
     assert child == 'test'
 
+
 # Test for XML namespace
 
 xml_test2_in = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -609,8 +611,9 @@ def global_test2():
 
     reader = csv.reader(open(filePath, 'r'))
 
-    root = x.helloWorlds([x.helloWorld(row[1].decode('utf-8'),
-                            {'language':row[0].decode('utf-8')}) for row in reader])
+    root = x.helloWorlds(
+        [x.helloWorld(row[1].decode('utf-8'), {'language': row[0].decode('utf-8')}) for row in reader]
+    )
 
     xmlToTest = root.write_xmlstring(xml_declaration=True, pretty_print=True).strip()
 
@@ -645,11 +648,9 @@ def global_test4():
     root.findmeld('title').text = 'My document'
     root.findmeld('form1').set('action', './handler')
     data = (
-        {'name': 'Girls',
-         'description': 'Pretty'},
-        {'name': 'Boys',
-         'description': 'Ugly'},
-        )
+        {'name': 'Girls', 'description': 'Pretty'},
+        {'name': 'Boys', 'description': 'Ugly'},
+    )
 
     iterator = root.findmeld('tr').repeat(data)
     for element, item in iterator:
@@ -671,11 +672,9 @@ def global_test5():
     root.findmeld('form1').set('action', './handler')
 
     data = (
-        {'name': 'Girls',
-         'description': 'Pretty'},
-        {'name': 'Boys',
-         'description': 'Ugly'},
-        )
+        {'name': 'Girls', 'description': 'Pretty'},
+        {'name': 'Boys', 'description': 'Ugly'},
+    )
 
     children = []
     for elt in data:
@@ -696,11 +695,9 @@ def global_test6():
     root.findmeld('form1').set('action', './handler')
 
     data = (
-        {'name': 'Girls',
-         'description': 'Pretty'},
-        {'name': 'Boys',
-         'description': 'Ugly'},
-        )
+        {'name': 'Girls', 'description': 'Pretty'},
+        {'name': 'Boys', 'description': 'Ugly'},
+    )
 
     children = []
     for elt in data:
@@ -723,11 +720,9 @@ def global_test7():
     root.findmeld('form1').set('action', './handler')
 
     data = (
-        {'name': 'Girls',
-         'description': 'Pretty'},
-        {'name': 'Boys',
-         'description': 'Ugly'},
-        )
+        {'name': 'Girls', 'description': 'Pretty'},
+        {'name': 'Boys', 'description': 'Ugly'},
+    )
 
     children = []
     for elt in data:
@@ -746,11 +741,9 @@ def global_test8():
     x = xml.Renderer()
     x.namespaces = {'meld': 'http://www.plope.com/software/meld3'}
     data = (
-        {'name': 'Girls',
-         'description': 'Pretty'},
-        {'name': 'Boys',
-         'description': 'Ugly'},
-        )
+        {'name': 'Girls', 'description': 'Pretty'},
+        {'name': 'Boys', 'description': 'Ugly'},
+    )
 
     with x.html:
         with x.head:

@@ -73,6 +73,7 @@ def render_for(cls, model=None):
 def render(self, renderer, comp, model):
     return render(self, renderer, comp, None)
 
+
 # ---------------------------------------------------------------------------
 
 def init(self, url, comp, http_method, request):

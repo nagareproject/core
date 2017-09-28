@@ -100,6 +100,7 @@ def drop(parser, options, args):
         with database.session.begin():
             database_settings[0].drop_all()
 
+
 # ---------------------------------------------------------------------------
 
 class DBCreate(command.Command):

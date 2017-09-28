@@ -94,12 +94,14 @@ except ImportError:
     def LazyProxy(f, *args, **kw):
         return f(*args, **kw)
 
+
 # -----------------------------------------------------------------------------
 
 # Mac Leopard OS bug (see http://code.djangoproject.com/ticket/5846)
 
 if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
     os.environ['LC_CTYPE'] = 'en_US.utf-8'
+
 
 # -----------------------------------------------------------------------------
 
@@ -112,7 +114,7 @@ def gettext(msg, domain=None, **kw):
 
 def ugettext(msg, domain=None, **kw):
     return get_locale().ugettext(msg, domain, **kw)
-_ = ugettext
+_ = ugettext  # noqa: E305
 
 
 def ngettext(singular, plural, n, domain=None, **kw):
@@ -121,7 +123,7 @@ def ngettext(singular, plural, n, domain=None, **kw):
 
 def ungettext(singular, plural, n, domain=None, **kw):
     return get_locale().ungettext(singular, plural, n, domain, **kw)
-_N = ungettext
+_N = ungettext  # noqa: E305
 
 
 def lazy_gettext(msg, domain=None, **kw):
@@ -130,7 +132,7 @@ def lazy_gettext(msg, domain=None, **kw):
 
 def lazy_ugettext(msg, domain=None, **kw):
     return LazyProxy(ugettext, msg, domain, **kw)
-_L = lazy_ugettext
+_L = lazy_ugettext  # noqa: E305
 
 
 def lazy_ngettext(singular, plural, n, domain=None, **kw):
@@ -139,7 +141,7 @@ def lazy_ngettext(singular, plural, n, domain=None, **kw):
 
 def lazy_ungettext(singular, plural, n, domain=None, **kw):
     return LazyProxy(ungettext, singular, plural, n, domain, **kw)
-_LN = lazy_ungettext
+_LN = lazy_ungettext  # noqa: E305
 
 
 def get_period_names():
@@ -269,12 +271,13 @@ def parse_time(string):
 def parse_date(string):
     return get_locale().parse_date(string)
 
+
 # -----------------------------------------------------------------------------
 
 # Locale API
 # ----------
 
-_translations_cache = {}    # Already loaded translation objects
+_translations_cache = {}  # Already loaded translation objects
 
 
 class DummyTranslation(object):
@@ -287,11 +290,11 @@ class DummyTranslation(object):
 
 class Locale(CoreLocale):
     def __init__(
-                    self,
-                    language, territory=None, script=None, variant=None,
-                    dirname=None, domain=None,
-                    timezone=None, default_timezone=None
-                ):
+        self,
+        language, territory=None, script=None, variant=None,
+        dirname=None, domain=None,
+        timezone=None, default_timezone=None
+    ):
         """
         A locale
 
@@ -1054,16 +1057,17 @@ class Locale(CoreLocale):
         """
         set_locale(self._previous_locales.pop())
 
+
 # -----------------------------------------------------------------------------
 
 class NegotiatedLocale(Locale):
     def __init__(
-                    self,
-                    request,
-                    locales, default_locale=(None, None),
-                    dirname=None, domain=None,
-                    timezone=None, default_timezone=None
-                ):
+        self,
+        request,
+        locales, default_locale=(None, None),
+        dirname=None, domain=None,
+        timezone=None, default_timezone=None
+    ):
         """
         A locale with negotiated language and territory
 
@@ -1084,10 +1088,10 @@ class NegotiatedLocale(Locale):
             value is used
         """
         locale = negotiate_locale(
-                                    request.accept_language,
-                                    map('-'.join, locales),
-                                    '-'
-                                 )
+            request.accept_language,
+            map('-'.join, locales),
+            '-'
+        )
 
         if not locale:
             (language, territory) = (default_locale + (None,))[:2]
@@ -1102,10 +1106,11 @@ class NegotiatedLocale(Locale):
                 territory = territory.upper()
 
         super(NegotiatedLocale, self).__init__(
-                                                language, territory,
-                                                dirname=dirname, domain=domain,
-                                                timezone=timezone, default_timezone=default_timezone
-                                              )
+            language, territory,
+            dirname=dirname, domain=domain,
+            timezone=timezone, default_timezone=default_timezone
+        )
+
 
 # -----------------------------------------------------------------------------
 

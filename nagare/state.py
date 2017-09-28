@@ -41,4 +41,3 @@ def stateful(o):
         del o._persistent_id
 
     return o
-

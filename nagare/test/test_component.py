@@ -28,6 +28,7 @@ class Foobar:
     def __init__(self):
         self.my_property = component.Component(Foo())
 
+
 # -------------------------------------------------------------------------------------------------------
 
 class App1:
@@ -50,6 +51,7 @@ def test1():
     app.bar.answer("I'm foo again")
     assert app.foo.my_property == "I'm foo again"
 
+
 # -------------------------------------------------------------------------------------------------------
 
 def test2():
@@ -70,6 +72,7 @@ def test2():
     assert isinstance(app.my_property(), Foo)
     assert not bool(app.my_property.model)
     assert app.my_property().my_property == "I'm foo"
+
 
 # -------------------------------------------------------------------------------------------------------
 
@@ -94,6 +97,7 @@ if continuation.has_continuation:
         assert app.my_property.model == 'foo'
         assert v() == "I'm bar"
 
+
 # -------------------------------------------------------------------------------------------------------
 
 @presentation.render_for(Bar)
@@ -102,7 +106,7 @@ def render(self, h, *args):
 
 
 @presentation.render_for(Bar, model='foo')
-def render(self, h, *args):
+def render_bar(self, h, *args):
     return h.h1("I'm bar in foo")
 
 
@@ -124,4 +128,3 @@ def test4():
 
     foo.becomes(model='foo')
     assert foo.render(h).write_htmlstring(pretty_print=True).strip() == "<h1>I'm bar in foo</h1>"
-

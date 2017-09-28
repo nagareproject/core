@@ -14,6 +14,7 @@ from __future__ import with_statement
 from nagare.namespaces import xml
 from nagare.namespaces.xml import TagProp
 
+
 # ----------------------------------------------------------------------------------
 
 class Renderer(xml.XmlRenderer):
@@ -34,9 +35,11 @@ class Renderer(xml.XmlRenderer):
     comment = TagProp('comment', set())
     copy = TagProp('copy', set(('use-attribute-sets',)))
     copy_of = TagProp('copy-of', set(('select',)))
-    decimal_format = TagProp('decimal-format', set(('name', 'decimal-separator', 'grouping-separator', 'infinity',
-                                                     'minus-sign', 'NaN', 'percent', 'per-mille', 'zero-digit',
-                                                     'pattern-separator')))
+    decimal_format = TagProp('decimal-format', set((
+        'name', 'decimal-separator', 'grouping-separator', 'infinity',
+        'minus-sign', 'NaN', 'percent', 'per-mille', 'zero-digit',
+        'pattern-separator'
+    )))
     element = TagProp('element', set(('name', 'namespace', 'use-attribute-sets')))
     fallback = TagProp('fallback', set(('select',)))
     if_ = TagProp('if', set(('test',)))
@@ -64,14 +67,17 @@ class Renderer(xml.XmlRenderer):
                                             'extension-element-prefixes',
                                             'exclude-result-prefixes')))
     template = TagProp('template', set(('match', 'name', 'priority', 'mode')))
-    transform = TagProp('transform', set(('version', 'id',
-                                            'extension-element-prefixes',
-                                            'exclude-result-prefixes')))
+    transform = TagProp('transform', set((
+        'version', 'id',
+        'extension-element-prefixes',
+        'exclude-result-prefixes'
+    )))
     text = TagProp('text', set())
     value_of = TagProp('value-of', set(('select', 'disable-output-escaping')))
     variable = TagProp('variable', set(('name', 'select')))
     when = TagProp('when', set(('test',)))
     with_param = TagProp('with-param', set(('name', 'select')))
+
 
 # ----------------------------------------------------------------------------------
 
