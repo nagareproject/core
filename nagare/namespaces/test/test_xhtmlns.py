@@ -11,7 +11,7 @@ from __future__ import with_statement
 
 import os
 from types import ListType
-from StringIO import StringIO
+from cStringIO import StringIO
 
 from paste.fixture import TestApp
 from lxml import etree as ET
@@ -872,13 +872,13 @@ def html_render_img_test1():
 
 def html_render_img_test2():
     """ XHTML namespace unit test - Tag img - init - relative source """
-    h = xhtml.Renderer(static='/tmp/static/')
+    h = xhtml.Renderer(static_url='/tmp/static/')
 
     with h.html:
         with h.body:
             h << h.img(src="logo.gif")
 
-    assert c14n(h.root) == c14n('<html><body><img src="/tmp/static/logo.gif"></body></html>')
+    assert c14n(h.root) == c14n('<html><body><img src="/tmp/static/logo.gif"/></body></html>')
 
 
 def html_render_img_test3():

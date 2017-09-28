@@ -85,7 +85,7 @@ class WSGIApp(object):
 
         self.security = dummy_manager.Manager()
 
-        self.set_default_locale(i18n.Locale())
+        self.set_default_locale(i18n.Locale('en'))
 
     def set_config(self, config_filename, config, error):
         """Read the configuration parameters
