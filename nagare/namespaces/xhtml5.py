@@ -1,11 +1,11 @@
-#--
-# Copyright (c) 2008-2013 Net-ng.
+# --
+# Copyright (c) 2008-2017 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
 # the file LICENSE.txt, which you should have received as part of
 # this distribution.
-#--
+# --
 
 """The XHTML5 renderer
 """
@@ -23,6 +23,7 @@ class Input(xhtml._HTMLActionTag):
     """Class of all the new input types of HTML5
     """
     _actions = (1, 'name', 'onchange')
+    async_action = xhtml._HTMLActionTag.sync_action
 
 
 class ObsoleteTagProp(TagProp):

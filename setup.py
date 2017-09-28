@@ -1,13 +1,13 @@
 #!/bin/env python
 
-#--
-# Copyright (c) 2008-2013 Net-ng.
+# --
+# Copyright (c) 2008-2017 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
 # the file LICENSE.txt, which you should have received as part of
 # this distribution.
-#--
+# --
 
 VERSION = '0.4.1'
 
@@ -68,7 +68,10 @@ setup(
       namespace_packages=('nagare',),
       zip_safe=False,
       dependency_links=('http://www.nagare.org/download/',),
-      install_requires=('PEAK-Rules', 'ConfigObj', 'lxml>=3.0.1', 'WebOb>=1.2.3', 'Paste', 'flup', 'python-memcached'),
+      install_requires=(
+          'PEAK-Rules', 'ConfigObj', 'lxml>=3.0.1', 'WebOb>=1.2.3',
+          'Paste', 'flup==1.0.3.dev-20110405', 'python-memcached'
+      ),
       message_extractors={'nagare': [
           ('test/**', 'ignore', None),
           ('**.py', 'python', None),

@@ -1,11 +1,11 @@
-#--
-# Copyright (c) 2008-2013 Net-ng.
+# --
+# Copyright (c) 2008-2017 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
 # the file LICENSE.txt, which you should have received as part of
 # this distribution.
-#--
+# --
 
 """Base classes for the sessions management"""
 
@@ -118,7 +118,9 @@ class Sessions(object):
     """The sessions managers
     """
     spec = {
+            'security_cookie_httponly': 'boolean(default=True)',
             'security_cookie_name': 'string(default="_nagare")',
+            'security_cookie_secure': 'boolean(default=False)',
             'states_history': 'boolean(default=True)',
             'pickler': 'string(default="cPickle:Pickler")',
             'unpickler': 'string(default="cPickle:Unpickler")',
@@ -128,7 +130,9 @@ class Sessions(object):
     def __init__(
                     self,
                     states_history=True,
+                    security_cookie_httponly=True,
                     security_cookie_name='_nagare',
+                    security_cookie_secure=False,
                     serializer=serializer.Dummy, pickler=None, unpickler=None
                 ):
         """Initialization
@@ -141,7 +145,9 @@ class Sessions(object):
           - ``unpickler`` -- unpickler used by the serializer
         """
         self.states_history = states_history
+        self.security_cookie_httponly = security_cookie_httponly
         self.security_cookie_name = security_cookie_name
+        self.security_cookie_secure = security_cookie_secure
         self.serializer = serializer(pickler, unpickler)
 
     def set_config(self, filename, conf, error):
@@ -253,7 +259,9 @@ class Sessions(object):
             secure_id = request.cookies.get(self.security_cookie_name)
             if not secure_id:
                 secure_id = str(random.randint(1000000000000000, 9999999999999999))
-                response.set_cookie(self.security_cookie_name, secure_id, path=request.script_name + '/')
+                response.set_cookie(self.security_cookie_name, secure_id, path=request.script_name + '/',
+                                    secure=self.security_cookie_secure,
+                                    httponly=self.security_cookie_httponly)
 
         return State(self, session_id, state_id, secure_id, use_same_state or not self.states_history)
 
