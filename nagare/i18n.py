@@ -531,7 +531,7 @@ class Locale(CoreLocale):
         >>> Locale('en', 'US').get_period_names()['am']
         u'AM'
         """
-        return dates.get_period_names(self)
+        return dates.get_period_names(locale=self)
 
     def get_day_names(self, width='wide', context='format'):
         """Return the day names for the specified format
@@ -730,7 +730,7 @@ class Locale(CoreLocale):
         Return:
           - the currency name
         """
-        return numbers.get_currency_name(currency, self)
+        return numbers.get_currency_name(currency, locale=self)
 
     def get_currency_symbol(self, currency):
         """Return the symbol used for the specified currency
@@ -904,7 +904,7 @@ class Locale(CoreLocale):
             return dt
 
         if not dt.tzinfo:
-            dt = dt.replace(tzinfo=self.default_timezone)
+            dt = self.default_timezone.localize(dt)
 
         return dt.astimezone(self.tzinfo)
 
@@ -945,7 +945,9 @@ class Locale(CoreLocale):
           - the formatted time string
         """
         if isinstance(t, datetime.time):
-            t = datetime.time(t.hour, t.minute, t.second)
+            d = datetime.datetime.now()
+            d = d.replace(hour=t.hour, minute=t.minute, second=t.second)
+            t = self.to_utc(d)
 
         if isinstance(t, datetime.datetime):
             t = self.to_utc(t)
