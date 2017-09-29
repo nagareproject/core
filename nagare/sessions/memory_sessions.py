@@ -25,9 +25,11 @@ DEFAULT_NB_STATES = 20
 class Sessions(common.Sessions):
     """Sessions manager for states kept in memory
     """
-    spec = common.Sessions.spec.copy()
-    spec['nb_sessions'] = 'integer(default=%d)' % DEFAULT_NB_SESSIONS
-    spec['nb_states'] = 'integer(default=%d)' % DEFAULT_NB_STATES
+    spec = dict(
+        common.Sessions.spec,
+        nb_sessions='integer(default=%d)' % DEFAULT_NB_SESSIONS,
+        nb_states='integer(default=%d)' % DEFAULT_NB_STATES
+    )
 
     def __init__(self, nb_sessions=DEFAULT_NB_SESSIONS, nb_states=DEFAULT_NB_STATES, **kw):
         """Initialization

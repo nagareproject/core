@@ -51,16 +51,16 @@ class Authentication(common.Authentication):
                 data['encoding'] = encoding
                 data['http_method'] = request.method
 
-                return (data.pop('username').decode(encoding), data)
+                return data.pop('username').decode(encoding), data
 
-        return (None, {'response': None, 'encoding': None})
+        return None, {'response': None, 'encoding': None}
 
     def check_password(
-            self,
-            username, password,
-            response, encoding, realm='', uri='',
-            nonce='', nc='', cnonce='', qop='', http_method='',
-            **kw
+        self,
+        username, password,
+        response, encoding, realm='', uri='',
+        nonce='', nc='', cnonce='', qop='', http_method='',
+        **kw
     ):
         """Authentication
 

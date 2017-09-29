@@ -42,7 +42,7 @@ def load_entry_point(app, entry_point):
     apps = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points(entry_point)])
     entry_point = apps[app]
 
-    return (entry_point.load(), entry_point.dist)
+    return entry_point.load(), entry_point.dist
 
 
 def load_app(app, _):
@@ -69,7 +69,7 @@ def load_egg(dist, app):
       - (the application, the distribution of the application)
     """
     dist = pkg_resources.get_distribution(dist)
-    return (dist.get_entry_info('nagare.applications', app).load(), dist)
+    return dist.get_entry_info('nagare.applications', app).load(), dist
 
 
 def load_file(filename, app):
@@ -82,9 +82,9 @@ def load_file(filename, app):
     Return:
       - (the object, None)
     """
-    dir = os.path.abspath(os.path.dirname(filename))
-    if dir not in sys.path:
-        sys.path.insert(0, dir)
+    dirname = os.path.abspath(os.path.dirname(filename))
+    if dirname not in sys.path:
+        sys.path.insert(0, dirname)
 
     name = os.path.splitext(os.path.basename(filename))[0]
     return load_module(name, app)
@@ -105,7 +105,7 @@ def load_module(module, app):
     if app is not None:
         r = getattr(r, app)
 
-    return (r, None)
+    return r, None
 
 
 loaders = {

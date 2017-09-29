@@ -34,9 +34,9 @@ def search_element(element_name, l):
             continue
 
         if isinstance(element, etree._Element) and element.tag.endswith(element_name):
-            return (i + 1, element)
+            return i + 1, element
 
-    return (0, None)
+    return 0, None
 
 
 def wrap(content_type, h, content):

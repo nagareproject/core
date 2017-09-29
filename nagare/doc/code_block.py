@@ -50,6 +50,7 @@ def code_block_directive(name, arguments, options, content, lineno, content_offs
         parsed = '<div class="ncodediv">' + parsed + '</div>'
     return [nodes.raw('', parsed, format='html')]
 
+
 code_block_directive.arguments = (1, 0, 1)
 code_block_directive.content = 1
 code_block_directive.options = {'linenos': directives.flag, 'hl_lines': directives.unchanged_required}

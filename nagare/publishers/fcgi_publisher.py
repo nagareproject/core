@@ -94,7 +94,7 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
            - conf object
        """
         (host, port, conf) = super(Publisher, self)._validate_conf(filename, conf, error)
-        return (host, port, conf.pop('socket'), conf)
+        return host, port, conf.pop('socket'), conf
 
     def serve(self, filename, conf, error):
         """Run the publisher

@@ -129,7 +129,7 @@ def read_application(cfgfile, error):
     # Re-read the application configuration, with some substitution variables
     aconf = read_application_options(cfgfile, error, defaults)
 
-    return (cfgfile, app, dist, aconf)
+    return cfgfile, app, dist, aconf
 
 
 # ---------------------------------------------------------------------------
@@ -162,7 +162,7 @@ def get_database(conf, debug):
     # given to the database engine
     engine_conf = dict([(k, v) for (k, v) in conf.items() if k not in ('uri', 'activated', 'metadata', 'debug', 'populate')])
 
-    return (metadata, conf['uri'], debug, engine_conf)
+    return metadata, conf['uri'], debug, engine_conf
 
 
 def activate_WSGIApp(
@@ -236,4 +236,4 @@ def activate_WSGIApp(
     if project_name:
         app.set_project(project_name)
 
-    return (app, zip(databases, populates))
+    return app, zip(databases, populates)

@@ -26,17 +26,14 @@ def serve_file(filename):
    Return:
      - a WSGI application
    """
-    if filename is None:
-        return httpexceptions.HTTPNotFound()
-
-    return fileapp.FileApp(filename)
+    return httpexceptions.HTTPNotFound() if filename is None else fileapp.FileApp(filename)
 
 
 class Publisher(object):
     """Base class of all the publishers"""
 
-    default_port = 8080     # Port to listen to
-    spec = {}               # Command line options
+    default_port = 8080  # Port to listen to
+    spec = {}  # Command line options
 
     def __init__(self):
         """Initialisation
@@ -99,7 +96,7 @@ class Publisher(object):
         config.validate(filename, conf, error)
         conf = dict([(k, v) for (k, v) in conf.items() if v is not None])
 
-        return (conf.pop('host'), conf.pop('port'), conf)
+        return conf.pop('host'), conf.pop('port'), conf
 
     def on_new_process(self):
         """The publisher has started a new process

@@ -59,7 +59,7 @@ class Authentication(common.Authentication):
           - A tuple with the id of the user and its password as a dictionary
         """
         (username, password) = self._get_ids(request, response)
-        return (username, {'password': password})
+        return username, {'password': password}
 
     def check_password(self, username, real_password, password):
         """Authentication

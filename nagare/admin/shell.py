@@ -77,7 +77,7 @@ def activate_applications(cfgfiles, debug, error):
 
     session = database.session
     session.begin()
-    return (session, apps)
+    return session, apps
 
 
 def activate_application(cfgfile, debug, error):

@@ -47,8 +47,8 @@ def c14n(node):
     node.write_c14n(buf)
     return buf.getvalue().replace('\n', '')
 
-# Test for XHTML namespace
 
+# Test for XHTML namespace
 
 def head_render_init_test1():
     """ XHTML namespace unit test - HeadRender - Allowed tags """

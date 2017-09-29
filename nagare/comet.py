@@ -172,13 +172,13 @@ class Channel(object):
             - the msg if available or ``None``
         """
         if nb >= self.history_nb + len(self.history):
-            return (None, None)
+            return None, None
 
         if nb < self.history_nb:
             nb = self.history_nb
 
         # Return only one message
-        return (nb + 1, self.history[nb - self.history_nb])
+        return nb + 1, self.history[nb - self.history_nb]
 
     def __len__(self):
         return len(self.clients)
@@ -198,7 +198,7 @@ class TextChannel(Channel):
         """
         # Concatenate all the available msgs
         msgs = self.history[max(nb, self.history_nb) - self.history_nb:]
-        return (len(self.history) + self.history_nb, ''.join(msgs) if msgs else None)
+        return len(self.history) + self.history_nb, ''.join(msgs) if msgs else None
 
 
 # ----------------------------------------------------------------------------

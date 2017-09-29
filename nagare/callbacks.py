@@ -102,7 +102,6 @@ def process(callbacks, request, response):
         raise CallbackLookupError(name[8:])
 
     render = None
-    callback_type = 0
 
     for ((callback_type, _), name, param, value) in sorted(actions.values()):
         try:

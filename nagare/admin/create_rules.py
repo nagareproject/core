@@ -58,7 +58,7 @@ def create_rules(app_names, error):
     package = pkg_resources.Requirement.parse('nagare')
     static = pkg_resources.resource_filename(package, 'static')
 
-    apps = [('nagare', static)]   # Initialize the result tuple with the static contents of the framework
+    apps = [('nagare', static)]  # Initialize the result tuple with the static contents of the framework
 
     for app_name in app_names:
         (cfgfile, app, dist, aconf) = util.read_application(app_name, error)

@@ -77,13 +77,13 @@ def serialize(self, content_type, doctype, declaration):
       - a tuple ('text/plain', Javascript to evaluate on the client)
     """
     if self.output is None:
-        return ('text/plain', '')
+        return 'text/plain', ''
 
     # Get the javascript for the header
     head = presentation.render(self.renderer.head, self.renderer, None, None)
 
     # Wrap the body and the header into a javascript code
-    return ('text/plain', serialize_body(self, content_type, doctype) + '; ' + head)
+    return 'text/plain', serialize_body(self, content_type, doctype) + '; ' + head
 
 
 def javascript_dependencies(renderer):
@@ -264,12 +264,12 @@ def serialize_views(self, content_type, doctype, declaration):
     bodies = [serialize_body(view_to_js, content_type, doctype) for view_to_js in self if view_to_js.output is not None]
 
     if not bodies:
-        return ('text/plain', '')
+        return 'text/plain', ''
 
     # Get the javascript for the header
     head = presentation.render(self[0].renderer.head, self[0].renderer, None, None)
 
-    return ('text/plain', '; '.join(bodies) + '; ' + head)
+    return 'text/plain', '; '.join(bodies) + '; ' + head
 
 
 class Updates(Update):

@@ -34,7 +34,7 @@ try:
             return self._func(*self._args, **self._kwargs)
 
         def __getstate__(self):
-            return (self._func, self._args, self._kwargs)
+            return self._func, self._args, self._kwargs
 
         def __setstate__(self, attrs):
             self.__init__(attrs[0], *attrs[1], **attrs[2])

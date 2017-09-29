@@ -30,7 +30,7 @@ def serialize(output, content_type, doctype, declaration):
     Return:
       - a tuple (content_type, content)
     """
-    return (content_type, str(output))
+    return content_type, str(output)
 
 
 @peak.rules.when(serialize, (xhtml_base._HTMLTag,))
@@ -59,7 +59,7 @@ def serialize(next_method, output, content_type, doctype, declaration):
 
         output = output.write_htmlstring(pretty_print=True, doctype=doctype if declaration else None)
 
-    return (content_type, output)
+    return content_type, output
 
 
 @peak.rules.when(serialize, (xml._Tag,))
@@ -80,7 +80,7 @@ def serialize(next_method, output, content_type, doctype, declaration):
     else:
         output = output.write_xmlstring(xml_declaration=declaration, doctype=doctype if declaration else None)
 
-    return (content_type, output)
+    return content_type, output
 
 
 @peak.rules.when(serialize, (etree._Element,))
@@ -126,7 +126,7 @@ def serialize(output, content_type, doctype, declaration):
     Return:
       - a tuple (content_type, content)
     """
-    return (content_type or 'text/plain', output)
+    return content_type or 'text/plain', output
 
 
 @peak.rules.when(serialize, (unicode,))
@@ -159,9 +159,9 @@ def serialize(output, content_type, doctype, declaration):
       - a tuple (content_type, content)
     """
     if not output:
-        return (content_type, '')
+        return content_type, ''
 
     first = serialize(output[0], content_type, doctype, declaration)[1]
     second = ''.join(serialize(e, content_type, doctype, False)[1] for e in output[1:])
 
-    return (content_type, first + second)
+    return content_type, first + second

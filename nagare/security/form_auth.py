@@ -71,7 +71,7 @@ class Authentication(basic_auth.Authentication):
         Return:
           - A tuple with the id of the user and its password
         """
-        return (params.get(self.prefix + '_name'), params.get(self.prefix + '_password'))
+        return params.get(self.prefix + '_name'), params.get(self.prefix + '_password')
 
     def cookie_decode(self, cookie):
         """Decode the data of the user cookie
@@ -86,7 +86,7 @@ class Authentication(basic_auth.Authentication):
             return [b64decode(s).decode('utf-8') for s in cookie.split(':')]
         except (TypeError, UnicodeDecodeError):
             # In case there's a problem when decoding the authentication cookie, fall back to unauthenticated
-            return (None, None)
+            return None, None
 
     def get_ids_from_cookie(self, cookies):
         """Search the data associated with the connected user into the cookies
@@ -99,7 +99,7 @@ class Authentication(basic_auth.Authentication):
         """
         data = cookies.get(self.key)
         if not data:
-            return (None, None)
+            return None, None
 
         return self.cookie_decode(data)
 

@@ -94,10 +94,10 @@ def entity_getstate(entity):
     Return:
       - the state dictionary
     """
-    state = entity._sa_instance_state   # SQLAlchemy managed state
+    state = entity._sa_instance_state  # SQLAlchemy managed state
 
     if state.key:
-        attrs = set(state.manager.local_attrs)   # SQLAlchemy managed attributes
+        attrs = set(state.manager.local_attrs)  # SQLAlchemy managed attributes
         attrs.add('_sa_instance_state')
     else:
         attrs = ()

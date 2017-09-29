@@ -148,7 +148,7 @@ class Pickle(Dummy):
             t.kill()
 
         # The pickled data are returned
-        return (session_data, f.getvalue())
+        return session_data, f.getvalue()
 
     def loads(self, session_data, state_data):
         """Deserialize an objects graph

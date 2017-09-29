@@ -1288,7 +1288,7 @@ class AsyncRenderer(Renderer):
             self.head = HeadRenderer(static_url=static_url)
 
         self.async_root = True
-        self.wrapper_to_generate = False    # Add a ``<div>`` around the rendering ?
+        self.wrapper_to_generate = False  # Add a ``<div>`` around the rendering ?
 
     def SyncRenderer(self, *args, **kw):
         """Create an associated synchronous HTML renderer
