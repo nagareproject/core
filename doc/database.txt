@@ -7,9 +7,8 @@ received, Nagare creates a database transaction which is commited at the end
 of the request handling or rollbacked if an exception is raised.
 
 The database connection is activated and configurated in the ``[database]`` section
-of the application configuration file as described in
-:wiki:`ApplicationConfiguration#database-section`. One of the parameters in
-this section is the location of the
+of the application `configuration file <configuration_file.html#database-section>`__.
+One of the parameters in this section is the location of the
 `__metadata__ <http://www.sqlalchemy.org/docs/core/schema.html#metadata-describing>`_ object of
 SQLAlchemy:
 
@@ -32,7 +31,5 @@ SQLAlchemy:
     `table definitions <http://www.sqlalchemy.org/docs/orm/mapper_config.html>`_
     if you are using SQLAlchemy only
 
-  - where Elixir automatically register the entities defined (see for example
-    the Wiki entities definition at :browser:`examples/nagare/examples/wiki/wikidata.py`)
+  - where Elixir automatically register the defined entities
 
-.. wikiname: DatabaseTier

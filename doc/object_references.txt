@@ -2,13 +2,12 @@ Object references
 =================
 
 Object references are textual references to Python objects. There are
-especially used in the :wiki:`ApplicationConfiguration` files to indicate what
+especially used in the :doc:`application files <configuration_file>` to indicate what
 Python objects to use.
 
 The general form of an object reference is: ``<schema> <path>:<object_name>``.
-Given such an object reference, the ``load_object()`` method of
-:apidoc:`admin.util#util.load_object` returns a tuple where the
-first item is the Python object, and the second item is the
+Given such an object reference, the :class:`nagare.admin.reference.load_object()` method
+returns a tuple where the first item is the Python object, and the second item is the
 `distribution <http://peak.telecommunity.com/DevCenter/PkgResources#distribution-objects>`_
 where this object is located, if found.
 
@@ -53,4 +52,3 @@ The available ``schemas`` are:
        >>> util.load_object('egg nagare.examples:wiki')
        (<class 'nagare.examples.wiki.wiki9.Wiki'>, nagare.examples 0.1.0 (/home/apr/projects/nagare/dev/src/nagare/examples))
 
-.. wikiname: ObjectReferences

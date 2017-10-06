@@ -82,8 +82,7 @@ maxRequest          No        *No default value* Maximum number of requests serv
 .. note::
 
    New publishers can be added to the framework, and then selected with the ``type``
-   parameter, by registering them under the ``[nagare.publishers]`` entry point
-   (see :wiki:`EntryPoints`).
+   parameter, by registering them under the ``[nagare.publishers]`` :doc:`entry point <entry_points>`.
 
 [sessions] section
 ~~~~~~~~~~~~~~~~~~
@@ -134,8 +133,8 @@ debug               No        off                Display the requests sent to th
 .. note::
 
    New sessions managers can be added to the framework, and then selected with the
-   ``type`` parameter, by registering them under the ``[nagare.sessions]`` entry point
-   (see :wiki:`EntryPoints`).
+   ``type`` parameter, by registering them under the ``[nagare.sessions]``
+   :doc:`entry point <entry_points>`.
 
 [reloader] section
 ~~~~~~~~~~~~~~~~~~
@@ -153,4 +152,3 @@ interval            No        1                  Time, in seconds, between the c
                                                  source changes
 =================== ========= ================== ==================================================
 
-.. wikiname: PublisherConfiguration

@@ -7,7 +7,7 @@ In the following chapters, we will create the application named *my_app*.
 
 1. Create the application skeleton
 ----------------------------------
-    
+
 In a directory of your choice, create the application skeleton:
 
   .. code-block:: sh
@@ -20,7 +20,7 @@ This command creates a *my_app* directory with the structure:
   - `conf` -- directory with all the configuration files of the application
   - `data` -- data directory, contains all the read/write data (database files for example) used by the application
   - `static` -- static directory, contains all the read only data (images, css, js...) used by the application
-  - `my_app` -- source directory, contains the application source files 
+  - `my_app` -- source directory, contains the application source files
 
 2. Configure your application
 -----------------------------
@@ -29,13 +29,13 @@ This command creates a *my_app* directory with the structure:
 ~~~~~~~~~~~~~~~~~~
 
 In your application directory, edit the `setup.py` file:
-    
+
   .. code-block:: python
 
     VERSION = '0.0.1'
-    
+
     from setuptools import setup, find_packages
-    
+
     setup(
           name = 'my_app',
           version = VERSION,
@@ -56,7 +56,7 @@ In your application directory, edit the `setup.py` file:
           """
          )
 
-Change the keywords of the ``setup()`` call (ie: author = 'John Doe', description = 
+Change the keywords of the ``setup()`` call (ie: author = 'John Doe', description =
 'This is my first application'...) to correctly describe your application.
 
 Note that the ``install_requires`` keyword initially list the ``nagare`` package.
@@ -72,14 +72,14 @@ and the `Setuptools documentation <http://peak.telecommunity.com/DevCenter/setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Edit the *conf/my_app.cfg* file:
-    
+
   .. code-block:: ini
-    
+
     [application]
     path = app my_app
     name = my_app
     debug = off
-    
+
     [database]
     activated = off
     uri = sqlite:///$here/../data/my_app.db
@@ -89,7 +89,7 @@ Edit the *conf/my_app.cfg* file:
 .. note::
 
   The structure and informations in this file are described with details in
-  :wiki:`ApplicationConfiguration`.
+  :doc:`configuration_file`.
 
 Briefly, the **[application]** section contains:
 
@@ -114,20 +114,20 @@ So to register your application, go into the ``my_apps`` directory and simply
 enter the command:
 
   .. code-block:: sh
-    
-    <NAGARE_HOME>/bin/python setup.py develop  
+
+    <NAGARE_HOME>/bin/python setup.py develop
 
 .. note::
 
   The entry points you can declare in the `setup.py` file are described
-  in :wiki:`EntryPoints`.
+  in :doc:`entry_points`.
 
 You can check your application is correctly registered by launching the command:
 
   .. code-block:: sh
-  
+
     <NAGARE_HOME>/bin/nagare-admin serve
-    
+
 which list all the applications known by the framework.
 
 4. Create the database
@@ -135,26 +135,26 @@ which list all the applications known by the framework.
 
 .. note::
 
-  The document :wiki:`DatabaseTier` describes how to set and use a relational
+  The document :doc:`database` describes how to set and use a relational
   database with the framework.
-  
+
 If your application uses a database you will need to create the database tables
 prior to launch the application:
 
   .. code-block:: sh
-  
+
     <NAGARE_HOME>/bin/nagare-admin create-db my_app
 
 The options available with the ``create-db`` administrative command are:
 
-  -d, --debug     force the display of the SQL requests 
+  -d, --debug     force the display of the SQL requests
   --drop          drop the tables if they exist, prior to re-create them
   --no-populate   don't call the populate function after the tables creation
 
 The database tables can be removed with the command:
 
   .. code-block:: sh
-  
+
     <NAGARE_HOME>/bin/nagare-admin drop-db my_app
 
 5. Launch your application
@@ -163,7 +163,7 @@ The database tables can be removed with the command:
 The following command launches the application:
 
   .. code-block:: sh
-  
+
     <NAGARE_HOME>/bin/nagare-admin serve my_app
 
 which becomes available at http://localhost:8080/my_app
@@ -171,11 +171,11 @@ which becomes available at http://localhost:8080/my_app
 These options are interesting when you are in development mode:
 
   -d, --debug    display a specialized web error page when an exception occur
-  --reload       automatically reload the application when one of its source file is changed 
+  --reload       automatically reload the application when one of its source file is changed
 
 .. note::
 
-  The :wiki:`NagareAdmin` guide lists the several administrative
+  The :doc:`nagare-admin` guide lists the several administrative
   commands with all their options
 
 6. Distribute your application
@@ -186,9 +186,9 @@ distribution (tarball on Unix, ZIP file on Windows) with the command (into the
 ``my_apps`` directory):
 
   .. code-block:: sh
-  
+
     <NAGARE_HOME>/bin/python setup.py sdist
-    
+
 The source distribution is created into the *dist* directory.
 
 If you want to globally distribute your application, you can
@@ -199,4 +199,3 @@ If you want to globally distribute your application, you can
 You can also create a binary distribution (ie. an *egg*) or a Windows
 installer for example, as explain in `setuptools <http://peak.telecommunity.com/DevCenter/setuptools>`_
 
-.. wikiname: ApplicationCreation

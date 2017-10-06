@@ -4,8 +4,7 @@ Presentation tier
 This document describes how to generate HTML and XML dialects with the service
 offered by the framework.
 
-The document :wiki:`ComponentModel` explains how to associate HTML or XML views
-to the components.
+:doc:`components` explains how to associate HTML or XML views to the components.
 
 Principles
 ----------
@@ -14,8 +13,8 @@ With Nagare, to generate a HTML text, you always build a tree of objects in
 memory, a Document Objects Model (not the DOM version of the W3C), that you
 can serialize in a (X)HTML text.
 
-One of the benefic effect of this serialization is that the generated HTML or
-XHTML is always valid.
+One benefic effect of this serialization is that the generated HTML or XHTML
+is always valid.
 
 The framework offers to you three ways to generate the DOM:
 
@@ -30,7 +29,7 @@ DOM objects creation
 --------------------
 
 A ``Renderer`` is a DOM objects factory. For example, the XHTML renderer
-:apidoc:`namespaces.xhtml#xhtml.Renderer` has an attribute, for
+:class:`nagare.namespaces.xhtml.Renderer` has an attribute, for
 each XHTML tag, that create a DOM object:
 
 .. code-block:: pycon
@@ -46,9 +45,8 @@ DOM objects API
 ElementTree API
 ~~~~~~~~~~~~~~~
 
-A DOM object is an instance of the class ``_Tag`` from
-:apidoc:`namespaces.xml#xml._Tag`. As this class inherits from
-``lxml.etree.ElementBase``, the DOM objects offer an
+A DOM object is an instance of the class :class:`nagare.namespaces.xml._Tag`.
+As this class inherits from ``lxml.etree.ElementBase``, the DOM objects offer an
 `ElementTree API. <http://effbot.org/zone/pythondoc-elementtree-ElementTree.htm#elementtree.ElementTree._ElementInterface-class>`_:
 
 .. code-block:: pycon
@@ -91,7 +89,7 @@ Each element in ``children`` can be a:
     string and added as data to the DOM object
   - list, tuple or generator which each elements are added to the DOM object
   - dictionary which each items are added as attributes of the DOM object
-  - :wiki:`ComponentModel component` ``comp`` wich will be rendered with its
+  - :doc:`component <components>` ``comp`` wich will be rendered with its
     default view (i.e ``comp.render(h)``) and the resulting DOM tree added
     to the DOM object
 
@@ -378,4 +376,3 @@ Once a tree of DOM object is build, it can be serialized in (X)HTML:
     parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
     removed.
 
-.. wikiname: PresentationTier

@@ -5,11 +5,11 @@ HTML documentation
 ------------------
 
 The Nagare documentation is written in
-the `reStrucuturedText <http://docutils.sourceforge.net/rst.html>`_ format.
+the `reStructuredText <http://docutils.sourceforge.net/rst.html>`_ format.
 
-If you want it in HTML, first do a developer installation as described in
-:wiki:`NagareInstallation#developers-framework-installation`, then go to the
-``nagare/core`` directory and enter the command:
+If you want it in HTML, first do a
+`developer installation <framework_installation.html#developers-framework-installation>`__
+, then go to the ``nagare/core`` directory and enter the command:
 
 .. code-block:: sh
 
@@ -21,9 +21,8 @@ API documentation
 -----------------
 
 If you want an HTML extraction of the Nagare classes and API, first do a
-developer installation as described in
-:wiki:`NagareInstallation#developers-framework-installation`, then go to the
-``nagare/core`` directory and enter the command:
+`developer installation <framework_installation.html#developers-framework-installation>`__
+, then go to the ``nagare/core`` directory and enter the command:
 
 .. code-block:: sh
 
@@ -31,8 +30,4 @@ developer installation as described in
 
 The HTML documentation is generated into the ``nagare/core/docs/api`` directory
 (start with the ``index.html`` file).
-
-.. wikiname: DocumentationGeneration
-
-
 

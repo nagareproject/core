@@ -13,9 +13,7 @@ on Linux:
 
     <NAGARE_HOME>/bin/easy_install -U nagare.examples
 
-on Windows:
-
-.. code-block:: cmd
+on Windows::
 
     <NAGARE_HOME>\Scripts\easy_install.exe -U nagare.examples
 
@@ -30,9 +28,7 @@ on Linux:
 
     <STACKLESS_HOME>/bin/easy_install -U 'nagare.examples'
 
-on Windows:
-
-.. code-block:: cmd
+on Windows::
 
     <STACKLESS_HOME>\Scripts\easy_install.exe -U nagare.examples
 
@@ -49,4 +45,3 @@ execute:
     hg update
     <NAGARE_HOME>/bin/easy_install setup.py develop
 
-.. wikiname: DemoUpgrade

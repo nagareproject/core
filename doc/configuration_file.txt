@@ -14,7 +14,7 @@ You can directly give the configuration file to the ``serve`` command, as:
     <NAGARE_HOME>/bin/nagare-admin serve /path/to/the/config.cfg
 
 Or, if the application was registered to the framework
-(as described in :wiki:`EntryPoints`), then you can launch it with:
+(as described in :doc:`entry_points`), then you can launch it with:
 
   .. code-block:: sh
 
@@ -48,7 +48,7 @@ Comments, starting with the ``#`` character can be added to a configuration file
 Name                Mandatory Default value      Description
 =================== ========= ================== ================================================
 path                Yes       *No default value* Reference to the root component factory of the
-                                                 application (see :wiki:`ObjectReferences`)
+                                                 application (see :doc:`object_references`)
 name                Yes       *No default value* ``/name`` will be the URL of the application
 static              No        ``static``         Filesystem path to the static contents of
                               directory          the application. By default, it's the
@@ -73,10 +73,10 @@ activated           No        off                If not activated, the framework
 uri                 Yes       *No default value* URI or connection string to the database,
                                                  as described in http://www.sqlalchemy.org/docs/core/engines.html#supported-databases
 metadata            Yes       *No default value* Reference to the SQLAlchemy metadata object
-                                                 (see :wiki:`ObjectReferences`)
+                                                 (see :doc:`object_references`)
 populate            No        *No default value* Reference to an optional function, called
                                                  after the table creation to populate them
-                                                 with some initial data (see :wiki:`ObjectReferences`)
+                                                 with some initial data (see :doc:`object_references`)
 debug               No        off                Display the generated SQL requests
 =================== ========= ================== ================================================
 
@@ -86,7 +86,7 @@ All other parameters, if present, are passed as keywords to the SQLALchemy
 If an application needs to work with several database, several subsections can
 be embedded into the main ``[database]`` section:
 
-  .. code-block:: txt
+  .. code-block:: ini
 
     [database]
 
@@ -100,4 +100,3 @@ be embedded into the main ``[database]`` section:
     uri = ...
     metadata = ...
 
-.. wikiname: ApplicationConfiguration

@@ -54,4 +54,3 @@ Using Nagare frees the developer from the classic burden of web programming:
   - Transparent Ajax rendering of a component, without any Python or Javascript
     code to add.
 
-.. wikiname: NagareFeatures

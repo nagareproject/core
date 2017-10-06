@@ -21,7 +21,7 @@ Part 2. Modify the default application
 2. Let's start with a pure python class. Replace the whole content of ``tutorial/app.py`` with:
 
   .. code-block:: python
-  
+
      class Counter(object):
 
          def __init__(self):
@@ -50,7 +50,7 @@ For Nagare, a view is just a function that takes a renderer (``h``) as a paramet
 For Nagare, an application is just an object factory (i.e. a callable that returns an object graph), and obviously a class is, so we just have to add the following to our ``app.py`` file:
 
   .. code-block:: python
- 
+
      ...
      # define app
      app = Counter
@@ -81,6 +81,3 @@ As we build a server-side DOM tree, we are protected against code injection. For
 
 This string would be escaped and no javascript will ever be executed.
 
-`Go to part 1 of this tutorial </trac/wiki/NagareTutorial>`_ | `Go to part 3 of this tutorial </trac/wiki/NagareTutorial3>`_
-
-.. wikiname: NagareTutorial2

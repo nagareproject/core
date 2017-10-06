@@ -79,11 +79,9 @@ On Windows:
     `http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.6.4.tar.gz <http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.6.4.tar.gz>`_
     and extract the file ``virtualenv.py`` (you could need an archiver like ``7-zip`` or ``winrar``).
 
-    then launch:
+    then launch::
 
-    .. code-block:: cmd
-
-       <STACKLESS_HOME>\python.exe virtualenv.py <NAGARE_HOME>
+        <STACKLESS_HOME>\python.exe virtualenv.py <NAGARE_HOME>
 
 The final step is to install the framework into this newly created virtual
 environment.
@@ -94,11 +92,9 @@ On Linux:
 
        <NAGARE_HOME>/bin/easy_install 'nagare[full]'
 
-On Windows:
+On Windows::
 
-    .. code-block:: cmd
-
-       <NAGARE_HOME>\Scripts\easy_install.exe nagare[full]
+    <NAGARE_HOME>\Scripts\easy_install.exe nagare[full]
 
 2.2. System-wide installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -116,11 +112,9 @@ Second, install the framework on Linux:
 
      <STACKLESS_HOME>/bin/easy_install 'nagare[full]'
 
-or, on Windows:
+or, on Windows::
 
-  .. code-block:: cmd
-
-     <STACKLESS_HOME>\Scripts\easy_install.exe nagare[full]
+    <STACKLESS_HOME>\Scripts\easy_install.exe nagare[full]
 
 See the following chapter if you don't want to install the framework with all
 its modules.
@@ -192,9 +186,7 @@ To test the installation, launch the adminstrative interface:
 
      <NAGARE_HOME>/bin/nagare-admin serve admin
 
-or, in Windows:
-
-  .. code-block:: cmd
+or, in Windows::
 
      <NAGARE_HOME>\Scripts\nagare-admin.exe serve admin
 
@@ -209,4 +201,3 @@ which must results in the following display:
 Then you can browse at http://127.0.0.1:8080/admin to look at the administrative
 interface.
 
-.. wikiname: NagareInstallation

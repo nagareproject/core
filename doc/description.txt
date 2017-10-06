@@ -16,12 +16,12 @@ of the Java, Python, Php and Ruby worlds:
   - no manual management of the HTTP request / response cycles
   - no global session object
   - no REST by default
-  
+
 When you forget all of that, what do you get ?
 
   You get a powerful framework dedicated to web applications development, in
   opposition to simple content publishing.
- 
+
   You get a truly component based framework where the application is a dynamic
   set of autonomous components, each one following its own independent control
   flow and maintaining its own private state.
@@ -34,10 +34,10 @@ When you forget all of that, what do you get ?
   control flow of the application.
 
   You get a framework with natively integrated Web 2.0 features.
-  
+
   You get a framework where the web applications are developed in the same way
   as the desktop applications.
-  
+
 *Take an open-minded tour to Nagare*
 ------------------------------------
 
@@ -53,5 +53,3 @@ A reference to the control flow of an application, the name of the highest
 creativity state of mind, and, in the "Ki no nagare" principle of martial arts,
 the perfect association of energy and agility.
 
-.. wikiname: NagareDescription
- 

@@ -1,7 +1,7 @@
 Internationalization of applications
 ====================================
 
-Since version 0.4.0, the Nagare framework includes a ``nagare.i18n`` module that can help you
+Since version 0.4.0, the Nagare framework includes a :mod:`nagare.i18n` module that can help you
 internationalize a Web application.
 
 There are many aspects to take into account when internationalizing an application:
@@ -13,7 +13,7 @@ There are many aspects to take into account when internationalizing an applicati
 - displaying the requested pages in the proper language according to the client browser language
   settings or a setting in the application
 
-All these aspects are addressed by the ``nagare.i18n`` module.
+All these aspects are addressed by the :mod:`nagare.i18n` module.
 
 
 Setup an application for internationalization
@@ -25,7 +25,7 @@ First, the Nagare ``i18n`` extras should be installed in your virtual environmen
 
     $ easy_install nagare[i18n]
 
-This command installs ``Babel`` and ``pytz`` which are necessary to use the ``nagare.i18n`` module.
+This command installs ``Babel`` and ``pytz`` which are necessary to use the :mod:`nagare.i18n` module.
 
 However, if you plan to use the internationalization feature of Nagare in your Web application, you'd
 better change the ``setup.py`` file that is generated when you create the application, in order to specify
@@ -42,24 +42,24 @@ that you need the ``i18n`` extra as a requirement:
 Then, Nagare is installed with the ``i18n`` extra when you install your application.
 
 When you create a new application with ``nagare-admin create-app``, Nagare automatically creates a
-``setup.cfg`` file that contains a default configuration for internationalization: 
+``setup.cfg`` file that contains a default configuration for internationalization:
 
 .. code-block:: ini
 
     [extract_messages]
     keywords = _ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
     output_file = data/locale/messages.pot
-    
+
     [init_catalog]
     input_file = data/locale/messages.pot
     output_dir = data/locale
     domain = messages
-    
+
     [update_catalog]
     input_file = data/locale/messages.pot
     output_dir = data/locale
     domain = messages
-    
+
     [compile_catalog]
     directory = data/locale
     domain = messages
@@ -95,28 +95,28 @@ directory is not created by default, so you have to create it before issuing any
 Marking the messages to translate
 ---------------------------------
 
-The ``nagare.i18n`` module provides functions to translate the strings that appear in your code. The most
+The :mod:`nagare.i18n` module provides functions to translate the strings that appear in your code. The most
 useful function is ``nagare.i18n._`` which returns the translation of the given string as a unicode string:
 
-..  code-block:: python
-    :hl_lines: 2, 9
-    
+.. code-block:: python
+    :emphasize-lines: 2, 9
+
     from nagare import presentation
     from nagare.i18n import _
-    
+
     class I18nExample(object):
         pass
-    
+
     @presentation.render_for(I18nExample)
     def render(self, h, *args):
         h << _('This is a translated string') << h.br
         h << 'This string is not translated'
         return h.root
-    
+
     app = I18nExample
 
 
-There are also many more functions that deals with strings in the ``nagare.i18n`` module:
+There are also many more functions that deals with strings in the :mod:`nagare.i18n` module:
 
 =============================================  ================================================================
                 Function                                                   Effect
@@ -145,16 +145,16 @@ useful when you want to use translated strings in module or class constants, whi
 time and consequently don't have access to the current locale which, as you will see later, is scoped to the request.
 Here is how you would define a class constant for use in a view:
 
-..  code-block:: python
-    :hl_lines: 6, 11
-    
+.. code-block:: python
+    :emphasize-lines: 6, 11
+
     from nagare import presentation
     from nagare.i18n import _, _L
-    
+
     class I18nExample(object):
         # the following line is evaluated when the module is loaded, so _ would not work here
         TITLE = _L("Internationalization Example")
-    
+
     @presentation.render_for(I18nExample)
     def render(self, h, *args):
         with h.h1:
@@ -162,14 +162,14 @@ Here is how you would define a class constant for use in a view:
         h << _('This is a translated string') << h.br
         h << 'This string is not translated'
         return h.root
-    
+
     ...
 
 
 Extracting the messages
 -----------------------
 
-``Babel`` automatically takes care of the messages extraction from the sources when you run the 
+``Babel`` automatically takes care of the messages extraction from the sources when you run the
 ``python setup.py extract_messages`` command. Specifically, when it extracts the localizable strings from the sources
 files, it only considers the strings enclosed in specific keywords calls. The list of the supported keywords appear in
 the ``setup.cfg`` file:
@@ -179,7 +179,7 @@ the ``setup.cfg`` file:
     [extract_messages]
     keywords = _ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
 
-All the ``nagare.i18n`` functions that deal with strings appear in this list, so you don't have to change this line 
+All the :mod:`nagare.i18n` functions that deal with strings appear in this list, so you don't have to change this line
 in most cases. However, if you need to add additional translation functions, don't forget to update the keywords
 list in this file.
 
@@ -225,16 +225,16 @@ file that looks like this one:
     "Content-Type: text/plain; charset=utf-8\n"
     "Content-Transfer-Encoding: 8bit\n"
     "Generated-By: Babel 0.9.6\n"
-    
+
     #: nagare/examples/i18n.py:18
     msgid "Internationalization Example"
     msgstr ""
-    
+
     #: nagare/examples/i18n.py:25
     msgid "This is a translated string"
     msgstr ""
 
-All the localizable strings of your application should appear in this file after extraction. Note that the string 
+All the localizable strings of your application should appear in this file after extraction. Note that the string
 ``This string is not translated`` of the previous example was not included because it was not enclosed in a call
 to a translation keyword.
 
@@ -269,7 +269,7 @@ If you change the source files and add new messages to translate, you have to up
 
     $ python setup.py extract_messages
     $ python setup.py update_catalog
-    
+
 Then, fill in the missing translations in the ``.po`` files and compile the catalogs again.
 
 .. code-block:: sh
@@ -280,9 +280,9 @@ Then, fill in the missing translations in the ``.po`` files and compile the cata
 Formatting numbers, dates, times, currencies and dealing with timezones
 -----------------------------------------------------------------------
 
-The ``nagare.i18n`` module also defines functions for formatting numbers, dates, times, currencies and for timezones
+The :mod:`nagare.i18n` module also defines functions for formatting numbers, dates, times, currencies and for timezones
 calculations, according to the locale of the user. We have grouped these functions by category. See the Nagare
-:apidoc:`i18n` API documentation for more information on these functions.
+:mod:`nagare.i18n` API documentation for more information on these functions.
 
 
 Numbers
@@ -356,9 +356,9 @@ Setting the locale of the application
 
 The last step of the internationalization process is to initialize the locale of the application according to a
 *language setting*. There are many ways to implement a language setting:
- 
+
 - use the client browser language settings, i.e. deal with the ``Accept-Language`` headers from the HTTP request
-- use a URL prefix, for example ``/en`` for english and ``/fr`` for french (see :wiki:`RestfulUrl` to learn how
+- use a URL prefix, for example ``/en`` for english and ``/fr`` for french (see :doc:`restful` to learn how
   to set up URLs)
 - use a per-user setting: for example, read the locale setting from a user profile stored in a database
 - use a per-session setting, for example store the language setting as an attribute of a component
@@ -374,7 +374,7 @@ there. Furthermore, since a user may change his language setting between two req
 to the HTTP request by design in Nagare.
 
 The locale can be changed with either the ``WSGIApp.set_locale`` method or the ``WSGIApp.set_default_locale`` method
-(see :apidoc:`wsgi`). The ``WSGIApp.start_request`` method itself use ``WSGIApp.set_locale`` to install the default
+(see :mod:`nagare.wsgi`). The ``WSGIApp.start_request`` method itself use ``WSGIApp.set_locale`` to install the default
 locale, set with ``WSGIApp.set_default_locale``. By default, the default locale is initialized to a locale that does
 not perform any translation, it just returns the original string.
 
@@ -385,25 +385,25 @@ Example 1: using  a negociated browser locale
 As an illustration, let's use a negociated browser locale in the previous example:
 
 .. code-block:: python
-    
+
     from nagare import presentation, component, wsgi, i18n
-    
+
     ...
-    
+
     class I18nExampleApp(wsgi.WSGIApp):
         AVAILABLE_LOCALES = (
             ('en',),  # English
             ('fr',),  # French
         )
-    
+
         def start_request(self, root, request, response):
             # set the default locale to a browser negotiated locale
             self.set_default_locale(i18n.NegotiatedLocale(request, self.AVAILABLE_LOCALES, default_locale=self.AVAILABLE_LOCALES[0]))
-    
+
             # let nagare install the default locale
             super(I18nExampleApp, self).start_request(root, request, response)
-    
-    
+
+
     app = I18nExampleApp(lambda: component.Component(I18nExample()))
 
 We first create an application class that inherit from ``wsgi.WSGIApp`` so that we can override the default
@@ -435,61 +435,61 @@ in the session in order to persist the change for the next requests. Here is the
 
     from nagare import presentation, component, wsgi, i18n
     from nagare.i18n import _, _L
-    
-    
+
+
     class I18nExample(object):
         # the following line is evaluated when the module is loaded, so _ would not work here
         TITLE = _L("Internationalization Example")
-    
+
         AVAILABLE_LOCALES = (
             (i18n.Locale('en'), u'English'),  # English
             (i18n.Locale('fr'), u'Français'),  # French
         )
-    
+
         def __init__(self, locale=AVAILABLE_LOCALES[0][0]):
             self.set_locale(locale)
-    
+
         def set_locale(self, locale):
             # remember the locale to use for the next requests in the session (see I18nExampleApp)
             self.locale = locale
-    
+
             # we should also initialize the locale dirname since it may not have been set yet
             # we use the current locale dirname, which is set by the WSGIApp.set_locale method
             dirname = i18n.get_locale().dirname
             locale.dirname = dirname
-    
+
             # change the locale for the current request so that the rendering is performed with the new locale
             i18n.set_locale(self.locale)
-    
-    
+
+
     @presentation.render_for(I18nExample)
     def render(self, h, comp, *args):
         with h.h1:
             h << self.TITLE
         h << _('This is a translated string') << h.br
         h << 'This string is not translated'
-    
+
         h << h.hr
-    
+
         # language change
         for locale, label in self.AVAILABLE_LOCALES:
             h << h.a(label, title=label).action(lambda locale=locale: self.set_locale(locale))
             h << " "
-    
+
         return h.root
-    
-    
+
+
     class I18nExampleApp(wsgi.WSGIApp):
         def start_request(self, root, request, response):
             # call base implementation
             super(I18nExampleApp, self).start_request(root, request, response)
-    
+
             if root():
                 # reinstall the locale stored in the session
                 locale = root().locale
                 self.set_locale(locale)
-    
-    
+
+
     app = I18nExampleApp(lambda: component.Component(I18nExample()))
 
 
@@ -524,5 +524,3 @@ These two examples explain the basics for setting the locale in a Nagare applica
 store the language setting by other means (see the list at the top-most paragraph of this section) and use a
 combination of these two techniques.
 
-
-.. wikiname: Internationalization

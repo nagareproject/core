@@ -4,4 +4,3 @@ Mailing List
 For help and announcements, you can subscribe to the
 `users group <http://groups.google.com/group/nagare-users>`_.
 
-.. wikiname: MailingLists

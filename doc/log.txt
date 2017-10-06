@@ -14,8 +14,8 @@ configuration is a singleton, which is problematic in a multi-applications setup
 (that is, when the same ``nagare-admin serve`` process serves more than one
 application).
 
-In order to solve these problems, Nagare provides its own ``log`` service
-(see :apidoc:`log`), which is built on top of the `logging`_ module but greatly
+In order to solve these problems, Nagare provides its own :mod:`nagare.log` service
+, which is built on top of the `logging`_ module but greatly
 simplifies its usage and configuration for common use-cases.
 
 
@@ -28,14 +28,14 @@ Using The default logger
 By default, when you serve Web applications with the ``nagare-admin serve``
 utility, Nagare creates a dedicated logger, handler and formatter for each
 application, and activates them: this is the purpose of the
-:apidoc:`log#log.configure` and :apidoc:`log#log.activate` functions.
+:class:`nagare.log.configure` and :class:`nagare.log.activate` functions.
 
 You can use the module level functions of the ``log`` module to write messages
 to the default logger of the *currently running* application, as shown in the
 example below:
 
 .. code-block:: python
-    :hl_lines: 8
+    :emphasize-lines: 8
 
     from nagare import presentation, log
 
@@ -274,4 +274,3 @@ logging configuration will display all the generated SQL queries:
 .. _`logging`: http://docs.python.org/library/logging.html
 .. _`Configuration file format`: http://docs.python.org/library/logging.config.html#configuration-file-format
 
-.. wikiname: LogService

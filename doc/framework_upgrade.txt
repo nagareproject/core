@@ -13,9 +13,7 @@ on Linux:
 
     <NAGARE_HOME>/bin/easy_install -U 'nagare[full]'
 
-on Windows:
-
-.. code-block:: cmd
+on Windows::
 
     <NAGARE_HOME>\Scripts\easy_install.exe -U nagare[full]
 
@@ -30,9 +28,7 @@ on Linux:
 
     <STACKLESS_HOME>/bin/easy_install -U 'nagare[full]'
 
-on Windows:
-
-.. code-block:: cmd
+on Windows::
 
     <STACKLESS_HOME>\Scripts\easy_install.exe -U nagare[full]
 
@@ -49,4 +45,3 @@ execute:
     hg update
     <NAGARE_HOME>/bin/easy_install setup.py develop
 
-.. wikiname: NagareUpgrade

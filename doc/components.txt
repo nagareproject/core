@@ -6,7 +6,7 @@ What is a component?
 --------------------
 
 A component is an object, instance of the ``Component`` class in
-:apidoc:`component#component.Component`.
+:class:`nagare.component.Component`.
 
 A component has one or multiple rendering methods. They are used to generate
 a HTML, XHTML, XML or any other views on it.
@@ -66,7 +66,7 @@ is called with :
   4. the model asked
 
 and the method will generally returns a tree of DOM objects, build by using
-the :wiki:`RendererObjects` API.
+the :doc:`renderer` API.
 
 The following code associates a default view (the ``view_by_default`` method) and
 a view for the *xml* model (the ``xml_view`` method) to the class ``AClass``:
@@ -259,7 +259,7 @@ components, we will now create the logic of the application by combining the log
 of the inner components.
 
 First, the ``ColorChooser``, on a click on a color, now returns the selected
-color. For this purpose, we register a callback (see :wiki:`CallbacksAndForms`)
+color. For this purpose, we register a callback (see :doc:`callbacks_forms`)
 on the link items, that calls the ``answer()`` method of the ``ColorChooser``
 component, with the value to return:
 
@@ -428,7 +428,7 @@ selected color and change the color of the text:
 Tasks
 -----
 
-Nagare also provides a ``Task`` concept in :apidoc:`component#component.Task`. A ``Task`` is
+Nagare also provides a ``Task`` concept in :class:`nagare.component.Task`. A ``Task`` is
 useful when implementing user-interaction logic, such as as a business process workflow or
 game logic. It's a good way to handle a sequence of Web "screens" (that are represented by
 either simple or compound components) appearing under some conditions depending on the choices
@@ -452,7 +452,7 @@ In this example, each step is delegated to other components via some calls to th
 from the ``Task`` component:
 
 .. code-block:: python
-    :hl_lines: 11, 19, 30
+    :emphasize-lines: 11, 19, 30
 
     from nagare import component
 
@@ -473,7 +473,7 @@ from the ``Task`` component:
 
                     # Display the board and get the clicked cell
                     played = comp.call(component.Component(board))
-                    
+
                     # Register the clicked cell
                     board.played(player+1, played)
 
@@ -523,5 +523,3 @@ is activating callbacks that permanently or temporarily modify this graph.
 .. _`nagare.examples`: http://hg.nagare.org/examples/
 .. _`Enlightening paper from Christian Queinnec`: http://pagesperso-systeme.lip6.fr/Christian.Queinnec/PDF/www.pdf
 
-
-.. wikiname: ComponentModel

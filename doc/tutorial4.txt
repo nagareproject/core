@@ -124,8 +124,5 @@ Using this full method call, we can now create and pass an asynchronous renderer
 This way ``counter1`` is rendered asynchronously whereas ``counter2`` is rendered synchronously. When you look at the generated html page you can see that for ``counter1`` links are disabled (attribute ``href`` set to ``#``) and some javascript is added (attribute ```onclick`` added with a call to the ``nagare_getAndEval()`` javascript function).
 
 
-That's all folks, if you'd like to learn more, feel free to join us on `IRC Freenode #nagare <irc://irc.freenode.net/nagare>`_, `Nagare blog </trac/blog>`_ and `Nagare users group <http://groups.google.com/group/nagare-users>`_ .
+That's all folks, if you'd like to learn more, feel free to join us on the `Nagare users group <http://groups.google.com/group/nagare-users>`_ .
 
-`Go to part 3 of this tutorial </trac/wiki/NagareTutorial3>`_
-
-.. wikiname: NagareTutorial4

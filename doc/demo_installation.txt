@@ -10,9 +10,7 @@ To install the demonstration, enter the command:
 
      <NAGARE_HOME>/bin/easy_install nagare.examples
 
-or, in Windows:
-
-  .. code-block:: cmd
+or, in Windows::
 
      <NAGARE_HOME>\Scripts\easy_install.exe nagare.examples
 
@@ -106,4 +104,3 @@ or, for the "portal" application:
 
 and browse to http://127.0.0.1:8080/portal.
 
-.. wikiname: DemoInstallation

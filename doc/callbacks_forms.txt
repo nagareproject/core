@@ -205,7 +205,7 @@ or, with a more compact view method:
 The ``var.Var()`` objects
 -------------------------
 
-The instances of the ``Var`` class in :apidoc:`var#var.Var` are
+The instances of the ``Var`` class in :class:`nagare.var.Var` are
 variable-like objects that provide a "functional" interface:
 
   - calling the object with a value, set the variable value and return the value
@@ -270,7 +270,7 @@ and ``nagare-error-message`` css classes to design the erroneous fields renderin
 The ``editor.Property`` objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The instances of the ``Property`` class in :apidoc:`editor#editor.Property`
+The instances of the ``Property`` class in :class:`nagare.editor.Property`
 are objects:
 
   - with a validation function, set by calling its ``.validate()`` method. A
@@ -343,7 +343,7 @@ are objects:
 The ``validator`` module
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :apidoc:`validator` module defines a ``IntValidator`` and a
+The :mod:`nagare.validator` module defines a ``IntValidator`` and a
 ``StringValidator`` objects to validate the numbers and the strings. They are
 suitable to be used as a validating function of a ``editor.Property`` object:
 
@@ -388,7 +388,7 @@ suitable to be used as a validating function of a ``editor.Property`` object:
 The ``editor.Editor`` objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An instances of the ``Editor`` class in :apidoc:`editor#editor.Editor`
+An instances of the ``Editor`` class in :class:`nagare.editor.Editor`
 is an intermediary between the values received from a form an a target object.
 
 An ``Editor`` object automatically creates ``editor.Property`` objects reflecting
@@ -504,4 +504,3 @@ and check that the validation error messages are displayed and that the
    `Demo1 <http://www.nagare.org/demo/form/1>`_ and
    `Demo2 <http://www.nagare.org/demo/form/2>`_, and read their source.
 
-.. wikiname: CallbacksAndForms

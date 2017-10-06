@@ -3,11 +3,8 @@ Entry points
 
 The entry points are a mecanism to extend the framework.
 
-How the entry points are declared in the :browser:`core/setup.py` file of your project
+How the entry points are declared in the ``setup.py`` file of your project
 is described in the `Setuptools documentation <http://peak.telecommunity.com/DevCenter/setuptools#extensible-applications-and-frameworks>`_.
-
-Look at the value of the ``entry_points`` keywork of ``the setup()`` call into
-the :browser:`core/setup.py` of the framework to see all the defined default entry points.
 
 The framework knows about the following entry points:
 
@@ -19,30 +16,29 @@ The framework knows about the following entry points:
     be automatically wrapped into a default ``WSGIApp`` object.
 
   - ``nagare.publishers``: these entry points defined the publishers that can be
-    used in :wiki:`PublisherConfiguration#publisher-section`.
+    selected with the ``type`` parameter of the
+    `publisher configuration file <publisher_file.html#publisher-section>`__
 
-    The framework publishers are defined into the :browser:`core/nagare/publishers`
-    directory. The class ``Publisher`` in :apidoc:`publishers.common#common.Publisher`
-    is the base class of all the publishers.
+    The framework publishers are defined into the :mod:`nagare.publishers`
+    package. The class :class:`nagare.publishers.common.Publisher` is the base class of
+    all the publishers.
 
-  - ``nagare.sessions``: there entry points defined the sessions manager that
-    can be used in :wiki:`PublisherConfiguration#sessions-section`.
+  - ``nagare.sessions``: there entry points defined the sessions manager that can be
+    selected with the ``type`` paramater of the
+    `publisher configuration file <publisher_file.html#sessions-section>`__.
 
-    The framework sessions managers are defined into the :browser:`core/nagare/sessions`
-    directory. The class ``Sessions`` in :apidoc:`sessions.common#common.Sessions`
+    The framework sessions managers are defined into the :mod:`nagare.sessions`
+    package. The class :class:`nagare.sessions.common.Sessions`
     is the base class of all the sessions managers.
 
   -  ``nagare.commands``: these entry points defined new administrative commands
-     (launched with ``nagare-admin``)
+     (launched with :doc:`nagare-admin`)
 
      All the build-in administrative commands of the framework are defined into
-     the :browser:`core/nagare/admin` directory. The class ``Command`` in
-     :apidoc:`admin.util#util.Command` is the interface an administrative command
-     must respect.
+     the :mod:`nagare.admin` package. The class :class:`nagare.admin.command.Command`
+     is the interface an administrative command must respect.
 
   - ``nagare.admin``: these entry points defined components that will be rendered
     into the "Nagare Administration interface" page (launched with ``nagare-admin serve admin``).
-    See the :browser:`core/nagare/admin/interface/info.py` and
-    :browser:`core/nagare/admin/interface/applications.py` files.
+    See the ``admin/interface/info.py`` and ``admin/interface/applications.py`` files.
 
-.. wikiname: EntryPoints

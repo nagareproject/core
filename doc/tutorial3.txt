@@ -20,7 +20,7 @@ Part 3. Add actions
 Change the default view of your ``Counter`` class to add html links (``a`` tags):
 
   .. code-block:: python
-  
+
      ...
      @presentation.render_for(Counter)
      def render(counter, h, *args):
@@ -39,7 +39,7 @@ Here, the "lshift" ``<<`` operator is used to append nodes to the renderer. Then
 As active nodes, ``a`` nodes have a special ``action()`` method which is used to bind action to the node. An action can be any callable as, in this case, a bound method:
 
   .. code-block:: python
-  
+
      ...
      @presentation.render_for(Counter)
      def render(counter, h, *args):
@@ -74,7 +74,7 @@ As you can see the URL are non-significative by default.
 
 With a MVC framework you must always map an URL to an action, even if its result is not a resource (in REST terminology), like the third step of a wizard or a contextual shopping basket.
 
-With Nagare you DON'T HAVE to use significative URL but you totally CAN if you NEED it (see :wiki:`RestfulUrl`). Also, non-significative URL with randomized sessions and actions ids improve security.
+With Nagare you DON'T HAVE to use significative URL but you totally CAN if you NEED it (see :doc:`restful`). Also, non-significative URL with randomized sessions and actions ids improve security.
 
 4. Back and Fork
 
@@ -83,9 +83,6 @@ What do you expect when doing ``++`` now?
 11?
 7?
 
-Now open a new tab on ``--`` link, you get one tab with a value of 7 and one tab with a value of 6. 
+Now open a new tab on ``--`` link, you get one tab with a value of 7 and one tab with a value of 6.
 Play with the 2 counters, that's right, you've got 2 different counters!
 
-`Go to part 2 of this tutorial </trac/wiki/NagareTutorial2>`_ | `Go to part 4 of this tutorial </trac/wiki/NagareTutorial4>`_
-
-.. wikiname: NagareTutorial3

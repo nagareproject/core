@@ -3,7 +3,7 @@ QuickStart
 
 This document describes the standard installation of the Nagare framework
 on Linux and how to start your first application. To install it on Windows,
-read :wiki:`NagareInstallation`.
+read :doc:`framework_installation`.
 
 1. Stackless Python installation
 --------------------------------
@@ -85,4 +85,3 @@ Congratulations your first application is available at http://localhost:8080/my_
 The source code of your application is in ``my_first_app/my_first_app/app.py``,
 ready to be modified !
 
-.. wikiname: QuickStart

@@ -4,9 +4,9 @@ The Renderer objects
 Creating a renderer
 -------------------
 
-As described in :wiki:`ComponentModel`, the views of a component receive
+As described in :doc:`components`, the views of a component receives
 a renderer. A renderer is a DOM objects factory that the developer uses to
-build the DOM tree of the view (see :wiki:`PresentationTier`):
+build the DOM tree of the :doc:`view <presentation>`:
 
   .. code-block:: python
 
@@ -21,8 +21,7 @@ build the DOM tree of the view (see :wiki:`PresentationTier`):
          return h.div(h.h1('Hello world !'))
 
 By default, each view receives a new XHTML renderer
-(instance of the ``Renderer`` class of
-:apidoc:`namespaces.xhtml#xhtml.Renderer`) suitable to build a
+(instance of :class:`nagare.namespaces.xhtml.Renderer`) suitable to build a
 synchronous (X)HTML DOM tree.
 
 A single view can also use a different renderer, for example to generate
@@ -69,13 +68,13 @@ or to generate an asynchronous view of a component:
 Now, if all your views need to generate XML (or use any other renderer), it would be
 cumbersome to create a renderer in each view. Instead, you can tell Nagare to use
 another default renderer by setting the ``renderer_factory`` attribute of the
-``WSGIApp`` (see :wiki:`WSGIApp`), as shown in the example below:
+:doc:`WSGIApp <wsgiapp>`, as shown in the example below:
 
 .. code-block:: python
 
     from nagare import wsgi
     from nagare.namespaces import xml
-    
+
     class WSGIApp(wsgi.WSGIApp):
         # use the XML renderer by default
         renderer_factory = xml.Renderer
@@ -90,8 +89,7 @@ Default renderers
 XHTML renderer
 ~~~~~~~~~~~~~~
 
-A XHTML renderer is an instance of the ``Renderer`` class of
-:apidoc:`namespaces.xhtml#xhtml.Renderer`.
+A XHTML renderer is an instance of :class:`nagare.namespaces.xhtml.Renderer`.
 
 A XHTML renderer is a factory for all the possible XHTML tags. It also has:
 
@@ -117,8 +115,7 @@ Head renderer
 ~~~~~~~~~~~~~
 
 The ``head`` attribute of a XHTML renderer is a Head renderer, an instance
-of the class ``HeadRenderer`` of
-:apidoc:`namespaces.xhtml#xhtml.HeadRenderer`.
+of :class:`nagare.namespaces.xhtml.HeadRenderer`.
 
 A head renderer is a factory for all the XHTML tags that can be embedded into
 the ``<head>`` section: ``base``, ``head``, ``link``, ``meta``, ``title``,
@@ -153,8 +150,7 @@ A head renderer has also the following method:
            return h.div(h.h1('Hello world !'), class_='main')
 
   - ``css_url(self, url)`` -- add a css url. If the url is relative, it's
-    relative to the ``static`` directory of the application
-    (see :wiki:`ApplicationConfiguration`)
+    relative to the ``static`` directory of the :doc:`application <configuration_file>`.
 
     .. code-block:: python
 
@@ -178,8 +174,8 @@ A head renderer has also the following method:
            return h.div(h.h1('Hello world !'), class_='main')
 
   - ``javascript_url(self, url)`` -- add a javascript url. If the url is
-    relative, it's relative to the ``static`` directory of the application
-    (see :wiki:`ApplicationConfiguration`)
+    relative, it's relative to the ``static`` directory of the
+    :doc:`application <configuration_file>`
 
     .. code-block:: python
 
@@ -197,11 +193,10 @@ Head renderer.
 XHTML5 renderer
 ~~~~~~~~~~~~~~~
 
-A XHTML5 renderer is an instance of the ``Renderer`` class of
-:apidoc:`namespaces.xhtml5#xhtml5.Renderer`.
+A XHTML5 renderer is an instance of :class:`nagare.namespaces.xhtml5.Renderer`.
 
 A XHTML5 renderer is a factory for all the possible HTML5 or XHTML5 tags from
-the new `HTML5 specification`_.
+the `HTML5 specification`_.
 
 Since it's extremely likely that you want to use this renderer in all the views
 of your application instead of the default (X)HTML renderer, you can install it
@@ -211,7 +206,7 @@ like this:
 
     from nagare import wsgi
     from nagare.namespaces import xhtml5
-    
+
     class WSGIApp(wsgi.WSGIApp):
         # use the (X)HTML5 renderer by default
         renderer_factory = xhtml5.Renderer
@@ -228,8 +223,7 @@ and ``<canvas>`` tags and more structural markup such as ``<section>``, ``<artic
 XML renderer
 ~~~~~~~~~~~~
 
-A XML renderer is an instance of the ``Renderer`` class of
-:apidoc:`namespaces.xml#xml.Renderer`.
+A XML renderer is an instance of :class:`nagare.namespaces.xml.Renderer`.
 
 It's a simple renderer which accepts any tag creation:
 
@@ -246,15 +240,15 @@ It's a simple renderer which accepts any tag creation:
 XSL renderer
 ~~~~~~~~~~~~
 
-A `XSL <http://www.w3.org/TR/xslt>`_ renderer is an instance of the ``Renderer``
-class of :apidoc:`namespaces.xsl#xsl.Renderer` and has a factory for
+A `XSL <http://www.w3.org/TR/xslt>`_ renderer is an instance of
+:class:`nagare.namespaces.xsl.Renderer` and has a factory for
 all the possible XSL tags.
 
 ESI renderer
 ~~~~~~~~~~~~
 
-A `ESI <http://www.w3.org/TR/esi-lang>`_ renderer is an instance of the
-``Renderer`` class of :apidoc:`namespaces.esi#esi.Renderer` and has
+A `ESI <http://www.w3.org/TR/esi-lang>`_ renderer is an instance of
+:class:`nagare.namespaces.esi.Renderer` and has
 a factory for all the possible ESI tags :  ``attempt``, ``choose``, ``comment``,
 ``include``, ``inline``, ``otherwise``, ``remove``, ``try``, ``vars``, ``when``.
 
@@ -321,4 +315,3 @@ a DOM tree:
      </body>
    </html>
 
-.. wikiname: RendererObjects

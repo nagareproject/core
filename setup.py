@@ -32,7 +32,7 @@ if sys.version_info < (2, 5, 2):
 
 # -----------------------------------------------------------------------------
 
-f = open(os.path.join(os.path.dirname(__file__), 'docs', 'features.txt'))
+f = open(os.path.join(os.path.dirname(__file__), 'doc', 'features.txt'))
 long_description = f.read()
 f.close()
 

@@ -58,7 +58,7 @@ The publisher configuration
 
 In order to serve a Nagare application through FastCGI, we must first tell the ``nagare-admin serve`` utility
 that we don't want to use the standalone server but FastCGI instead. This is done by creating a publisher
-configuration file (see :wiki:`PublisherConfiguration`) and passing it to the ``nagare-admin serve`` command
+configuration file (see :doc:`publisher_file`) and passing it to the ``nagare-admin serve`` command
 with the ``-c`` option.
 
 Here is a typical publisher configuration file to serve an application through FastCGI:
@@ -373,6 +373,4 @@ wrong thanks to the ``autorestart`` option.
 .. _`mod_fastcgi`: http://www.fastcgi.com/mod_fastcgi/docs/mod_fastcgi.html
 .. _`Nginx's HttpFastcgiModule`: http://wiki.nginx.org/HttpFastcgiModule
 .. _`Lighttpd's mod_fastcgi`: http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ModFastCGI
-
-.. wikiname: ApplicationDeployment
 

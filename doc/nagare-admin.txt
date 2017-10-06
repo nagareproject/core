@@ -33,7 +33,7 @@ And you can get an help about a specific command by entering :
 .. code-block:: sh
 
    <NAGARE_HOME>/bin/nagare-admin <command> --help
-   
+
 Full commands reference
 -----------------------
 
@@ -67,7 +67,7 @@ of a skeleton application:
 
    <NAGARE_HOME>/bin/nagare-admin create-app <application_name>
 
-See :wiki:`ApplicationCreation`
+See :doc:`application_creation`
 
 create-db
 ~~~~~~~~~
@@ -79,10 +79,10 @@ entities description:
 
    <NAGARE_HOME>/bin/nagare-admin create-db <application>
 
-The ``metadata`` parameter of the ``[database]`` section of your application
-:wiki:`ApplicationConfiguration` must be an :wiki:`ObjectReferences` to an
+The ``metadata`` parameter of the ``[database]`` section of
+:doc:`configuration_file` must be an :doc:`object_references` to an
 `SQLAlchemy metadata object <http://www.sqlalchemy.org/docs/04/metadata.html>`_.
-The usage of the metadata object is described in :wiki:`DatabaseTier`. 
+The usage of the metadata object is described in :doc:`database`.
 
 The available options are:
 
@@ -125,11 +125,11 @@ The ``drop-db`` command deletes the database tables of the application:
 .. code-block:: sh
 
    <NAGARE_HOME>/bin/nagare-admin drop-db
-  
-The ``metadata`` parameter of the ``[database]`` section of your application
-:wiki:`ApplicationConfiguration` must be an :wiki:`ObjectReferences` to an
+
+The ``metadata`` parameter of the ``[database]`` section of
+:doc:`configuration_file` must be an :doc:`object_references` to an
 `SQLAlchemy metadata object <http://www.sqlalchemy.org/docs/04/metadata.html>`_.
-The usage of the metadata object is described in :wiki:`DatabaseTier`. 
+The usage of the metadata object is described in :doc:`database`.
 
 The available options are:
 
@@ -155,7 +155,7 @@ The ``serve`` command launches one or several applications:
    <NAGARE_HOME>/bin/nagare-admin serve <application> ...
 
 The *<application>* argument can be the name of a registered application or
-an application configuration file (see :wiki:`ApplicationConfiguration`).
+an :doc:`application configuration file <configuration_file>`.
 
 Without any parameters, the command displays the list of all the registered
 applications.
@@ -167,15 +167,15 @@ The available options are:
                     set this parameter to the internet address of your external
                     interface or to '0.0.0.0' to listen to on all the interfaces
                     of your system. This option overwrites the ``host`` parameter
-                    of the :wiki:`PublisherConfiguration` 
+                    of the :doc:`publisher_file`
   -p, --port        port where to listen to the requests. This option overwrites
-                    the ``port`` parameter of the :wiki:`PublisherConfiguration`
-  -c, --conf        path to the :wiki:`PublisherConfiguration`. If not given, the
+                    the ``port`` parameter of the :doc:`publisher_file`
+  -c, --conf        path to the :doc:`publisher_file`. If not given, the
                     standalone Python threaded HTTP server is used.
   -d, --debug       display the web debug page when an exception occurs. This
-                    option overwrites the ``debug`` option of the
-                    :wiki:`ApplicationConfiguration`.
-                    the ``nagare[debug]`` extra must be installed.
+                    option overwrites the ``debug`` option of
+                    :doc:`configuration_file`.
+                    The ``nagare[debug]`` extra must be installed.
   --reload          This option activates the reloader process which automatically
                     detect source changes and re-launch the application.
 
@@ -197,7 +197,7 @@ The *path_to_module* parameter can be a filesystem path as:
 .. code-block:: sh
 
    <NAGARE_HOME>/bin/nagare-admin serve-module /tmp/nagare/examples/counter.py:Counter counter
-   
+
 or a module name as:
 
 .. code-block:: sh
@@ -244,4 +244,3 @@ The available options are:
                     available
   -d, --debug       display the generated SQL requests
 
-.. wikiname: NagareAdmin

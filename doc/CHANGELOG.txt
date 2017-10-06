@@ -18,7 +18,7 @@ New features
 
   - Mercurial migration (http://hg.nagare.org and http://bitbucket.org/nagare mirror)
   - new site, examples and documentation design
-  - tutorial (http://www.nagare.org/trac/wiki/NagareTutorial)
+  - tutorial
   - i18n service (messages catalogs, HTTP language negotiation, timezones, dates, currencies, numbers ...)
   - multiprocess / thread scopes differences handled by the new ``nagare.local`` service
   - HTML5 renderer (``nagare.namespaces.xhtml5.Renderer()``)
@@ -135,9 +135,9 @@ New features
   - LRU management of the sessions and continuations
   - ``nagare-admin create-rules`` administrative command added.
     Generation of the Apache / lighttpd / ngnix rewrite rules to serve the statics
-    contents. See :wiki:`NagareAdmin`
+    contents. See :doc:`nagare-admin`
   - ``nagare-admin batch`` administrative command added. To execute Python
-    statements. See :wiki:`NagareAdmin`
+    statements. See :doc:`nagare-admin`
   - Easy WSGI pipe creation
   - An application can now be registered under several urls
   - The automatic reloader can be configured with a list of files to watch
@@ -153,7 +153,7 @@ Changes
 
   - Complete refactoring of the AJAX communication. The "wire" format is now Javascript.
   - ``component.Component.init()`` and ``presentation.init_for()`` API changes.
-    See :wiki:`RestfulUrl`
+    See :doc:`restful`
 
 Bugs fixed
 ~~~~~~~~~~
@@ -169,4 +169,3 @@ Bugs fixed
 
 Initial release
 
-.. wikiname: NagareChangelog
