@@ -291,7 +291,7 @@ class DummyTranslation(object):
 class Locale(CoreLocale):
     def __init__(
         self,
-        language, territory=None, script=None, variant=None,
+        language='en', territory=None, script=None, variant=None,
         dirname=None, domain=None,
         timezone=None, default_timezone=None
     ):
