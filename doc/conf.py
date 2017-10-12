@@ -19,7 +19,6 @@
 #import os
 #import sys
 #sys.path.insert(0, os.path.abspath('.'))
-#import sphinx_rtd_theme
 
 
 # -- General configuration ------------------------------------------------
@@ -72,7 +71,7 @@ language = None
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+#pygments_style = 'trac'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
@@ -83,15 +82,22 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'nature'
-#html_theme = 'sphinx_rtd_theme'
-#html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'sphinx_rtd_theme'
+html_style = 'theme.css'
+
+html_favicon = '_static/favicon.ico'
+html_logo = '_static/logo.png'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
-# html_theme_options = {}
+html_theme_options = dict(
+    logo_only=True,
+    collapse_navigation=True,
+    prev_next_buttons_location='bottom',
+    display_version=False,
+    sticky_navigation=False
+)
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

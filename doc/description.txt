@@ -1,55 +1,31 @@
-Description
-===========
-
-**Nagare** is an Open-Source framework, released under the BSD license,
-dedicated to rich web applications development in Python.
-
 *And Now For Something Completely Different*
---------------------------------------------
+============================================
 
-**Nagare** doesn't follow the statu quo established by the classic frameworks
-of the Java, Python, Php and Ruby worlds:
+.. container:: description-left
 
-  - no templating language
-  - no explicit URL routing / mapping
-  - no controllers proliferation
-  - no manual management of the HTTP request / response cycles
-  - no global session object
-  - no REST by default
+    .. image:: img/banner.png
 
-When you forget all of that, what do you get ?
+.. container:: description-right
 
-  You get a powerful framework dedicated to web applications development, in
-  opposition to simple content publishing.
+    .. include:: ../README.rst
+       :start-line: 3
 
-  You get a truly component based framework where the application is a dynamic
-  set of autonomous components, each one following its own independent control
-  flow and maintaining its own private state.
 
-  You get a framework where every web page is the composition of views from
-  several components.
+    .. raw:: html
 
-  You get a framework where the HTTP connectionless request / response cycle,
-  the refresh, back and fork actions of the browser, don't break the normal
-  control flow of the application.
+       <h2><i>Take an open-minded tour to Nagare</i></h2>
 
-  You get a framework with natively integrated Web 2.0 features.
+    Try it ! Play with it ! Adopt it !
 
-  You get a framework where the web applications are developed in the same way
-  as the desktop applications.
+    And never look back.
 
-*Take an open-minded tour to Nagare*
-------------------------------------
+    .. raw:: html
 
-Try it ! Play with it ! Adopt it !
+       <hr>
 
-And never look back.
+    **Nagare** is the japanese word for "flow" or "smooth transition".
 
---------
-
-**Nagare** is the japanese word for "flow" or "smooth transition".
-
-A reference to the control flow of an application, the name of the highest
-creativity state of mind, and, in the "Ki no nagare" principle of martial arts,
-the perfect association of energy and agility.
+    A reference to the control flow of an application, the name of the highest
+    creativity state of mind, and, in the "Ki no nagare" principle of martial arts,
+    the perfect association of energy and agility.
 

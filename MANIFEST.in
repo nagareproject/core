@@ -1,3 +1,4 @@
 graft conf
 graft static
-graft docs
+graft doc
+

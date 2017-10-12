@@ -238,7 +238,7 @@ Launching the application with:
 
 and browsing to http://localhost:8080/color, gives you:
 
-.. class:: htmlscreen
+.. cssclass:: htmlscreen
 
     .. raw:: html
 
@@ -364,7 +364,7 @@ So now a little menu of two items is displayed. Clicking on the items displays
 the ``color_chooser`` or the ``text`` object. And, clicking on a color in the
 ``color_chooser`` changes again the color of the ``text`` object:
 
-.. class:: htmlscreen
+.. cssclass:: htmlscreen
 
     .. raw:: html
 

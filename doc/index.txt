@@ -10,7 +10,7 @@ Nagare documentation
    :maxdepth: 1
    :caption: About
 
-   description
+   Description<description>
    features
    License<LICENSE>
    Changelog<CHANGELOG>

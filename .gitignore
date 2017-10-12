@@ -16,3 +16,6 @@ docs/*/*.html
 .git
 nbproject
 build
+.cache
+.idea
+doc/_build

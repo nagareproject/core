@@ -51,9 +51,9 @@ setup(
     Installation
     ============
 
-    For a standard installation, read the ``docs/quickstart.txt`` document.
+    For a standard installation, read the ``doc/quickstart.txt`` document.
 
-    Read ``docs/framework_installation.txt`` to install the
+    Read ``doc/framework_installation.txt`` to install the
     `latest <http://www.nagare.org/snapshots/nagare-latest#egg=nagare-dev>`_
     development version from the `Mercurial repository <http://hg.nagare.org/core>`_
     or to create a Nagare developer installation.
@@ -79,23 +79,19 @@ setup(
     extras_require={
         'debug': ('WebError',),
         'database': ('SQLAlchemy', 'Elixir'),
-        'doc': ('Pygments==1.1', 'docutils', 'RstDoc'),
+        'doc': ('sphinx', 'sphinx_rtd_theme<0.3'),
         'test': ('nose',),
         'i18n': ('Babel', 'pytz'),
         'full': (
             'WebError',
             'SQLAlchemy', 'Elixir',
-            'Pygments==1.1', 'docutils', 'RstDoc',
+            'sphinx', 'sphinx_rtd_theme<0.3',
             'nose',
             'Babel', 'pytz'
         ),
     },
     test_suite='nose.collector',
     entry_points='''
-        [distutils.commands]
-        generate_api = nagare.doc.setuplib:GenerateAPI [doc]
-        generate_html = nagare.doc.setuplib:GenerateHTML [doc]
-
         [console_scripts]
         nagare-admin = nagare.admin.command:run
 
