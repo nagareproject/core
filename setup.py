@@ -78,13 +78,13 @@ setup(
     ]},
     extras_require={
         'debug': ('WebError',),
-        'database': ('SQLAlchemy', 'Elixir'),
+        'database': ('SQLAlchemy>0.5.8', 'Elixir'),
         'doc': ('sphinx', 'sphinx_rtd_theme<0.3'),
         'test': ('nose',),
         'i18n': ('Babel', 'pytz'),
         'full': (
             'WebError',
-            'SQLAlchemy', 'Elixir',
+            'SQLAlchemy>0.5.8', 'Elixir',
             'sphinx', 'sphinx_rtd_theme<0.3',
             'nose',
             'Babel', 'pytz'

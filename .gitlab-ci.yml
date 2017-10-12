@@ -1,0 +1,39 @@
+# --
+# Copyright (c) 2008-2017 Net-ng.
+# All rights reserved.
+#
+# This software is licensed under the BSD License, as described in
+# the file LICENSE.txt, which you should have received as part of
+# this distribution.
+# --
+
+variables:
+    CI_IMAGE: docker-registry.net-ng.com/nagare/stackless:2.7.14
+
+tests:
+    image: $CI_IMAGE
+    script:
+        - /opt/stackless/bin/python setup.py develop
+        - /opt/stackless/bin/easy_install 'nagare[database,i18n,test]'
+        - /opt/stackless/bin/nosetests
+
+pages:
+    image: $CI_IMAGE
+    stage: deploy
+    script:
+        - /opt/stackless/bin/python setup.py develop
+        - /opt/stackless/bin/easy_install 'nagare[doc]'
+        - /opt/stackless/bin/sphinx-apidoc -s txt -T -o doc/source nagare
+        - /opt/stackless/bin/sphinx-build -b html doc public
+    artifacts:
+        paths:
+            - public
+    only:
+        - master
+
+docker:
+    script:
+        - docker build -t $CI_IMAGE docker
+        - docker push $CI_IMAGE
+    when: manual
+
