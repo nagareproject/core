@@ -81,13 +81,13 @@ setup(
         'database': ('SQLAlchemy>0.5.8', 'Elixir'),
         'doc': ('sphinx', 'sphinx_rtd_theme<0.3'),
         'test': ('nose',),
-        'i18n': ('Babel', 'pytz'),
+        'i18n': ('Babel>=2.5.0', 'pytz'),
         'full': (
             'WebError',
             'SQLAlchemy>0.5.8', 'Elixir',
             'sphinx', 'sphinx_rtd_theme<0.3',
             'nose',
-            'Babel', 'pytz'
+            'Babel>=2.5.0', 'pytz'
         ),
     },
     test_suite='nose.collector',

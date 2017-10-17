@@ -170,8 +170,8 @@ class WSGIApp(object):
         In:
           - ``locale`` -- the locale
         """
-        if not locale.has_translation_directory(None):
-            locale.add_translation_directory(os.path.join(self.data_path, 'locale'), None)
+        if not locale.has_translation_directory():
+            locale.add_translation_directory(os.path.join(self.data_path, 'locale'))
 
         i18n.set_locale(locale)
 

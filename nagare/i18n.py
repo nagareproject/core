@@ -90,6 +90,7 @@ except ImportError:
                 log.warning('i18n extra not installed')
 
             self.language = None
+            self.zone_formats = {'region': '%s'}
 
     def LazyProxy(f, *args, **kw):
         return f(*args, **kw)
@@ -343,7 +344,7 @@ class Locale(CoreLocale):
 
         self.zone_formats['region'] = '%s'
 
-    def add_translation_directory(self, dirname=None, domain=None):
+    def add_translation_directory(self, dirname, domain=None):
         """Associate a directory to a translation domain
 
         In:
@@ -352,7 +353,7 @@ class Locale(CoreLocale):
         """
         self.translation_directories[domain] = dirname
 
-    def has_translation_directory(self, domain):
+    def has_translation_directory(self, domain=None):
         """Test if a domain has an associated directory
 
         In:
@@ -362,6 +363,14 @@ class Locale(CoreLocale):
           - bool
         """
         return domain in self.translation_directories
+
+    def get_translation_directory(self, domain=None):
+        """Return the directory associated to the domain
+
+        In:
+          - ``domain`` -- the translation domain
+        """
+        return self.translation_directories.get(domain)
 
     def _get_translation(self, domain=None):
         """Load the translation object, if not already loaded
@@ -376,7 +385,7 @@ class Locale(CoreLocale):
             return DummyTranslation()
 
         domain = domain or self.domain
-        dirname = self.translation_directories.get(domain) or self.translation_directories.get(None)
+        dirname = self.get_translation_directory(domain) or self.get_translation_directory(None)
         args = (dirname, self.language, domain)
 
         translation = _translations_cache.get(args)
