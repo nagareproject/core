@@ -125,8 +125,6 @@ finally retrieved from the attribute ``root`` of the renderer:
 
 .. code-block:: python
 
-   >>> from __future__ import with_statement
-
    >>> from nagare.namespaces import xhtml
    >>> h = xhtml.Renderer()
 
@@ -141,17 +139,12 @@ finally retrieved from the attribute ``root`` of the renderer:
 
 .. note::
 
-  Dont't forget the line ``from __future__ import with_statement`` at the
-  beginning of the file to activate the ``with`` statement in Python 2.5.
-
   In a component view, don't forget to return the tree with ``h.root``
 
 Remember that the different ways to build a DOM tree can be freely mixed,
 so the example above can be rewrote as:
 
 .. code-block:: python
-
-   >>> from __future__ import with_statement
 
    >>> from nagare.namespaces import xhtml
    >>> h = xhtml.Renderer()

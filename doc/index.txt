@@ -49,6 +49,8 @@ Nagare documentation
    Callbacks and forms<callbacks_forms>
    Renderers<renderer>
    Significative URLs<restful>
+   WSGI Application<wsgiapp>
+   Internationalization and localization<i18n>
    Log service<log>
    Object references<object_references>
    Entry points<entry_points>

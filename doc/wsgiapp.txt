@@ -85,10 +85,10 @@ instead of creating a new state for each request as in synchronous mode.
 
 To sum up, there are 4 important steps when handling a request:
 
-  1. initialize the components from the session or from the URL (if a new session begins)
-  2. update the components tree by processing the action callbacks
-  3. render the components tree
-  4. save the new state in the session
+1. initialize the components from the session or from the URL (if a new session begins)
+2. update the components tree by processing the action callbacks
+3. render the components tree
+4. save the new state in the session
 
 That's basically what the ``WSGIApp.__call__`` method does. However, note that there are many hooks called in
 this method that can be overridden to customize the application behavior. That's what we're going to review now.
@@ -205,9 +205,8 @@ common use-cases in Nagare applications.
 Reading a specific configuration section to initialize a service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Imagine that you want to send emails to the visitors of your next Web application. You need to connect to
-a SMTP server but, for obvious reasons, you want to be able to configure the host and the port of the SMTP
-server your Web application will connect to.
+Imagine that you want to send emails to the visitors of your next Web application. So you need
+to be able to configure the host and the port of the SMTP server your Web application will connect to.
 
 In the application configuration file, we can add a specific section that provides the configuration
 information for the mail sender service.
@@ -236,14 +235,14 @@ In order to read this configuration section, we need to override the ``WSGIApp.s
         }
 
         def set_config(self, config_filename, conf, error):
-            # call the base implementation
+            # Call the base implementation
             super(MyApp, self).set_config(config_filename, conf, error)
 
-            # read the configuration values
+            # Parse and convert the SMTP parameters
             conf = configobj.ConfigObj(conf, configspec=configobj.ConfigObj(self.APPLICATION_SPEC))
             config.validate(config_filename, conf, error)
 
-            # create the mail sender service instance
+            # Create the mail sender service instance
             mail_host = conf['mail']['host']
             mail_port = conf['mail']['port']
             self.mail_sender = MailSender(mail_host, mail_port)
@@ -256,6 +255,7 @@ to:
 
 1. validate the correctness of the configuration file
 2. provide "smart" default values for the missing configuration keys
+3. convert the keys to the proper type
 
 Now that the mail sender service is created, we must pass it to the Nagare components that need it.
 The configured mail sender instance can be passed to the root component by overriding the
@@ -277,7 +277,7 @@ Then the root component can use the mail sender instance or pass it to its child
     class Root(object):
         def __init__(self, mail_sender)
             self.mail_sender = mail_sender
-            # do something useful with the mail_sender:
+            # Do something useful with the mail_sender:
             # use it in an action callback or pass it to a children component
 
     def root_factory(mail_sender):
@@ -330,42 +330,13 @@ application must be registered to the root URL. This can be done by overriding t
 
     class MyApp(wsgi.WSGIApp):
         def set_publisher(self, publisher):
-            # call the base implementation
+            # Call the base implementation
             super(EurekaBase, self).set_publisher(publisher)
 
-            # register the application in the root URL
-            publisher.register_application(self.application_path, "", self, self)
+            # Register the application in the root URL
+            publisher.register_application(self.application_path, '', self, self)
 
 Note that the static contents of the application are still be served in ``/static/myapp``.
-
-
-Building absolute URLs in components
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Imagine that you want to send an email to a user containing a link to your Web application, maybe a
-welcome email. In order to do that, you need to create absolute URLs pointing to the application, and
-you need to know the base URL of the application to do that. You may use a specific key in the
-configuration file to store the server host URL. An alternative way would be to use the URL of the host
-accessed by the request being processed. You can access the request data and pass the host URL to the
-root component in the ``WSGIApp.start_request`` method, as show in the following example:
-
-.. code-block:: python
-
-    import urlparse
-
-    class Root(object):
-        host_url = None
-
-        def absolute_url(self, url)
-            return urlparse.urljoin(self.host_url, url)
-
-
-.. code-block:: python
-
-    class MyApp(wsgi.WSGIApp):
-        def start_request(self, root, request, response):
-            # Update the host_url attribute of the Root instance
-            root().host_url = request.host_url
 
 
 Logging unhandled exceptions
@@ -380,10 +351,10 @@ the ``WSGIApp.on_exception`` method, as show in the example below:
 
     class MyApp(wsgi.WSGIApp):
         def on_exception(self, request, response):
-            # log the current exception (i.e. sys.exc_info())
+            # Log the current exception (i.e. sys.exc_info())
             log.exception('An error occured')
 
-            # return an internal server error to the client
+            # Return an internal server error to the client
             return webob.exc.HTTPInternalServerError()
 
 
