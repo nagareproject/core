@@ -28,7 +28,7 @@ From example, starting with a pure Python ``Counter`` class :
 
 .. code-block:: python
 
-   class Counter:
+   class Counter(object):
        def __init__(self):
            self.value = 0
 
@@ -49,8 +49,8 @@ to create a ``Counter`` component, you only need to do:
 How to associate views to a component?
 --------------------------------------
 
-The ``nagare.presentation`` presentation service of the framework keeps track
-of the views associated to a class.
+The ``nagare.presentation`` service of the framework keeps track of the views
+associated to a class.
 
 The views are plain Python methods and multiple views can be registered on a
 class, each with a different ``model`` name.
@@ -60,34 +60,36 @@ The views are associated to a class using the
 asked to render a component, with a given ``model``, the view for this ``model``
 is called with :
 
-  1. the object (the inner object of the component)
-  2. a renderer
-  3. the component
-  4. the model asked
+1. the object (the inner object of the component)
+2. a renderer
+3. the component
+4. the model asked
 
 and the method will generally returns a tree of DOM objects, build by using
 the :doc:`renderer` API.
 
 The following code associates a default view (the ``view_by_default`` method) and
-a view for the *xml* model (the ``xml_view`` method) to the class ``AClass``:
+a view for the *edit* model (the ``edit_view`` method) to the class ``AClass``:
 
 .. code-block:: python
 
    from nagare import presentation
 
    @presentation.render_for(AClass)
-   def view_by_default(self, h, component, model, *args):
+   def view_by_default(self, h, comp, model, *args):
      # Here, generate and return a view, typically a DOM tree
+     ...
 
-   @presentation.render_for(AClass, model='xml')
-   def xml_view(self, h, component, model, *args):
+   @presentation.render_for(AClass, model='edit')
+   def edit_view(self, h, comp, model, *args):
      # Here, generate and return a view, typically a DOM tree
+     ...
 
 .. note::
 
    In general, we append ``*args`` to the signature of the view methods for
    compatibility with some future parameters addition. Furthermore if you're
-   not using, for example, the ``component`` and the ``model`` parameters into
+   not using, for example, the ``comp`` and the ``model`` parameters into
    your rendering process but only the ``self`` and ``h`` parameters, then you
    could defined your view method as a simpler ``def render(self, h, *args)``
 
@@ -143,7 +145,8 @@ optional ``model`` parameter:
     '<b>0</b>'
 
 But it's simpler to add the component as the child of a DOM object and let
-Nagare automatically create a new renderer and call the view of the component.
+Nagare automatically create a new renderer and call the view of the component for you.
+
 So:
 
 .. code-block:: pycon
@@ -167,17 +170,17 @@ How to build a compound component?
 A component can be build from other existing components. The inner components
 are simply represented as normal Python attributes in the compound component.
 
-First we create a ``ColorChooser`` component, a component displaying four clickable
+First let's create a ``ColorChooser`` component, a component displaying four clickable
 cells with differents colors:
 
 .. code-block:: python
 
-   class ColorChooser:
+   class ColorChooser(object):
        pass
 
    @presentation.render_for(ColorChooser)
    def render(self, h, binding, *args):
-       return (
+       return h.div(
                h.a('X', style='background-color: #4B96FF'),
                h.a('X', style='background-color: #FF8FDF'),
                h.a('X', style='background-color: #9EFF5D'),
@@ -188,7 +191,7 @@ then a ``ColorText`` component, a text displayed with a given background color:
 
 .. code-block:: python
 
-    class ColorText:
+    class ColorText(object):
         def __init__(self, text, color='#ffffff'):
             self.color = color
             self.text = text
@@ -212,7 +215,7 @@ embeds the views of the inner components:
     from nagare.component import Component
 
     # ``App`` is the compound component
-    class App:
+    class App(object):
         def __init__(self):
             # ``App`` embeds two inner components
             self.color_chooser_comp = Component(ColorChooser())
@@ -243,10 +246,12 @@ and browsing to http://localhost:8080/color, gives you:
     .. raw:: html
 
        <div>
-         <a style="background-color: #4B96FF">X</a>
-         <a style="background-color: #FF8FDF">X</a>
-         <a style="background-color: #9EFF5D">X</a>
-         <a style="background-color: #ffffff">X</a>
+         <div>
+           <a style="background-color: #4B96FF">X</a>
+           <a style="background-color: #FF8FDF">X</a>
+           <a style="background-color: #9EFF5D">X</a>
+           <a style="background-color: #ffffff">X</a>
+         </div>
          <hr>
          <div style="background-color:#ffffff">Hello world !</div>
        </div>
@@ -266,12 +271,12 @@ component, with the value to return:
 .. code-block:: python
 
    @presentation.render_for(ColorChooser)
-   def render(self, h, component, *args):
-       return (
-               h.a('X', style='background-color: #4B96FF').action(lambda: component.answer('#4B96FF')),
-               h.a('X', style='background-color: #FF8FDF').action(lambda: component.answer('#FF8FDF')),
-               h.a('X', style='background-color: #9EFF5D').action(lambda: component.answer('#9EFF5D')),
-               h.a('X', style='background-color: #ffffff').action(lambda: component.answer('#ffffff'))
+   def render(self, h, comp, *args):
+       return h.div(
+               h.a('X', style='background-color: #4B96FF').action(comp.answer, '#4B96FF'),
+               h.a('X', style='background-color: #FF8FDF').action(comp.answer, '#FF8FDF'),
+               h.a('X', style='background-color: #9EFF5D').action(comp.answer, '#9EFF5D'),
+               h.a('X', style='background-color: #ffffff').action(comp.answer, '#ffffff')
               )
 
 .. note::
@@ -280,8 +285,9 @@ component, with the value to return:
 
    .. code-block:: python
 
-      for color in ('#4B96FF', '#FF8FDF', '#9EFF5D', '#ffffff'):
-          h << h.a('X', 'style' : 'background-color: ' + color).action(lambda color=color: component.answer(color))
+      with h.div:
+          for color in ('#4B96FF', '#FF8FDF', '#9EFF5D', '#ffffff'):
+              h << h.a('X', style='background-color: ' + color).action(comp.answer, color)
 
       return h.root
 
@@ -289,7 +295,7 @@ Second, we add a ``set_color()`` method to our ``ColorText`` object:
 
 .. code-block:: python
 
-    class ColorText:
+    class ColorText(object):
         def __init__(self, text, color='#ffffff'):
             self.color = color
             self.text = text
@@ -303,7 +309,7 @@ object, using the ``on_answer()`` method of the ``ColorChooser`` component:
 
 .. code-block:: python
 
-    class App:
+    class App(object):
         def __init__(self):
             self.color_chooser_comp = Component(ColorChooser())
             self.text = ColorText('Hello world !')
@@ -326,7 +332,7 @@ component, the ``content`` component:
 
 .. code-block:: python
 
-   class App:
+   class App(object):
        def __init__(self):
            self.color_chooser = ColorChooser()
            self.text = ColorText('Hello world !')
@@ -345,13 +351,13 @@ simply replace the ``content`` component:
        with h.div:
            # On a click on this link, replace the ``content`` inner object
            # by the ``color_chooser`` object
-           h << h.a('The Color chooser').action(lambda: self.content.becomes(self.color_chooser))
+           h << h.a('The Color chooser').action(self.content.becomes, self.color_chooser)
 
            h << ' | '
 
            # On a click on this link, replace the ``content`` inner object
            # by the ``text`` object
-           h << h.a('The text').action(lambda: self.content.becomes(self.text))
+           h << h.a('The text').action(self.content.becomes, self.text)
 
            h << h.hr
            # Render the ``content`` component which can have ``color_chooser``
@@ -396,14 +402,14 @@ selected color and change the color of the text:
 
 .. code-block:: python
 
-   class App:
+   class App(object):
        def __init__(self):
            self.color_chooser = ColorChooser()
-           self.text = ColorText('Hello world !')
 
+           self.text = ColorText('Hello world !')
            self.text_comp = Component(self.text)
 
-       def change_color(self, component):
+       def change_color(self, comp):
            # When the 'Choose a color' link is clicked, temporary replace
            # the ``App`` component (here the ``component`` parameter) by the
            # ``color_chooser``
@@ -411,13 +417,13 @@ selected color and change the color of the text:
            # When the ``color_chooser`` answers, the ``App`` component is
            # restored and the control flow continues: the color answered is
            # set to the text
-           new_color = component.call(self.color_chooser)
+           new_color = comp.call(self.color_chooser)
            self.text.set_color(new_color)
 
     @presentation.render_for(App)
-    def render(self, h, component, *args):
+    def render(self, h, comp, *args):
         with h.div:
-            h << h.a('Choose a color').action(lambda: self.change_color(component))
+            h << h.a('Choose a color').action(self.change_color, comp)
 
             h << h.hr
             h << self.text_comp
@@ -439,8 +445,9 @@ other components thanks to the ``call`` method. The ``call`` method is a way to 
 of the presentation logic defined in the ``Task``, waiting for user-interaction (showing the called
 component and waiting for it to ``answer``), then resuming the execution from where it stopped.
 
-For example, the Tic-tac-toe game logic found the ``tictactoe.py`` example from the
-`nagare.examples`_ is implemented as a ``Task`` performing the following steps:
+For example, the Tic-tac-toe game logic found in the
+`tictactoe.py <https://github.com/nagareproject/examples/blob/master/nagare/examples/tictactoe.py#L94>`_
+example is implemented as a ``Task`` performing the following steps:
 
 1. Ask the first player's name
 2. Ask the second player's name
@@ -520,6 +527,5 @@ And navigating into the application, by clicking on links or by submitting forms
 is activating callbacks that permanently or temporarily modify this graph.
 
 
-.. _`nagare.examples`: http://hg.nagare.org/examples/
-.. _`Enlightening paper from Christian Queinnec`: http://pagesperso-systeme.lip6.fr/Christian.Queinnec/PDF/www.pdf
+.. _`Enlightening paper from Christian Queinnec`: https://pages.lip6.fr/Christian.Queinnec/PDF/www.pdf
 

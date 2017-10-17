@@ -11,8 +11,8 @@ Principle
 An URL representes a well-defined state of the application components. The mapping
 of significative URL to the components state (the URL scheme) is made in 2 steps:
 
-  1. Give an URL to pages (i.e a components state)
-  2. When an URL is received, initialize the components state from it
+1. Give an URL to pages (i.e a components state)
+2. When an URL is received, initialize the components state from it
 
 To illustrate these steps, we will use a timezone-aware clock example. First,
 install the require ``pytz`` python module:
@@ -46,7 +46,7 @@ its timezone offset:
         h << h.div(dt.strftime('%H:%M'), style='font-size: 150%')
 
         # When the ``Time Zone`` link is clicked, change to the ``timezone`` view of this object
-        h << h.a('Time Zone').action(lambda: comp.becomes(self, model='timezone'))
+        h << h.a('Time Zone').action(comp.becomes, model='timezone')
 
         return h.root
 
@@ -58,7 +58,7 @@ its timezone offset:
         h << h.div(dt.strftime('%z %Z'), style='font-size: 150%')
 
         # When the ``Time`` link is clicked, change back to the default view of this object
-        h << h.a('Time').action(lambda: comp.becomes(self, model=None))
+        h << h.a('Time').action(comp.becomes, model=None)
 
         return h.root
 
@@ -103,19 +103,19 @@ about a URL scheme. You can see that switching between the ``Time Zone`` and
 It's easy to change the URL path when a link is clicked. Just add a normal relative
 ``href`` attribut to the link definition.
 
-In our example, we modify the lines #15 and #24:
+In our example, we modify the lines #19 and #31:
 
 .. code-block:: python
     :emphasize-lines: 3, 8
 
     ...
     # When the ``Time zone`` link is clicked, change to the ``timezone`` view of this object
-    h << h.a('Time Zone', href='timezone').action(lambda: comp.becomes(self, model='timezone'))
+    h << h.a('Time Zone', href='timezone').action(comp.becomes, model='timezone')
     ...
 
     ...
     # When the ``Time`` link is clicked, change back to the default view of this object
-    h << h.a('Time', href='time').action(lambda: comp.becomes(self, model=None))
+    h << h.a('Time', href='time').action(comp.becomes, model=None)
         ...
 
 Now, when you click on the links, the URL path is changed to
@@ -133,11 +133,11 @@ the session is expired, Nagare tries to initialized the application components
 from the URL path by calling the generic method ``presentation.init_for()`` on
 the application root component, with the parameters:
 
-  1. ``self`` -- the root object
-  2. ``url`` -- a tuple of the unicode parts of the URL path (starting after the application name)
-  3. ``comp`` -- the component wrapping the root object
-  4. ``http_method`` -- the HTTP method (``GET``, ``POST``, ``PUT`` ...)
-  5. ``request`` -- the HTTP `webob request <http://pythonpaste.org/webob/reference.html#id1>`_ object
+1. ``self`` -- the root object
+2. ``url`` -- a tuple of the unicode parts of the URL path (starting after the application name)
+3. ``comp`` -- the component wrapping the root object
+4. ``http_method`` -- the HTTP method (``GET``, ``POST``, ``PUT`` ...)
+5. ``request`` -- the HTTP `request <https://webob.readthedocs.io/en/stable/reference.html#request>`_
 
 It's up to the developper to implement the generic methods to initialize the
 root component.
@@ -160,12 +160,12 @@ In our example, we implement 2 conditions:
     # If no URL is given or url is 'time', set the default view
     @presentation.init_for(Clock, 'not url or url == (u"time",)')
     def init(self, url, comp, http_method, request):
-        comp.becomes(self, model=None)
+        comp.becomes(model=None)
 
     # If the url is 'timezone', set the ``timezone`` view
     @presentation.init_for(Clock, 'url == (u"timezone",)')
     def init(self, url, comp, http_method, request):
-        comp.becomes(self, model='timezone')
+        comp.becomes(model='timezone')
 
 Note these 2 methods do the exact same actions than when the links are manually
 clicked.
@@ -200,15 +200,15 @@ The example is now enhanced with a ``Clocks`` component that can display several
 .. code-block:: python
    :linenos:
 
-    class Clocks:
+    class Clocks(object):
         # A ``Clocks`` has several ``Clock`` objects and a ``content`` component
         def __init__(self):
             # The ``Clock`` objects, each associated to a city name
             self.cities = {
-                            'New-York' : Clock('America/New_York'),
-                            'Paris' : Clock('Europe/Paris'),
-                            'Sydney' : Clock('Australia/Sydney')
-                          }
+                'New-York': Clock('America/New_York'),
+                'Paris': Clock('Europe/Paris'),
+                'Sydney': Clock('Australia/Sydney')
+            }
 
             # The ``content`` component, when created, wraps the ``None`` object
             self.content = component.Component(None)
@@ -237,12 +237,12 @@ The example is now enhanced with a ``Clocks`` component that can display several
         with h.span(class_='clocks'):
             # Display all the city names
             for (name, city) in sorted(self.cities.items()):
-                if city is self.content():	# ``self.content()`` returns the current wrapped object
+                if city is self.content():  # ``self.content()`` returns the current wrapped object
                     # The selected city name is no more clickable
                     h << h.span(name, class_='tab selected_tab')
                 else:
                     # The others city names, when clicked, invoke the ``change_city()`` method
-                    link = h.a(name).action(lambda name=name: self.change_city(name))
+                    link = h.a(name).action(self.change_city, name)
                     h << h.span(link, class_='tab')
 
             # Delegate the rendering to the ``content`` component
@@ -303,25 +303,25 @@ A Nagare application is made of a dynamic tree of components. A parent component
 can fix the URL prefix their children will use for their links, by using the ``url``
 parameter of:
 
-  - ``component.Component(o, url='...')``
-  - ``comp.becomes(o, url='...')``
-  - ``comp.call(o, url='...')``
+- ``component.Component(o, url='...')``
+- ``comp.becomes(o, url='...')``
+- ``comp.call(o, url='...')``
 
 In our example, we decide that the URL of the links generated by the ``Clock``
 views will began by the name of the city. So we add the parameter ``url=<city name>``
-line #16 and ``href=<city_name>`` line #34:
+line #21 and ``href=<city_name>`` line #43:
 
 .. code-block:: python
     :emphasize-lines: 3, 8
 
         ...
-        def select_city(self, name):
+        def change_city(self, name):
             self.content.becomes(self.cities[name], model=None, url=name)
         ...
 
         ...
         # The others city names, when clicked, invoke the ``change_city()`` method
-        link = h.a(name, href=name).action(lambda name=name: self.change_city(name))
+        link = h.a(name, href=name).action(self.change_city, name)
         ...
 
 Now, the URL path changes to http://localhost:8080/test2/Paris/time or
@@ -336,9 +336,9 @@ First a parent component initializes itself with parts of the received URL. Then
 it delegates the initialization to their children by calling their ``init()``
 method with the parameters:
 
-  1. ``url`` -- the rest of the URL parts
-  2. ``http_method`` -- the HTTP method (``GET``, ``POST``, ``PUT`` ...)
-  3. ``request`` -- the HTTP `webob request <http://pythonpaste.org/webob/reference.html#id1>`_ object
+1. ``url`` -- the rest of the URL parts
+2. ``http_method`` -- the HTTP method (``GET``, ``POST``, ``PUT`` ...)
+3. ``request`` -- the HTTP `request <https://webob.readthedocs.io/en/stable/reference.html#request>`_
 
 So, we add a ``presentation.init_for()`` implementation for the ``Clocks``
 component that uses the first part of the URL (the city name) to initialize
@@ -363,7 +363,7 @@ RESTful URL
 
 You may have noticed the ``presentation.init_for()`` also received the ``http_method``
 parameter (typically ``GET``, ``POST``, ``PUT`` and ``DELETE``) and the full
-``request`` `webob object <http://pythonpaste.org/webob/reference.html#id1>`_.
+`request <https://webob.readthedocs.io/en/stable/reference.html#request>`_ object.
 In true RESTful style, both these parameters can be used to initialized the
 components tree.
 

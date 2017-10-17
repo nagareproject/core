@@ -92,6 +92,7 @@ h2, h3, h4, .rst-content .toctree-wrapper p.caption {
 }
 
 .rst-content blockquote { margin: 0; }
+.rst-content .highlight > pre { line-height: 1.5 }
 
 div[class^="highlight"] {
     margin: 0 0 15px 24px;

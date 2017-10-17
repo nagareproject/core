@@ -14,26 +14,26 @@ Installing the application
 If the application is available on the `PyPi <http://pypi.python.org>`_, use
 the command:
 
-  .. code-block:: sh
+.. code-block:: sh
 
      <NAGARE_HOME>/bin/easy_install <application>
 
 else, retrieve the application archive or egg and install it with:
 
-  .. code-block:: sh
+.. code-block:: sh
 
      <NAGARE_HOME>/bin/easy_install <path/to/the/archive>
 
 To check the application is correctly registered to Nagare, enter:
 
-  .. code-block:: sh
+.. code-block:: sh
 
      <NAGARE_HOME>/bin/nagare-admin serve
 
 which lists all the registered applications.
 
 The application is installed in is own directory under
-``<NAGARE_HOME>/lib/python2.5/site-packages``
+``<NAGARE_HOME>/lib/python2.7/site-packages``
 
 Serving the application
 -----------------------
@@ -44,13 +44,13 @@ that the database URI is correct if the application uses a database.
 
 If the application uses a database, create the database tables:
 
-  .. code-block:: sh
+.. code-block:: sh
 
      <NAGARE_HOME>/bin/nagare-admin create-db <application>
 
 Then, the application is launched with:
 
-  .. code-block:: sh
+.. code-block:: sh
 
      <NAGARE_HOME>/bin/nagare-admin serve <application>
 

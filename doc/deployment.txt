@@ -18,15 +18,15 @@ shell.
 However, this standalone mode is not suitable in a production environment, because it is not
 efficient nor fail-safe:
 
-  - Since it's a threaded program, it does not fully utilize the CPU cores due to the GIL (see `this
-    discussion <http://stackoverflow.com/questions/4496680/python-threads-all-executing-on-a-single-core>`_).
-    To solve this problem, we need to use multiprocessing.
-  - Static files are served by the standalone server and are not cached. They would be better served
-    by a faster dedicated Web server such as Apache, Nginx, Lighttpd, ...
-  - The server processes are not monitored, and they don't cope with failures very well. For example, in a
-    production setup, it's important to detect zombie processes and restart them to prevent attacks or to limit
-    the impact of unnoticed programmation errors in the application. Of course, you should also use logging
-    to trace the origin of the problems in order to solve them.
+- Since it's a threaded program, it does not fully utilize the CPU cores due to the GIL (see `this
+  discussion <http://stackoverflow.com/questions/4496680/python-threads-all-executing-on-a-single-core>`_).
+  To solve this problem, we need to use multiprocessing.
+- Static files are served by the standalone server and are not cached. They would be better served
+  by a faster dedicated Web server such as Apache, Nginx, Lighttpd ...
+- The server processes are not monitored, and they don't cope with failures very well. For example, in a
+  production setup, it's important to detect zombie processes and restart them to prevent attacks or to limit
+  the impact of unnoticed programmation errors in the application. Of course, you should also use logging
+  to trace the origin of the problems in order to solve them.
 
 So, in a production environment, the recommended way to serve Nagare applications
 is through *FastCGI* associated to a frontend Web server such as Apache, Nginx or
@@ -117,7 +117,7 @@ server supporting FastCGI if you want to.
 Apache
 ++++++
 
-On Apache, the FastCGI support is provided by the `mod_fastcgi`_ module which is not installed by default.
+On Apache, the FastCGI support is provided by the ``mod_fastcgi`` module which is not installed by default.
 You should download and install it by yourself, as described `here <http://www.fastcgi.com/mod_fastcgi/INSTALL>`_.
 Then, the ``mod_fastcgi`` module should be activated by including it in the main apache configuration file as shown
 below:
@@ -365,12 +365,11 @@ the ``nagare-admin serve`` command. Furthermore, they are restarted automaticall
 wrong thanks to the ``autorestart`` option.
 
 
-.. _`FastCGI`: http://www.fastcgi.com/
+.. _`FastCGI`: https://fastcgi-archives.github.io
 .. _`Apache`: http://httpd.apache.org/
 .. _`Nginx`: http://nginx.org/
 .. _`Supervisor`: http://supervisord.org/
 .. _`Lighttpd`: http://www.lighttpd.net/
-.. _`mod_fastcgi`: http://www.fastcgi.com/mod_fastcgi/docs/mod_fastcgi.html
 .. _`Nginx's HttpFastcgiModule`: http://wiki.nginx.org/HttpFastcgiModule
 .. _`Lighttpd's mod_fastcgi`: http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ModFastCGI
 

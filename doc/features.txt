@@ -17,40 +17,40 @@ Its component model and use of the continuation come from the famous
 
 Python is a great language and Nagare makes full use of it:
 
-  - the views of the components are Python methods rendering a DOM tree,
-    built in programmatic XHTML or from a template,
-  - the control flow of the components is coded in Python, thanks to the
-    continuation,
-  - data management in DBMS using SQLAlchemy or its declarative layer Elixir,
-  - if a Python function is given instead of an expected Javascript code, Nagare
-    automatically generates a translation from Python to Javascript.
+- the views of the components are Python methods rendering a DOM tree,
+  built in programmatic XHTML or from a template,
+- the control flow of the components is coded in Python, thanks to the
+  continuation,
+- data management in DBMS using SQLAlchemy or its declarative layer Elixir,
+- if a Python function is given instead of an expected Javascript code, Nagare
+  automatically generates a translation from Python to Javascript.
 
 Furthermore Nagare integrates the best tools and standard from the Python world.
 For example:
 
-  - WSGI: binds the application to several possible publishers,
-  - lxml: generates the DOM trees and brings to Nagare the full set of
-    XML features (XSL, XPath, Schemas ...),
-  - setuptools: installs, deploys and extends the Nagare framework and the
-    Nagare applications too,
-  - PEAK Rules: generic methods are heavily used in Nagare, to associate views
-    to components, to define security rules, to translate Python
-    code to Javascript ...
-  - WebOb: for its Request and Response Objects.
+- WSGI: binds the application to several possible publishers,
+- lxml: generates the DOM trees and brings to Nagare the full set of
+  XML features (XSL, XPath, Schemas ...),
+- setuptools: installs, deploys and extends the Nagare framework and the
+  Nagare applications too,
+- PEAK Rules: generic methods are heavily used in Nagare, to associate views
+  to components, to define security rules, to translate Python
+  code to Javascript ...
+- WebOb: for its Request and Response Objects.
 
 Using Nagare frees the developer from the classic burden of web programming:
 
-  - No more manual URL mapping. Nagare directly associates a Python callback
-    to a link or a field of a form.
-  - No global session object. All the states of all components are kept on
-    the server.
-  - Easy development with Nagare own Python multi-threaded server including
-    automatic reloading and possible clustering deployment using a memcached
-    server.
-  - Automatic conversion of the parameters received to Unicode and automatic
-    generation of UTF-8 encoded web pages. Nagare is a full Unicode framework.
-  - Possible automatic generation of, always 100% valid, XHTML or HTML according
-    to the browser capability.
-  - Transparent Ajax rendering of a component, without any Python or Javascript
-    code to add.
+- No more manual URL mapping. Nagare directly associates a Python callback
+  to a link or a field of a form.
+- No global session object. All the states of all components are kept on
+  the server.
+- Easy development with Nagare own Python multi-threaded server including
+  automatic reloading and possible clustering deployment using a memcached
+  server.
+- Automatic conversion of the parameters received to Unicode and automatic
+  generation of UTF-8 encoded web pages. Nagare is a full Unicode framework.
+- Possible automatic generation of, always 100% valid, XHTML or HTML according
+  to the browser capability.
+- Transparent Ajax rendering of a component, without any Python or Javascript
+  code to add.
 

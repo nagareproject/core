@@ -19,7 +19,7 @@ this link is clicked:
    from nagare import presentation
    from nagare.namespaces import xhtml
 
-   class ClickCounter:
+   class ClickCounter(object):
        def __init__(self):
            self.nb = 0
 
@@ -39,17 +39,15 @@ To test this snippet, launched it with:
 
    <NAGARE_HOME>/bin/nagare-admin serve-module <path/to/the/example/file.py>:ClickCounter clic
 
-This simple GuessBook example associates a callback to a textarea element,
+This simple *GuessBook* example associates a callback to a textarea element,
 that append the new messages to the list of the existing ones:
 
 .. code-block:: python
 
-   from __future__ import with_statement
-
    from nagare import presentation, var
    from nagare.namespaces import xhtml
 
-   class GuestBook:
+   class GuestBook(object):
        def __init__(self):
            self.msgs = []
 
@@ -90,16 +88,18 @@ Element                      Callback registration      Callback parameters
 ``h.input``                  ``.action(callback)``      the text received
 ``h.input(type='text)``      ``.action(callback)``      the text received
 ``h.input(type='password')`` ``.action(callback)``      the text received
-``h.input(type='radio')``    ``.action(callback)``      boolean: is the radio button selected ?
-``h.input(type='checkbox')`` ``.action(callback)``      the value of the ``value`` attribute (``on`` if not
+``h.input(type='radio')``    ``.action(callback)``      *no parameter*
+``h.input(type='checkbox')`` ``.action(callback)``      the value of the ``value`` attribute (``on`` if no
                                                         ``value`` attribute is set)
 ``h.input(type='submit')``   ``.action(callback)``      *no parameter*
-``h.input(type='hidden')``   ``.action(callback)``      *no parameter*
+``h.input(type='hidden')``   ``.action(callback)``      the value of the ``value`` attribute (empty string
+                                                        if no ``value`` attribut is set)
 ``h.input(type='file')``     ``.action(callback)``      an empty string if no file was uploaded, else
                                                         a ``cgi.FieldStorage`` object
 ``h.input(type='image')``    ``.action(callback)``      the callback is called twice:
-                                                          1. with the parameters ``True`` and the x value
-                                                          2. with the parameters ``False`` and the y value
+
+                                                        1. with the parameters ``True`` and the *x* value
+                                                        2. with the parameters ``False`` and the *y* value
 ``h.textarea``               ``.action(callback)``      the text received
 ``h.select``                 ``.action(callback)``      the selected option value
 ``h.select(multiple=1)``     ``.action(callback)``      a tuple of the selected options value (even if
@@ -123,13 +123,13 @@ Callback order
 
 The callbacks are processed in this order:
 
-  1. the ``form`` ``pre_action()`` callback
-  2. the ``select``, ``textarea`` and ``input`` of type ``text``, ``password``,
-     ``radio``, ``checkbox``, ``hidden`` and ``file`` ``action()`` callback
-  3. the ``form`` ``post_action()`` callback
-  4. the ``a`` and ``input(type='submit')`` ``action()`` callback
-  5. the ``input(type='image')`` ``action()`` callback
-  6. the ``img`` ``action()`` callback
+1. the ``form`` ``pre_action()`` callback
+2. the ``select``, ``textarea`` and ``input`` of type ``text``, ``password``,
+   ``radio``, ``checkbox``, ``hidden`` and ``file`` ``action()`` callback
+3. the ``form`` ``post_action()`` callback
+4. the ``a`` and ``input(type='submit')`` ``action()`` callback
+5. the ``input(type='image')`` ``action()`` callback
+6. the ``img`` ``action()`` callback
 
 .. warning::
 
@@ -159,12 +159,9 @@ typically the ```pre_action`` callback of the ``h.form``:
 
 .. code-block:: python
 
-   from __future__ import with_statement
-
    from nagare import presentation
-   from nagare.namespaces import xhtml
 
-   class ColorSelection:
+   class ColorSelection(object):
        def __init__(self):
            self.reset_colors()
 
@@ -187,7 +184,7 @@ typically the ```pre_action`` callback of the ``h.form``:
 
        return h.root
 
-or, with a more compact view method:
+or, with a more compact view:
 
 .. code-block:: python
 
@@ -197,9 +194,11 @@ or, with a more compact view method:
 
        with h.form.pre_action(self.reset_colors):
            for color in (u'blue', u'white', u'red'):
-               h << h.input(type='checkbox', value=color).action(self.set_color).selected(color in self.colors) << color << h.br
+               h << h.input(type='checkbox', value=color).action(self.set_color).selected(color in self.colors)
+               h << color << h.br
 
            h << h.br << h.input(type='submit', value='Send')
+
        return h.root
 
 The ``var.Var()`` objects
@@ -208,8 +207,8 @@ The ``var.Var()`` objects
 The instances of the ``Var`` class in :class:`nagare.var.Var` are
 variable-like objects that provide a "functional" interface:
 
-  - calling the object with a value, set the variable value and return the value
-  - calling the object without a value, return the variable value
+- calling the object with a value, set the variable value and return the value
+- calling the object without a value, return the variable value
 
 They can be usefull to directly get / set variables in a lambda expression
 callback.
@@ -229,7 +228,7 @@ For example, the first snippet can be rewrote as:
    def render(self, h, *args):
        return h.p(
                    'You have ',
-                   h.a('clicked').action(lambda: self.nb(self.nb()+1)),
+                   h.a('clicked').action(lambda: self.nb(self.nb() + 1)),
                    ' ', self.nb, ' times.'
                  )
 
@@ -273,18 +272,18 @@ The ``editor.Property`` objects
 The instances of the ``Property`` class in :class:`nagare.editor.Property`
 are objects:
 
-  - with a validation function, set by calling its ``.validate()`` method. A
-    validation function, when called with a value, must validate and, eventually,
-    convert it. If the value is valid, the (converted) value is returned.
-    Else the ``ValueError`` exception must be raised with an error message.
+- with a validation function, set by calling its ``.validate()`` method. A
+  validation function, when called with a value, must validate and, eventually,
+  convert it. If the value is valid, the (converted) value is returned.
+  Else the ``ValueError`` exception must be raised with an error message.
 
-  - that can be set with a value, by calling its ``.set()`` method or by directly
-    be called
-  - that always keeps the value in its ``input`` attribute
-  - that validates the value, by calling its validating function
-  - that keeps the last valid value in its ``value`` attribute
-  - that keeps the error message of the validation in its ``error`` attribute,
-    or ``None`` if the value is valid.
+- that can be set with a value, by calling its ``.set()`` method or by directly
+  be called
+- that always keeps the value in its ``input`` attribute
+- that validates the value, by calling its validating function
+- that keeps the last valid value in its ``value`` attribute
+- that keeps the error message of the validation in its ``error`` attribute,
+  or ``None`` if the value is valid.
 
 .. code-block:: pycon
 
@@ -392,7 +391,7 @@ An instances of the ``Editor`` class in :class:`nagare.editor.Editor`
 is an intermediary between the values received from a form an a target object.
 
 An ``Editor`` object automatically creates ``editor.Property`` objects reflecting
-the attributes, of the target object, we want to edit with the form.
+the attributes of the target object we want to edit with the form.
 
 An ``Editor`` object will modified the target object attributes only if all the
 validating functions of its properties validate the data from the form.
@@ -405,11 +404,10 @@ In this example, we've got pure Python ``Person`` objects with ``name`` and
 
 .. code-block:: python
 
-   from __future__ import with_statement
    from nagare import editor, presentation, component
    from nagare.validator import StringValidator, IntValidator
 
-   class Person:
+   class Person(object):
        def __init__(self):
            self.name = ''
            self.age = 0
@@ -453,9 +451,10 @@ form:
             #
             # The ``error()`` method will display the error message if it's
             # not ``None``
-            h << 'Name: ' << h.input.action(self.name).error(self.name.error) << h.br
+            h << 'Name: ' << h.input(value=self.name).action(self.name).error(self.name.error) << h.br
 
-            h << 'Age: ' << h.input.action(self.age).error(self.age.error) << h.br
+            h << 'Age: ' << h.input(value=self.age).action(self.age).error(self.age.error) << h.br
+
 
             h << h.input(type='submit', value='Send').action(self.commit)
 
@@ -466,7 +465,7 @@ Finally, an application creates a ``Person`` object and wraps it into a
 
 .. code-block:: python
 
-   class App:
+   class App(object):
        def __init__(self):
            self.person = Person()
 

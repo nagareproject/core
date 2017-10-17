@@ -81,7 +81,7 @@ module:
 ====================================== =================================================================
 
 All these functions accept variable arguments and keyword arguments, which are
-documented in the ``logging`` module, `here <http://docs.python.org/library/logging.html#logging.Logger.debug>`_.
+documented in the ``logging`` module, `here <https://docs.python.org/2/library/logging.html#logging.Logger.debug>`_.
 
 Overriding the default configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,7 +241,7 @@ Creating other loggers
 Any other general loggers can be created the same way, by just giving a full
 absolute namespace.
 
-For example the `SQLAlchemy documentation <http://docs.sqlalchemy.org/en/rel_0_7/core/engines.html#configuring-logging>`_
+For example the `SQLAlchemy documentation <http://docs.sqlalchemy.org/en/latest/core/engines.html#configuring-logging>`_
 states the name of the SQL query logger is ``sqlalchemy.engine``. So this
 logging configuration will display all the generated SQL queries:
 
@@ -271,6 +271,6 @@ logging configuration will display all the generated SQL queries:
     format={ %(message)s }
 
 
-.. _`logging`: http://docs.python.org/library/logging.html
-.. _`Configuration file format`: http://docs.python.org/library/logging.config.html#configuration-file-format
+.. _`logging`: https://docs.python.org/2/library/logging.html
+.. _`Configuration file format`: https://docs.python.org/2/library/logging.config.html#configuration-file-format
 

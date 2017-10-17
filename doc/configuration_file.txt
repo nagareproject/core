@@ -9,20 +9,20 @@ launch an application.
 
 You can directly give the configuration file to the ``serve`` command, as:
 
-  .. code-block:: sh
+.. code-block:: sh
 
     <NAGARE_HOME>/bin/nagare-admin serve /path/to/the/config.cfg
 
 Or, if the application was registered to the framework
 (as described in :doc:`entry_points`), then you can launch it with:
 
-  .. code-block:: sh
+.. code-block:: sh
 
     <NAGARE_HOME>/bin/nagare-admin serve <application>
 
 In this case, the framework reads the configuration file named ``<application>.cfg``
 in the directory ``<application>*/conf`` under
-``<NAGARE_HOME>/lib/python2.5/site-packages``.
+``<NAGARE_HOME>/lib/python2.7/site-packages``.
 
 .. note::
 
@@ -71,7 +71,7 @@ Name                Mandatory Default value      Description
 activated           No        off                If not activated, the framework will not read
                                                  the following parameters
 uri                 Yes       *No default value* URI or connection string to the database,
-                                                 as described in http://www.sqlalchemy.org/docs/core/engines.html#supported-databases
+                                                 as described in the SQLAlchemy `engine configuration <http://www.sqlalchemy.org/docs/core/engines.html#supported-databases>`_
 metadata            Yes       *No default value* Reference to the SQLAlchemy metadata object
                                                  (see :doc:`object_references`)
 populate            No        *No default value* Reference to an optional function, called
@@ -86,7 +86,7 @@ All other parameters, if present, are passed as keywords to the SQLALchemy
 If an application needs to work with several database, several subsections can
 be embedded into the main ``[database]`` section:
 
-  .. code-block:: ini
+.. code-block:: ini
 
     [database]
 

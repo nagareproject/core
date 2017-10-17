@@ -41,7 +41,6 @@ execute:
 .. code-block:: sh
 
     cd core
-    hg pull
-    hg update
+    git pull
     <NAGARE_HOME>/bin/easy_install setup.py develop
 

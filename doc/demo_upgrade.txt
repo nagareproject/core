@@ -41,7 +41,6 @@ execute:
 .. code-block:: sh
 
     cd examples
-    hg pull
-    hg update
-    <NAGARE_HOME>/bin/easy_install setup.py develop
+    git pull
+    <NAGARE_HOME>/bin/python setup.py develop
 

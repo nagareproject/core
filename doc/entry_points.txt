@@ -4,41 +4,41 @@ Entry points
 The entry points are a mecanism to extend the framework.
 
 How the entry points are declared in the ``setup.py`` file of your project
-is described in the `Setuptools documentation <http://peak.telecommunity.com/DevCenter/setuptools#extensible-applications-and-frameworks>`_.
+is described in the `Setuptools documentation <https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins>`_.
 
 The framework knows about the following entry points:
 
-  - ``nagare.applications``: this entry point is the most often used as it registers
-    an application to the framework.
+- ``nagare.applications``: this entry point is the most often used as it registers
+  an application to the framework.
 
-    An application can be an instance of ``WSGIApp``, configurated with a
-    component factory, or a direct component factory which, in this case, will
-    be automatically wrapped into a default ``WSGIApp`` object.
+  An application can be an instance of ``WSGIApp``, configurated with a
+  component factory, or a direct component factory which, in this case, will
+  be automatically wrapped into a default ``WSGIApp`` object.
 
-  - ``nagare.publishers``: these entry points defined the publishers that can be
-    selected with the ``type`` parameter of the
-    `publisher configuration file <publisher_file.html#publisher-section>`__
+- ``nagare.publishers``: these entry points defined the publishers that can be
+  selected with the ``type`` parameter of the
+  `publisher configuration file <publisher_file.html#publisher-section>`__
 
-    The framework publishers are defined into the :mod:`nagare.publishers`
-    package. The class :class:`nagare.publishers.common.Publisher` is the base class of
-    all the publishers.
+  The framework publishers are defined into the :mod:`nagare.publishers`
+  package. The class :class:`nagare.publishers.common.Publisher` is the base class of
+  all the publishers.
 
-  - ``nagare.sessions``: there entry points defined the sessions manager that can be
-    selected with the ``type`` paramater of the
-    `publisher configuration file <publisher_file.html#sessions-section>`__.
+- ``nagare.sessions``: there entry points defined the sessions manager that can be
+  selected with the ``type`` paramater of the
+  `publisher configuration file <publisher_file.html#sessions-section>`__.
 
-    The framework sessions managers are defined into the :mod:`nagare.sessions`
-    package. The class :class:`nagare.sessions.common.Sessions`
-    is the base class of all the sessions managers.
+  The framework sessions managers are defined into the :mod:`nagare.sessions`
+  package. The class :class:`nagare.sessions.common.Sessions`
+  is the base class of all the sessions managers.
 
-  -  ``nagare.commands``: these entry points defined new administrative commands
-     (launched with :doc:`nagare-admin`)
+-  ``nagare.commands``: these entry points defined new administrative commands
+   (launched with :doc:`nagare-admin`)
 
-     All the build-in administrative commands of the framework are defined into
-     the :mod:`nagare.admin` package. The class :class:`nagare.admin.command.Command`
-     is the interface an administrative command must respect.
+   All the build-in administrative commands of the framework are defined into
+   the :mod:`nagare.admin` package. The class :class:`nagare.admin.command.Command`
+   is the interface an administrative command must respect.
 
-  - ``nagare.admin``: these entry points defined components that will be rendered
-    into the "Nagare Administration interface" page (launched with ``nagare-admin serve admin``).
-    See the ``admin/interface/info.py`` and ``admin/interface/applications.py`` files.
+- ``nagare.admin``: these entry points defined components that will be rendered
+  into the "Nagare Administration interface" page (launched with ``nagare-admin serve admin``).
+  See the ``admin/interface/info.py`` and ``admin/interface/applications.py`` files.
 

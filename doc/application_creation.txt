@@ -10,17 +10,17 @@ In the following chapters, we will create the application named *my_app*.
 
 In a directory of your choice, create the application skeleton:
 
-  .. code-block:: sh
+.. code-block:: sh
 
-    <NAGARE_HOME>/bin/nagare-admin create-app my_app
+  <NAGARE_HOME>/bin/nagare-admin create-app my_app
 
 This command creates a *my_app* directory with the structure:
 
-  - `setup.py` -- setuptools configuration file
-  - `conf` -- directory with all the configuration files of the application
-  - `data` -- data directory, contains all the read/write data (database files for example) used by the application
-  - `static` -- static directory, contains all the read only data (images, css, js...) used by the application
-  - `my_app` -- source directory, contains the application source files
+- ``setup.py`` -- setuptools configuration file
+- ``conf`` -- directory with all the configuration files of the application
+- ``data`` -- data directory, contains all the read/write data (database files for example) used by the application
+- ``static`` -- static directory, contains all the read only data (images, css, js...) used by the application
+- ``my_app`` -- source directory, contains the application source files
 
 2. Configure your application
 -----------------------------
@@ -28,9 +28,9 @@ This command creates a *my_app* directory with the structure:
 2.1. File setup.py
 ~~~~~~~~~~~~~~~~~~
 
-In your application directory, edit the `setup.py` file:
+In your application directory, edit the ``setup.py`` file:
 
-  .. code-block:: python
+.. code-block:: python
 
     VERSION = '0.0.1'
 
@@ -65,15 +65,15 @@ Nagare is not currently installed, it will be automatically downloaded and
 installed.
 
 The available keywords are described into the
-`Distutils documentation <http://docs.python.org/dist/module-distutils.core.html>`_
-and the `Setuptools documentation <http://peak.telecommunity.com/DevCenter/setuptools#new-and-changed-setup-keywords>`_.
+`Packaging and Distributing Projects <https://packaging.python.org/tutorials/distributing-packages/#setup-args>`_
+documentation.
 
 2.2. Application configuration file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Edit the *conf/my_app.cfg* file:
+Edit the ``conf/my_app.cfg`` file:
 
-  .. code-block:: ini
+.. code-block:: ini
 
     [application]
     path = app my_app
@@ -93,16 +93,16 @@ Edit the *conf/my_app.cfg* file:
 
 Briefly, the **[application]** section contains:
 
-  - `path` -- factory component reference, used by the framework to create the root component of the application
-  - `name` -- the url of the application (i.e http://localhost:8080/my_app)
-  - `debug` -- debug mode to (de)activate the web error page
+- ``path`` -- factory component reference, used by the framework to create the root component of the application
+- ``name`` -- the url of the application (i.e http://localhost:8080/my_app)
+- ``debug`` -- debug mode to (de)activate the web error page
 
 and the **[database]** section contains:
 
-  - `activated` -- indicate if the application uses a database
-  - `uri` -- database URI for SQLAlchemy
-  - `metadata` -- reference to the SQLAlchemy metadata object
-  - `debug` -- debug mode to (de)activate the display of the SQL requests
+- ``activated`` -- indicate if the application uses a database
+- ``uri`` -- database URI for SQLAlchemy
+- ``metadata`` -- reference to the SQLAlchemy metadata object
+- ``debug`` -- debug mode to (de)activate the display of the SQL requests
 
 3. Register your application to the Nagare framework
 ----------------------------------------------------
@@ -113,18 +113,18 @@ once installed, the application is automatically registered to Nagare.
 So to register your application, go into the ``my_apps`` directory and simply
 enter the command:
 
-  .. code-block:: sh
+.. code-block:: sh
 
     <NAGARE_HOME>/bin/python setup.py develop
 
 .. note::
 
-  The entry points you can declare in the `setup.py` file are described
+  The entry points you can declare in the ``setup.py`` file are described
   in :doc:`entry_points`.
 
 You can check your application is correctly registered by launching the command:
 
-  .. code-block:: sh
+.. code-block:: sh
 
     <NAGARE_HOME>/bin/nagare-admin serve
 
@@ -141,19 +141,19 @@ which list all the applications known by the framework.
 If your application uses a database you will need to create the database tables
 prior to launch the application:
 
-  .. code-block:: sh
+.. code-block:: sh
 
     <NAGARE_HOME>/bin/nagare-admin create-db my_app
 
 The options available with the ``create-db`` administrative command are:
 
-  -d, --debug     force the display of the SQL requests
+  -d, --debug     to display of the generated SQL requests
   --drop          drop the tables if they exist, prior to re-create them
   --no-populate   don't call the populate function after the tables creation
 
 The database tables can be removed with the command:
 
-  .. code-block:: sh
+.. code-block:: sh
 
     <NAGARE_HOME>/bin/nagare-admin drop-db my_app
 
@@ -162,7 +162,7 @@ The database tables can be removed with the command:
 
 The following command launches the application:
 
-  .. code-block:: sh
+.. code-block:: sh
 
     <NAGARE_HOME>/bin/nagare-admin serve my_app
 
@@ -185,17 +185,16 @@ When your application is ready to be released, you can create a source
 distribution (tarball on Unix, ZIP file on Windows) with the command (into the
 ``my_apps`` directory):
 
-  .. code-block:: sh
+.. code-block:: sh
 
     <NAGARE_HOME>/bin/python setup.py sdist
 
-The source distribution is created into the *dist* directory.
+The source distribution is created into the ``dist`` directory.
 
 If you want to globally distribute your application, you can
-`register <http://docs.python.org/dist/package-index.html>`_ on the central
-`PyPI <http://wiki.python.org/moin/CheeseShopTutorial>`_ repository and
-`uploaded <http://docs.python.org/dist/package-upload.html>`_ it there.
+register on the central `PyPI <https://pypi.python.org>`_ repository and
+`uploaded <https://packaging.python.org/tutorials/distributing-packages/#upload-your-distributions>`_ it there.
 
-You can also create a binary distribution (ie. an *egg*) or a Windows
-installer for example, as explain in `setuptools <http://peak.telecommunity.com/DevCenter/setuptools>`_
+You can also create a binary distribution (ie. a *wheel*) or a Windows
+installer for example, as explain in `Packaging your Project <https://packaging.python.org/tutorials/distributing-packages/#packaging-your-project>`_
 

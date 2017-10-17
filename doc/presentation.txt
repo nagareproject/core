@@ -18,19 +18,19 @@ is always valid.
 
 The framework offers to you three ways to generate the DOM:
 
-  1. functional
-  2. imperative
-  3. templating
+1. functional
+2. imperative
+3. templating
 
 It's important to note that these three methods all generate a DOM and so can
 be freely mixed to build an aggregating DOM.
 
-DOM objects creation
+DOM element creation
 --------------------
 
-A ``Renderer`` is a DOM objects factory. For example, the XHTML renderer
+A ``Renderer`` is a DOM element factory. For example, the XHTML renderer
 :class:`nagare.namespaces.xhtml.Renderer` has an attribute, for
-each XHTML tag, that create a DOM object:
+each XHTML tag, that create a DOM element:
 
 .. code-block:: pycon
 
@@ -39,15 +39,15 @@ each XHTML tag, that create a DOM object:
     >>> h.div
     <Element div at 8410b6c>
 
-DOM objects API
----------------
+DOM elements API
+----------------
 
 ElementTree API
 ~~~~~~~~~~~~~~~
 
-A DOM object is an instance of the class :class:`nagare.namespaces.xml._Tag`.
-As this class inherits from ``lxml.etree.ElementBase``, the DOM objects offer an
-`ElementTree API. <http://effbot.org/zone/pythondoc-elementtree-ElementTree.htm#elementtree.ElementTree._ElementInterface-class>`_:
+A DOM element is an instance of the class :class:`nagare.namespaces.xml._Tag`.
+As this class inherits from ``lxml.etree.Element``, the DOM element offers an
+`ElementTree API. <https://docs.python.org/2.7/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element>`_:
 
 .. code-block:: pycon
 
@@ -67,43 +67,43 @@ As this class inherits from ``lxml.etree.ElementBase``, the DOM objects offer an
 Lxml API
 ~~~~~~~~
 
-You can also `validate <http://codespeak.net/lxml/validation.html>`_ a DOM tree
+You can also `validate <http://lxml.de/validation.html>`_ a DOM tree
 against a DTD, XML Schema, RelaxNG or Schematron document.
 
-And you can use `XPath and Xsl transformations <http://codespeak.net/lxml/xpathxslt.html>`_.
+And you can use `XPath and Xsl transformations <http://lxml.de/xpathxslt.html>`_.
 
 Functional DOM building API
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``_Tag`` class implements a ``__call__``  method to add children, text or
-attributes to a DOM object:
+attributes to a DOM element:
 
-  .. code-block:: python
+.. code-block:: python
 
      def __call__(self, *children, **attributes)
 
 Each element in ``children`` can be a:
 
-  - DOM object that is added as a child of the DOM object
-  - string, unicode string, integer or float that is converted to unicode
-    string and added as data to the DOM object
-  - list, tuple or generator which each elements are added to the DOM object
-  - dictionary which each items are added as attributes of the DOM object
-  - :doc:`component <components>` ``comp`` wich will be rendered with its
-    default view (i.e ``comp.render(h)``) and the resulting DOM tree added
-    to the DOM object
+- DOM element that is added as a child of the DOM element
+- string, unicode string, integer or float that is converted to unicode
+  string and added as data to the DOM element
+- list, tuple or generator which each elements are added to the DOM element
+- dictionary which each items are added as attributes of the DOM element
+- :doc:`component <components>` ``comp`` wich will be rendered with its
+  default view (i.e ``comp.render(h)``) and the resulting DOM tree added
+  to the DOM element
 
-Each items in ``attributes`` are added as attributes of the DOM object.
+Each items in ``attributes`` are added as attributes of the DOM element.
 
 .. note::
 
    As a keyword parameter cannot have the name of a Python reserved keyword,
    add a ``_`` character to the name (i.e: ``h.div(class_='content')``)
 
-Using the DOM object creation API of the renderers, with the nesting of
-calls to the created DOM objects, a DOM tree can be built in a functional way:
+Using the DOM element creation API of the renderers, with the nesting of
+calls to the created DOM element, a DOM tree can be built in a functional way:
 
-  .. code-block:: python
+.. code-block:: python
 
      >>> from nagare.namespaces import xhtml
      >>> h = xhtml.Renderer()
@@ -115,13 +115,13 @@ calls to the created DOM objects, a DOM tree can be built in a functional way:
 Imperative DOM building API
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A DOM object is also a `context manager <http://docs.python.org/lib/typecontextmanager.html>`_
+A DOM element is also a `context manager <https://docs.python.org/2/library/stdtypes.html#context-manager-types>`_
 
 Once a context is opened using the ``with`` statement, children can be added
 to the context manager using the ``<<`` operator on the renderer.
 
-So a DOM tree can be imperatively built from the nesting of contexts. With is root
-finally retrieved from the attribute ``root`` of the Renderer:
+So a DOM tree can also be imperatively built from the nesting of contexts. With its root
+finally retrieved from the attribute ``root`` of the renderer:
 
 .. code-block:: python
 
@@ -164,7 +164,7 @@ so the example above can be rewrote as:
    '<div id="content"><h1>Hello world</h1></div>'
 
 
-Or, creating a HTML list from the Python list ``l``:
+Or, to create a HTML list from the Python list ``l``:
 
 .. code-block:: python
 
@@ -181,10 +181,9 @@ Template
 ~~~~~~~~
 
 The templating system in Nagare follows the idea of the
-`meld family <http://plope.com/software/meld3/>`_: the
-designer who creates the XHTML template only gives identifiers to nodes.
+*meld family*: the designer who creates the XHTML template only gives identifiers to nodes.
 Then the developer can parse the template into a DOM tree, search for the DOM
-objects given their identifiers and manipulates them in Python.
+elements given their identifiers and manipulates them in Python.
 
 1. Creating the template
 ++++++++++++++++++++++++
@@ -205,8 +204,8 @@ To mark the nodes, use the attribute ``id`` of this namespace:
        </body>
    </html>
 
-The helper method ``meld_id()`` is available to add, in Python, a ``meld:id``
-attribute to a DOM object:
+The Python helper method ``meld_id()`` is available to add a ``meld:id``
+attribute to a DOM element:
 
 .. code-block:: pycon
 
@@ -215,7 +214,7 @@ attribute to a DOM object:
 
    >>> tree = h.html(
    ...            h.body(
-   ...                h.h1("Hello").meld_id("title")
+   ...                h.h1('Hello').meld_id('title')
    ...            )
    ...        )
    >>> print tree.write_xmlstring(pretty_print=True)
@@ -245,10 +244,10 @@ template:
        </body>
    </html>
 
-3. Finding the DOM objects
-++++++++++++++++++++++++++
+3. Finding the DOM elements
++++++++++++++++++++++++++++
 
-Use the ``findmeld()`` method of the DOM objects to retreive the marked nodes:
+Use the ``findmeld()`` method of the DOM elements to retreive the marked nodes:
 
 .. code-block:: pycon
 
@@ -260,10 +259,10 @@ Use the ``findmeld()`` method of the DOM objects to retreive the marked nodes:
    >>> root.findmeld('title')
    <Element {http://www.w3.org/1999/xhtml}h1 at 8410c5c>
 
-4. Manipulating the DOM objects
-+++++++++++++++++++++++++++++++
+4. Manipulating the DOM elements
+++++++++++++++++++++++++++++++++
 
-Once a DOM object is found, you can manipulate it with the normal ElementTree,
+Once a DOM element is found, you can manipulate it with the normal ElementTree,
 Lxml, functional or imperative API:
 
 .. code-block:: pycon
@@ -284,13 +283,13 @@ Lxml, functional or imperative API:
    </html>
 
 
-These three methods of the DOM objects are helpers to work with templates:
+These three methods of the DOM elements are helpers to work with templates:
 
-  - ``fill(self, *children, **attributes)`` -- replaces the children of the
-    DOM object by the given children and appends the ``attributes`` to the DOM
-    object current attributes.
+- ``fill(self, *children, **attributes)`` -- replaces the children of the
+  DOM element by the given children and appends the ``attributes`` to the DOM
+  element current attributes.
 
-    .. code-block:: python
+  .. code-block:: python
 
        >>> from nagare.namespaces import xhtml
        >>> h = xhtml.Renderer()
@@ -299,14 +298,14 @@ These three methods of the DOM objects are helpers to work with templates:
        >>> root.write_htmlstring()
        <div id="content"><h1>Hello world</h1></div>'
 
-       >>> root.fill("Go to ", h.a("Nagare home", href="http://www.nagare.org"), class_="description")
+       >>> root.fill('Go to ', h.a('Nagare home', href='http://www.nagare.org'), class_='description')
 
        >>> root.write_htmlstring()
         '<div id="content" class="description">Go to <a href="http://www.nagare.org">Nagare home</a></div>'
 
-  - ``replace(self, *children)`` -- replace the DOM object by the given children:
+- ``replace(self, *children)`` -- replace the DOM element by the given children:
 
-    .. code-block:: python
+  .. code-block:: python
 
        >>> from nagare.namespaces import xhtml
        >>> h = xhtml.Renderer()
@@ -322,23 +321,22 @@ These three methods of the DOM objects are helpers to work with templates:
        >>> root.write_htmlstring()
        '<div id="content"><h2>Nagare</h2></div>'
 
-  - ``repeat(self, iterable, childname=None)`` -- (description taken from
-    the `meld3 <http://plope.com/software/meld3/>`_ site)
+- ``repeat(self, iterable, childname=None)``
 
-      Repeats an element with values from an iterable.
+  Repeats an element with values from an iterable.
 
-      If ``childname`` is not ``None``, repeat the element on which repeat was called,
-      otherwise find the child element with a ``meld:id`` matching ``childname``
-      and repeat that.  The element is repeated within its parent element.
+  If ``childname`` is not ``None``, repeat the element on which repeat was called,
+  otherwise find the child element with a ``meld:id`` matching ``childname``
+  and repeat that.  The element is repeated within its parent element.
 
-      This method returns an iterable; the value of each iteration is a
-      two-sequence in the form (newelement, data).  ``newelement`` is a clone of
-      the template element (including clones of its children) which has already
-      been seated in its parent element in the template. ``data`` is a value from
-      the passed in iterable.  Changing ``newelement`` (typically based on values
-      from ``data``) mutates the element "in place".
+  This method returns an iterable; the value of each iteration is a
+  two-sequence in the form (newelement, data).  ``newelement`` is a clone of
+  the template element (including clones of its children) which has already
+  been seated in its parent element in the template. ``data`` is a value from
+  the passed in iterable.  Changing ``newelement`` (typically based on values
+  from ``data``) mutates the element "in place".
 
-    .. code-block:: pycon
+  .. code-block:: pycon
 
         >>> from nagare.namespaces import xhtml
         >>> h = xhtml.Renderer()
@@ -363,16 +361,16 @@ These three methods of the DOM objects are helpers to work with templates:
 DOM tree serialization
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Once a tree of DOM object is build, it can be serialized in (X)HTML:
+Once a tree of DOM elements is build, it can be serialized in (X)HTML:
 
-  - ``write_xmlstring(self, encoding='utf-8', pipeline=True)`` -- serializes
-    the DOM tree into a XML string, encoded according to the ``encoding``
-    parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
-    removed, else they are kept so that the xml string can be re-parse as a
-    template.
+- ``write_xmlstring(self, encoding='utf-8', pipeline=True)`` -- serializes
+  the DOM tree into a XML string, encoded according to the ``encoding``
+  parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
+  removed, else they are kept so that the xml string can be re-parse as a
+  template.
 
-  - ``write_htmlstring(self, encoding='utf-8', pipeline=True)`` -- serializes
-    the DOM tree into a HTML string, encoded according to the ``encoding``
-    parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
-    removed.
+- ``write_htmlstring(self, encoding='utf-8', pipeline=True)`` -- serializes
+  the DOM tree into a HTML string, encoded according to the ``encoding``
+  parameter. If ``pipeline`` is True, the eventual ``meld:id`` attributes are
+  removed.
 

@@ -48,10 +48,10 @@ The ``batch`` command executes a python file.
 
 Once launched, two variables are available:
 
-  - `apps` is a dictionary that associates the name of an application to its
-    activated application object.
-  - `session` is the SQLAlchemy session (don't forget the ``session.commit()``
-    statement at the end of your batch if database entities are manipulated)
+- ``apps`` is a dictionary that associates the name of an application to its
+  activated application object.
+- ``session`` is the SQLAlchemy session (don't forget the ``session.commit()``
+  statement at the end of your batch if database entities are manipulated)
 
 The available options are:
 
@@ -81,14 +81,14 @@ entities description:
 
 The ``metadata`` parameter of the ``[database]`` section of
 :doc:`configuration_file` must be an :doc:`object_references` to an
-`SQLAlchemy metadata object <http://www.sqlalchemy.org/docs/04/metadata.html>`_.
+`SQLAlchemy metadata object <http://docs.sqlalchemy.org/en/latest/core/metadata.html>`_.
 The usage of the metadata object is described in :doc:`database`.
 
 The available options are:
 
   --no-populate     by default, after the tables creation, the function
                     referenced by the ``populate`` parameter of the ``[database]``
-                    section is called, to initialize the database. The
+                    section is called to initialize the database. The
                     ``--no-populate`` option disable this behaviour.
   --drop            if this option is given, the database tables are dropped
                     before to be re-created.
@@ -128,7 +128,7 @@ The ``drop-db`` command deletes the database tables of the application:
 
 The ``metadata`` parameter of the ``[database]`` section of
 :doc:`configuration_file` must be an :doc:`object_references` to an
-`SQLAlchemy metadata object <http://www.sqlalchemy.org/docs/04/metadata.html>`_.
+`SQLAlchemy metadata object <http://docs.sqlalchemy.org/en/latest/core/metadata.html>`_.
 The usage of the metadata object is described in :doc:`database`.
 
 The available options are:
@@ -232,10 +232,10 @@ interpreter:
 
 Once launched, two variables are available:
 
-  - `apps` is a dictionary that associates the name of an application to its
-    activated application object.
-  - `session` is the SQLAlchemy session (don't forget the ``session.commit()``
-    statement if database entities are manipulated)
+- ``apps`` is a dictionary that associates the name of an application to its
+  activated application object.
+- ``session`` is the SQLAlchemy session (don't forget the ``session.commit()``
+  statement if database entities are manipulated)
 
 The available options are:
 
