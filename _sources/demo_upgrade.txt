@@ -1,0 +1,46 @@
+Demo upgrade
+============
+
+1. Virtual environment installation
+-----------------------------------
+
+If the demo installation you want to upgrade is located into a virtual
+environment, execute the followings commands:
+
+on Linux:
+
+.. code-block:: sh
+
+    <NAGARE_HOME>/bin/easy_install -U nagare.examples
+
+on Windows::
+
+    <NAGARE_HOME>\Scripts\easy_install.exe -U nagare.examples
+
+2. System-wide installation
+---------------------------
+
+If the demo installation was installed system-wide, execute:
+
+on Linux:
+
+.. code-block:: sh
+
+    <STACKLESS_HOME>/bin/easy_install -U 'nagare.examples'
+
+on Windows::
+
+    <STACKLESS_HOME>\Scripts\easy_install.exe -U nagare.examples
+
+3. Developer installation
+-------------------------
+
+If your demo installation was directly a checkout from the Mercurial repository,
+execute:
+
+.. code-block:: sh
+
+    cd examples
+    git pull
+    <NAGARE_HOME>/bin/python setup.py develop
+

@@ -1,0 +1,984 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nagare.security package &mdash; Nagare 0.4.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Nagare 0.4.1 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LICENSE.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using it</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../framework_installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../framework_upgrade.html">Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nagare-admin.html">nagare-admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_file.html">Application configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publisher_file.html">Publisher configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deployment.html">Application deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../third_party.html">Third party applications</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial1.html">Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial2.html">Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial3.html">Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial4.html">Part 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wiki_tutorial.html">Wiki</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../application_creation.html">Application creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../presentation.html">Presentation service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../callbacks_forms.html">Callbacks and forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderer.html">Renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../restful.html">Significative URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wsgiapp.html">WSGI Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../i18n.html">Internationalization and localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../log.html">Log service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../object_references.html">Object references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../entry_points.html">Entry points</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo_installation.html">Demo installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo_upgrade.html">Demo upgrade</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nagare</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>nagare.security package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="nagare-security-package">
+<h1>nagare.security package<a class="headerlink" href="#nagare-security-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nagare.security.basic_auth">
+<span id="nagare-security-basic-auth-module"></span><h2>nagare.security.basic_auth module<a class="headerlink" href="#module-nagare.security.basic_auth" title="Permalink to this headline">¶</a></h2>
+<p>Authentication manager for the basic HTTP authentication scheme</p>
+<dl class="class">
+<dt id="nagare.security.basic_auth.Authentication">
+<em class="property">class </em><code class="descclassname">nagare.security.basic_auth.</code><code class="descname">Authentication</code><span class="sig-paren">(</span><em>realm</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.basic_auth.Authentication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Authentication</span></code></a></p>
+<p>Authentication manager for the basic HTTP authentication scheme</p>
+<dl class="method">
+<dt id="nagare.security.basic_auth.Authentication.check_password">
+<code class="descname">check_password</code><span class="sig-paren">(</span><em>username</em>, <em>real_password</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.basic_auth.Authentication.check_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authentication</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">username</span></code> – user id</li>
+<li><code class="docutils literal"><span class="pre">real_password</span></code> – real password of the user</li>
+<li><code class="docutils literal"><span class="pre">password</span></code> – password received</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>a boolean</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.basic_auth.Authentication.denies">
+<code class="descname">denies</code><span class="sig-paren">(</span><em>detail</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.basic_auth.Authentication.denies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called when a permission is denied</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">details</span></code> – a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.basic_auth.Authentication.get_ids">
+<code class="descname">get_ids</code><span class="sig-paren">(</span><em>request</em>, <em>response</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.basic_auth.Authentication.get_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the data associated with the connected user</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal"><span class="pre">response</span></code> – the web response object</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>A tuple with the id of the user and its password as a dictionary</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.security.common">
+<span id="nagare-security-common-module"></span><h2>nagare.security.common module<a class="headerlink" href="#module-nagare.security.common" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nagare.security.common.Authentication">
+<em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Authentication</code><a class="headerlink" href="#nagare.security.common.Authentication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>An <code class="docutils literal"><span class="pre">Authentication</span></code> object identify, authenticate and create the
+user objects</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By definition, the user object <code class="docutils literal"><span class="pre">None</span></code> is the anonymous user</p>
+</div>
+<dl class="method">
+<dt id="nagare.security.common.Authentication.check_password">
+<code class="descname">check_password</code><span class="sig-paren">(</span><em>username</em>, <em>password</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Authentication.check_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authentication</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">username</span></code> – the user id</li>
+<li><code class="docutils literal"><span class="pre">password</span></code> – the real password of the user</li>
+<li><code class="docutils literal"><span class="pre">kw</span></code> – other data for the user</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>a boolean</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Authentication.create_user">
+<code class="descname">create_user</code><span class="sig-paren">(</span><em>request</em>, <em>response</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Authentication.create_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the user is valid and create it</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Authentication.denies">
+<code class="descname">denies</code><span class="sig-paren">(</span><em>detail</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Authentication.denies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called when a permission is denied</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">detail</span></code> – a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Authentication.end_rendering">
+<code class="descname">end_rendering</code><span class="sig-paren">(</span><em>request</em>, <em>response</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Authentication.end_rendering" title="Permalink to this definition">¶</a></dt>
+<dd><p>End of the request processing</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">request</span></code> – the request object</li>
+<li><code class="docutils literal"><span class="pre">response</span></code> – the response object</li>
+<li><code class="docutils literal"><span class="pre">session</span></code> – the session</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Authentication.get_ids">
+<code class="descname">get_ids</code><span class="sig-paren">(</span><em>request</em>, <em>response</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Authentication.get_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the data associated with the connected user</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal"><span class="pre">response</span></code> – the web response object</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>A tuple with the id of the user and a dictionary of its data</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Authentication.get_password">
+<code class="descname">get_password</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Authentication.get_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the real password of the user</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">username</span></code> – the user id</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>the password</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Authentication.logout">
+<code class="descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Authentication.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deconnection of the current user</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Authentication.set_user_id">
+<code class="descname">set_user_id</code><span class="sig-paren">(</span><em>user</em>, <em>id</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Authentication.set_user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the credentials of the user</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">user</span></code> – the user</li>
+<li><code class="docutils literal"><span class="pre">id</span></code> – the user id</li>
+<li><code class="docutils literal"><span class="pre">**kw</span></code> – the user credentials</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="nagare.security.common.Denial">
+<em class="property">exception </em><code class="descclassname">nagare.security.common.</code><code class="descname">Denial</code><span class="sig-paren">(</span><em>message='Access forbidden'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Denial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.BaseException</span></code></p>
+<p>Type of the objects return when an access is denied</p>
+<p>In a boolean context, it is evaluated to <code class="docutils literal"><span class="pre">False</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nagare.security.common.Permission">
+<em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Permission</code><a class="headerlink" href="#nagare.security.common.Permission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class of all the permissions</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nagare.security.common.Private">
+<em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Private</code><a class="headerlink" href="#nagare.security.common.Private" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Permission" title="nagare.security.common.Permission"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Permission</span></code></a></p>
+<p>To define the <code class="docutils literal"><span class="pre">private</span></code> permission singleton</p>
+<p>Nobody has access to objects protected with this permission</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nagare.security.common.Public">
+<em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Public</code><a class="headerlink" href="#nagare.security.common.Public" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Permission" title="nagare.security.common.Permission"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Permission</span></code></a></p>
+<p>To define the <code class="docutils literal"><span class="pre">public</span></code> permission singleton</p>
+<p>Every body has access to objects protected with this permission</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nagare.security.common.Rules">
+<em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Rules</code><a class="headerlink" href="#nagare.security.common.Rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Pre-defined security rules</p>
+<p>A rule is an implementation of the <code class="docutils literal"><span class="pre">security.common.Rules.has_permission()</span></code>
+generic method.</p>
+<dl class="method">
+<dt id="nagare.security.common.Rules.check_access_list">
+<code class="descname">check_access_list</code><span class="sig-paren">(</span><em>user</em>, <em>perms</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.check_access_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>If several permissions are to be checked, the access must be granted
+for at least one permission</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Rules.check_access_set">
+<code class="descname">check_access_set</code><span class="sig-paren">(</span><em>user</em>, <em>perms</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.check_access_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>If several permissions are to be checked, the access must be granted
+for at least one permission</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Rules.check_access_tuple">
+<code class="descname">check_access_tuple</code><span class="sig-paren">(</span><em>user</em>, <em>perms</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.check_access_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>If several permissions are to be checked, the access must be granted
+for at least one permission</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Rules.full_access">
+<code class="descname">full_access</code><span class="sig-paren">(</span><em>user</em>, <em>perm</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.full_access" title="Permalink to this definition">¶</a></dt>
+<dd><p>Everybody has access to an object protected with the <code class="docutils literal"><span class="pre">public</span></code> permission</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Rules.has_permission">
+<code class="descname">has_permission</code><span class="sig-paren">(</span><em>user</em>, <em>perm</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.has_permission" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">has_permission()</span></code> generic method
+and default implementation: by default all accesses are denied</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">user</span></code> – user to check the permission for</li>
+<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s) to check</li>
+<li><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permission on</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>True if the access is granted</li>
+<li>Else a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.Rules.no_access">
+<code class="descname">no_access</code><span class="sig-paren">(</span><em>user</em>, <em>perm</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.no_access" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nobody has access to an object protected with the <code class="docutils literal"><span class="pre">private</span></code> permission</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nagare.security.common.User">
+<em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">User</code><span class="sig-paren">(</span><em>id=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class for the user objects</p>
+<dl class="method">
+<dt id="nagare.security.common.User.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.User.get_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.common.User.set_id">
+<code class="descname">set_id</code><span class="sig-paren">(</span><em>id</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.User.set_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.security.digest_auth">
+<span id="nagare-security-digest-auth-module"></span><h2>nagare.security.digest_auth module<a class="headerlink" href="#module-nagare.security.digest_auth" title="Permalink to this headline">¶</a></h2>
+<p>Authentication manager for the digest HTTP authentication scheme</p>
+<dl class="class">
+<dt id="nagare.security.digest_auth.Authentication">
+<em class="property">class </em><code class="descclassname">nagare.security.digest_auth.</code><code class="descname">Authentication</code><span class="sig-paren">(</span><em>realm</em>, <em>private_key</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.digest_auth.Authentication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Authentication</span></code></a></p>
+<p>Authentication manager for the digest HTTP authentication scheme</p>
+<dl class="method">
+<dt id="nagare.security.digest_auth.Authentication.check_password">
+<code class="descname">check_password</code><span class="sig-paren">(</span><em>username</em>, <em>password</em>, <em>response</em>, <em>encoding</em>, <em>realm=''</em>, <em>uri=''</em>, <em>nonce=''</em>, <em>nc=''</em>, <em>cnonce=''</em>, <em>qop=''</em>, <em>http_method=''</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.digest_auth.Authentication.check_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authentication</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">username</span></code> – user id</li>
+<li><code class="docutils literal"><span class="pre">password</span></code> – real password of the user</li>
+<li><code class="docutils literal"><span class="pre">encoding</span></code> – encoding of username and password on the client</li>
+<li><code class="docutils literal"><span class="pre">response</span></code>, <code class="docutils literal"><span class="pre">realm</span></code>, <code class="docutils literal"><span class="pre">uri</span></code>, <code class="docutils literal"><span class="pre">nonce</span></code>, <code class="docutils literal"><span class="pre">nc</span></code>, <code class="docutils literal"><span class="pre">cnonce</span></code>,
+<code class="docutils literal"><span class="pre">qop</span></code> – elements of the challenge response</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>a boolean</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.digest_auth.Authentication.denies">
+<code class="descname">denies</code><span class="sig-paren">(</span><em>detail</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.digest_auth.Authentication.denies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called when a permission is denied</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">details</span></code> – a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.digest_auth.Authentication.get_ids">
+<code class="descname">get_ids</code><span class="sig-paren">(</span><em>request</em>, <em>response</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.digest_auth.Authentication.get_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the data associated with the connected user</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal"><span class="pre">response</span></code> – the web response object</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>A tuple with the id of the user and all the challenge response parameters</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.security.dummy_manager">
+<span id="nagare-security-dummy-manager-module"></span><h2>nagare.security.dummy_manager module<a class="headerlink" href="#module-nagare.security.dummy_manager" title="Permalink to this headline">¶</a></h2>
+<p>Empty security manager</p>
+<dl class="class">
+<dt id="nagare.security.dummy_manager.Manager">
+<em class="property">class </em><code class="descclassname">nagare.security.dummy_manager.</code><code class="descname">Manager</code><a class="headerlink" href="#nagare.security.dummy_manager.Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Authentication</span></code></a>, <a class="reference internal" href="#nagare.security.common.Rules" title="nagare.security.common.Rules"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Rules</span></code></a></p>
+<p>A security manager is typically a mix-in of an authentication
+manager and security rules</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.security.form_auth">
+<span id="nagare-security-form-auth-module"></span><h2>nagare.security.form_auth module<a class="headerlink" href="#module-nagare.security.form_auth" title="Permalink to this headline">¶</a></h2>
+<p>Simple form based authentication manager</p>
+<p>The id and password of the user are first searched into the parameters of
+the request. So, first, set a form with the fields names <code class="docutils literal"><span class="pre">__ac_name</span></code>
+and <code class="docutils literal"><span class="pre">__ac_password</span></code> (the prefix <code class="docutils literal"><span class="pre">__ac</span></code> is configurable).</p>
+<p>Then the user id and the password are automatically kept into a cookie,
+sent back on each request by the browser.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This simple authentication manager keeps the user id and password in
+clear into the cookie. So this authentication manager is as secure as
+the HTTP basic authentication.</p>
+</div>
+<dl class="class">
+<dt id="nagare.security.form_auth.Authentication">
+<em class="property">class </em><code class="descclassname">nagare.security.form_auth.</code><code class="descname">Authentication</code><span class="sig-paren">(</span><em>prefix='__ac'</em>, <em>key=None</em>, <em>max_age=None</em>, <em>path='/'</em>, <em>domain=None</em>, <em>secure=None</em>, <em>httponly=False</em>, <em>comment=None</em>, <em>expires=None</em>, <em>overwrite=False</em>, <em>realm=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.basic_auth.Authentication" title="nagare.security.basic_auth.Authentication"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.basic_auth.Authentication</span></code></a></p>
+<p>Simple form based authentication</p>
+<dl class="method">
+<dt id="nagare.security.form_auth.Authentication.cookie_decode">
+<code class="descname">cookie_decode</code><span class="sig-paren">(</span><em>cookie</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication.cookie_decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode the data of the user cookie</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">cookie</span></code> – the data of the user cookie</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>A list with the id of the user and its password</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.form_auth.Authentication.cookie_encode">
+<code class="descname">cookie_encode</code><span class="sig-paren">(</span><em>*ids</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication.cookie_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode the data of the user cookie</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">ids</span></code> – a tuple of data to put into the cookie</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>the data to put into the user cookie</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.form_auth.Authentication.denies">
+<code class="descname">denies</code><span class="sig-paren">(</span><em>detail</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication.denies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called when a permission is denied</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">details</span></code> – a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.form_auth.Authentication.end_rendering">
+<code class="descname">end_rendering</code><span class="sig-paren">(</span><em>request</em>, <em>response</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication.end_rendering" title="Permalink to this definition">¶</a></dt>
+<dd><p>End of the request processing</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">request</span></code> – the request object</li>
+<li><code class="docutils literal"><span class="pre">response</span></code> – the response object</li>
+<li><code class="docutils literal"><span class="pre">session</span></code> – the session</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.form_auth.Authentication.get_ids_from_cookie">
+<code class="descname">get_ids_from_cookie</code><span class="sig-paren">(</span><em>cookies</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication.get_ids_from_cookie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the data associated with the connected user into the cookies</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">cookies</span></code> – cookies dictionary</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>A list with the id of the user and its password</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.form_auth.Authentication.get_ids_from_params">
+<code class="descname">get_ids_from_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication.get_ids_from_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the data associated with the connected user into the request
+parameter</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">params</span></code> – the request parameters</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>A tuple with the id of the user and its password</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.form_auth.Authentication.logout">
+<code class="descname">logout</code><span class="sig-paren">(</span><em>location=''</em>, <em>delete_session=True</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deconnection of the current user</p>
+<p>Mark the user object as expired</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">location</span></code> – location to redirect to</li>
+<li><code class="docutils literal"><span class="pre">delete_session</span></code> – is the session expired too ?</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.security.form_auth.Authentication.set_user_id">
+<code class="descname">set_user_id</code><span class="sig-paren">(</span><em>user</em>, <em>id</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication.set_user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the credentials of the user</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">user</span></code> – the user</li>
+<li><code class="docutils literal"><span class="pre">id</span></code> – the user id</li>
+<li><code class="docutils literal"><span class="pre">password</span></code> – the user password</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.security">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nagare.security" title="Permalink to this headline">¶</a></h2>
+<p>Securiy API for the applications</p>
+<dl class="function">
+<dt id="nagare.security.call_with_permissions">
+<code class="descclassname">nagare.security.</code><code class="descname">call_with_permissions</code><span class="sig-paren">(</span><em>self</em>, <em>__action</em>, <em>__perm</em>, <em>__subject</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.call_with_permissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call a function or method only if permit</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">self</span></code> – if <code class="docutils literal"><span class="pre">None</span></code> then <code class="docutils literal"><span class="pre">__action</span></code> is a function else a method</li>
+<li><code class="docutils literal"><span class="pre">__action</span></code> – function or method to call</li>
+<li><code class="docutils literal"><span class="pre">__perm</span></code> – permission(s) to check</li>
+<li><code class="docutils literal"><span class="pre">__subject</span></code> – object to check the permissions on</li>
+<li><code class="docutils literal"><span class="pre">args</span></code>, <code class="docutils literal"><span class="pre">kw</span></code> – <code class="docutils literal"><span class="pre">__action</span></code> parameters</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">__action</span></code> return</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.check_permissions">
+<code class="descclassname">nagare.security.</code><code class="descname">check_permissions</code><span class="sig-paren">(</span><em>perm</em>, <em>subject=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.check_permissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control that the current user has the permissions <code class="docutils literal"><span class="pre">perm</span></code>
+on the object <code class="docutils literal"><span class="pre">subject</span></code></p>
+<p>Forward the call to the generic method <code class="docutils literal"><span class="pre">has_permission()</span></code> of the
+current security manager.</p>
+<p>Then let the security manager acts if the permission is denied.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The default generic method can check a single permission or a list of
+permissions</p>
+</div>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s)</li>
+<li><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>True if the access is granted</li>
+<li>Else a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.get_manager">
+<code class="descclassname">nagare.security.</code><code class="descname">get_manager</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.get_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the security manager</p>
+<p>Each application has a dedicated security manager</p>
+<dl class="docutils">
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>the security manager</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.get_user">
+<code class="descclassname">nagare.security.</code><code class="descname">get_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current user</p>
+<dl class="docutils">
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>the user object (created by the security manager) if not expired</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.has_permissions">
+<code class="descclassname">nagare.security.</code><code class="descname">has_permissions</code><span class="sig-paren">(</span><em>perm</em>, <em>subject=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.has_permissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that the current user has the permissions <code class="docutils literal"><span class="pre">perm</span></code>
+on the object <code class="docutils literal"><span class="pre">subject</span></code></p>
+<p>Forward the call to the generic method <code class="docutils literal"><span class="pre">has_permission()</span></code> of the
+current security manager</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The default generic method can check a single permission or a list of
+permissions</p>
+</div>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s)</li>
+<li><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>True if the access is granted</li>
+<li>Else a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.permissions">
+<code class="descclassname">nagare.security.</code><code class="descname">permissions</code><span class="sig-paren">(</span><em>perm</em>, <em>subject=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.permissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to check the permissions of the current user</p>
+<p>The <code class="docutils literal"><span class="pre">subject</span></code> will be the first argument of the decorated method</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s)</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on or the first argument</dt>
+<dd>of the decorated method if <code class="docutils literal"><span class="pre">None</span></code></dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.permissions_with_subject">
+<code class="descclassname">nagare.security.</code><code class="descname">permissions_with_subject</code><span class="sig-paren">(</span><em>perm</em>, <em>subject=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.permissions_with_subject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to check the permissions of the current user</p>
+<p>The <code class="docutils literal"><span class="pre">subject</span></code> will be the first argument of the decorated method</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s)</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on or the first argument</dt>
+<dd>of the decorated method if <code class="docutils literal"><span class="pre">None</span></code></dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.set_manager">
+<code class="descclassname">nagare.security.</code><code class="descname">set_manager</code><span class="sig-paren">(</span><em>manager</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.set_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the security manager</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">manager</span></code> – the new security manager</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.set_user">
+<code class="descclassname">nagare.security.</code><code class="descname">set_user</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.set_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the user</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">user</span></code> – the current user</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.security.wrapper">
+<code class="descclassname">nagare.security.</code><code class="descname">wrapper</code><span class="sig-paren">(</span><em>action</em>, <em>perm</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap a function or method into a wrapper that will check the user permissions</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">action</span></code> – function or method to wrapper</li>
+<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s) to check</li>
+<li><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>new action</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+   
+
+</body>
+</html>

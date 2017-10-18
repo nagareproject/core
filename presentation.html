@@ -1,0 +1,607 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Presentation tier &mdash; Nagare 0.4.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Nagare 0.4.1 documentation" href="index.html"/>
+        <link rel="next" title="The Nagare component model" href="components.html"/>
+        <link rel="prev" title="Create an application" href="application_creation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using it</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="framework_installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="framework_upgrade.html">Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nagare-admin.html">nagare-admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_file.html">Application configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publisher_file.html">Publisher configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Application deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="third_party.html">Third party applications</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial1.html">Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial2.html">Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial3.html">Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial4.html">Part 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wiki_tutorial.html">Wiki</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Developer documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="application_creation.html">Application creation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Presentation service</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#principles">Principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dom-element-creation">DOM element creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dom-elements-api">DOM elements API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#elementtree-api">ElementTree API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lxml-api">Lxml API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functional-dom-building-api">Functional DOM building API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imperative-dom-building-api">Imperative DOM building API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#template">Template</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creating-the-template">1. Creating the template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing-the-template">2. Parsing the template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#finding-the-dom-elements">3. Finding the DOM elements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#manipulating-the-dom-elements">4. Manipulating the DOM elements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dom-tree-serialization">DOM tree serialization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Components model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks_forms.html">Callbacks and forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderer.html">Renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="restful.html">Significative URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wsgiapp.html">WSGI Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i18n.html">Internationalization and localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="log.html">Log service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object_references.html">Object references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entry_points.html">Entry points</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="demo_installation.html">Demo installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo_upgrade.html">Demo upgrade</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Nagare</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Presentation tier</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="presentation-tier">
+<h1>Presentation tier<a class="headerlink" href="#presentation-tier" title="Permalink to this headline">¶</a></h1>
+<p>This document describes how to generate HTML and XML dialects with the service
+offered by the framework.</p>
+<p><a class="reference internal" href="components.html"><span class="doc">The Nagare component model</span></a> explains how to associate HTML or XML views to the components.</p>
+<div class="section" id="principles">
+<h2>Principles<a class="headerlink" href="#principles" title="Permalink to this headline">¶</a></h2>
+<p>With Nagare, to generate a HTML text, you always build a tree of objects in
+memory, a Document Objects Model (not the DOM version of the W3C), that you
+can serialize in a (X)HTML text.</p>
+<p>One benefic effect of this serialization is that the generated HTML or XHTML
+is always valid.</p>
+<p>The framework offers to you three ways to generate the DOM:</p>
+<ol class="arabic simple">
+<li>functional</li>
+<li>imperative</li>
+<li>templating</li>
+</ol>
+<p>It’s important to note that these three methods all generate a DOM and so can
+be freely mixed to build an aggregating DOM.</p>
+</div>
+<div class="section" id="dom-element-creation">
+<h2>DOM element creation<a class="headerlink" href="#dom-element-creation" title="Permalink to this headline">¶</a></h2>
+<p>A <code class="docutils literal"><span class="pre">Renderer</span></code> is a DOM element factory. For example, the XHTML renderer
+<a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a> has an attribute, for
+each XHTML tag, that create a DOM element:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">div</span>
+<span class="go">&lt;Element div at 8410b6c&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dom-elements-api">
+<h2>DOM elements API<a class="headerlink" href="#dom-elements-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="elementtree-api">
+<h3>ElementTree API<a class="headerlink" href="#elementtree-api" title="Permalink to this headline">¶</a></h3>
+<p>A DOM element is an instance of the class <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xml._Tag</span></code>.
+As this class inherits from <code class="docutils literal"><span class="pre">lxml.etree.Element</span></code>, the DOM element offers an
+<a class="reference external" href="https://docs.python.org/2.7/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element">ElementTree API.</a>:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">h1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Hello world&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go">&#39;&lt;div id=&quot;content&quot;&gt;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;/div&gt;&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lxml-api">
+<h3>Lxml API<a class="headerlink" href="#lxml-api" title="Permalink to this headline">¶</a></h3>
+<p>You can also <a class="reference external" href="http://lxml.de/validation.html">validate</a> a DOM tree
+against a DTD, XML Schema, RelaxNG or Schematron document.</p>
+<p>And you can use <a class="reference external" href="http://lxml.de/xpathxslt.html">XPath and Xsl transformations</a>.</p>
+</div>
+<div class="section" id="functional-dom-building-api">
+<h3>Functional DOM building API<a class="headerlink" href="#functional-dom-building-api" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">_Tag</span></code> class implements a <code class="docutils literal"><span class="pre">__call__</span></code>  method to add children, text or
+attributes to a DOM element:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">children</span><span class="p">,</span> <span class="o">**</span><span class="n">attributes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each element in <code class="docutils literal"><span class="pre">children</span></code> can be a:</p>
+<ul class="simple">
+<li>DOM element that is added as a child of the DOM element</li>
+<li>string, unicode string, integer or float that is converted to unicode
+string and added as data to the DOM element</li>
+<li>list, tuple or generator which each elements are added to the DOM element</li>
+<li>dictionary which each items are added as attributes of the DOM element</li>
+<li><a class="reference internal" href="components.html"><span class="doc">component</span></a> <code class="docutils literal"><span class="pre">comp</span></code> wich will be rendered with its
+default view (i.e <code class="docutils literal"><span class="pre">comp.render(h)</span></code>) and the resulting DOM tree added
+to the DOM element</li>
+</ul>
+<p>Each items in <code class="docutils literal"><span class="pre">attributes</span></code> are added as attributes of the DOM element.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As a keyword parameter cannot have the name of a Python reserved keyword,
+add a <code class="docutils literal"><span class="pre">_</span></code> character to the name (i.e: <code class="docutils literal"><span class="pre">h.div(class_='content')</span></code>)</p>
+</div>
+<p>Using the DOM element creation API of the renderers, with the nesting of
+calls to the created DOM element, a DOM tree can be built in a functional way:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">h1</span><span class="p">(</span><span class="s1">&#39;Hello world&#39;</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;content&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go">&lt;div id=&quot;content&quot;&gt;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;/div&gt;&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="imperative-dom-building-api">
+<h3>Imperative DOM building API<a class="headerlink" href="#imperative-dom-building-api" title="Permalink to this headline">¶</a></h3>
+<p>A DOM element is also a <a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#context-manager-types">context manager</a></p>
+<p>Once a context is opened using the <code class="docutils literal"><span class="pre">with</span></code> statement, children can be added
+to the context manager using the <code class="docutils literal"><span class="pre">&lt;&lt;</span></code> operator on the renderer.</p>
+<p>So a DOM tree can also be imperatively built from the nesting of contexts. With its root
+finally retrieved from the attribute <code class="docutils literal"><span class="pre">root</span></code> of the renderer:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="p">{</span> <span class="s1">&#39;id&#39;</span> <span class="p">:</span> <span class="s1">&#39;content&#39;</span> <span class="p">}</span>
+<span class="gp">... </span>    <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">h1</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;Hello world&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go">&#39;&lt;div id=&quot;content&quot;&gt;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;/div&gt;&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In a component view, don’t forget to return the tree with <code class="docutils literal"><span class="pre">h.root</span></code></p>
+</div>
+<p>Remember that the different ways to build a DOM tree can be freely mixed,
+so the example above can be rewrote as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;content&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">h1</span><span class="p">(</span><span class="s1">&#39;Hello world&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go">&#39;&lt;div id=&quot;content&quot;&gt;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;/div&gt;&#39;</span>
+</pre></div>
+</div>
+<p>Or, to create a HTML list from the Python list <code class="docutils literal"><span class="pre">l</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Functional</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ul</span><span class="p">([</span><span class="n">u</span><span class="o">.</span><span class="n">li</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">l</span><span class="p">])</span>
+
+<span class="c1"># Imperative</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">ul</span><span class="p">:</span>
+<span class="o">...</span>     <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
+<span class="o">...</span>         <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">ul</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="template">
+<h3>Template<a class="headerlink" href="#template" title="Permalink to this headline">¶</a></h3>
+<p>The templating system in Nagare follows the idea of the
+<em>meld family</em>: the designer who creates the XHTML template only gives identifiers to nodes.
+Then the developer can parse the template into a DOM tree, search for the DOM
+elements given their identifiers and manipulates them in Python.</p>
+<div class="section" id="creating-the-template">
+<h4>1. Creating the template<a class="headerlink" href="#creating-the-template" title="Permalink to this headline">¶</a></h4>
+<p>The template must be a valid XML document, for example a XHTML template and
+the namespace <code class="docutils literal"><span class="pre">http://www.plope.com/software/meld3</span></code> must be declared.</p>
+<p>To mark the nodes, use the attribute <code class="docutils literal"><span class="pre">id</span></code> of this namespace:</p>
+<div class="highlight-html"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span>
+      <span class="na">xmlns:meld</span><span class="o">=</span><span class="s">&quot;http://www.plope.com/software/meld3&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">meld:id</span><span class="o">=</span><span class="s">&quot;title&quot;</span><span class="p">&gt;</span>Hello<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>The Python helper method <code class="docutils literal"><span class="pre">meld_id()</span></code> is available to add a <code class="docutils literal"><span class="pre">meld:id</span></code>
+attribute to a DOM element:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">html</span><span class="p">(</span>
+<span class="gp">... </span>           <span class="n">h</span><span class="o">.</span><span class="n">body</span><span class="p">(</span>
+<span class="gp">... </span>               <span class="n">h</span><span class="o">.</span><span class="n">h1</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">meld_id</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+<span class="gp">... </span>           <span class="p">)</span>
+<span class="gp">... </span>       <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span><span class="o">.</span><span class="n">write_xmlstring</span><span class="p">(</span><span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&lt;html&gt;</span>
+<span class="go">  &lt;body&gt;</span>
+<span class="go">    &lt;h1 xmlns:ns0=&quot;http://www.plope.com/software/meld3&quot; ns0:id=&quot;title&quot;&gt;Hello&lt;/h1&gt;</span>
+<span class="go">  &lt;/body&gt;</span>
+<span class="go">&lt;/html&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="parsing-the-template">
+<h4>2. Parsing the template<a class="headerlink" href="#parsing-the-template" title="Permalink to this headline">¶</a></h4>
+<p>You can use the <code class="docutils literal"><span class="pre">parse_htmlstring()</span></code> method of a xhtml renderer to parse a
+template:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">parse_html</span><span class="p">(</span><span class="s1">&#39;/tmp/template.xml&#39;</span><span class="p">,</span> <span class="n">xhtml</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">root</span><span class="o">.</span><span class="n">write_xmlstring</span><span class="p">()</span>
+<span class="go">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:meld=&quot;http://www.plope.com/software/meld3&quot;&gt;</span>
+<span class="go">    &lt;body&gt;</span>
+<span class="go">        &lt;h1 meld:id=&quot;title&quot;&gt;Hello&lt;/h1&gt;</span>
+<span class="go">    &lt;/body&gt;</span>
+<span class="go">&lt;/html&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="finding-the-dom-elements">
+<h4>3. Finding the DOM elements<a class="headerlink" href="#finding-the-dom-elements" title="Permalink to this headline">¶</a></h4>
+<p>Use the <code class="docutils literal"><span class="pre">findmeld()</span></code> method of the DOM elements to retreive the marked nodes:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">parse_html</span><span class="p">(</span><span class="s1">&#39;/tmp/template.xml&#39;</span><span class="p">,</span> <span class="n">xhtml</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">findmeld</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+<span class="go">&lt;Element {http://www.w3.org/1999/xhtml}h1 at 8410c5c&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manipulating-the-dom-elements">
+<h4>4. Manipulating the DOM elements<a class="headerlink" href="#manipulating-the-dom-elements" title="Permalink to this headline">¶</a></h4>
+<p>Once a DOM element is found, you can manipulate it with the normal ElementTree,
+Lxml, functional or imperative API:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">parse_html</span><span class="p">(</span><span class="s1">&#39;/tmp/template.xml&#39;</span><span class="p">,</span> <span class="n">xhtml</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findmeld</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;World&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">root</span><span class="o">.</span><span class="n">write_xmlstring</span><span class="p">()</span>
+<span class="go">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:meld=&quot;http://www.plope.com/software/meld3&quot;&gt;</span>
+<span class="go">    &lt;body&gt;</span>
+<span class="go">        &lt;h1 meld:id=&quot;title&quot;&gt;World&lt;/h1&gt;</span>
+<span class="go">    &lt;/body&gt;</span>
+<span class="go">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>These three methods of the DOM elements are helpers to work with templates:</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">fill(self,</span> <span class="pre">*children,</span> <span class="pre">**attributes)</span></code> – replaces the children of the
+DOM element by the given children and appends the <code class="docutils literal"><span class="pre">attributes</span></code> to the DOM
+element current attributes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">h1</span><span class="p">(</span><span class="s1">&#39;Hello world&#39;</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;content&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go">&lt;div id=&quot;content&quot;&gt;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;/div&gt;&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="s1">&#39;Go to &#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="s1">&#39;Nagare home&#39;</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;http://www.nagare.org&#39;</span><span class="p">),</span> <span class="n">class_</span><span class="o">=</span><span class="s1">&#39;description&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go"> &#39;&lt;div id=&quot;content&quot; class=&quot;description&quot;&gt;Go to &lt;a href=&quot;http://www.nagare.org&quot;&gt;Nagare home&lt;/a&gt;&lt;/div&gt;&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">replace(self,</span> <span class="pre">*children)</span></code> – replace the DOM element by the given children:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">h1</span><span class="p">(</span><span class="s1">&#39;Hello world&#39;</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;content&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go">&lt;div id=&quot;content&quot;&gt;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;/div&gt;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go">&lt;h1&gt;Hello world&lt;/h1&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">h2</span><span class="p">(</span><span class="s1">&#39;Nagare&#39;</span><span class="p">))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
+<span class="go">&#39;&lt;div id=&quot;content&quot;&gt;&lt;h2&gt;Nagare&lt;/h2&gt;&lt;/div&gt;&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">repeat(self,</span> <span class="pre">iterable,</span> <span class="pre">childname=None)</span></code></p>
+<p>Repeats an element with values from an iterable.</p>
+<p>If <code class="docutils literal"><span class="pre">childname</span></code> is not <code class="docutils literal"><span class="pre">None</span></code>, repeat the element on which repeat was called,
+otherwise find the child element with a <code class="docutils literal"><span class="pre">meld:id</span></code> matching <code class="docutils literal"><span class="pre">childname</span></code>
+and repeat that.  The element is repeated within its parent element.</p>
+<p>This method returns an iterable; the value of each iteration is a
+two-sequence in the form (newelement, data).  <code class="docutils literal"><span class="pre">newelement</span></code> is a clone of
+the template element (including clones of its children) which has already
+been seated in its parent element in the template. <code class="docutils literal"><span class="pre">data</span></code> is a value from
+the passed in iterable.  Changing <code class="docutils literal"><span class="pre">newelement</span></code> (typically based on values
+from <code class="docutils literal"><span class="pre">data</span></code>) mutates the element “in place”.</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">parse_xmlstring</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;ul xmlns:meld=&quot;http://www.plope.com/software/meld3&quot;&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;li meld:id=&quot;alist&quot; align=&quot;center&quot;&gt;A line example&lt;/li&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/ul&gt;&#39;&#39;&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Item </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findmeld</span><span class="p">(</span><span class="s1">&#39;alist&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">item</span>
+<span class="gp">...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">root</span><span class="o">.</span><span class="n">write_xmlstring</span><span class="p">()</span>
+<span class="go">&lt;ul xmlns:meld=&quot;http://www.plope.com/software/meld3&quot;&gt;</span>
+<span class="go">&lt;li align=&quot;center&quot;&gt;Item 0&lt;/li&gt;</span>
+<span class="go">&lt;li align=&quot;center&quot;&gt;Item 1&lt;/li&gt;</span>
+<span class="go">&lt;li align=&quot;center&quot;&gt;Item 2&lt;/li&gt;</span>
+<span class="go">&lt;/ul&gt;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="dom-tree-serialization">
+<h3>DOM tree serialization<a class="headerlink" href="#dom-tree-serialization" title="Permalink to this headline">¶</a></h3>
+<p>Once a tree of DOM elements is build, it can be serialized in (X)HTML:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">write_xmlstring(self,</span> <span class="pre">encoding='utf-8',</span> <span class="pre">pipeline=True)</span></code> – serializes
+the DOM tree into a XML string, encoded according to the <code class="docutils literal"><span class="pre">encoding</span></code>
+parameter. If <code class="docutils literal"><span class="pre">pipeline</span></code> is True, the eventual <code class="docutils literal"><span class="pre">meld:id</span></code> attributes are
+removed, else they are kept so that the xml string can be re-parse as a
+template.</li>
+<li><code class="docutils literal"><span class="pre">write_htmlstring(self,</span> <span class="pre">encoding='utf-8',</span> <span class="pre">pipeline=True)</span></code> – serializes
+the DOM tree into a HTML string, encoded according to the <code class="docutils literal"><span class="pre">encoding</span></code>
+parameter. If <code class="docutils literal"><span class="pre">pipeline</span></code> is True, the eventual <code class="docutils literal"><span class="pre">meld:id</span></code> attributes are
+removed.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="components.html" class="btn btn-neutral float-right" title="The Nagare component model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="application_creation.html" class="btn btn-neutral" title="Create an application" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.4.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+   
+
+</body>
+</html>

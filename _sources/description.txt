@@ -1,0 +1,31 @@
+*And Now For Something Completely Different*
+============================================
+
+.. container:: description-left
+
+    .. image:: img/banner.png
+
+.. container:: description-right
+
+    .. include:: ../README.rst
+       :start-line: 3
+
+
+    .. raw:: html
+
+       <h2><i>Take an open-minded tour to Nagare</i></h2>
+
+    Try it ! Play with it ! Adopt it !
+
+    And never look back.
+
+    .. raw:: html
+
+       <hr>
+
+    **Nagare** is the japanese word for "flow" or "smooth transition".
+
+    A reference to the control flow of an application, the name of the highest
+    creativity state of mind, and, in the "Ki no nagare" principle of martial arts,
+    the perfect association of energy and agility.
+

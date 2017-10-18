@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nagare.admin.interface package &mdash; Nagare 0.4.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Nagare 0.4.1 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LICENSE.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using it</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../framework_installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../framework_upgrade.html">Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nagare-admin.html">nagare-admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_file.html">Application configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publisher_file.html">Publisher configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deployment.html">Application deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../third_party.html">Third party applications</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial1.html">Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial2.html">Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial3.html">Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial4.html">Part 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wiki_tutorial.html">Wiki</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../application_creation.html">Application creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../presentation.html">Presentation service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../callbacks_forms.html">Callbacks and forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderer.html">Renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../restful.html">Significative URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wsgiapp.html">WSGI Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../i18n.html">Internationalization and localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../log.html">Log service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../object_references.html">Object references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../entry_points.html">Entry points</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo_installation.html">Demo installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo_upgrade.html">Demo upgrade</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nagare</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>nagare.admin.interface package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="nagare-admin-interface-package">
+<h1>nagare.admin.interface package<a class="headerlink" href="#nagare-admin-interface-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nagare.admin.interface.applications">
+<span id="nagare-admin-interface-applications-module"></span><h2>nagare.admin.interface.applications module<a class="headerlink" href="#module-nagare.admin.interface.applications" title="Permalink to this headline">¶</a></h2>
+<p>Applications administration view</p>
+<dl class="class">
+<dt id="nagare.admin.interface.applications.Admin">
+<em class="property">class </em><code class="descclassname">nagare.admin.interface.applications.</code><code class="descname">Admin</code><span class="sig-paren">(</span><em>apps</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.interface.applications.Admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="nagare.admin.interface.applications.Admin.priority">
+<code class="descname">priority</code><em class="property"> = 100</em><a class="headerlink" href="#nagare.admin.interface.applications.Admin.priority" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.admin.interface.applications.render">
+<code class="descclassname">nagare.admin.interface.applications.</code><code class="descname">render</code><span class="sig-paren">(</span><em>self</em>, <em>h</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.interface.applications.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the currently launched application, with their names and their URLs</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.admin.interface.info">
+<span id="nagare-admin-interface-info-module"></span><h2>nagare.admin.interface.info module<a class="headerlink" href="#module-nagare.admin.interface.info" title="Permalink to this headline">¶</a></h2>
+<p>Framework environment administrative view</p>
+<dl class="class">
+<dt id="nagare.admin.interface.info.Admin">
+<em class="property">class </em><code class="descclassname">nagare.admin.interface.info.</code><code class="descname">Admin</code><span class="sig-paren">(</span><em>apps</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.interface.info.Admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="nagare.admin.interface.info.Admin.priority">
+<code class="descname">priority</code><em class="property"> = 1</em><a class="headerlink" href="#nagare.admin.interface.info.Admin.priority" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.admin.interface.info.render">
+<code class="descclassname">nagare.admin.interface.info.</code><code class="descname">render</code><span class="sig-paren">(</span><em>self</em>, <em>h</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.interface.info.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display informations about the running framework environment</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.admin.interface">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nagare.admin.interface" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+   
+
+</body>
+</html>

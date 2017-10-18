@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nagare.publishers package &mdash; Nagare 0.4.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Nagare 0.4.1 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LICENSE.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using it</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../framework_installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../framework_upgrade.html">Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nagare-admin.html">nagare-admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_file.html">Application configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../publisher_file.html">Publisher configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deployment.html">Application deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../third_party.html">Third party applications</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial1.html">Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial2.html">Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial3.html">Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial4.html">Part 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wiki_tutorial.html">Wiki</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../application_creation.html">Application creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../presentation.html">Presentation service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../callbacks_forms.html">Callbacks and forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderer.html">Renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../restful.html">Significative URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../wsgiapp.html">WSGI Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../i18n.html">Internationalization and localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../log.html">Log service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../object_references.html">Object references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../entry_points.html">Entry points</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo_installation.html">Demo installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo_upgrade.html">Demo upgrade</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nagare</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>nagare.publishers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="nagare-publishers-package">
+<h1>nagare.publishers package<a class="headerlink" href="#nagare-publishers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nagare.publishers.common">
+<span id="nagare-publishers-common-module"></span><h2>nagare.publishers.common module<a class="headerlink" href="#module-nagare.publishers.common" title="Permalink to this headline">¶</a></h2>
+<p>Base class of all the publishers</p>
+<dl class="class">
+<dt id="nagare.publishers.common.Publisher">
+<em class="property">class </em><code class="descclassname">nagare.publishers.common.</code><code class="descname">Publisher</code><a class="headerlink" href="#nagare.publishers.common.Publisher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class of all the publishers</p>
+<dl class="attribute">
+<dt id="nagare.publishers.common.Publisher.default_port">
+<code class="descname">default_port</code><em class="property"> = 8080</em><a class="headerlink" href="#nagare.publishers.common.Publisher.default_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nagare.publishers.common.Publisher.get_registered_applications">
+<code class="descname">get_registered_applications</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.common.Publisher.get_registered_applications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all the applications registered on this publisher</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.publishers.common.Publisher.on_new_process">
+<code class="descname">on_new_process</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.common.Publisher.on_new_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>The publisher has started a new process</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.publishers.common.Publisher.register_application">
+<code class="descname">register_application</code><span class="sig-paren">(</span><em>app_name</em>, <em>name</em>, <em>app</em>, <em>wsgi_pipe</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.common.Publisher.register_application" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register an application to launch</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">app_name</span></code> – name of the application</li>
+<li><code class="docutils literal"><span class="pre">name</span></code> – url of the application</li>
+<li><code class="docutils literal"><span class="pre">app</span></code> – the WSGI application</li>
+<li><code class="docutils literal"><span class="pre">wsgi_pipe</span></code> – the pipe of WSGI “middlewares”</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.publishers.common.Publisher.register_static">
+<code class="descname">register_static</code><span class="sig-paren">(</span><em>name</em>, <em>get_file</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.common.Publisher.register_static" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a WSGI application to serve static contents</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">name</span></code> – the URL of the contents will be prefix by <code class="docutils literal"><span class="pre">/static/&lt;name&gt;/</span></code></li>
+<li><code class="docutils literal"><span class="pre">get_file</span></code> – function that will received the URL of the static content
+and will return its filename</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>URL prefix (<code class="docutils literal"><span class="pre">/static/&lt;name&gt;/</span></code>)</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.publishers.common.Publisher.serve">
+<code class="descname">serve</code><span class="sig-paren">(</span><em>filename</em>, <em>conf</em>, <em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.common.Publisher.serve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the publisher</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nagare.publishers.common.Publisher.spec">
+<code class="descname">spec</code><em class="property"> = {}</em><a class="headerlink" href="#nagare.publishers.common.Publisher.spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="nagare.publishers.common.serve_file">
+<code class="descclassname">nagare.publishers.common.</code><code class="descname">serve_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.common.serve_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a WSGI application that return a static file</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">filename</span></code> – path of the file to serve</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>a WSGI application</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="nagare-publishers-eventlet-publisher-module">
+<h2>nagare.publishers.eventlet_publisher module<a class="headerlink" href="#nagare-publishers-eventlet-publisher-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="nagare-publishers-fapws-publisher-module">
+<h2>nagare.publishers.fapws_publisher module<a class="headerlink" href="#nagare-publishers-fapws-publisher-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nagare.publishers.fcgi_publisher">
+<span id="nagare-publishers-fcgi-publisher-module"></span><h2>nagare.publishers.fcgi_publisher module<a class="headerlink" href="#module-nagare.publishers.fcgi_publisher" title="Permalink to this headline">¶</a></h2>
+<p>The FastCGI publisher</p>
+<dl class="class">
+<dt id="nagare.publishers.fcgi_publisher.Publisher">
+<em class="property">class </em><code class="descclassname">nagare.publishers.fcgi_publisher.</code><code class="descname">Publisher</code><a class="headerlink" href="#nagare.publishers.fcgi_publisher.Publisher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nagare.publishers.common.Publisher" title="nagare.publishers.common.Publisher"><code class="xref py py-class docutils literal"><span class="pre">nagare.publishers.common.Publisher</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">flup.server.fcgi_fork.WSGIServer</span></code></p>
+<p>The FastCGI publisher</p>
+<dl class="attribute">
+<dt id="nagare.publishers.fcgi_publisher.Publisher.default_port">
+<code class="descname">default_port</code><em class="property"> = 9000</em><a class="headerlink" href="#nagare.publishers.fcgi_publisher.Publisher.default_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nagare.publishers.fcgi_publisher.Publisher.register_static">
+<code class="descname">register_static</code><span class="sig-paren">(</span><em>name</em>, <em>get_file</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.fcgi_publisher.Publisher.register_static" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a WSGI application to serve static contents</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">name</span></code> – the URL of the contents will be prefix by <code class="docutils literal"><span class="pre">/static/&lt;name&gt;/</span></code></li>
+<li><code class="docutils literal"><span class="pre">get_file</span></code> – function that will received the URL of the static content
+and will return its filename</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>URL prefix (<code class="docutils literal"><span class="pre">/static/&lt;name&gt;/</span></code>)</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p><strong>Dummy method</strong></p>
+<p>The front HTTP server must be configurated to serve the static contents</p>
+<p class="last">(you can use the administrative command <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">create-rules</span></code> to generate
+the rewrite rules if you are using the lighttpd or nginx servers)</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="nagare.publishers.fcgi_publisher.Publisher.serve">
+<code class="descname">serve</code><span class="sig-paren">(</span><em>filename</em>, <em>conf</em>, <em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.fcgi_publisher.Publisher.serve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the publisher</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nagare.publishers.fcgi_publisher.Publisher.spec">
+<code class="descname">spec</code><em class="property"> = {'socket': 'string(default=&quot;&quot;)', 'maxChildren': 'integer(default=None)', 'maxRequests': 'integer(default=None)', 'umask': 'integer(default=None)', 'minSpare': 'integer(default=None)', 'host': 'string(default=None)', 'maxSpare': 'integer(default=None)', 'multiplexed': 'boolean(default=None)', 'port': 'integer(default=9000)'}</em><a class="headerlink" href="#nagare.publishers.fcgi_publisher.Publisher.spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.publishers.standalone_publisher">
+<span id="nagare-publishers-standalone-publisher-module"></span><h2>nagare.publishers.standalone_publisher module<a class="headerlink" href="#module-nagare.publishers.standalone_publisher" title="Permalink to this headline">¶</a></h2>
+<p>The HTTP multi-threaded publisher</p>
+<dl class="class">
+<dt id="nagare.publishers.standalone_publisher.Publisher">
+<em class="property">class </em><code class="descclassname">nagare.publishers.standalone_publisher.</code><code class="descname">Publisher</code><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nagare.publishers.common.Publisher" title="nagare.publishers.common.Publisher"><code class="xref py py-class docutils literal"><span class="pre">nagare.publishers.common.Publisher</span></code></a></p>
+<p>The HTTP publisher</p>
+<dl class="method">
+<dt id="nagare.publishers.standalone_publisher.Publisher.serve">
+<code class="descname">serve</code><span class="sig-paren">(</span><em>filename</em>, <em>conf</em>, <em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.serve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the publisher</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nagare.publishers.standalone_publisher.Publisher.server_spec">
+<code class="descname">server_spec</code><em class="property"> = {'daemon_threads': 'boolean(default=None)', 'use_threadpool': 'boolean(default=None)', 'socket_timeout': 'integer(default=None)', 'host': 'string(default=None)', 'threadpool_workers': 'integer(default=None)', 'protocol_version': 'string(default=None)', 'port': 'integer(default=None)', 'server_version': 'string(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.server_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="nagare.publishers.standalone_publisher.Publisher.spec">
+<code class="descname">spec</code><em class="property"> = {'daemon_threads': 'boolean(default=None)', 'spawn_if_under': 'integer(default=None)', 'use_threadpool': 'boolean(default=None)', 'socket_timeout': 'integer(default=None)', 'max_requests': 'integer(default=None)', 'dying_limit': 'integer(default=None)', 'host': 'string(default=None)', 'max_zombie_threads_before_die': 'integer(default=None)', 'hung_thread_limit': 'integer(default=None)', 'hung_check_period': 'integer(default=None)', 'threadpool_workers': 'integer(default=None)', 'protocol_version': 'string(default=None)', 'kill_thread_limit': 'integer(default=None)', 'port': 'integer(default=None)', 'server_version': 'string(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="nagare.publishers.standalone_publisher.Publisher.threadpool_spec">
+<code class="descname">threadpool_spec</code><em class="property"> = {'dying_limit': 'integer(default=None)', 'max_zombie_threads_before_die': 'integer(default=None)', 'spawn_if_under': 'integer(default=None)', 'hung_check_period': 'integer(default=None)', 'max_requests': 'integer(default=None)', 'kill_thread_limit': 'integer(default=None)', 'hung_thread_limit': 'integer(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.threadpool_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nagare.publishers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nagare.publishers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+   
+
+</body>
+</html>

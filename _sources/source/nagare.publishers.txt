@@ -1,0 +1,54 @@
+nagare\.publishers package
+==========================
+
+Submodules
+----------
+
+nagare\.publishers\.common module
+---------------------------------
+
+.. automodule:: nagare.publishers.common
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.publishers\.eventlet\_publisher module
+----------------------------------------------
+
+.. automodule:: nagare.publishers.eventlet_publisher
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.publishers\.fapws\_publisher module
+-------------------------------------------
+
+.. automodule:: nagare.publishers.fapws_publisher
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.publishers\.fcgi\_publisher module
+------------------------------------------
+
+.. automodule:: nagare.publishers.fcgi_publisher
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.publishers\.standalone\_publisher module
+------------------------------------------------
+
+.. automodule:: nagare.publishers.standalone_publisher
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: nagare.publishers
+    :members:
+    :undoc-members:
+    :show-inheritance:

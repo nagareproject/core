@@ -1,0 +1,571 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The publisher configuration file &mdash; Nagare 0.4.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Nagare 0.4.1 documentation" href="index.html"/>
+        <link rel="next" title="Deploying Nagare applications in a production environment" href="deployment.html"/>
+        <link rel="prev" title="The application configuration file" href="configuration_file.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using it</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="framework_installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="framework_upgrade.html">Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nagare-admin.html">nagare-admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_file.html">Application configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Publisher configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-configuration-file">Using the configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#publisher-section">[publisher] section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sessions-section">[sessions] section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reloader-section">[reloader] section</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Application deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="third_party.html">Third party applications</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial1.html">Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial2.html">Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial3.html">Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial4.html">Part 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wiki_tutorial.html">Wiki</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="application_creation.html">Application creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="presentation.html">Presentation service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Components model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks_forms.html">Callbacks and forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderer.html">Renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="restful.html">Significative URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wsgiapp.html">WSGI Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i18n.html">Internationalization and localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="log.html">Log service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object_references.html">Object references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entry_points.html">Entry points</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="demo_installation.html">Demo installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo_upgrade.html">Demo upgrade</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Nagare</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>The publisher configuration file</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-publisher-configuration-file">
+<h1>The publisher configuration file<a class="headerlink" href="#the-publisher-configuration-file" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-the-configuration-file">
+<h2>Using the configuration file<a class="headerlink" href="#using-the-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>To configure how an application is published, use the <code class="docutils literal"><span class="pre">-c</span></code> option of the
+<code class="docutils literal"><span class="pre">serve</span></code> administrative command:</p>
+<blockquote>
+<div><div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve -c /path/to/the/publisher/config.cfg &lt;application&gt;
+</pre></div>
+</div>
+</div></blockquote>
+<p>Several examples of publisher configurations are located into <code class="docutils literal"><span class="pre">conf/publishers</span></code>
+under the framework installation directory.</p>
+</div>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p>For the boolean parameters, a value of <code class="docutils literal"><span class="pre">true</span></code>, <code class="docutils literal"><span class="pre">yes</span></code>, <code class="docutils literal"><span class="pre">on</span></code> or <code class="docutils literal"><span class="pre">1</span></code> means True
+and a value of <code class="docutils literal"><span class="pre">false</span></code>, <code class="docutils literal"><span class="pre">no</span></code>, <code class="docutils literal"><span class="pre">off</span></code> or <code class="docutils literal"><span class="pre">0</span></code> mean False.</p>
+<p>Comments start with the <code class="docutils literal"><span class="pre">#</span></code> character.</p>
+<div class="section" id="publisher-section">
+<h3>[publisher] section<a class="headerlink" href="#publisher-section" title="Permalink to this headline">¶</a></h3>
+<p>This section defines the publisher to use.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="9%" />
+<col width="19%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Mandatory</th>
+<th class="head">Default value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>type</td>
+<td>No</td>
+<td>standalone</td>
+<td><p class="first">Choice of the publisher to use.</p>
+<p>The current choices are:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">standalone</span></code>: Python threaded HTTP server
+(convenient in development mode)</li>
+<li><code class="docutils literal"><span class="pre">fastcgi</span></code>: multi-processes fastcgi server.
+A external HTTP is required (recommended in
+production)</li>
+<li><code class="docutils literal"><span class="pre">fapws3</span></code>: fast event-driven HTTP server
+(experimental)</li>
+<li><code class="docutils literal"><span class="pre">eventlet</span></code>: fast event-driven HTTP server
+(experimental)</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td>host</td>
+<td>No</td>
+<td>127.0.0.1</td>
+<td>By default, the publisher only accepts requests
+on the local interface. If you want to accept
+external requests, set this parameter to the
+internet address of your external interface or
+to ‘0.0.0.0’ to listen to on all the interfaces
+of your system.
+The optional <code class="docutils literal"><span class="pre">--host</span></code> on the command line
+takes precedence over this parameter.</td>
+</tr>
+<tr class="row-even"><td>port</td>
+<td>No</td>
+<td><em>publisher
+dependent</em></td>
+<td>Port where to listen to the requests. If no
+value is explicitly given, the <code class="docutils literal"><span class="pre">standalone</span></code>,
+<code class="docutils literal"><span class="pre">fapws3</span></code> and <code class="docutils literal"><span class="pre">eventlet</span></code> publishers listen on
+port <code class="docutils literal"><span class="pre">8080</span></code>. And the <code class="docutils literal"><span class="pre">fastcgi</span></code> publisher
+listen on <code class="docutils literal"><span class="pre">9000</span></code>.
+The optional <code class="docutils literal"><span class="pre">--port</span> <span class="pre">/</span> <span class="pre">-p</span></code> on the command line
+takes precedence over this parameter.</td>
+</tr>
+<tr class="row-odd"><td>debug</td>
+<td>No</td>
+<td>off</td>
+<td>Put the publisher in debug mode</td>
+</tr>
+</tbody>
+</table>
+<p>If the application is publisher by the FastCGI publisher (i.e
+<code class="docutils literal"><span class="pre">type=fastcgi</span></code>), these parameters can also be set:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="9%" />
+<col width="19%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Mandatory</th>
+<th class="head">Default value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>socket</td>
+<td>No</td>
+<td><em>No default value</em></td>
+<td>Unix socket path instead of the TCP host:port
+socket</td>
+</tr>
+<tr class="row-odd"><td>umask</td>
+<td>No</td>
+<td><em>No default value</em></td>
+<td>Unix permission mask of the unix socket to create</td>
+</tr>
+<tr class="row-even"><td>minSpare</td>
+<td>No</td>
+<td>1</td>
+<td>Minimum number of processes ready to process new
+requests</td>
+</tr>
+<tr class="row-odd"><td>maxChildren</td>
+<td>No</td>
+<td>50</td>
+<td>Maximum number of running processes</td>
+</tr>
+<tr class="row-even"><td>maxSpare</td>
+<td>No</td>
+<td>5</td>
+<td>Maximum number of idle processes</td>
+</tr>
+<tr class="row-odd"><td>maxRequest</td>
+<td>No</td>
+<td><em>No default value</em></td>
+<td>Maximum number of requests served by a process
+before being killed</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">New publishers can be added to the framework, and then selected with the <code class="docutils literal"><span class="pre">type</span></code>
+parameter, by registering them under the <code class="docutils literal"><span class="pre">[nagare.publishers]</span></code> <a class="reference internal" href="entry_points.html"><span class="doc">entry point</span></a>.</p>
+</div>
+</div>
+<div class="section" id="sessions-section">
+<h3>[sessions] section<a class="headerlink" href="#sessions-section" title="Permalink to this headline">¶</a></h3>
+<p>This section defined the sessions manager to use.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="9%" />
+<col width="19%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Mandatory</th>
+<th class="head">Default value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>type</td>
+<td>No</td>
+<td>standalone</td>
+<td><p class="first">Choice of the sessions manager to use.</p>
+<p>The current choices are:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">standalone</span></code>: threads-safe in-memory sessions
+manager. Can be used with the <code class="docutils literal"><span class="pre">standalone</span></code>,
+<code class="docutils literal"><span class="pre">fapws3</span></code> or <code class="docutils literal"><span class="pre">eventlet</span></code> publisher.</li>
+<li><code class="docutils literal"><span class="pre">memcache</span></code>: the sessions are stored and
+shared into an external memcached server.
+Can be use will all the publishers</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If the <code class="docutils literal"><span class="pre">type</span></code> parameter has the value <code class="docutils literal"><span class="pre">standalone</span></code>, the following parameters
+can be configured:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="9%" />
+<col width="19%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Mandatory</th>
+<th class="head">Default value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>nb</td>
+<td>No</td>
+<td>10000</td>
+<td>Maximum number of sessions keeped</td>
+</tr>
+</tbody>
+</table>
+<p>If the <code class="docutils literal"><span class="pre">type</span></code> parameter has the value <code class="docutils literal"><span class="pre">memcache</span></code>, the following parameters
+can be configured:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="9%" />
+<col width="19%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Mandatory</th>
+<th class="head">Default value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>host</td>
+<td>No</td>
+<td>127.0.0.1</td>
+<td>Address of the memcached server</td>
+</tr>
+<tr class="row-odd"><td>port</td>
+<td>No</td>
+<td>11211</td>
+<td>Port of the memcached server</td>
+</tr>
+<tr class="row-even"><td>ttl</td>
+<td>No</td>
+<td>0</td>
+<td>How long (in seconds) does the session live?
+A value of <code class="docutils literal"><span class="pre">0</span></code> means the sessions are managed
+in LRU.</td>
+</tr>
+<tr class="row-odd"><td>reset</td>
+<td>No</td>
+<td>on</td>
+<td>If this parameter is true, then all the sessions
+are removed from the memcached server when the
+application (re)starts.</td>
+</tr>
+<tr class="row-even"><td>debug</td>
+<td>No</td>
+<td>off</td>
+<td>Display the requests sent to the memcached server</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">New sessions managers can be added to the framework, and then selected with the
+<code class="docutils literal"><span class="pre">type</span></code> parameter, by registering them under the <code class="docutils literal"><span class="pre">[nagare.sessions]</span></code>
+<a class="reference internal" href="entry_points.html"><span class="doc">entry point</span></a>.</p>
+</div>
+</div>
+<div class="section" id="reloader-section">
+<h3>[reloader] section<a class="headerlink" href="#reloader-section" title="Permalink to this headline">¶</a></h3>
+<p>This section configures the reloader process which automatically detect source
+changes and relaunch the application.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="9%" />
+<col width="19%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Mandatory</th>
+<th class="head">Default value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>activated</td>
+<td>No</td>
+<td>off</td>
+<td>If not activated, the framework will not read
+the following parameters.
+In production, don’t activate the reloader.</td>
+</tr>
+<tr class="row-odd"><td>interval</td>
+<td>No</td>
+<td>1</td>
+<td>Time, in seconds, between the control of
+source changes</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="deployment.html" class="btn btn-neutral float-right" title="Deploying Nagare applications in a production environment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="configuration_file.html" class="btn btn-neutral" title="The application configuration file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.4.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+   
+
+</body>
+</html>

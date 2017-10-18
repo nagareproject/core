@@ -1,0 +1,54 @@
+Object references
+=================
+
+Object references are textual references to Python objects. There are
+especially used in the :doc:`application files <configuration_file>` to indicate what
+Python objects to use.
+
+The general form of an object reference is: ``<schema> <path>:<object_name>``.
+Given such an object reference, the :class:`nagare.admin.reference.load_object()` method
+returns a tuple where the first item is the Python object, and the second item is the
+`distribution <http://setuptools.readthedocs.io/en/latest/pkg_resources.html#distribution-objects>`_
+where this object is located, if found.
+
+The available ``schemas`` are:
+
+- ``python <module_path>:<object_name>`` -- a reference to an object in a
+  Python module. The Python module is searched using ``sys.path``. This
+  schema is also used by default if no schema is given.
+
+  .. code-block:: pycon
+
+     >>> from nagare.admin import util
+     >>> util.load_object('python xml.sax.xmlreader:XMLReader')
+     (<class xml.sax.xmlreader.XMLReader at 0x851f17c>, None)
+     >>> util.load_object('xml.sax.xmlreader:XMLReader')
+     (<class xml.sax.xmlreader.XMLReader at 0x851f17c>, None)
+
+- ``file <filename>:<object_name>`` -- a reference to an object in a Python
+  file.
+
+  .. code-block:: pycon
+
+     >>> from nagare.admin import util
+     >>> util.load_object('file /usr/lib/python2.5/xml/sax/xmlreader.py:XMLReader')
+     (<class xmlreader.XMLReader at 0x851f62c>, None)
+
+- ``app <application_name>`` -- a reference to a registered Nagare application
+  entry point.
+
+  .. code-block:: pycon
+
+     >>> from nagare.admin import util
+     >>> util.load_object('app admin')
+     (<nagare.admin.admin_app.WSGIApp object at 0x8b5148c>, nagare 0.1.0 (/home/apr/projects/nagare/dev/src/nagare/core))
+
+- ``egg <distribution_name>:<application_name>`` -- a reference to a specific
+  registered Nagare application entry point of a distribution.
+
+  .. code-block:: pycon
+
+     >>> from nagare.admin import util
+     >>> util.load_object('egg nagare.examples:wiki')
+     (<class 'nagare.examples.wiki.wiki9.Wiki'>, nagare.examples 0.1.0 (/home/apr/projects/nagare/dev/src/nagare/examples))
+

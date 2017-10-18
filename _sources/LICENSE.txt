@@ -1,0 +1,5 @@
+Nagare license
+==============
+
+.. include:: ../LICENSE.txt
+

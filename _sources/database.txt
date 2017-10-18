@@ -1,0 +1,35 @@
+Database tier
+=============
+
+You can use `SQLAlchemy <http://www.sqlalchemy.org/>`_ or its declarative
+layer Elixir with Nagare. For each request received, Nagare creates a
+database transaction which is commited at the end
+of the request handling or rollbacked if an exception is raised.
+
+The database connection is activated and configurated in the ``[database]`` section
+of the application `configuration file <configuration_file.html#database-section>`__.
+One of the parameters in this section is the location of the
+`__metadata__ <http://docs.sqlalchemy.org/en/latest/core/metadata.html>`_ object of
+SQLAlchemy:
+
+- which must be explicitly created:
+
+  .. code-block:: python
+
+     from elixir import *
+     from sqlalchemy import MetaData
+
+     __metadata__ = MetaData()
+
+     # Database definitions
+     ...
+
+- which Nagare automatically binds to the database engine when the application
+  is launched
+
+- where your code must explicitly register the
+  `table definitions <http://www.sqlalchemy.org/docs/orm/mapper_config.html>`_
+  if you are using SQLAlchemy only
+
+- where Elixir automatically register the defined entities
+

@@ -1,0 +1,531 @@
+The Nagare component model
+==========================
+
+
+What is a component?
+--------------------
+
+A component is an object, instance of the ``Component`` class in
+:class:`nagare.component.Component`.
+
+A component has one or multiple rendering methods. They are used to generate
+a HTML, XHTML, XML or any other views on it.
+
+A component knows how to replace itself by an other component, either permanently
+or temporarily.
+
+
+How to create a component?
+--------------------------
+
+With a lot of components based frameworks, you need to make your classes inherit
+from a ``Component`` class. Nagare is using composition instead of inheritance so
+you only need to wrap your python object into a ``Component`` instance to obtain
+a component. That means you can make a component from a "Plain Old Python
+Object" without changing its code.
+
+From example, starting with a pure Python ``Counter`` class :
+
+.. code-block:: python
+
+   class Counter(object):
+       def __init__(self):
+           self.value = 0
+
+       def increase(self):
+           self.value += 1
+
+       def decrease(self):
+           self.value -= 1
+
+to create a ``Counter`` component, you only need to do:
+
+.. code-block:: python
+
+   from nagare import component
+   counter1 = component.Component(Counter())
+
+
+How to associate views to a component?
+--------------------------------------
+
+The ``nagare.presentation`` service of the framework keeps track of the views
+associated to a class.
+
+The views are plain Python methods and multiple views can be registered on a
+class, each with a different ``model`` name.
+
+The views are associated to a class using the
+``presentation.render_for`` decorator. Then when the presentation service is
+asked to render a component, with a given ``model``, the view for this ``model``
+is called with :
+
+1. the object (the inner object of the component)
+2. a renderer
+3. the component
+4. the model asked
+
+and the method will generally returns a tree of DOM objects, build by using
+the :doc:`renderer` API.
+
+The following code associates a default view (the ``view_by_default`` method) and
+a view for the *edit* model (the ``edit_view`` method) to the class ``AClass``:
+
+.. code-block:: python
+
+   from nagare import presentation
+
+   @presentation.render_for(AClass)
+   def view_by_default(self, h, comp, model, *args):
+     # Here, generate and return a view, typically a DOM tree
+     ...
+
+   @presentation.render_for(AClass, model='edit')
+   def edit_view(self, h, comp, model, *args):
+     # Here, generate and return a view, typically a DOM tree
+     ...
+
+.. note::
+
+   In general, we append ``*args`` to the signature of the view methods for
+   compatibility with some future parameters addition. Furthermore if you're
+   not using, for example, the ``comp`` and the ``model`` parameters into
+   your rendering process but only the ``self`` and ``h`` parameters, then you
+   could defined your view method as a simpler ``def render(self, h, *args)``
+
+   The views for a class are defined and added externally to the class itself,
+   even from an other file if you want. So again, views can be added without any
+   modifications of the class.
+
+For example, a default HTML view on our ``Counter`` objects could be:
+
+.. code-block:: python
+
+    from nagare import presentation
+
+    @presentation.render_for(Counter)
+    def render(self, h, *args):
+        with h.div:
+            h << 'Value: ' << self.value << h.br
+            h << h.a('--')
+            h << ' | '
+            h << h.a('++')
+
+        return h.root
+
+and an other simpler HTML view, called ``static``, could be:
+
+.. code-block:: python
+
+     @presentation.render_for(Counter, model='static')
+     def render(self, h, *args):
+         return h.b(self.value)
+
+
+How to render a component?
+--------------------------
+
+To render a component, calls its ``render()`` method, with a renderer and an
+optional ``model`` parameter:
+
+.. code-block:: pycon
+
+    >>> from nagare.namespaces import xhtml
+
+    >>> counter1 = Component(Counter())
+
+    >>> h = xhtml.Renderer()
+    >>> tree = counter1.render(h)
+    >>> tree.write_htmlstring()
+    '<div>Value: 0<br><a>--</a> | <a>++</a></div>'
+
+    >>> h = xhtml.Renderer()
+    >>> tree = counter1.render(h, model='static')
+    >>> tree.write_htmlstring()
+    '<b>0</b>'
+
+But it's simpler to add the component as the child of a DOM object and let
+Nagare automatically create a new renderer and call the view of the component for you.
+
+So:
+
+.. code-block:: pycon
+
+    >>> tree = h.div(counter1)
+    >>> tree.write_htmlstring()
+    '<div><div>Value: 0<br><a>--</a> | <a>++</a></div></div>'
+
+is a shortcut for explicitly calling the default view:
+
+.. code-block:: pycon
+
+    >>> tree = h.div(counter1.render(h))
+    >>> tree.write_htmlstring()
+    '<div><div>Value: 0<br><a>--</a> | <a>++</a></div></div>'
+
+
+How to build a compound component?
+----------------------------------
+
+A component can be build from other existing components. The inner components
+are simply represented as normal Python attributes in the compound component.
+
+First let's create a ``ColorChooser`` component, a component displaying four clickable
+cells with differents colors:
+
+.. code-block:: python
+
+   class ColorChooser(object):
+       pass
+
+   @presentation.render_for(ColorChooser)
+   def render(self, h, binding, *args):
+       return h.div(
+               h.a('X', style='background-color: #4B96FF'),
+               h.a('X', style='background-color: #FF8FDF'),
+               h.a('X', style='background-color: #9EFF5D'),
+               h.a('X', style='background-color: #ffffff')
+              )
+
+then a ``ColorText`` component, a text displayed with a given background color:
+
+.. code-block:: python
+
+    class ColorText(object):
+        def __init__(self, text, color='#ffffff'):
+            self.color = color
+            self.text = text
+
+    @presentation.render_for(ColorText)
+    def render(self, h, *args):
+        return h.span(self.text, style='background-color:' + self.color)
+
+
+Composition of embedded components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Views composition
++++++++++++++++++
+
+The simplest method to build a compound component is to add a view that
+embeds the views of the inner components:
+
+.. code-block:: python
+
+    from nagare.component import Component
+
+    # ``App`` is the compound component
+    class App(object):
+        def __init__(self):
+            # ``App`` embeds two inner components
+            self.color_chooser_comp = Component(ColorChooser())
+            self.text = ColorText('Hello world !')
+            self.text_comp = Component(self.text)
+
+    @presentation.render_for(App)
+    def render(self, h, *args):
+        with h.div:
+            # The default view of ``App`` renders the default views of its
+            # inner components
+            h << self.color_chooser_comp
+            h << h.hr
+            h << self.text_comp
+
+        return h.root
+
+Launching the application with:
+
+.. code-block:: sh
+
+    <NAGARE_HOME>/bin/nagare-admin serve-module color.py:App color
+
+and browsing to http://localhost:8080/color, gives you:
+
+.. cssclass:: htmlscreen
+
+    .. raw:: html
+
+       <div>
+         <div>
+           <a style="background-color: #4B96FF">X</a>
+           <a style="background-color: #FF8FDF">X</a>
+           <a style="background-color: #9EFF5D">X</a>
+           <a style="background-color: #ffffff">X</a>
+         </div>
+         <hr>
+         <div style="background-color:#ffffff">Hello world !</div>
+       </div>
+
+Logic composition
++++++++++++++++++
+
+After creating the composite view of the application from the views of its inner
+components, we will now create the logic of the application by combining the logic
+of the inner components.
+
+First, the ``ColorChooser``, on a click on a color, now returns the selected
+color. For this purpose, we register a callback (see :doc:`callbacks_forms`)
+on the link items, that calls the ``answer()`` method of the ``ColorChooser``
+component, with the value to return:
+
+.. code-block:: python
+
+   @presentation.render_for(ColorChooser)
+   def render(self, h, comp, *args):
+       return h.div(
+               h.a('X', style='background-color: #4B96FF').action(comp.answer, '#4B96FF'),
+               h.a('X', style='background-color: #FF8FDF').action(comp.answer, '#FF8FDF'),
+               h.a('X', style='background-color: #9EFF5D').action(comp.answer, '#9EFF5D'),
+               h.a('X', style='background-color: #ffffff').action(comp.answer, '#ffffff')
+              )
+
+.. note::
+
+   Of course, this view could be written in a more compact Python code:
+
+   .. code-block:: python
+
+      with h.div:
+          for color in ('#4B96FF', '#FF8FDF', '#9EFF5D', '#ffffff'):
+              h << h.a('X', style='background-color: ' + color).action(comp.answer, color)
+
+      return h.root
+
+Second, we add a ``set_color()`` method to our ``ColorText`` object:
+
+.. code-block:: python
+
+    class ColorText(object):
+        def __init__(self, text, color='#ffffff'):
+            self.color = color
+            self.text = text
+
+        def set_color(self, color):
+            self.color = color
+
+Finally, the ``App`` object binds the ``answer()`` method of the
+``ColorChooser`` component to the ``set_color()`` method of the ``ColorText``
+object, using the ``on_answer()`` method of the ``ColorChooser`` component:
+
+.. code-block:: python
+
+    class App(object):
+        def __init__(self):
+            self.color_chooser_comp = Component(ColorChooser())
+            self.text = ColorText('Hello world !')
+            self.text_comp = Component(self.text)
+
+            self.color_chooser_comp.on_answer(self.text.set_color)
+
+Now, clicking on a color immediately changes the background color of the text.
+
+
+Permanently replacing a component
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A component knows how to replace itself into the components graph with its
+``becomes()`` method, which is called with the object or the component to be
+replaced by.
+
+For example, our ``App`` component is now changed to only have one inner
+component, the ``content`` component:
+
+.. code-block:: python
+
+   class App(object):
+       def __init__(self):
+           self.color_chooser = ColorChooser()
+           self.text = ColorText('Hello world !')
+
+           self.content = Component(self.color_chooser)
+           self.content.on_answer(self.text.set_color)
+
+and its default view displays a little menu to choose between the ``ColorChooser``
+object or the ``ColorText`` to display. The actions on the link of this menu
+simply replace the ``content`` component:
+
+.. code-block:: python
+
+   @presentation.render_for(App)
+   def render(self, h, *args):
+       with h.div:
+           # On a click on this link, replace the ``content`` inner object
+           # by the ``color_chooser`` object
+           h << h.a('The Color chooser').action(self.content.becomes, self.color_chooser)
+
+           h << ' | '
+
+           # On a click on this link, replace the ``content`` inner object
+           # by the ``text`` object
+           h << h.a('The text').action(self.content.becomes, self.text)
+
+           h << h.hr
+           # Render the ``content`` component which can have ``color_chooser``
+           # or ``text`` as inner object
+           h << self.content
+
+       return h.root
+
+So now a little menu of two items is displayed. Clicking on the items displays
+the ``color_chooser`` or the ``text`` object. And, clicking on a color in the
+``color_chooser`` changes again the color of the ``text`` object:
+
+.. cssclass:: htmlscreen
+
+    .. raw:: html
+
+       <div>
+           <a href="#">The Color chooser</a> | <a href="#">The text</a>
+           <hr>
+           <a style="background-color: #4B96FF" href="#">X</a>
+           <a style="background-color: #FF8FDF" href="#">X</a>
+           <a style="background-color: #9EFF5D" href="#">X</a>
+           <a style="background-color: #ffffff" href="#">X</a>
+       </div>
+
+
+Temporary replacing a component
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Permanently replacing a component is like a "goto" in some programming
+languages. Temporary replacing a component is like a "call": the component
+is replaced, but as soon as the replacing component calls its
+``answer(return_value)`` method, the previous component comes back in the
+component graph and the caller receives the returned value.
+
+For example, our ``App`` component can be changed to first display the
+``text_comp`` component and a link to choose its color. Once the link is
+clicked, the ``App`` component temporary replaces itself by the ``color_chooser``
+object. Remember that, once a color is selected, the ``color_chooser`` component
+do an ``answer(color)``. So the ``App`` component is restored, receives the
+selected color and change the color of the text:
+
+.. code-block:: python
+
+   class App(object):
+       def __init__(self):
+           self.color_chooser = ColorChooser()
+
+           self.text = ColorText('Hello world !')
+           self.text_comp = Component(self.text)
+
+       def change_color(self, comp):
+           # When the 'Choose a color' link is clicked, temporary replace
+           # the ``App`` component (here the ``component`` parameter) by the
+           # ``color_chooser``
+           #
+           # When the ``color_chooser`` answers, the ``App`` component is
+           # restored and the control flow continues: the color answered is
+           # set to the text
+           new_color = comp.call(self.color_chooser)
+           self.text.set_color(new_color)
+
+    @presentation.render_for(App)
+    def render(self, h, comp, *args):
+        with h.div:
+            h << h.a('Choose a color').action(self.change_color, comp)
+
+            h << h.hr
+            h << self.text_comp
+
+        return h.root
+
+
+Tasks
+-----
+
+Nagare also provides a ``Task`` concept in :class:`nagare.component.Task`. A ``Task`` is
+useful when implementing user-interaction logic, such as as a business process workflow or
+game logic. It's a good way to handle a sequence of Web "screens" (that are represented by
+either simple or compound components) appearing under some conditions depending on the choices
+of the user.
+
+Intuitively, a ``Task`` can be seen as a component without a view, just replacing itself with
+other components thanks to the ``call`` method. The ``call`` method is a way to stop the execution
+of the presentation logic defined in the ``Task``, waiting for user-interaction (showing the called
+component and waiting for it to ``answer``), then resuming the execution from where it stopped.
+
+For example, the Tic-tac-toe game logic found in the
+`tictactoe.py <https://github.com/nagareproject/examples/blob/master/nagare/examples/tictactoe.py#L94>`_
+example is implemented as a ``Task`` performing the following steps:
+
+1. Ask the first player's name
+2. Ask the second player's name
+3. Wait for the next player to play its turn. Repeat this step until someone wins or there's no
+   empty cell left.
+4. Show a message that congratulates the winner, if any
+
+In this example, each step is delegated to other components via some calls to the ``call`` method
+from the ``Task`` component:
+
+.. code-block:: python
+    :emphasize-lines: 11, 19, 30
+
+    from nagare import component
+
+    class Task(component.Task):
+        def go(self, comp):
+            # the game will run endlessly
+            while True:
+                # 1. Create the board
+                board = TicTacToe()
+
+                # 2. Ask the names of the players
+                players = (comp.call(util.Ask('Player #1')), comp.call(util.Ask('Player #2')))
+
+                player = 1
+                # 3. Play the game until a player wins or there are no more free cells
+                while not board.is_won() and not board.is_ended():
+                    player = (player+1) & 1 # Toggle the player
+
+                    # Display the board and get the clicked cell
+                    played = comp.call(component.Component(board))
+
+                    # Register the clicked cell
+                    board.played(player+1, played)
+
+                if board.is_won():
+                    msg =  'Player %s WON !' %  players[player]
+                else:
+                    msg = 'Nobody WON !'
+
+                # 4. Display the end message
+                comp.call(util.Confirm(msg))
+
+As you see, in order to create a task, you must create a class that inherit from ``Task``
+and override the ``go()`` method which receives the ``Component`` object that wraps the task object
+as input parameter. In other words, a ``Task`` object should be wrapped into a ``Component`` object
+to be used, like classical components.
+
+In the ``go`` method, you can ``call`` any component to show and ask something to the user, and thus
+temporarily suspend the execution of the task that will resume when the called component answers.
+
+Also, the steps are wrapped in a endless ``while`` loop since we want the game to start again
+after the end of the previous game.
+
+A ``Task`` component, like a classical component, can ``answer`` and can be used as an inner component
+of compound components. So, if a ``Task`` is used as the root component of an application and answers,
+Nagare just starts the task again, thus looping the task endlessly since there's no parent component to
+which it can pass the answer.
+
+``Task`` objects and more specifically the ``call`` method of components are useful tools that allow us
+to program complex user-interface interactions in direct style (i.e. sequentially), without being
+disrupted by the control flow break due to the response/request cycle, as described in this `enlightening
+paper from Christian Queinnec`_. Nagare automatically takes care of saving the current state of the
+application (including the execution pointer) in the session so that the application can resume back to
+where it stopped when the user comes back in with the next request.
+
+
+How to build an application?
+----------------------------
+
+You already did it !
+
+With Nagare, an application is only a compound component, a graph of components.
+
+And navigating into the application, by clicking on links or by submitting forms,
+is activating callbacks that permanently or temporarily modify this graph.
+
+
+.. _`Enlightening paper from Christian Queinnec`: https://pages.lip6.fr/Christian.Queinnec/PDF/www.pdf
+

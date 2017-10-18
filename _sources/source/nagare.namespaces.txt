@@ -1,0 +1,77 @@
+nagare\.namespaces package
+==========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    nagare.namespaces.test
+
+Submodules
+----------
+
+nagare\.namespaces\.common module
+---------------------------------
+
+.. automodule:: nagare.namespaces.common
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.namespaces\.esi module
+------------------------------
+
+.. automodule:: nagare.namespaces.esi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.namespaces\.xhtml module
+--------------------------------
+
+.. automodule:: nagare.namespaces.xhtml
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.namespaces\.xhtml5 module
+---------------------------------
+
+.. automodule:: nagare.namespaces.xhtml5
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.namespaces\.xhtml\_base module
+--------------------------------------
+
+.. automodule:: nagare.namespaces.xhtml_base
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.namespaces\.xml module
+------------------------------
+
+.. automodule:: nagare.namespaces.xml
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.namespaces\.xsl module
+------------------------------
+
+.. automodule:: nagare.namespaces.xsl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: nagare.namespaces
+    :members:
+    :undoc-members:
+    :show-inheritance:

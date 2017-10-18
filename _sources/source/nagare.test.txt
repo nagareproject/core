@@ -1,0 +1,70 @@
+nagare\.test package
+====================
+
+Submodules
+----------
+
+nagare\.test\.test\_component module
+------------------------------------
+
+.. automodule:: nagare.test.test_component
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.test\.test\_database module
+-----------------------------------
+
+.. automodule:: nagare.test.test_database
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.test\.test\_form module
+-------------------------------
+
+.. automodule:: nagare.test.test_form
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.test\.test\_i18n module
+-------------------------------
+
+.. automodule:: nagare.test.test_i18n
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.test\.test\_serializer module
+-------------------------------------
+
+.. automodule:: nagare.test.test_serializer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.test\.test\_top module
+------------------------------
+
+.. automodule:: nagare.test.test_top
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+nagare\.test\.test\_wsgi module
+-------------------------------
+
+.. automodule:: nagare.test.test_wsgi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: nagare.test
+    :members:
+    :undoc-members:
+    :show-inheritance:

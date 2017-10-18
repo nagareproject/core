@@ -1,0 +1,822 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Callbacks and forms &mdash; Nagare 0.4.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Nagare 0.4.1 documentation" href="index.html"/>
+        <link rel="next" title="The Renderer objects" href="renderer.html"/>
+        <link rel="prev" title="Database tier" href="database.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using it</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="framework_installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="framework_upgrade.html">Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nagare-admin.html">nagare-admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_file.html">Application configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publisher_file.html">Publisher configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Application deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="third_party.html">Third party applications</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial1.html">Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial2.html">Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial3.html">Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial4.html">Part 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wiki_tutorial.html">Wiki</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Developer documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="application_creation.html">Application creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="presentation.html">Presentation service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Components model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Databases</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Callbacks and forms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#principle">Principle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#form-elements">Form elements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#callbacks-registration">Callbacks registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#callback-order">Callback order</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#elements-selection">Elements selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checkboxes-reset">Checkboxes reset</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-var-var-objects">The <code class="docutils literal"><span class="pre">var.Var()</span></code> objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#form-validation">Form validation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#erroneous-element">Erroneous element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-editor-property-objects">The <code class="docutils literal"><span class="pre">editor.Property</span></code> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-validator-module">The <code class="docutils literal"><span class="pre">validator</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-editor-editor-objects">The <code class="docutils literal"><span class="pre">editor.Editor</span></code> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#putting-all-together">Putting all together</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="renderer.html">Renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="restful.html">Significative URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wsgiapp.html">WSGI Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i18n.html">Internationalization and localization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="log.html">Log service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object_references.html">Object references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entry_points.html">Entry points</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="demo_installation.html">Demo installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo_upgrade.html">Demo upgrade</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Nagare</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Callbacks and forms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="callbacks-and-forms">
+<h1>Callbacks and forms<a class="headerlink" href="#callbacks-and-forms" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="principle">
+<h2>Principle<a class="headerlink" href="#principle" title="Permalink to this headline">¶</a></h2>
+<p>With Nagare, you directly associate a standard Python methods or <em>callbacks</em>
+to the links and to the form elements, without explicitly naming them and
+without manual analysis of the requests received.</p>
+<p>When the callbacks are processed, you can freely modified the components graph
+of the application.</p>
+<p>In this example, a callback is associated to a link, to count how many times
+this link is clicked:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+
+<span class="k">class</span> <span class="nc">ClickCounter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">clic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ClickCounter</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">p</span><span class="p">(</span>
+                <span class="s1">&#39;You have &#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="s1">&#39;clicked&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clic</span><span class="p">),</span>
+                <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb</span><span class="p">,</span> <span class="s1">&#39; times.&#39;</span>
+              <span class="p">)</span>
+</pre></div>
+</div>
+<p>To test this snippet, launched it with:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:ClickCounter clic
+</pre></div>
+</div>
+<p>This simple <em>GuessBook</em> example associates a callback to a textarea element,
+that append the new messages to the list of the existing ones:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">var</span>
+<span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+
+<span class="k">class</span> <span class="nc">GuestBook</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msgs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+<span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">GuestBook</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">msgs</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">blockquote</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">hr</span>
+
+    <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;New message:&#39;</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span>
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">textarea</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_message</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span>
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;Send&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
+</pre></div>
+</div>
+<p>You can test it with:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:GuestBook book
+</pre></div>
+</div>
+</div>
+<div class="section" id="form-elements">
+<h2>Form elements<a class="headerlink" href="#form-elements" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="callbacks-registration">
+<h3>Callbacks registration<a class="headerlink" href="#callbacks-registration" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="25%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Callback registration</th>
+<th class="head">Callback parameters</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.a</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td><em>no parameter</em></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.form</span></code></td>
+<td><code class="docutils literal"><span class="pre">.pre_action(callback)</span></code></td>
+<td><em>no parameter</em></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.form</span></code></td>
+<td><code class="docutils literal"><span class="pre">.post_action(callback)</span></code></td>
+<td><em>no parameter</em></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>the text received</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='text)</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>the text received</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='password')</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>the text received</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='radio')</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td><em>no parameter</em></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='checkbox')</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>the value of the <code class="docutils literal"><span class="pre">value</span></code> attribute (<code class="docutils literal"><span class="pre">on</span></code> if no
+<code class="docutils literal"><span class="pre">value</span></code> attribute is set)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='submit')</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td><em>no parameter</em></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='hidden')</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>the value of the <code class="docutils literal"><span class="pre">value</span></code> attribute (empty string
+if no <code class="docutils literal"><span class="pre">value</span></code> attribut is set)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='file')</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>an empty string if no file was uploaded, else
+a <code class="docutils literal"><span class="pre">cgi.FieldStorage</span></code> object</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='image')</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td><p class="first">the callback is called twice:</p>
+<ol class="last arabic simple">
+<li>with the parameters <code class="docutils literal"><span class="pre">True</span></code> and the <em>x</em> value</li>
+<li>with the parameters <code class="docutils literal"><span class="pre">False</span></code> and the <em>y</em> value</li>
+</ol>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.textarea</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>the text received</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.select</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>the selected option value</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.select(multiple=1)</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td>a tuple of the selected options value (even if
+only one option is selected)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.img</span></code></td>
+<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<td><em>no parameter</em>
+The callback is called when the browser requests
+the image. The callback is called with the response
+object as parameter and must return the image data.
+If the <code class="docutils literal"><span class="pre">content_type</span></code> attribut of the response
+object is not set by the callback, Nagare will try
+to guess the image type.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Nagare is a full unicode framework: the text values are passed to the callbacks
+as unicode strings.</p>
+</div>
+</div>
+<div class="section" id="callback-order">
+<h3>Callback order<a class="headerlink" href="#callback-order" title="Permalink to this headline">¶</a></h3>
+<p>The callbacks are processed in this order:</p>
+<ol class="arabic simple">
+<li>the <code class="docutils literal"><span class="pre">form</span></code> <code class="docutils literal"><span class="pre">pre_action()</span></code> callback</li>
+<li>the <code class="docutils literal"><span class="pre">select</span></code>, <code class="docutils literal"><span class="pre">textarea</span></code> and <code class="docutils literal"><span class="pre">input</span></code> of type <code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">password</span></code>,
+<code class="docutils literal"><span class="pre">radio</span></code>, <code class="docutils literal"><span class="pre">checkbox</span></code>, <code class="docutils literal"><span class="pre">hidden</span></code> and <code class="docutils literal"><span class="pre">file</span></code> <code class="docutils literal"><span class="pre">action()</span></code> callback</li>
+<li>the <code class="docutils literal"><span class="pre">form</span></code> <code class="docutils literal"><span class="pre">post_action()</span></code> callback</li>
+<li>the <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">input(type='submit')</span></code> <code class="docutils literal"><span class="pre">action()</span></code> callback</li>
+<li>the <code class="docutils literal"><span class="pre">input(type='image')</span></code> <code class="docutils literal"><span class="pre">action()</span></code> callback</li>
+<li>the <code class="docutils literal"><span class="pre">img</span></code> <code class="docutils literal"><span class="pre">action()</span></code> callback</li>
+</ol>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Only modify the components graph in the <code class="docutils literal"><span class="pre">a</span></code>, <code class="docutils literal"><span class="pre">input(type='submit')</span></code> or
+<code class="docutils literal"><span class="pre">input(type='image')</span></code> callbacks.</p>
+</div>
+</div>
+<div class="section" id="elements-selection">
+<h3>Elements selection<a class="headerlink" href="#elements-selection" title="Permalink to this headline">¶</a></h3>
+<p>Some form elements have an helper <code class="docutils literal"><span class="pre">.selected()</span></code> method to select it:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head"><code class="docutils literal"><span class="pre">.selected()</span></code> parameter</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='radio')</span></code></td>
+<td>a boolean to select or unselect the radio button</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='checkbox')</span></code></td>
+<td>a boolean to select or unselect the checkbox</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.option</span></code></td>
+<td>a list of values of the options to select</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="checkboxes-reset">
+<h3>Checkboxes reset<a class="headerlink" href="#checkboxes-reset" title="Permalink to this headline">¶</a></h3>
+<p>The callbacks of the <code class="docutils literal"><span class="pre">h.input(type='checkbox')</span></code> are only called for the
+selected checkboxes. So, you need to reset the attributes that keep the current
+selected checkboxes before to process the callbacks. This reset method is
+typically the <code class="docutils literal"><span class="pre">`pre_action</span></code> callback of the <code class="docutils literal"><span class="pre">h.form</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+
+<span class="k">class</span> <span class="nc">ColorSelection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_colors</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset_colors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">set_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
+<span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ColorSelection</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;Selected colors: &#39;</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">hr</span>
+
+    <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">pre_action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reset_colors</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;checkbox&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_color</span><span class="p">)</span><span class="o">.</span><span class="n">selected</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;blue&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;blue&#39;</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span>
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;checkbox&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_color</span><span class="p">)</span><span class="o">.</span><span class="n">selected</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;white&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;white&#39;</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span>
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;checkbox&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_color</span><span class="p">)</span><span class="o">.</span><span class="n">selected</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;red&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;red&#39;</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span>
+
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;Send&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
+</pre></div>
+</div>
+<p>or, with a more compact view:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ColorSelection</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;Selected colors: &#39;</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">hr</span>
+
+    <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">pre_action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reset_colors</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="p">(</span><span class="sa">u</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;red&#39;</span><span class="p">):</span>
+            <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;checkbox&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">color</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_color</span><span class="p">)</span><span class="o">.</span><span class="n">selected</span><span class="p">(</span><span class="n">color</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span>
+            <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">color</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span>
+
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;Send&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="the-var-var-objects">
+<h2>The <code class="docutils literal"><span class="pre">var.Var()</span></code> objects<a class="headerlink" href="#the-var-var-objects" title="Permalink to this headline">¶</a></h2>
+<p>The instances of the <code class="docutils literal"><span class="pre">Var</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.var.Var" title="nagare.var.Var"><code class="xref py py-class docutils literal"><span class="pre">nagare.var.Var</span></code></a> are
+variable-like objects that provide a “functional” interface:</p>
+<ul class="simple">
+<li>calling the object with a value, set the variable value and return the value</li>
+<li>calling the object without a value, return the variable value</li>
+</ul>
+<p>They can be usefull to directly get / set variables in a lambda expression
+callback.</p>
+<p>For example, the first snippet can be rewrote as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">var</span>
+<span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+
+<span class="k">class</span> <span class="nc">ClickCounter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ClickCounter</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">p</span><span class="p">(</span>
+                <span class="s1">&#39;You have &#39;</span><span class="p">,</span>
+                <span class="n">h</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="s1">&#39;clicked&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+                <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb</span><span class="p">,</span> <span class="s1">&#39; times.&#39;</span>
+              <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="form-validation">
+<h2>Form validation<a class="headerlink" href="#form-validation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="erroneous-element">
+<h3>Erroneous element<a class="headerlink" href="#erroneous-element" title="Permalink to this headline">¶</a></h3>
+<p>Calling the <code class="docutils literal"><span class="pre">.error(msg)</span></code> method on an element wrap it into styled <code class="docutils literal"><span class="pre">div</span></code>
+if <code class="docutils literal"><span class="pre">msg</span></code> is not <code class="docutils literal"><span class="pre">None</span></code>:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span><span class="o">.</span><span class="n">write_xmlstring</span><span class="p">(</span><span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&lt;input/&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span><span class="o">.</span><span class="n">write_xmlstring</span><span class="p">(</span><span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&lt;input/&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Erroneous field&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tree</span><span class="o">.</span><span class="n">write_xmlstring</span><span class="p">(</span><span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&lt;div class=&quot;nagare-error-field&quot;&gt;</span>
+<span class="go">  &lt;div class=&quot;nagare-error-input&quot;&gt;</span>
+<span class="go">    &lt;input/&gt;</span>
+<span class="go">  &lt;/div&gt;</span>
+<span class="go">  &lt;div class=&quot;nagare-error-message&quot;&gt;Erroneous field&lt;/div&gt;</span>
+<span class="go">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>So your application can defined the <code class="docutils literal"><span class="pre">nagare-error-field</span></code>, <code class="docutils literal"><span class="pre">nagare-error-input</span></code>
+and <code class="docutils literal"><span class="pre">nagare-error-message</span></code> css classes to design the erroneous fields rendering.</p>
+</div>
+<div class="section" id="the-editor-property-objects">
+<h3>The <code class="docutils literal"><span class="pre">editor.Property</span></code> objects<a class="headerlink" href="#the-editor-property-objects" title="Permalink to this headline">¶</a></h3>
+<p>The instances of the <code class="docutils literal"><span class="pre">Property</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.editor.Property" title="nagare.editor.Property"><code class="xref py py-class docutils literal"><span class="pre">nagare.editor.Property</span></code></a>
+are objects:</p>
+<ul class="simple">
+<li>with a validation function, set by calling its <code class="docutils literal"><span class="pre">.validate()</span></code> method. A
+validation function, when called with a value, must validate and, eventually,
+convert it. If the value is valid, the (converted) value is returned.
+Else the <code class="docutils literal"><span class="pre">ValueError</span></code> exception must be raised with an error message.</li>
+<li>that can be set with a value, by calling its <code class="docutils literal"><span class="pre">.set()</span></code> method or by directly
+be called</li>
+<li>that always keeps the value in its <code class="docutils literal"><span class="pre">input</span></code> attribute</li>
+<li>that validates the value, by calling its validating function</li>
+<li>that keeps the last valid value in its <code class="docutils literal"><span class="pre">value</span></code> attribute</li>
+<li>that keeps the error message of the validation in its <code class="docutils literal"><span class="pre">error</span></code> attribute,
+or <code class="docutils literal"><span class="pre">None</span></code> if the value is valid.</li>
+</ul>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.editor</span> <span class="kn">import</span> <span class="n">Property</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">is_lesser_than_10</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">n</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">n</span>
+<span class="gp">... </span>    <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="s1">&#39;must be lesser than 10&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">is_lesser_than_10</span><span class="p">)</span>
+<span class="go">&lt;nagare.editor.Property object at 0x842348c&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Valid value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">input</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">error</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Invalid value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">input</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">error</span>
+<span class="go">u&#39;must be lesser than 10&#39;</span>
+
+<span class="go"># Setting a valid value by calling the property</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">input</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="p">()</span>     <span class="c1"># Calling the property without a value return its ``input`` value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">error</span>
+
+<span class="go"># Setting an invalid value by calling the property</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">input</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="p">()</span>     <span class="c1"># Calling the property without a value return its ``input`` value</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">error</span>
+<span class="go">u&#39;must be lesser than 10&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-validator-module">
+<h3>The <code class="docutils literal"><span class="pre">validator</span></code> module<a class="headerlink" href="#the-validator-module" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="source/nagare.html#module-nagare.validator" title="nagare.validator"><code class="xref py py-mod docutils literal"><span class="pre">nagare.validator</span></code></a> module defines a <code class="docutils literal"><span class="pre">IntValidator</span></code> and a
+<code class="docutils literal"><span class="pre">StringValidator</span></code> objects to validate the numbers and the strings. They are
+suitable to be used as a validating function of a <code class="docutils literal"><span class="pre">editor.Property</span></code> object:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.validator</span> <span class="kn">import</span> <span class="n">IntValidator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.editor</span> <span class="kn">import</span> <span class="n">Property</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+<span class="go"># The validating function, first creates a ``IntValidator()``, then checks</span>
+<span class="go"># the value is lesser than 10 and positive, and, finally, convert it to an</span>
+<span class="go"># integer before to return it</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">IntValidator</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">lesser_than</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">greater_than</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">input</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">error</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">input</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">error</span>
+<span class="go">u&#39;Must be lesser than 10&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">-1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">input</span>
+<span class="go">-1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">number</span><span class="o">.</span><span class="n">error</span>
+<span class="go">u&#39;Must be greater than 0&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-editor-editor-objects">
+<h3>The <code class="docutils literal"><span class="pre">editor.Editor</span></code> objects<a class="headerlink" href="#the-editor-editor-objects" title="Permalink to this headline">¶</a></h3>
+<p>An instances of the <code class="docutils literal"><span class="pre">Editor</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.editor.Editor" title="nagare.editor.Editor"><code class="xref py py-class docutils literal"><span class="pre">nagare.editor.Editor</span></code></a>
+is an intermediary between the values received from a form an a target object.</p>
+<p>An <code class="docutils literal"><span class="pre">Editor</span></code> object automatically creates <code class="docutils literal"><span class="pre">editor.Property</span></code> objects reflecting
+the attributes of the target object we want to edit with the form.</p>
+<p>An <code class="docutils literal"><span class="pre">Editor</span></code> object will modified the target object attributes only if all the
+validating functions of its properties validate the data from the form.</p>
+</div>
+<div class="section" id="putting-all-together">
+<h3>Putting all together<a class="headerlink" href="#putting-all-together" title="Permalink to this headline">¶</a></h3>
+<p>In this example, we’ve got pure Python <code class="docutils literal"><span class="pre">Person</span></code> objects with <code class="docutils literal"><span class="pre">name</span></code> and
+<code class="docutils literal"><span class="pre">age</span></code> attributes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">editor</span><span class="p">,</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">component</span>
+<span class="kn">from</span> <span class="nn">nagare.validator</span> <span class="kn">import</span> <span class="n">StringValidator</span><span class="p">,</span> <span class="n">IntValidator</span>
+
+<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>We create a dedicated editor for this objects, to be able to edit these
+attributes with a web form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PersonEditor</span><span class="p">(</span><span class="n">editor</span><span class="o">.</span><span class="n">Editor</span><span class="p">):</span>
+    <span class="c1"># The ``__init__`` method receives the target ``Person`` object</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">person</span><span class="p">):</span>
+        <span class="c1"># We create the ``name`` and ``age`` ``Properties``, initialized</span>
+        <span class="c1"># with the values from the target object</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PersonEditor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">))</span>
+
+        <span class="c1"># We use a string validator to check that the name is not empty i.e</span>
+        <span class="c1"># the name is required</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="k">lambda</span> <span class="n">name</span><span class="p">:</span> <span class="n">StringValidator</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">not_empty</span><span class="p">())</span>
+
+        <span class="c1"># We use an integer validator to check the age is positive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="k">lambda</span> <span class="n">age</span><span class="p">:</span> <span class="n">IntValidator</span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="o">.</span><span class="n">greater_than</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="c1"># This ``commit`` method will write back the values of the ``name`` and</span>
+    <span class="c1"># ``age`` attributes to the target object is they are valid</span>
+    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PersonEditor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">commit</span><span class="p">((</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Then we can create a view on the <code class="docutils literal"><span class="pre">PersonEditor</span></code> objects to render the web
+form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">PersonEditor</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="c1"># The ``action()`` callback calls the ``name`` property of the editor</span>
+        <span class="c1"># with the value from the form. The validating function of the</span>
+        <span class="c1"># property will check the value is valid and, if not, will set</span>
+        <span class="c1"># the ``self.name.error`` value</span>
+        <span class="c1">#</span>
+        <span class="c1"># The ``error()`` method will display the error message if it&#39;s</span>
+        <span class="c1"># not ``None``</span>
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;Name: &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span>
+
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;Age: &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">)</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">br</span>
+
+
+        <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;Send&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
+</pre></div>
+</div>
+<p>Finally, an application creates a <code class="docutils literal"><span class="pre">Person</span></code> object and wraps it into a
+<code class="docutils literal"><span class="pre">PersonEditor</span></code> component to edit these properties:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
+
+        <span class="c1"># Create a ``PersonEditor`` object that wrap the ``Person`` object to edit</span>
+        <span class="n">editor</span> <span class="o">=</span> <span class="n">PersonEditor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">person</span><span class="p">)</span>
+
+        <span class="c1"># Transform the editor object into a component</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_component</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="n">Component</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+
+<span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># Display the current values</span>
+    <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">p</span><span class="p">(</span><span class="s1">&#39;Name: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">p</span><span class="p">(</span><span class="s1">&#39;Age: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">person</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>
+
+    <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">hr</span>
+
+    <span class="c1"># Render the editor</span>
+    <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">editor_component</span>
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
+</pre></div>
+</div>
+<p>Now launch this example with:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="go">&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:App editor</span>
+</pre></div>
+</div>
+<p>and check that the validation error messages are displayed and that the
+<code class="docutils literal"><span class="pre">Person</span></code> target object is only modified is all the values are valid.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For more complete examples of validations, use of all the possible form
+elements, inter-fields validation … see the
+<a class="reference external" href="http://www.nagare.org/demo/form/1">Demo1</a> and
+<a class="reference external" href="http://www.nagare.org/demo/form/2">Demo2</a>, and read their source.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="renderer.html" class="btn btn-neutral float-right" title="The Renderer objects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="database.html" class="btn btn-neutral" title="Database tier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.4.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+   
+
+</body>
+</html>
