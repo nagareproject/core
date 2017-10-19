@@ -375,6 +375,7 @@ Use the ``set_default_locale()`` if the locale if only set once for the applicat
            super(I18nExample, self).__init__(root_factory)
 
            self.set_default_locale(i18n.Locale('fr'))  # Hard coded locale
+
 or:
 
 .. code-block:: python
