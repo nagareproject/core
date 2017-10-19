@@ -147,7 +147,7 @@ def create_app_py(filename, params):
             @presentation.render_for(%(Id)s)
             def render(self, h, *args):
                 NAGARE = 'http://www.nagare.org/'
-                NAGARE_DOC = NAGARE + 'trac/wiki/'
+                NAGARE_DOC = NAGARE + 'doc/'
 
                 this_file = __file__
                 if this_file.endswith('.pyc'):
@@ -203,16 +203,15 @@ def create_app_py(filename, params):
                         with h.tr:
                             with h.td:
                                 with h.ul:
-                                    h << h.li(h.a('Description', href=NAGARE_DOC+'NagareDescription'))  # noqa: E501
-                                    h << h.li(h.a('Features', href=NAGARE_DOC+'NagareFeatures'))  # noqa: E501
-                                    h << h.li(h.a('Who uses Nagare?', href=NAGARE_DOC+'WhoUsesNagare'))  # noqa: E501
-                                    h << h.li(h.a('Licence', href=NAGARE_DOC+'NagareLicence'))  # noqa: E501
+                                    h << h.li(h.a('Description', href=NAGARE_DOC+'description'))  # noqa: E501
+                                    h << h.li(h.a('Features', href=NAGARE_DOC+'features'))  # noqa: E501
+                                    h << h.li(h.a('License', href=NAGARE_DOC+'license'))  # noqa: E501
 
                             with h.td:
                                 with h.ul:
-                                    h << h.li(h.a('Blogs', href=NAGARE+'trac/blog'))  # noqa: E501
-                                    h << h.li(h.a('Mailing list', href=NAGARE_DOC+'MailingLists'))  # noqa: E501
-                                    h << h.li(h.a('Bug report', href=NAGARE_DOC+'BugReport'))  # noqa: E501
+                                    h << h.li(h.a('Github repositories', href='http://github.com/nagareproject'))  # noqa: E501
+                                    h << h.li(h.a('Mailing list', href='http://groups.google.com/group/nagare-users'))  # noqa: E501
+                                    h << h.li(h.a('Bugs report', href='https://github.com/nagareproject/core/issues'))  # noqa: E501
 
                             with h.td(class_='last'):
                                 with h.ul:

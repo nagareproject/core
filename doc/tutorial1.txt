@@ -67,4 +67,5 @@ Part 1. Create an application
 5. Open you webbrowser and go to http://127.0.0.1:8080/tutorial, you should see the default application screen.
 
 .. image:: img/tutorial1.png
+   :align: center
 

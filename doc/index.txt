@@ -12,8 +12,8 @@ Nagare documentation
 
    Description<description>
    features
-   License<LICENSE>
-   Changelog<CHANGELOG>
+   License<license>
+   Changelog<changelog>
 
 .. toctree::
    :maxdepth: 1
