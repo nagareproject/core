@@ -139,7 +139,7 @@ You should obtain something like this:
 .. code-block:: apache
 
     RewriteEngine On
-    RewriteRule ^/static/nagare/(.*)$ /path/to/python/site-packages/nagare-0.4.1-py2.7.egg/static/$1 [L]
+    RewriteRule ^/static/nagare/(.*)$ /path/to/python/site-packages/nagare-0.5.0-py2.7.egg/static/$1 [L]
     RewriteRule ^/static/myapp/(.*)$ /path/to/python/site-packages/myapp-0.0.1-py2.7.egg/static/$1 [L]
 
 Then, you must create a ``VirtualHost`` for your application and include the rewrite rules file
@@ -186,7 +186,7 @@ You should obtain something like this:
 .. code-block:: nginx
 
     location /static/nagare/ {
-      alias /path/to/python/site-packages/nagare-0.4.1-py2.7.egg/static/;
+      alias /path/to/python/site-packages/nagare-0.5.0-py2.7.egg/static/;
     }
 
     location /static/myapp/ {

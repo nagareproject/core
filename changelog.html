@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Nagare Changelog &mdash; Nagare 0.4.1 documentation</title>
+  <title>Nagare Changelog &mdash; Nagare 0.5.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.4.1 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
         <link rel="next" title="QuickStart" href="quickstart.html"/>
         <link rel="prev" title="Nagare license" href="license.html"/> 
 
@@ -94,29 +94,30 @@
 <li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">0.4.1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">0.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.4.1</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#bugs-fixed">Bugs fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">0.4.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id3">0.4.0</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#new-features">New features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changes">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Bugs fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Bugs fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">0.3.0</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">New features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">Bugs fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">0.3.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Bugs fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id8">0.2.0</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id9">New features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id10">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id11">Bugs fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">0.2.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Bugs fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id12">0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">0.1.0</a></li>
 </ul>
 </li>
 </ul>
@@ -222,7 +223,32 @@
   <div class="section" id="nagare-changelog">
 <h1>Nagare Changelog<a class="headerlink" href="#nagare-changelog" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
-<h2>0.4.1<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>0.5.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Project only hosted on Github now</li>
+<li>Documentation served as github.io pages</li>
+<li>Documentation generated with Sphinx</li>
+<li>Documentations added:<ul>
+<li>internationalization</li>
+<li><code class="docutils literal"><span class="pre">nagare.wsgi.WSGIApp</span></code></li>
+<li>application deployment</li>
+<li>log service</li>
+</ul>
+</li>
+<li>Running now on Stackless, Pypy (experimental) and CPython (with limitations)</li>
+<li>Request and Response object factories added</li>
+<li>Improved components garbage collector</li>
+<li>Callbacks registered with <code class="docutils literal"><span class="pre">.action()</span></code> and <code class="docutils literal"><span class="pre">.answer()</span></code> can have parameters and keywords</li>
+<li>No more <code class="docutils literal"><span class="pre">lambda</span></code> for the validators
+(<code class="docutils literal"><span class="pre">lambda</span> <span class="pre">v:</span> <span class="pre">IntValidator(v).greater_than(10)</span></code> =&gt; <code class="docutils literal"><span class="pre">IntValidator().greater_than(10)</span></code>)</li>
+<li>Translation <em>domain</em> added to the i18n service API</li>
+<li>Custom <code class="docutils literal"><span class="pre">data-*</span></code> HTML5 attributes can be created as <code class="docutils literal"><span class="pre">data_*</span></code> keywords</li>
+<li>The <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> automatically added in the asynchronous views have the
+<code class="docutils literal"><span class="pre">nagare-generated</span></code> and <code class="docutils literal"><span class="pre">nagare-async-view</span></code> classes</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>0.4.1<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="bugs-fixed">
 <h3>Bugs fixed<a class="headerlink" href="#bugs-fixed" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -230,8 +256,8 @@
 </ul>
 </div>
 </div>
-<div class="section" id="id2">
-<h2>0.4.0<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>0.4.0<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="new-features">
 <h3>New features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -262,8 +288,8 @@
 <li>New versions of YUI, IPython, SQLAlchemy, lxml and WebOb</li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h3>Bugs fixed<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Bugs fixed<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>client disconnection detection added for comet streams</li>
 <li>#51: javascript executed multiple times</li>
@@ -287,10 +313,10 @@
 </ul>
 </div>
 </div>
-<div class="section" id="id4">
-<h2>0.3.0<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id5">
-<h3>New features<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<h2>0.3.0<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>New features<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>refactoring of the sessions managers:<ul>
 <li>session objects now keep track of their sessions manager</li>
@@ -325,8 +351,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h3>Changes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Changes<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>with the YUI connection manager, a large browser response must be reassembled (Firefox only)</li>
 <li>late creation of the SQLAlchemy database engines and metadatas binding</li>
@@ -337,8 +363,8 @@
 <li>parsing (X)HTML from URL now working under Windows</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h3>Bugs fixed<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>Bugs fixed<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>#47: <code class="docutils literal"><span class="pre">set_publisher()</span></code> called when using “nagare-admin create-db”</li>
 <li>#48: py2js parentheses bug</li>
@@ -347,11 +373,11 @@
 </ul>
 </div>
 </div>
-<div class="section" id="id8">
-<h2>0.2.0<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
-<p>Python Stackless 2.6.2 is now the recommanded Python version.</p>
 <div class="section" id="id9">
-<h3>New features<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<h2>0.2.0<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>Python Stackless 2.6.2 is now the recommanded Python version.</p>
+<div class="section" id="id10">
+<h3>New features<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>When an AJAX update contains CSS or Javascript urls, they are correctly fetched.</li>
 <li>Multiple AJAX updates object added</li>
@@ -374,16 +400,16 @@ as an alias without the session and continuation parameters</li>
 <li>SQLAlchemy updated to 0.5.x</li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h3>Changes<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h3>Changes<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Complete refactoring of the AJAX communication. The “wire” format is now Javascript.</li>
 <li><code class="docutils literal"><span class="pre">component.Component.init()</span></code> and <code class="docutils literal"><span class="pre">presentation.init_for()</span></code> API changes.
 See <a class="reference internal" href="restful.html"><span class="doc">Significative “RESTful” URLs</span></a></li>
 </ul>
 </div>
-<div class="section" id="id11">
-<h3>Bugs fixed<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h3>Bugs fixed<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>#19, #23, #26: race condition in the sessions management</li>
 <li>#22: don’t clear the registered callbacks when an image is served</li>
@@ -392,8 +418,8 @@ See <a class="reference internal" href="restful.html"><span class="doc">Signific
 </ul>
 </div>
 </div>
-<div class="section" id="id12">
-<h2>0.1.0<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id13">
+<h2>0.1.0<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
 <p>Initial release</p>
 </div>
 </div>
@@ -440,7 +466,7 @@ See <a class="reference internal" href="restful.html"><span class="doc">Signific
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.4.1',
+            VERSION:'0.5.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
