@@ -122,9 +122,13 @@ def read_application(cfgfile, error):
     # From the path of the application, create the application object
     (app, dist) = reference.load_object(aconf['application']['path'])
 
-    defaults = dict(here='string(default="%s")' % os.path.abspath(os.path.dirname(cfgfile)))
-    if dist is not None:
-        defaults['root'] = 'string(default="%s")' % dist.location
+    here = os.path.abspath(os.path.dirname(cfgfile))
+    root = os.path.abspath(os.path.join(here, '..')) if dist is None else dist.location
+
+    defaults = {
+        'here': 'string(default="%s")' % here,
+        'root': 'string(default="%s")' % root
+    }
 
     # Re-read the application configuration, with some substitution variables
     aconf = read_application_options(cfgfile, error, defaults)

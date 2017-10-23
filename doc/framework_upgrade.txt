@@ -35,7 +35,7 @@ on Windows::
 3. Developer installation
 -------------------------
 
-If your Nagare installation was directly a checkout from the Mercurial repository,
+If your Nagare installation was directly a checkout from the Github repository,
 execute:
 
 .. code-block:: sh

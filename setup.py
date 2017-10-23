@@ -15,7 +15,7 @@ import textwrap
 
 from setuptools import setup, find_packages
 
-VERSION = '0.4.1'
+VERSION = '0.5.0'
 
 
 # -----------------------------------------------------------------------------
@@ -54,8 +54,7 @@ setup(
     For a standard installation, read the ``doc/quickstart.txt`` document.
 
     Read ``doc/framework_installation.txt`` to install the
-    `latest <http://www.nagare.org/snapshots/nagare-latest#egg=nagare-dev>`_
-    development version from the `Mercurial repository <http://hg.nagare.org/core>`_
+    latest development version from the `Github repository <https://github.com/nagareproject/core>`_
     or to create a Nagare developer installation.
     """) % long_description,
     license='BSD',
