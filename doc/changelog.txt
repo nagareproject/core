@@ -1,6 +1,30 @@
 Nagare Changelog
 ================
 
+0.5.0
+-----
+
+- Project only hosted on Github now
+- Documentation served as github.io pages
+- Documentation generated with Sphinx
+- Documentations added:
+
+  - internationalization
+  - ``nagare.wsgi.WSGIApp``
+  - application deployment
+  - log service
+
+- Running now on Stackless, Pypy (experimental) and CPython (with limitations)
+- Request and Response object factories added
+- Improved components garbage collector
+- Callbacks registered with ``.action()`` and ``.answer()`` can have parameters and keywords
+- No more ``lambda`` for the validators
+  (``lambda v: IntValidator(v).greater_than(10)`` => ``IntValidator().greater_than(10)``)
+- Translation *domain* added to the i18n service API
+- Custom ``data-*`` HTML5 attributes can be created as ``data_*`` keywords
+- The ``<div>`` automatically added in the asynchronous views have the
+  ``nagare-generated`` and ``nagare-async-view`` classes
+
 0.4.1
 -----
 
