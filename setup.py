@@ -40,7 +40,7 @@ setup(
     name='nagare',
     version=VERSION,
     author='Alain Poirier',
-    author_email='alain.poirier at net-ng.com',
+    author_email='alain.poirier@net-ng.com',
     description='Nagare Python web framework',
     long_description=textwrap.dedent("""
     Description
@@ -51,9 +51,9 @@ setup(
     Installation
     ============
 
-    For a standard installation, read the ``doc/quickstart.txt`` document.
+    For a standard installation, read the `quickstart <http://www.nagare.org/doc/quickstart>`_ document.
 
-    Read ``doc/framework_installation.txt`` to install the
+    Read `framework installation <http://www.nagare.org/doc/framework_installation>`_ to run the
     latest development version from the `Github repository <https://github.com/nagareproject/core>`_
     or to create a Nagare developer installation.
     """) % long_description,
