@@ -22,14 +22,15 @@ from nagare import wsgi, config
 
 application_options_spec = {
     'application': dict(
-        path='string()',  # Where to find the application object (see ``load_object()``) ?
-        name='string()',  # URL for the application
+        app='string',  # Application name (the entry point name for this applications)
+        name='string(default="$napp")',  # URL for the application
         debug='boolean(default=False)',  # Debug web page activated ?
 
         redirect_after_post='boolean(default=False)',  # Follow the PRG pattern ?
         always_html='boolean(default=True)',  # Don't generate xhtml, even if it's a browser capability ?
         wsgi_pipe='string(default="")',  # Method to create the WSGI middlewares pipe
-        static='string(default="$root/static")'  # Default directory of the static files
+        static='string(default="%s")' % os.path.join('$root', '$app', 'static'),  # Default directory of the static files
+        data='string(default="%s")' % os.path.join('$root', '$app', 'data')  # Default directory of the data files
     ),
 
     'database': dict(
@@ -48,7 +49,7 @@ application_options_spec = {
 }
 
 
-def read_application_options(cfgfile, error, default={}):
+def read_application_options(cfgfile, error, default=None):
     """Read the configuration file for the application
 
     In:
@@ -59,11 +60,11 @@ def read_application_options(cfgfile, error, default={}):
     Return:
       - a ``ConfigObj`` of the application parameters
     """
-    if default:
-        default['name'] = 'string(default="%s")' % configobj.ConfigObj(cfgfile)['application']['name']
-
-    spec = configobj.ConfigObj(default)
+    spec = configobj.ConfigObj(default or {})
     spec.merge(application_options_spec)
+
+    apps = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.applications')])
+    spec.merge({'application': {'app': 'option(%s)' % (apps + ', ""')}})
 
     choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
     spec.merge({'sessions': {'type': 'option(%s, default="")' % (choices + ', ""')}})
@@ -91,49 +92,42 @@ def read_application(cfgfile, error):
 
     In:
       - ``cfgfile`` -- name of a registered application or path to an application configuration file
-      - ``error`` -- the function to call in case of configuration errors
 
     Return:
       - a tuple:
 
         - name of the application configuration file
         - the application object
-        - the distribution of the application
+        - the setuptools project name of the application
         - a ``ConfigObj`` of the application parameters
+
+        All these values are ``None`` if the configuration file is not found
     """
     if not os.path.isfile(cfgfile):
-        # The name of a registered application is given, find its configuration file
+        app, dist = reference.load_app(cfgfile)
+        if dist is None:
+            return (None,) * 4
 
-        # Get all the registered applications
-        apps = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.applications')])
+        cfgfile = os.path.join(dist.location, dist.project_name, 'conf', cfgfile + '.cfg')
 
-        # Get the application
-        app = apps.get(cfgfile)
-        if app is None:
-            error("application '%s' not found (use 'nagare-admin serve' to see the available applications)" % cfgfile)
-
-        # From the directory of the application, get its configuration file
-        requirement = pkg_resources.Requirement.parse(app.dist.project_name)
-        cfgfile = pkg_resources.resource_filename(requirement, os.path.join('conf', cfgfile + '.cfg'))
+    if not os.path.isfile(cfgfile):
+        return (None,) * 4
 
     # Read the application configuration file
     aconf = read_application_options(cfgfile, error)
 
     # From the path of the application, create the application object
-    (app, dist) = reference.load_object(aconf['application']['path'])
-
-    here = os.path.abspath(os.path.dirname(cfgfile))
-    root = os.path.abspath(os.path.join(here, '..')) if dist is None else dist.location
+    app, dist = reference.load_app(aconf['application']['app'])
 
     defaults = {
-        'here': 'string(default="%s")' % here,
-        'root': 'string(default="%s")' % root
+        'here': 'string(default="%s")' % os.path.abspath(os.path.dirname(cfgfile)),
+        'root': 'string(default="%s")' % dist.location
     }
 
     # Re-read the application configuration, with some substitution variables
     aconf = read_application_options(cfgfile, error, defaults)
 
-    return cfgfile, app, dist, aconf
+    return cfgfile, app, dist.project_name, aconf
 
 
 # ---------------------------------------------------------------------------

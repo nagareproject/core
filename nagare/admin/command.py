@@ -111,9 +111,9 @@ class Commands(dict):
         # Return the description of each sub-commands
         commands = list(self.get_description(()))
 
-        l = max(len(name) for name, _ in commands)
+        name_max_len = max(len(name) for name, _ in commands)
         for name, desc in sorted(commands):
-            yield ' - %s: %s' % (name.ljust(l), desc)
+            yield ' - %s: %s' % (name.ljust(name_max_len), desc)
 
         if error:
             yield ''

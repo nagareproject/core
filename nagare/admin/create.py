@@ -65,7 +65,6 @@ def create_setup_py(filename, params):
             url='',
             packages=find_packages(),
             include_package_data=True,
-            package_data={'': ['*.cfg']},
             zip_safe=False,
             install_requires=('nagare',),
             entry_points="""
@@ -90,28 +89,28 @@ def upgrade_setup_py(filename, params, setup_py=None):
         print >>f, re.sub(r'\n(\s*)(entry_points)', r"\n\1message_extractors={'%(id)s': [('**.py', 'python', None)]},\n\1\2" % params, setup_py)
 
 
-def upgrade_setup_cfg(filename):
+def upgrade_setup_cfg(filename, params):
     old_conf = ConfigObj(filename)
 
     new_conf = ConfigObj(StringIO(textwrap.dedent('''\
             [extract_messages]
             keywords = _ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2
-            output_file = data/locale/messages.pot
+            output_file = %(id)s/data/locale/messages.pot
 
             [init_catalog]
-            input_file = data/locale/messages.pot
-            output_dir = data/locale
+            input_file = %(id)s/data/locale/messages.pot
+            output_dir = %(id)s/data/locale
             domain = messages
 
             [update_catalog]
-            input_file = data/locale/messages.pot
-            output_dir = data/locale
+            input_file = %(id)s/data/locale/messages.pot
+            output_dir = %(id)s/data/locale
             domain = messages
 
             [compile_catalog]
-            directory = data/locale
+            directory = %(id)s/data/locale
             domain = messages
-            ''')), list_values=False)
+            ''' % params)), list_values=False)
     new_conf.merge(old_conf)
 
     if new_conf != old_conf:
@@ -122,13 +121,13 @@ def upgrade_setup_cfg(filename):
         new_conf.write()
 
 
-def create_manifest_in(filename):
+def create_manifest_in(filename, params):
     with open(filename, 'w') as f:
         print >>f, textwrap.dedent('''\
-            graft conf
-            graft static
-            graft data/locale
-        ''')
+            graft %(id)s/conf
+            graft %(id)s/static
+            graft %(id)s/data/locale
+        ''' % params)
 
 
 def create_app_py(filename, params):
@@ -245,7 +244,7 @@ def create_conf(filename, params):
     with open(filename, 'w') as f:
         f.write(textwrap.dedent('''\
             [application]
-            path = app %(id)s
+            app = %(id)s
             name = %(id)s
             debug = off
 
@@ -271,7 +270,7 @@ def run(parser, options, args):
     create_or_update(root, os.mkdir)
 
     params = {
-        'exe': sys.executable,
+        'venv': os.path.dirname(sys.executable),
         'root': root,
         'setup': os.path.join(root, 'setup.py'),
         'name': app_name,
@@ -280,24 +279,24 @@ def run(parser, options, args):
     }
 
     create_or_update(os.path.join(root, 'setup.py'), create_setup_py, upgrade_setup_py, params)
-    create_or_update(os.path.join(root, 'setup.cfg'), upgrade_setup_cfg, upgrade_setup_cfg)
-    create_or_update(os.path.join(root, 'MANIFEST.in'), create_manifest_in)
+    create_or_update(os.path.join(root, 'setup.cfg'), upgrade_setup_cfg, upgrade_setup_cfg, params)
+    create_or_update(os.path.join(root, 'MANIFEST.in'), create_manifest_in, None, params)
+
+    create_or_update(os.path.join(root, 'test'), os.mkdir)
+    create_or_update(os.path.join(root, 'test', '__init__.py'), create_empty_file)
 
     create_or_update(os.path.join(root, app_id), os.mkdir)
     create_or_update(os.path.join(root, app_id, '__init__.py'), create_empty_file)
     create_or_update(os.path.join(root, app_id, 'app.py'), create_app_py, None, params)
     create_or_update(os.path.join(root, app_id, 'models.py'), create_models_py)
 
-    create_or_update(os.path.join(root, 'static'), os.mkdir)
-    create_or_update(os.path.join(root, 'static', '__init__.py'), create_empty_file)
+    create_or_update(os.path.join(root, app_id, 'static'), os.mkdir)
 
-    create_or_update(os.path.join(root, 'data'), os.mkdir)
-    create_or_update(os.path.join(root, 'data', '__init__.py'), create_empty_file)
-    create_or_update(os.path.join(root, 'data', 'locale'), os.mkdir)
+    create_or_update(os.path.join(root, app_id, 'data'), os.mkdir)
+    create_or_update(os.path.join(root, app_id, 'data', 'locale'), os.mkdir)
 
-    create_or_update(os.path.join(root, 'conf'), os.mkdir)
-    create_or_update(os.path.join(root, 'conf', '__init__.py'), create_empty_file)
-    create_or_update(os.path.join(root, 'conf', app_id + '.cfg'), create_conf, None, params)
+    create_or_update(os.path.join(root, app_id, 'conf'), os.mkdir)
+    create_or_update(os.path.join(root, app_id, 'conf', app_id + '.cfg'), create_conf, None, params)
 
     print "Application '%s' created." % app_name
     print
@@ -305,8 +304,7 @@ def run(parser, options, args):
         Note:
           1. Edit the file '%(setup)s' to set the informations about your new application.
           2. Register your application with:
-               - cd "%(root)s"
-               - "%(exe)s" setup.py develop
+               - %(venv)s/pip install -e %(root)s
         """ % params)
 
 

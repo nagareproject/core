@@ -40,12 +40,12 @@ def load_entry_point(app, entry_point):
       - (the object, the distribution of the object)
     """
     apps = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points(entry_point)])
-    entry_point = apps[app]
+    entry_point = apps.get(app)
 
-    return entry_point.load(), entry_point.dist
+    return (entry_point.load(), entry_point.dist) if entry_point else (None, None)
 
 
-def load_app(app, _):
+def load_app(app, _=None):
     """Load a registered application
 
     In:

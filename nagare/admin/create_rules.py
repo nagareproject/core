@@ -56,19 +56,18 @@ def create_rules(app_names, error):
         app_names = [entry.name for entry in pkg_resources.iter_entry_points('nagare.applications')]
 
     package = pkg_resources.Requirement.parse('nagare')
-    static = pkg_resources.resource_filename(package, 'static')
+    static = os.path.join(pkg_resources.resource_filename(package, 'nagare'), 'static')
 
     apps = [('nagare', static)]  # Initialize the result tuple with the static contents of the framework
 
     for app_name in app_names:
-        (cfgfile, app, dist, aconf) = util.read_application(app_name, error)
+        (cfgfile, app, project_name, aconf) = util.read_application(app_name, error)
+        if aconf is not None:
+            static = aconf['application']['static']
+            if os.path.isdir(static):
+                apps.append((aconf['application']['name'], static))
 
-        static = aconf['application'].get('static', os.path.join(dist.location, 'static') if dist else None)
-
-        if static and os.path.isdir(static):
-            apps.append((aconf['application']['name'], static))
-
-    return sorted(apps, key=lambda x: len(x[0]))
+    return sorted(apps, key=lambda (url, _): len(url))
 
 
 def generate_lighttpd_rules(app_names, error):

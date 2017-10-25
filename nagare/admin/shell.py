@@ -51,10 +51,11 @@ def activate_applications(cfgfiles, debug, error):
     # Merge all the ``[logging]]`` section of all the applications
     for cfgfile in cfgfiles:
         # Read the configuration file of the application
-        (cfgfile, app, dist, aconf) = util.read_application(cfgfile, error)
-        configs.append((cfgfile, app, dist, aconf))
+        (conffile, app, project_name, aconf) = util.read_application(cfgfile, error)
+        error('Configuration file "%s" not found' % cfgfile)
+        configs.append((conffile, app, project_name, aconf))
 
-        log.configure(aconf['logging'].dict(), aconf['application']['name'])
+        log.configure(aconf['logging'].dict(), aconf['application']['app'])
 
     # Configure the logging service
     log.activate()
@@ -62,13 +63,12 @@ def activate_applications(cfgfiles, debug, error):
     apps = {}
 
     # For each application given, activate its metadata and its logger
-    for (cfgfile, app, dist, aconf) in configs:
-        name = aconf['application']['name']
+    for (cfgfile, app, project_name, aconf) in configs:
+        name = aconf['application']['app']
 
         log.set_logger('nagare.application.' + name)
 
-        requirement = None if not dist else pkg_resources.Requirement.parse(dist.project_name)
-        data_path = None if not requirement else pkg_resources.resource_filename(requirement, '/data')
+        data_path = aconf['application']['data']
 
         (apps[name], databases) = util.activate_WSGIApp(app, cfgfile, aconf, error, data_path=data_path, debug=debug)
 

@@ -13,16 +13,14 @@ variables:
 tests:
     image: $CI_IMAGE
     script:
-        - /opt/stackless/bin/python setup.py develop
-        - /opt/stackless/bin/easy_install 'nagare[database,i18n,test]'
+        - /opt/stackless/bin/pip install -i http://packages.net-ng.com/repository/pypi/simple --trusted-host packages.net-ng.com -e ".[database,i18n,test]"
         - /opt/stackless/bin/nosetests
 
 pages:
     image: $CI_IMAGE
     stage: deploy
     script:
-        - /opt/stackless/bin/python setup.py develop
-        - /opt/stackless/bin/easy_install 'nagare[doc]'
+        - /opt/stackless/bin/pip install -i http://packages.net-ng.com/repository/pypi/simple --trusted-host packages.net-ng.com -e ".[doc]"
         - /opt/stackless/bin/sphinx-apidoc -s txt -T -o doc/source nagare
         - /opt/stackless/bin/sphinx-build -b html doc public
     artifacts:
@@ -34,8 +32,7 @@ pages:
 gh-pages:
     image: $CI_IMAGE
     script:
-        - /opt/stackless/bin/python setup.py develop
-        - /opt/stackless/bin/easy_install 'nagare[doc]'
+        - /opt/stackless/bin/pip install -i http://packages.net-ng.com/repository/pypi/simple --trusted-host packages.net-ng.com -e ".[doc]"
         - /opt/stackless/bin/sphinx-apidoc -s txt -T -o doc/source nagare
         - git clone --branch gh-pages git@git.net-ng.com:nng/nagare-core.git gh-pages
         - /opt/stackless/bin/sphinx-build -b html doc gh-pages

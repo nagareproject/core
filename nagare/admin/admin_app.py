@@ -101,7 +101,7 @@ class WSGIApp(wsgi.WSGIApp):
         config.validate(config_filename, conf, error)
 
         self.as_root = conf['application']['as_root']
-        self.application_path = conf['application']['path']
+        self.application_url = conf['application']['name']
 
         super(WSGIApp, self).set_config(config_filename, conf, error)
 
@@ -116,7 +116,7 @@ class WSGIApp(wsgi.WSGIApp):
         self.publisher = publisher
 
         if self.as_root:
-            publisher.register_application(self.application_path, '', self, self)
+            publisher.register_application(self.application_url, '', self, self)
 
     def create_root(self):
         """

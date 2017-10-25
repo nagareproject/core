@@ -32,7 +32,7 @@ if sys.version_info < (2, 5, 2):
 
 # -----------------------------------------------------------------------------
 
-f = open(os.path.join(os.path.dirname(__file__), 'doc', 'features.txt'))
+f = open(os.path.join(os.path.dirname(__file__), 'README.rst'))
 long_description = f.read()
 f.close()
 
@@ -63,12 +63,10 @@ setup(
     download_url='http://www.nagare.org/download',
     packages=find_packages(),
     include_package_data=True,
-    package_data={'': ['nagare/static/*']},
     namespace_packages=('nagare',),
     zip_safe=False,
-    dependency_links=('http://www.nagare.org/download/',),
     install_requires=(
-        'PEAK-Rules', 'ConfigObj', 'lxml', 'WebOb',
+        'nagare-peak-rules', 'ConfigObj', 'lxml', 'WebOb',
         'Paste', 'flup==1.0.3.dev-20110405', 'python-memcached'
     ),
     message_extractors={'nagare': [
@@ -97,7 +95,6 @@ setup(
         [nagare.commands]
         info = nagare.admin.info:Info
         serve = nagare.admin.serve:Serve
-        serve-module = nagare.admin.serve_module:Serve
         create-app = nagare.admin.create:Create
         create-db = nagare.admin.db:DBCreate
         drop-db = nagare.admin.db:DBDrop

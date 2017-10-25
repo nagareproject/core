@@ -143,29 +143,7 @@ def get_file_from_root(root, path):
     """
     filename = os.path.join(root, path[1:])
 
-    if not os.path.exists(filename) or os.path.isdir(filename):
-        return None
-
-    return filename
-
-
-def get_file_from_package(package, path):
-    """
-    Return the path of a static content, from a setuptools package
-
-    In:
-      - ``package`` -- the setuptools package of a registered application
-      - ``path`` -- the url path of the wanted static content
-
-    Return:
-      - the path of the static content
-    """
-    path = os.path.join('static', path[1:])
-
-    if not pkg_resources.resource_exists(package, path) or pkg_resources.resource_isdir(package, path):
-        return None
-
-    return pkg_resources.resource_filename(package, path)
+    return filename if os.path.exists(filename) and not os.path.isdir(filename) else None
 
 
 # ---------------------------------------------------------------------------
@@ -222,33 +200,37 @@ def run(parser, options, args):
     # Merge all the ``[logging]`` section of all the applications
     for cfgfile in args:
         # Read the configuration file of the application
-        (cfgfile, app, dist, aconf) = util.read_application(cfgfile, parser.error)
-        configs.append((cfgfile, app, dist, aconf))
+        (conffile, app, project_name, aconf) = util.read_application(cfgfile, parser.error)
+        if conffile is None:
+            parser.error('Configuration file not found for application "%s"' % cfgfile)
+        configs.append((conffile, app, project_name, aconf))
 
-        log.configure(aconf['logging'].dict(), aconf['application']['name'])
+        log.configure(aconf['logging'].dict(), aconf['application']['app'])
 
     # Configure the logging service
     log.activate()
 
     # Configure each application and register it to the publisher
-    for (cfgfile, app, dist, aconf) in configs:
+    for (cfgfile, app, project_name, aconf) in configs:
         # log.set_logger('nagare.application.'+aconf['application']['name'])
-
         if watcher:
             watcher.watch_file(aconf.filename)
 
-        requirement = None if not dist else pkg_resources.Requirement.parse(dist.project_name)
-        data_path = None if not requirement else pkg_resources.resource_filename(requirement, '/data')
+        app_url = aconf['application']['name']
 
-        # Create the function to get the static contents of the application
-        get_file = None
         static_path = aconf['application']['static']
-        if static_path is not None and os.path.isdir(static_path):
-            def get_file(path, static_path=static_path):
-                return get_file_from_root(static_path, path)
+        if os.path.isdir(static_path):
+            # Register the function to serve the static contents of the application
+            static_url = publisher.register_static(
+                app_url,
+                lambda path, static_path=static_path: get_file_from_root(static_path, path)
+            )
+        else:
+            static_path = static_url = None
 
-        # Register the function to serve the static contents of the application
-        static_url = publisher.register_static(aconf['application']['name'], get_file)
+        data_path = aconf['application']['data']
+        if not os.path.isdir(data_path):
+            data_path = None
 
         # Load the sessions manager factory
         sessions_managers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
@@ -262,7 +244,7 @@ def run(parser, options, args):
         (app, metadatas) = util.activate_WSGIApp(
             app,
             cfgfile, aconf, parser.error,
-            '' if not dist else dist.project_name,
+            project_name,
             static_path, static_url,
             data_path,
             publisher,
@@ -271,16 +253,18 @@ def run(parser, options, args):
 
         # Register the application to the publisher
         publisher.register_application(
-            aconf['application']['path'],
-            aconf['application']['name'],
+            aconf['application']['app'],
+            app_url,
             app,
             create_wsgi_pipe(app, options, cfgfile, aconf, parser.error)
         )
 
     # Register the function to serve the static contents of the framework
+    nagare = pkg_resources.Requirement.parse('nagare')
+    nagare_location = pkg_resources.resource_filename(nagare, 'nagare')
     publisher.register_static(
         'nagare',
-        lambda path, r=pkg_resources.Requirement.parse('nagare'): get_file_from_package(r, path)
+        lambda path, root=os.path.join(nagare_location, 'static'): get_file_from_root(root, path)
     )
 
     # Launch all the applications

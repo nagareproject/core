@@ -46,7 +46,9 @@ def read_options(debug, args, error):
         error('Bad number of parameters')
 
     # Read the configuration of the application
-    (cfgfile, app, dist, aconf) = util.read_application(args[0], error)
+    (cfgfile, app, project_name, aconf) = util.read_application(args[0], error)
+    if cfgfile is None:
+        error('Configuration file not found')
 
     # Configure the local service
     local.worker = local.Process()
