@@ -45,7 +45,7 @@ class Authentication(common.Authentication):
             (scheme, data) = authorization.split(' ', 1)
             if scheme == 'Digest':
                 data = [x.split('=', 1) for x in data.split(',')]
-                data = dict([(k.lstrip(), v.strip('"')) for (k, v) in data])
+                data = {k.lstrip(): v.strip('"') for k, v in data}
 
                 encoding = request.accept_charset.best_match(['iso-8859-1', 'utf-8'])
                 data['encoding'] = encoding

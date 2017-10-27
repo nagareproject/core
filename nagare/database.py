@@ -103,7 +103,7 @@ def entity_getstate(entity):
         attrs = ()
 
     # ``d`` is the dictionary of the _not_ SQLAlchemy managed attributes
-    d = dict([(k, v) for (k, v) in entity.__dict__.items() if k not in attrs])
+    d = {k: v for k, v in entity.__dict__.iteritems() if k not in attrs}
 
     # Keep only the primary key from the SQLAlchemy state
     d['_sa_key'] = state.key[1] if state.key else None

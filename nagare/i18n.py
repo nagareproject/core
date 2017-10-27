@@ -339,7 +339,10 @@ class Locale(CoreLocale):
 
         # By default, load the translation files for the 'nagare' domain
         # from the nagare directories
-        nagare_translations_dir = pkg_resources.resource_filename(pkg_resources.Requirement.parse('nagare'), 'data/locale')
+        nagare_translations_dir = pkg_resources.resource_filename(
+            pkg_resources.Requirement.parse('nagare'),
+            'nagare/data/locale'
+        )
         self.add_translation_directory(nagare_translations_dir, 'nagare')
 
         self.zone_formats['region'] = '%s'
@@ -1103,7 +1106,7 @@ class NegotiatedLocale(Locale):
         )
 
         if not locale:
-            (language, territory) = (default_locale + (None,))[:2]
+            language, territory = (default_locale + (None,))[:2]
         else:
             locale = core.LOCALE_ALIASES.get(locale, locale).replace('_', '-')
 
@@ -1111,7 +1114,7 @@ class NegotiatedLocale(Locale):
                 language = locale
                 territory = None
             else:
-                (language, territory) = locale.split('-')
+                language, territory = locale.split('-')
                 territory = territory.upper()
 
         super(NegotiatedLocale, self).__init__(

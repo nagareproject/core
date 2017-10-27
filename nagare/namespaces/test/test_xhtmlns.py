@@ -7,8 +7,6 @@
 # this distribution.
 # --
 
-from __future__ import with_statement
-
 import os
 from types import ListType
 from cStringIO import StringIO
@@ -26,7 +24,7 @@ from nagare.sessions.memory_sessions import SessionsWithPickledStates
 from nagare import presentation
 
 
-def create_FixtureApp(app):
+def create_fixture_app(app):
     local.worker = local.Process()
     local.request = local.Process()
 
@@ -45,6 +43,7 @@ def c14n(node):
 
     buf = StringIO()
     node.write_c14n(buf)
+
     return buf.getvalue().replace('\n', '')
 
 
@@ -505,7 +504,7 @@ def render(self, h, *args):
 def html_render_form_test5():
     """ XHTML namespace unit test - Form - create test methods call order """
     myApp = My_app_test_form
-    app = create_FixtureApp(myApp)
+    app = create_fixture_app(myApp)
     res = app.get('/')
     form = res.forms[0]
     res = form.submit()
@@ -639,7 +638,7 @@ def render_2(self, h, *args):
 def html_render_select_test7():
     """ XHTML namespace unit test - Select - test selected method with multiple attribute but one choice """
     myApp = My_app_test_select_multiple
-    app = create_FixtureApp(myApp)
+    app = create_fixture_app(myApp)
     res = app.get('/')
     assert 'choice:default' in res
     form = res.forms[0]
@@ -672,7 +671,7 @@ def render_3(self, h, *args):
 def html_render_select_test8():
     """ XHTML namespace unit test - Select - test selected method with single attribute """
     myApp = My_app_test_select_single
-    app = create_FixtureApp(myApp)
+    app = create_fixture_app(myApp)
     res = app.get('/')
     assert 'choice:default' in res
     form = res.forms[0]

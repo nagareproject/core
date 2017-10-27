@@ -14,7 +14,6 @@ A ``WSGIApp`` conforms to the WSGI interface and has a component factory. So,
 each time the ``WSGIApp`` receives a request without a session id or with an
 expired session id, it creates a new root component and a new session.
 """
-from __future__ import with_statement
 
 import sys
 import os

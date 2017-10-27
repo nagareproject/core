@@ -41,7 +41,7 @@ class Authentication(common.Authentication):
 
         authorization = request.headers.get('authorization')
         if authorization is not None:
-            (scheme, data) = authorization.split(' ', 1)
+            scheme, data = authorization.split(' ', 1)
             if scheme == 'Basic':
                 encoding = request.accept_charset.best_match(['iso-8859-1', 'utf-8'])
                 ids = [s.decode(encoding) for s in b64decode(data).split(':', 1)]

@@ -498,7 +498,7 @@ def py2js(d, h):
     Return:
       - transcoded javascript
     """
-    return '{' + ', '.join(['%s : %s' % (py2js(name, h), py2js(value, h)) for (name, value) in d.items()]) + '}'
+    return '{' + ', '.join('%s : %s' % (py2js(name, h), py2js(value, h)) for name, value in d.iteritems()) + '}'
 
 
 @peak.rules.when(py2js, ((types.FunctionType, types.MethodType),))
@@ -588,7 +588,7 @@ def py2js(l, h):
     Return:
       - transcoded javascript
     """
-    return '[' + ', '.join([py2js(value, h) for value in l]) + ']'
+    return '[' + ', '.join(py2js(value, h) for value in l) + ']'
 
 
 @peak.rules.when(py2js, (tuple,))

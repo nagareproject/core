@@ -7,8 +7,6 @@
 # this distribution.
 # --
 
-from __future__ import with_statement
-
 import csv
 import os
 from types import ListType

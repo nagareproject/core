@@ -70,17 +70,17 @@ def read_publisher_options(parser, options):
     if options.conf:
         configspec.merge({'here': 'string(default="%s")' % os.path.abspath(os.path.dirname(options.conf))})
 
-    choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.publishers')])
+    choices = ', '. join('"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.publishers'))
     configspec.merge({'publisher': {'type': 'option(%s, default="standalone")' % choices}})
 
-    choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
+    choices = ', '. join('"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions'))
     configspec.merge({'sessions': {'type': 'option(%s, default="standalone")' % choices}})
 
     conf = configobj.ConfigObj(options.conf, configspec=configspec, interpolation='Template')
     config.validate(options.conf, conf, parser.error)
 
     # The options in the command line overwrite the parameters read into the configuration file
-    for (name, section, key) in (
+    for name, section, key in (
         ('host', 'publisher', 'host'),
         ('port', 'publisher', 'port'),
         ('debug', 'publisher', 'debug'),
@@ -160,12 +160,12 @@ def run(parser, options, args):
     or paths to application configuration files.
     """
     # If no argument are given, display the list of the registered applications
-    if len(args) == 0:
+    if not args:
         print 'Available applications:'
 
         # The applications are registered under the ``nagare.applications`` entry point
         applications = pkg_resources.iter_entry_points('nagare.applications')
-        for name in sorted([application.name for application in applications]):
+        for name in sorted(application.name for application in applications):
             print ' -', name
         return
 
@@ -187,7 +187,7 @@ def run(parser, options, args):
         watcher = None
 
     # Load the publisher
-    publishers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.publishers')])
+    publishers = {entry.name: entry for entry in pkg_resources.iter_entry_points('nagare.publishers')}
     t = pconf['publisher']['type']
     publisher = publishers[t].load()()
 
@@ -200,7 +200,7 @@ def run(parser, options, args):
     # Merge all the ``[logging]`` section of all the applications
     for cfgfile in args:
         # Read the configuration file of the application
-        (conffile, app, project_name, aconf) = util.read_application(cfgfile, parser.error)
+        conffile, app, project_name, aconf = util.read_application(cfgfile, parser.error)
         if conffile is None:
             parser.error('Configuration file not found for application "%s"' % cfgfile)
         configs.append((conffile, app, project_name, aconf))
@@ -211,7 +211,7 @@ def run(parser, options, args):
     log.activate()
 
     # Configure each application and register it to the publisher
-    for (cfgfile, app, project_name, aconf) in configs:
+    for cfgfile, app, project_name, aconf in configs:
         # log.set_logger('nagare.application.'+aconf['application']['name'])
         if watcher:
             watcher.watch_file(aconf.filename)
@@ -233,7 +233,7 @@ def run(parser, options, args):
             data_path = None
 
         # Load the sessions manager factory
-        sessions_managers = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points('nagare.sessions')])
+        sessions_managers = {entry.name: entry for entry in pkg_resources.iter_entry_points('nagare.sessions')}
         conf = pconf['sessions'].dict()
         conf.update(aconf['sessions'].dict())
         t = conf.pop('type')
@@ -241,7 +241,7 @@ def run(parser, options, args):
         sessions_manager = sessions_managers[t].load()()
         sessions_manager.set_config(options.conf, conf, parser.error)
 
-        (app, metadatas) = util.activate_WSGIApp(
+        app, metadatas = util.activate_WSGIApp(
             app,
             cfgfile, aconf, parser.error,
             project_name,

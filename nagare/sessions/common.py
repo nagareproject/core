@@ -158,7 +158,7 @@ class Sessions(object):
           - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
         """
-        conf = dict([(k, v) for k, v in conf.items() if k in self.spec])
+        conf = {k: v for k, v in conf.iteritems() if k in self.spec}
         conf = configobj.ConfigObj(conf, configspec=self.spec)
         config.validate(filename, conf, error)
 
@@ -259,9 +259,11 @@ class Sessions(object):
             secure_id = request.cookies.get(self.security_cookie_name)
             if not secure_id:
                 secure_id = str(random.randint(1000000000000000, 9999999999999999))
-                response.set_cookie(self.security_cookie_name, secure_id, path=request.script_name + '/',
-                                    secure=self.security_cookie_secure,
-                                    httponly=self.security_cookie_httponly)
+                response.set_cookie(
+                    self.security_cookie_name, secure_id, path=request.script_name + '/',
+                    secure=self.security_cookie_secure,
+                    httponly=self.security_cookie_httponly
+                )
 
         return State(self, session_id, state_id, secure_id, use_same_state or not self.states_history)
 

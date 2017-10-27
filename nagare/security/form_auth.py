@@ -33,10 +33,12 @@ from nagare.security import basic_auth
 class Authentication(basic_auth.Authentication):
     """Simple form based authentication"""
 
-    def __init__(self, prefix='__ac', key=None, max_age=None,
-                 path='/', domain=None, secure=None, httponly=False,
-                 comment=None, expires=None, overwrite=False,
-                 realm=None):
+    def __init__(
+        self, prefix='__ac', key=None, max_age=None,
+        path='/', domain=None, secure=None, httponly=False,
+        comment=None, expires=None, overwrite=False,
+        realm=None
+    ):
         """Initialization
 
         In:

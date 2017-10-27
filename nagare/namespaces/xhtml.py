@@ -12,8 +12,6 @@
 This renderer is dedicated to the Nagare framework
 """
 
-from __future__ import with_statement
-
 import operator
 import types
 # import urllib
@@ -264,11 +262,11 @@ def render(self, h, *args):
     else:
         head = self.head(head)
 
-    head.extend([self.link(rel='stylesheet', type='text/css', href=url, **attributes) for (url, attributes) in self._get_css_url()])
-    head.extend([self.script(type='text/javascript', src=url, **attributes) for (url, attributes) in self._get_javascript_url()])
+    head.extend(self.link(rel='stylesheet', type='text/css', href=url, **attributes) for (url, attributes) in self._get_css_url())
+    head.extend(self.script(type='text/javascript', src=url, **attributes) for (url, attributes) in self._get_javascript_url())
 
-    head.extend([self.style(css, type='text/css', **attributes) for (name, css, attributes) in self._get_named_css()])
-    head.extend([self.script(js, type='text/javascript', **attributes) for (name, js, attributes) in self._get_named_javascript()])
+    head.extend(self.style(css, type='text/css', **attributes) for (name, css, attributes) in self._get_named_css())
+    head.extend(self.script(js, type='text/javascript', **attributes) for (name, js, attributes) in self._get_named_javascript())
 
     return head
 
@@ -894,25 +892,25 @@ class Renderer(xhtml_base.Renderer):
     # Redefinition of the he HTML tags with actions
     # ---------------------------------------------
 
-    a = TagProp('a', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu')), A)
-    area = TagProp('area', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('shape', 'coords', 'href', 'nohref', 'alt', 'target')), A)
-    button = TagProp('button', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('name', 'value', 'type', 'disabled')), SubmitInput)
-    form = TagProp('form', set(xhtml_base.allattrs + ('action', 'method', 'name', 'enctype', 'onsubmit', 'onreset', 'accept_charset', 'target')), Form)
-    img = TagProp('img', set(xhtml_base.allattrs + (
+    a = TagProp('a', xhtml_base.allattrs | xhtml_base.focusattrs | {'charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu'}, A)
+    area = TagProp('area', xhtml_base.allattrs | xhtml_base.focusattrs | {'shape', 'coords', 'href', 'nohref', 'alt', 'target'}, A)
+    button = TagProp('button', xhtml_base.allattrs | xhtml_base.focusattrs | {'name', 'value', 'type', 'disabled'}, SubmitInput)
+    form = TagProp('form', xhtml_base.allattrs | {'action', 'method', 'name', 'enctype', 'onsubmit', 'onreset', 'accept_charset', 'target'}, Form)
+    img = TagProp('img', xhtml_base.allattrs | {
         'src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
-        'align', 'border', 'hspace', 'vspace', 'lowsrc')
-    ), Img)
-    input = TagProp('input', set(xhtml_base.allattrs + xhtml_base.focusattrs + (
+        'align', 'border', 'hspace', 'vspace', 'lowsrc'
+    }, Img)
+    input = TagProp('input', xhtml_base.allattrs | xhtml_base.focusattrs | {
         'type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength', 'src'
-        'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border')
-    ), TextInput)
-    label = TagProp('label', set(xhtml_base.allattrs + ('for', 'accesskey', 'onfocus', 'onblur')), Label)
-    option = TagProp('option', set(xhtml_base.allattrs + ('selected', 'disabled', 'label', 'value')), Option)
-    select = TagProp('select', set(xhtml_base.allattrs + ('name', 'size', 'multiple', 'disabled', 'tabindex', 'onfocus', 'onblur', 'onchange', 'rows')), Select)
-    textarea = TagProp('textarea', set(xhtml_base.allattrs + xhtml_base.focusattrs + ('name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap')), TextArea)
+        'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border'
+    }, TextInput)
+    label = TagProp('label', xhtml_base.allattrs | {'for', 'accesskey', 'onfocus', 'onblur'}, Label)
+    option = TagProp('option', xhtml_base.allattrs | {'selected', 'disabled', 'label', 'value'}, Option)
+    select = TagProp('select', xhtml_base.allattrs | {'name', 'size', 'multiple', 'disabled', 'tabindex', 'onfocus', 'onblur', 'onchange', 'rows'}, Select)
+    textarea = TagProp('textarea', xhtml_base.allattrs | xhtml_base.focusattrs | {'name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap'}, TextArea)
 
-    script = TagProp('script', set(('id', 'charset', 'type', 'language', 'src', 'defer')), Script)
-    style = TagProp('style', set(xhtml_base.i18nattrs + ('id', 'type', 'media', 'title')), Style)
+    script = TagProp('script', {'id', 'charset', 'type', 'language', 'src', 'defer'}, Script)
+    style = TagProp('style', xhtml_base.i18nattrs | {'id', 'type', 'media', 'title'}, Style)
 
     _specialTags = dict(
         text_input=TextInput,
@@ -1195,7 +1193,7 @@ class AsyncHeadRenderer(HeadRenderer):
         """
         super(AsyncHeadRenderer, self).__init__(static_url=static_url)
 
-        self._anonymous_css = []         # CSS
+        self._anonymous_css = []  # CSS
         self._anonymous_javascript = []  # Javascript code
 
     def _css(self, style):
@@ -1233,7 +1231,7 @@ class AsyncHeadRenderer(HeadRenderer):
         Return:
           - list of css styles
         """
-        return [css for (order, css) in sorted(self._anonymous_css)]
+        return [css for order, css in sorted(self._anonymous_css)]
 
     def _get_anonymous_javascript(self):
         """Return the list of anonymous javascript codes, sorted by order of insertion
@@ -1241,7 +1239,7 @@ class AsyncHeadRenderer(HeadRenderer):
         Return:
           - list of javascript codes
         """
-        return [js for (order, js) in sorted(self._anonymous_javascript)]
+        return [js for order, js in sorted(self._anonymous_javascript)]
 
 
 @presentation.render_for(AsyncHeadRenderer)

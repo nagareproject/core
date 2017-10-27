@@ -63,10 +63,10 @@ def read_application_options(cfgfile, error, default=None):
     spec = configobj.ConfigObj(default or {})
     spec.merge(application_options_spec)
 
-    apps = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.applications')])
+    apps = ', '. join('"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.applications'))
     spec.merge({'application': {'app': 'option(%s)' % (apps + ', ""')}})
 
-    choices = ', '. join(['"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions')])
+    choices = ', '. join('"%s"' % entry.name for entry in pkg_resources.iter_entry_points('nagare.sessions'))
     spec.merge({'sessions': {'type': 'option(%s, default="")' % (choices + ', ""')}})
 
     conf = configobj.ConfigObj(cfgfile, configspec=spec, interpolation='Template' if default else None)
@@ -158,7 +158,7 @@ def get_database(conf, debug):
 
     # All the parameters, of the [database] section, with an unknown name are
     # given to the database engine
-    engine_conf = dict([(k, v) for (k, v) in conf.items() if k not in ('uri', 'activated', 'metadata', 'debug', 'populate')])
+    engine_conf = {k: v for k, v in conf.items() if k not in ('uri', 'activated', 'metadata', 'debug', 'populate')}
 
     return metadata, conf['uri'], debug, engine_conf
 
@@ -196,7 +196,7 @@ def activate_WSGIApp(
     databases = []
     populates = []
     # Get all the databases settings
-    for (section, content) in aconf['database'].items():
+    for section, content in aconf['database'].items():
         if isinstance(content, configobj.Section):
             database = get_database(content, content['debug'] or debug)
             if database:

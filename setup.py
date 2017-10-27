@@ -26,8 +26,8 @@ except ImportError:
     print "Warning: you are installing Nagare on CPython instead of Stackless Python (http://www.stackless.com) or PyPy (http://pypy.org)."
     print "         Without 'continuation', the 'Component.call()' method will not be available."
 
-if sys.version_info < (2, 5, 2):
-    print 'The version of Python must be 2.5.2 or more'
+if sys.version_info < (2, 7, 0):
+    print 'The Python version must be 2.7'
     sys.exit(-2)
 
 # -----------------------------------------------------------------------------

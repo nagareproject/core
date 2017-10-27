@@ -80,20 +80,20 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
     def _validate_conf(self, filename, conf, error):
         """Validate the configuration read from the publisher configuration file
 
-       In:
-         - ``filename`` -- the path to the configuration file
-         - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
-         - ``error`` -- the function to call in case of configuration errors
+        In:
+          - ``filename`` -- the path to the configuration file
+          - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
+          - ``error`` -- the function to call in case of configuration errors
 
-       Return:
-         - the tuple:
+        Return:
+          - the tuple:
 
-           - hostname to listen to
-           - port to listen to
-           - unix socket to listen to
-           - conf object
-       """
-        (host, port, conf) = super(Publisher, self)._validate_conf(filename, conf, error)
+            - hostname to listen to
+            - port to listen to
+            - unix socket to listen to
+            - conf object
+        """
+        host, port, conf = super(Publisher, self)._validate_conf(filename, conf, error)
         return host, port, conf.pop('socket'), conf
 
     def serve(self, filename, conf, error):
@@ -104,7 +104,7 @@ class Publisher(common.Publisher, fcgi_fork.WSGIServer):
           - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
         """
-        (host, port, socket, conf) = self._validate_conf(filename, conf, error)
+        host, port, socket, conf = self._validate_conf(filename, conf, error)
 
         if not socket:
             bind_address = (host, port)

@@ -64,7 +64,7 @@ def clean(old, new):
     models = set(callback[0] for callback in new.itervalues())
 
     # Keep only the old callbacks of a view if no new callbacks were registered
-    return dict((k, v) for k, v in old.iteritems() if v[0] not in models)
+    return {k: v for k, v in old.iteritems() if v[0] not in models}
 
 
 def process(callbacks, request, response):
@@ -84,7 +84,7 @@ def process(callbacks, request, response):
     actions = {}
 
     try:
-        for (name, value) in request.params.items():
+        for name, value in request.params.items():
             if isinstance(value, basestring) and value.startswith('_action'):
                 # For the radio buttons, the callback identifier is the value,
                 # not the name
@@ -97,15 +97,15 @@ def process(callbacks, request, response):
                     v = v[3]
                     value = (v if isinstance(v, tuple) else (v,)) + (value,)
 
-                actions[name] = ((int(name[7]), len(actions)), int(name[8:16]), name, value)
+                actions[name] = (int(name[7]), len(actions)), int(name[8:16]), name, value
     except ValueError:
         raise CallbackLookupError(name[8:])
 
     render = None
 
-    for ((callback_type, _), name, param, value) in sorted(actions.values()):
+    for (callback_type, _), name, param, value in sorted(actions.values()):
         try:
-            (model, f, with_request, render) = callbacks[name]
+            model, f, with_request, render = callbacks[name]
         except KeyError:
             raise CallbackLookupError(name)
 

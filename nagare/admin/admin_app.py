@@ -14,12 +14,10 @@ The default view of this application is the administration view
 of the framework.
 """
 
-from __future__ import with_statement
-
 import operator
 
-import pkg_resources
 import configobj
+import pkg_resources
 
 from nagare import component, presentation, wsgi, config
 

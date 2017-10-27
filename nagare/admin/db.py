@@ -12,8 +12,6 @@
 Create or delete the database tables of an application
 """
 
-from __future__ import with_statement
-
 import pkg_resources
 
 from nagare import local, log, database
@@ -35,7 +33,7 @@ def read_options(debug, args, error):
       - tuples (metadata object, populate function)
    """
     # If no application name is given, display the list of the registered applications
-    if len(args) == 0:
+    if not args:
         print 'Available applications:'
         app_names = [entry.name for entry in pkg_resources.iter_entry_points('nagare.applications')]
         for app_name in sorted(app_names):
@@ -46,7 +44,7 @@ def read_options(debug, args, error):
         error('Bad number of parameters')
 
     # Read the configuration of the application
-    (cfgfile, app, project_name, aconf) = util.read_application(args[0], error)
+    cfgfile, app, project_name, aconf = util.read_application(args[0], error)
     if cfgfile is None:
         error('Configuration file not found')
 
@@ -75,7 +73,7 @@ def create(parser, options, args):
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines : application name
     """
-    for (database_settings, populate) in read_options(options.debug, args, parser.error):
+    for database_settings, populate in read_options(options.debug, args, parser.error):
         database.set_metadata(*database_settings)
 
         with database.session.begin():
@@ -96,7 +94,7 @@ def drop(parser, options, args):
       - ``options`` -- options in the command lines
       - ``args`` -- arguments in the command lines : application name
     """
-    for (database_settings, populate) in read_options(options.debug, args, parser.error):
+    for database_settings, populate in read_options(options.debug, args, parser.error):
         database.set_metadata(*database_settings)
 
         with database.session.begin():

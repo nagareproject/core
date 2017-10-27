@@ -59,7 +59,7 @@ class Publisher(object):
     def get_registered_applications(self):
         """Return all the applications registered on this publisher
        """
-        return [(app, app_path, app_urls) for (app, (app_path, app_urls)) in self.apps.items()]
+        return [(app, app_path, app_urls) for app, (app_path, app_urls) in self.apps.iteritems()]
 
     def register_static(self, name, get_file):
         """Register a WSGI application to serve static contents
@@ -91,10 +91,10 @@ class Publisher(object):
            - port to listen to
            - conf object
        """
-        conf = dict([(k, v) for (k, v) in conf.items() if k in self.spec])
+        conf = {k: v for k, v in conf.iteritems() if k in self.spec}
         conf = configobj.ConfigObj(conf, configspec=self.spec, interpolation='Template')
         config.validate(filename, conf, error)
-        conf = dict([(k, v) for (k, v) in conf.items() if v is not None])
+        conf = {k: v for k, v in conf.iteritems() if v is not None}
 
         return conf.pop('host'), conf.pop('port'), conf
 

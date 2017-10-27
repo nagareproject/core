@@ -13,8 +13,6 @@ When this maximum is reached, the last recently used key is deleted when a new
 key is added.
 """
 
-from __future__ import with_statement
-
 import threading
 
 
@@ -66,7 +64,7 @@ class LRUDict(object):
         Return:
           - the value
         """
-        (age, item) = self.items[k]
+        age, item = self.items[k]
         del self.age_to_items[age]
 
         self._set_newest(k, item)
@@ -82,7 +80,7 @@ class LRUDict(object):
           - ``o`` -- the value
         """
         try:
-            (age, item) = self.items[k]
+            age, item = self.items[k]
             del self.age_to_items[age]
         except KeyError:
             pass
@@ -103,7 +101,7 @@ class LRUDict(object):
         In:
           - ``k`` -- the key
         """
-        (age, item) = self.items.pop(k)
+        age, item = self.items.pop(k)
         del self.age_to_items[age]
 
     def debug(self):

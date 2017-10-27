@@ -154,7 +154,7 @@ def configure(log_conf, app_name=None):
         if handler:
             app_default_conf['logger_app_' + app_name]['handlers'] += (', ' + handler)
 
-        logger_sections = [values for (section, values) in log_conf.items() if section.startswith('logger_')]
+        logger_sections = [values for section, values in log_conf.iteritems() if section.startswith('logger_')]
 
         for logger_section in logger_sections:
             if ('qualname' in logger_section) and logger_section['qualname'].startswith('.'):

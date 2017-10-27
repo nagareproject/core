@@ -25,15 +25,15 @@ class Renderer(xml.XmlRenderer):
     # The ESI tags
     # ------------
 
-    include = TagProp('include', set(('src', 'alt', 'onerror')))
-    inline = TagProp('inline', set(('name', 'fetchable')))
+    include = TagProp('include', {'src', 'alt', 'onerror'})
+    inline = TagProp('inline', {'name', 'fetchable'})
     choose = TagProp('choose', set())
-    when = TagProp('when', set(('test',)))
+    when = TagProp('when', {'test'})
     otherwise = TagProp('otherwise', set())
     try_ = TagProp('try', set())
     attempt = TagProp('attempt', set())
     except_ = TagProp('except', set())
-    comment = TagProp('comment', set(('text',)))
+    comment = TagProp('comment', {'text'})
     remove = TagProp('remove', set())
     vars = TagProp('vars', set())
 

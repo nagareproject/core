@@ -51,7 +51,7 @@ def activate_applications(cfgfiles, debug, error):
     # Merge all the ``[logging]]`` section of all the applications
     for cfgfile in cfgfiles:
         # Read the configuration file of the application
-        (conffile, app, project_name, aconf) = util.read_application(cfgfile, error)
+        conffile, app, project_name, aconf = util.read_application(cfgfile, error)
         error('Configuration file "%s" not found' % cfgfile)
         configs.append((conffile, app, project_name, aconf))
 
@@ -63,16 +63,16 @@ def activate_applications(cfgfiles, debug, error):
     apps = {}
 
     # For each application given, activate its metadata and its logger
-    for (cfgfile, app, project_name, aconf) in configs:
+    for cfgfile, app, project_name, aconf in configs:
         name = aconf['application']['app']
 
         log.set_logger('nagare.application.' + name)
 
         data_path = aconf['application']['data']
 
-        (apps[name], databases) = util.activate_WSGIApp(app, cfgfile, aconf, error, data_path=data_path, debug=debug)
+        apps[name], databases = util.activate_WSGIApp(app, cfgfile, aconf, error, data_path=data_path, debug=debug)
 
-        for (database_settings, populate) in databases:
+        for database_settings, populate in databases:
             database.set_metadata(*database_settings)
 
     session = database.session
@@ -314,7 +314,7 @@ def set_batch_options(optparser):
     if not sys.argv[3:]:
         return None
 
-    for (i, option) in enumerate(sys.argv[3:]):
+    for i, option in enumerate(sys.argv[3:]):
         if not option.startswith('-'):
             break
 
@@ -339,7 +339,7 @@ def batch(parser, options, args):
     if len(args) == 1:
         parser.error('No file given')
 
-    for (i, option) in enumerate(sys.argv[3:]):
+    for i, option in enumerate(sys.argv[3:]):
         if not option.startswith('-'):
             break
 

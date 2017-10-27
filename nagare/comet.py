@@ -12,8 +12,6 @@
 This implementation is only working with a multi-threaded publisher
 """
 
-from __future__ import with_statement
-
 import threading
 import select
 
@@ -95,7 +93,7 @@ class Channel(object):
             self.discard_disconnected_clients()
 
             # Is a msg already available to send ?
-            (new_nb, msg) = self.get_old_msg(nb)
+            new_nb, msg = self.get_old_msg(nb)
             if not msg:
                 self.clients.add(client)
 

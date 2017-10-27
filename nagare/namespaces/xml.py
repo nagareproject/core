@@ -9,8 +9,6 @@
 
 """XML renderer"""
 
-from __future__ import with_statement
-
 import types
 import copy
 import cStringIO
@@ -335,7 +333,7 @@ def add_child(self, d):
 
     Attribute name can end with a '_' which is removed
     """
-    for (name, value) in d.items():
+    for name, value in d.iteritems():
         add_attribute(self, name, value)
 
 
@@ -623,7 +621,7 @@ class XmlRenderer(common.Renderer):
         """
         pi = ET.ProcessingInstruction(target, text)
 
-        for name, value in kw.items():
+        for name, value in kw.iteritems():
             add_attribute(pi, name, value)
 
         return pi
@@ -695,7 +693,7 @@ class XmlRenderer(common.Renderer):
           - the root element of the parsed XML, if ``fragment`` is ``False``
           - a list of XML elements, if ``fragment`` is ``True``
         """
-        if type(text) == unicode:
+        if isinstance(text, unicode):
             text = text.encode(kw.setdefault('encoding', 'utf-8'))
 
         return self.parse_xml(cStringIO.StringIO(text), fragment, no_leading_text, **kw)

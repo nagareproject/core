@@ -60,13 +60,13 @@ class Publisher(common.Publisher):
           - ``conf`` -- the ``ConfigObj`` object, created from the configuration file
           - ``error`` -- the function to call in case of configuration errors
         """
-        (host, port, conf) = self._validate_conf(filename, conf, error)
+        host, port, conf = self._validate_conf(filename, conf, error)
 
         # The publisher is a threaded server so call only once the ``on_new_process()`` method
         self.on_new_process()
         print time.strftime('%x %X -', time.localtime()),
 
-        server_options = dict([(k, v) for (k, v) in conf.items() if k in self.server_spec])
-        threadpool_options = dict([(k, v) for (k, v) in conf.items() if k in self.threadpool_spec])
+        server_options = {k: v for k, v in conf.iteritems() if k in self.server_spec}
+        threadpool_options = {k: v for k, v in conf.iteritems() if k in self.threadpool_spec}
 
         httpserver.serve(self.urls, host, port, threadpool_options=threadpool_options, **server_options)

@@ -25,7 +25,7 @@ def _validate(filename, config):
     """
     errors = configobj.flatten_errors(config, config.validate(Validator(), preserve_errors=True))
 
-    for (sections, name, error) in errors:
+    for sections, name, error in errors:
         yield 'file "%s", section "[%s]", parameter "%s": %s' % (filename, ' / '.join(sections), name, error)
 
 

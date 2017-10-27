@@ -12,8 +12,6 @@
 Generate the directory structure and the skeleton of an application.
 """
 
-from __future__ import with_statement
-
 import sys
 import os
 import textwrap
@@ -133,8 +131,6 @@ def create_manifest_in(filename, params):
 def create_app_py(filename, params):
     with open(filename, 'w') as f:
         f.write(textwrap.dedent("""\
-            from __future__ import with_statement
-
             import os
             from nagare import presentation
 

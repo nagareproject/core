@@ -13,8 +13,6 @@ This renderer only depends of the ``nagare.namespaces.xml`` module.
 Having not dependencies to the framework make it suitable to be used in others frameworks.
 """
 
-from __future__ import with_statement
-
 import cStringIO
 import urllib
 import peak
@@ -29,14 +27,14 @@ from nagare.namespaces.xml import TagProp
 # Common attributes
 # -----------------
 
-componentattrs = ('id', 'class', 'style', 'title')
-i18nattrs = ('lang', 'dir')
-eventattrs = (
+componentattrs = {'id', 'class', 'style', 'title'}
+i18nattrs = {'lang', 'dir'}
+eventattrs = {
     'onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmousemove',
     'onmouseover', 'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup'
-)
-allattrs = componentattrs + i18nattrs + eventattrs
-focusattrs = ('accesskey', 'tabindex', 'onfocus', 'onblur')
+}
+allattrs = componentattrs | i18nattrs | eventattrs
+focusattrs = {'accesskey', 'tabindex', 'onfocus', 'onblur'}
 
 
 class _HTMLTag(xml._Tag):
@@ -124,13 +122,13 @@ class HeadRenderer(xml.XmlRenderer):
     # Tag factories
     # -------------
 
-    base = TagProp('base', set(('id', 'href', 'target')))
-    head = TagProp('head', set(i18nattrs + ('id', 'profile')))
-    link = TagProp('link', set(allattrs + ('charset', 'href', 'hreflang', 'type', 'rel', 'rev', 'media', 'target')))
-    meta = TagProp('meta', set(i18nattrs + ('id', 'http_equiv', 'name', 'content', 'scheme')))
-    title = TagProp('title', set(i18nattrs + ('id',)))
-    style = TagProp('style', set(i18nattrs + ('id',)))
-    script = TagProp('script', set(i18nattrs + ('id',)))
+    base = TagProp('base', {'id', 'href', 'target'})
+    head = TagProp('head', i18nattrs | {'id', 'profile'})
+    link = TagProp('link', allattrs | {'charset', 'href', 'hreflang', 'type', 'rel', 'rev', 'media', 'target'})
+    meta = TagProp('meta', i18nattrs | {'id', 'http_equiv', 'name', 'content', 'scheme'})
+    title = TagProp('title', i18nattrs | {'id'})
+    style = TagProp('style', i18nattrs | {'id'})
+    script = TagProp('script', i18nattrs | {'id'})
 
     @classmethod
     def class_init(cls, specialTags):
@@ -147,156 +145,156 @@ class HeadRenderer(xml.XmlRenderer):
 class Renderer(xml.XmlRenderer):
     head_renderer_factory = HeadRenderer
 
-    componentattrs = ('id', 'class', 'style', 'title')
-    i18nattrs = ('lang', 'dir')
-    eventattrs = (
+    componentattrs = {'id', 'class', 'style', 'title'}
+    i18nattrs = {'lang', 'dir'}
+    eventattrs = {
         'onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmousemove',
         'onmouseover', 'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup'
-    )
-    focusattrs = ('accesskey', 'tabindex', 'onfocus', 'onblur')
-    cellhalignattrs = ('align', 'char', 'charoff')
-    cellvalignattrs = ('valign',)
-    allattrs = componentattrs + i18nattrs + eventattrs
+    }
+    focusattrs = {'accesskey', 'tabindex', 'onfocus', 'onblur'}
+    cellhalignattrs = {'align', 'char', 'charoff'}
+    cellvalignattrs = {'valign'}
+    allattrs = componentattrs | i18nattrs | eventattrs
 
     # The HTML tags
     # -------------
 
-    a = TagProp('a', set(allattrs + focusattrs + (
+    a = TagProp('a', allattrs | focusattrs | {
         'charset', 'type', 'name', 'href', 'hreflang', 'rel',
         'rev', 'shape', 'coords', 'target', 'oncontextmenu'
-    )))
-    abbr = TagProp('abbr', set(allattrs))
-    acronym = TagProp('acronym', set(allattrs))
-    address = TagProp('address', set(allattrs))
-    applet = TagProp('applet', set(componentattrs + (
+    })
+    abbr = TagProp('abbr', allattrs)
+    acronym = TagProp('acronym', allattrs)
+    address = TagProp('address', allattrs)
+    applet = TagProp('applet', componentattrs | {
         'codebase', 'archive', 'code', 'object', 'alt', 'name', 'width',
         'height', 'align', 'hspace', 'vspace'
-    )))
-    area = TagProp('area', set(allattrs + focusattrs + ('shape', 'coords', 'href', 'nohref', 'alt', 'target')))
-    b = TagProp('b', set(allattrs))
-    basefont = TagProp('basefont', set(componentattrs + i18nattrs + ('id', 'size', 'color', 'face')))
-    bdo = TagProp('bdo', set(componentattrs + eventattrs + ('lang', 'dir')))
-    big = TagProp('big', set(allattrs))
-    blockquote = TagProp('blockquote', set(allattrs + ('cite',)))
-    body = TagProp('body', set(allattrs + (
+    })
+    area = TagProp('area', allattrs | focusattrs | {'shape', 'coords', 'href', 'nohref', 'alt', 'target'})
+    b = TagProp('b', allattrs)
+    basefont = TagProp('basefont', componentattrs | i18nattrs | {'id', 'size', 'color', 'face'})
+    bdo = TagProp('bdo', componentattrs | eventattrs | {'lang', 'dir'})
+    big = TagProp('big', allattrs)
+    blockquote = TagProp('blockquote', allattrs | {'cite'})
+    body = TagProp('body', allattrs | {
         'onload', 'onunload', 'onfocus', 'background', 'bgcolor', 'text',
         'link', 'vlink', 'alink', 'leftmargin', 'topmargin', 'marginwidth', 'marginheight'
-    )))
-    br = TagProp('br', set(componentattrs + ('clear',)))
-    button = TagProp('button', set(allattrs + focusattrs + ('name', 'value', 'type', 'disabled')))
-    caption = TagProp('caption', set(allattrs + ('align',)))
-    center = TagProp('center', set(allattrs))
-    cite = TagProp('cite', set(allattrs))
-    code = TagProp('code', set(allattrs))
-    col = TagProp('col', set(allattrs + cellhalignattrs + cellvalignattrs + ('span', 'width')))
-    colgroup = TagProp('colgroup', set(allattrs + cellhalignattrs + cellvalignattrs + ('span', 'width')))
-    dd = TagProp('dd', set(allattrs))
-    del_ = TagProp('del', set(allattrs + ('cite', 'datetime')))
-    dfn = TagProp('dfn', set(allattrs))
-    dir = TagProp('dir', set(allattrs + ('compact',)))
-    div = TagProp('div', set(allattrs + ('align',)))
-    dl = TagProp('dl', set(allattrs + ('compact',)))
-    dt = TagProp('dt', set(allattrs))
-    em = TagProp('em', set(allattrs))
-    embed = TagProp('embed', set((
+    })
+    br = TagProp('br', componentattrs | {'clear'})
+    button = TagProp('button', allattrs | focusattrs | {'name', 'value', 'type', 'disabled'})
+    caption = TagProp('caption', allattrs | {'align'})
+    center = TagProp('center', allattrs)
+    cite = TagProp('cite', allattrs)
+    code = TagProp('code', allattrs)
+    col = TagProp('col', allattrs | cellhalignattrs | cellvalignattrs | {'span', 'width'})
+    colgroup = TagProp('colgroup', allattrs | cellhalignattrs | cellvalignattrs | {'span', 'width'})
+    dd = TagProp('dd', allattrs)
+    del_ = TagProp('del', allattrs | {'cite', 'datetime'})
+    dfn = TagProp('dfn', allattrs)
+    dir = TagProp('dir', allattrs | {'compact'})
+    div = TagProp('div', allattrs | {'align'})
+    dl = TagProp('dl', allattrs | {'compact'})
+    dt = TagProp('dt', allattrs)
+    em = TagProp('em', allattrs)
+    embed = TagProp('embed', {
         'width', 'height', 'src', 'controller', 'href', 'target',
         'border', 'pluginspage', 'quality', 'type', 'bgcolor', 'menu'
-    )))
-    fieldset = TagProp('fieldset', set(allattrs))
-    font = TagProp('font', set(componentattrs + i18nattrs + ('face', 'size', 'color')))
-    form = TagProp('form', set(allattrs + (
+    })
+    fieldset = TagProp('fieldset', allattrs)
+    font = TagProp('font', componentattrs | i18nattrs | {'face', 'size', 'color'})
+    form = TagProp('form', allattrs | {
         'action', 'method', 'name', 'enctype',
         'onsubmit', 'onreset', 'accept_charset', 'target'
-    )))
+    })
     frame = TagProp('frame', set())
-    frameset = TagProp('frameset', set(componentattrs + (
+    frameset = TagProp('frameset', componentattrs | {
         'rows', 'cols', 'onload', 'onunload', 'framespacing', 'border',
         'marginwidth', 'marginheight', 'frameborder', 'noresize', 'scrolling'
-    )))
-    h1 = TagProp('h1', set(allattrs + ('align',)))
-    h2 = TagProp('h2', set(allattrs + ('align',)))
-    h3 = TagProp('h3', set(allattrs + ('align',)))
-    h4 = TagProp('h4', set(allattrs + ('align',)))
-    h5 = TagProp('h5', set(allattrs + ('align',)))
-    h6 = TagProp('h6', set(allattrs + ('align',)))
-    hr = TagProp('hr', set(allattrs + ('align', 'noshade', 'size', 'width', 'color')))
-    html = TagProp('html', set(i18nattrs + ('id',)))
-    i = TagProp('i', set(allattrs))
-    iframe = TagProp('iframe', set(componentattrs + (
+    })
+    h1 = TagProp('h1', allattrs | {'align'})
+    h2 = TagProp('h2', allattrs | {'align'})
+    h3 = TagProp('h3', allattrs | {'align'})
+    h4 = TagProp('h4', allattrs | {'align'})
+    h5 = TagProp('h5', allattrs | {'align'})
+    h6 = TagProp('h6', allattrs | {'align'})
+    hr = TagProp('hr', allattrs | {'align', 'noshade', 'size', 'width', 'color'})
+    html = TagProp('html', i18nattrs | {'id'})
+    i = TagProp('i', allattrs)
+    iframe = TagProp('iframe', componentattrs | {
         'longdesc', 'name', 'src', 'frameborder', 'marginwidth', 'marginheight',
         'noresize', 'scrolling', 'align', 'height', 'width', 'hspace', 'vspace', 'bordercolor',
-    )))
-    img = TagProp('img', set(allattrs + (
+    })
+    img = TagProp('img', allattrs | {
         'src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap',
         'ismap', 'align', 'border', 'hspace', 'vspace', 'lowsrc'
-    )))
-    input = TagProp('input', set(allattrs + focusattrs + (
+    })
+    input = TagProp('input', allattrs | focusattrs | {
         'type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength',
         'src', 'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border'
-    )))
-    ins = TagProp('ins', set(allattrs + ('cite', 'datetime')))
-    isindex = TagProp('isindex', set(componentattrs + i18nattrs + ('prompt',)))
-    kbd = TagProp('kbd', set(allattrs))
-    label = TagProp('label', set(allattrs + ('for', 'accesskey', 'onfocus', 'onblur')))
-    legend = TagProp('legend', set(allattrs + ('accesskey', 'align')))
-    li = TagProp('li', set(allattrs + ('type', 'value')))
-    map = TagProp('map', set(i18nattrs + eventattrs + ('id', 'class', 'style', 'title', 'name')))
-    menu = TagProp('menu', set(allattrs + ('compact',)))
-    noframes = TagProp('noframes', set(allattrs))
-    noscript = TagProp('noscript', set(allattrs))
-    object = TagProp('object', set(allattrs + (
+    })
+    ins = TagProp('ins', allattrs | {'cite', 'datetime'})
+    isindex = TagProp('isindex', componentattrs | i18nattrs | {'prompt'})
+    kbd = TagProp('kbd', allattrs)
+    label = TagProp('label', allattrs | {'for', 'accesskey', 'onfocus', 'onblur'})
+    legend = TagProp('legend', allattrs | {'accesskey', 'align'})
+    li = TagProp('li', allattrs | {'type', 'value'})
+    map = TagProp('map', i18nattrs | eventattrs | {'id', 'class', 'style', 'title', 'name'})
+    menu = TagProp('menu', allattrs | {'compact'})
+    noframes = TagProp('noframes', allattrs)
+    noscript = TagProp('noscript', allattrs)
+    object = TagProp('object', allattrs | {
         'declare', 'classid', 'codebase', 'data', 'type', 'codetype',
         'archive', 'standby', 'height', 'width', 'usemap', 'name',
         'tabindex', 'align', 'border', 'hspace', 'vspace'
-    )))
-    ol = TagProp('ol', set(allattrs + ('type', 'compact', 'start')))
-    optgroup = TagProp('optgroup', set(allattrs + ('disabled', 'label')))
-    option = TagProp('option', set(allattrs + ('selected', 'disabled', 'label', 'value')))
-    p = TagProp('p', set(allattrs + ('align',)))
-    param = TagProp('param', set(('id', 'name', 'value', 'valuetype', 'type')))
-    pre = TagProp('pre', set(allattrs + ('width',)))
-    q = TagProp('q', set(allattrs + ('cite',)))
-    s = TagProp('s', set(allattrs))
-    samp = TagProp('samp', set(allattrs))
-    script = TagProp('script', set(('id', 'charset', 'type', 'language', 'src', 'defer')))
-    select = TagProp('select', set(allattrs + (
+    })
+    ol = TagProp('ol', allattrs | {'type', 'compact', 'start'})
+    optgroup = TagProp('optgroup', allattrs | {'disabled', 'label'})
+    option = TagProp('option', allattrs | {'selected', 'disabled', 'label', 'value'})
+    p = TagProp('p', allattrs | {'align'})
+    param = TagProp('param', {'id', 'name', 'value', 'valuetype', 'type'})
+    pre = TagProp('pre', allattrs | {'width'})
+    q = TagProp('q', allattrs | {'cite'})
+    s = TagProp('s', allattrs)
+    samp = TagProp('samp', allattrs)
+    script = TagProp('script', {'id', 'charset', 'type', 'language', 'src', 'defer'})
+    select = TagProp('select', allattrs | {
         'name', 'size', 'multiple', 'disabled', 'tabindex',
         'onfocus', 'onblur', 'onchange', 'rows'
-    )))
-    small = TagProp('small', set(allattrs))
-    span = TagProp('span', set(allattrs))
-    strike = TagProp('strike', set(allattrs))
-    strong = TagProp('strong', set(allattrs))
-    style = TagProp('style', set(i18nattrs + ('id', 'type', 'media', 'title')))
-    sub = TagProp('sub', set(allattrs))
-    sup = TagProp('sup', set(allattrs))
-    table = TagProp('table', set(componentattrs + i18nattrs + ('prompt',)))
-    tbody = TagProp('tbody', set(allattrs + cellhalignattrs + cellvalignattrs))
-    td = TagProp('td', set(allattrs + cellhalignattrs + cellvalignattrs + (
+    })
+    small = TagProp('small', allattrs)
+    span = TagProp('span', allattrs)
+    strike = TagProp('strike', allattrs)
+    strong = TagProp('strong', allattrs)
+    style = TagProp('style', i18nattrs | {'id', 'type', 'media', 'title'})
+    sub = TagProp('sub', allattrs)
+    sup = TagProp('sup', allattrs)
+    table = TagProp('table', componentattrs | i18nattrs | {'prompt'})
+    tbody = TagProp('tbody', allattrs | cellhalignattrs | cellvalignattrs)
+    td = TagProp('td', allattrs | cellhalignattrs | cellvalignattrs | {
         'abbr', 'axis', 'headers', 'scope', 'rowspan',
         'colspan', 'nowrap', 'bgcolor', 'width', 'height',
         'background', 'bordercolor'
-    )))
-    textarea = TagProp('textarea', set(allattrs + focusattrs + (
+    })
+    textarea = TagProp('textarea', allattrs | focusattrs | {
         'name', 'rows', 'cols', 'disabled',
         'readonly', 'onselect', 'onchange', 'wrap'
-    )))
-    tfoot = TagProp('tfoot', set(allattrs + cellhalignattrs + cellvalignattrs))
-    th = TagProp('th', set(allattrs + cellhalignattrs + cellvalignattrs + (
+    })
+    tfoot = TagProp('tfoot', allattrs | cellhalignattrs | cellvalignattrs)
+    th = TagProp('th', allattrs | cellhalignattrs | cellvalignattrs | {
         'abbr', 'axis', 'headers', 'scope', 'rowspan',
         'colspan', 'nowrap', 'bgcolor', 'width', 'height'
         'background', 'bordercolor'
-    )))
-    thead = TagProp('thead', set(allattrs + cellhalignattrs + cellvalignattrs))
-    tr = TagProp('tr', set(allattrs + cellhalignattrs + cellvalignattrs + ('bgcolor', 'nowrap', 'width', 'background')))
-    tt = TagProp('tt', set(allattrs))
-    u = TagProp('u', set(allattrs))
-    ul = TagProp('ul', set(allattrs + ('type', 'compact')))
-    var = TagProp('var', set(allattrs))
+    })
+    thead = TagProp('thead', allattrs | cellhalignattrs | cellvalignattrs)
+    tr = TagProp('tr', allattrs | cellhalignattrs | cellvalignattrs | {'bgcolor', 'nowrap', 'width', 'background'})
+    tt = TagProp('tt', allattrs)
+    u = TagProp('u', allattrs)
+    ul = TagProp('ul', allattrs | {'type', 'compact'})
+    var = TagProp('var', allattrs)
 
-#    frame = TagProp('frame', set(componentattrs + ('longdesc', 'name', 'src', 'frameborder', 'marginwidht', 'marginheight',
+#    frame = TagProp('frame', componentattrs | {'longdesc', 'name', 'src', 'frameborder', 'marginwidht', 'marginheight',
 #                                                                  'noresize', 'scrolling', 'framespacing', 'border', 'marginwidth', 'marginheight',
-#                                                                  'frameborder', 'noresize', 'scrolling')))
+#                                                                  'frameborder', 'noresize', 'scrolling'})
     @classmethod
     def class_init(cls, specialTags):
         """Class initialisation

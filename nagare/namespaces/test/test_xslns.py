@@ -7,8 +7,6 @@
 # this distribution.
 # --
 
-from __future__ import with_statement
-
 import os
 
 from nagare.namespaces import xsl

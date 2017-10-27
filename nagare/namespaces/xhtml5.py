@@ -10,8 +10,6 @@
 """The XHTML5 renderer
 """
 
-from __future__ import with_statement
-
 from lxml import etree as ET
 
 from nagare.namespaces.xml import TagProp
@@ -115,11 +113,11 @@ class Renderer(xhtml.Renderer):
     # New input types
     # ---------------
 
-    _specialTags = dict([(input_type + '_input', Input) for input_type in (
+    _specialTags = {input_type + '_input': Input for input_type in (
         'tel', 'search', 'url', 'email',
         'datetime', 'date', 'datetime-local_input',
         'month', 'week', 'time', 'number', 'range', 'color'
-    )])
+    )}
     _specialTags.update(xhtml.Renderer._specialTags)
 
     @classmethod

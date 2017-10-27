@@ -61,7 +61,7 @@ def create_rules(app_names, error):
     apps = [('nagare', static)]  # Initialize the result tuple with the static contents of the framework
 
     for app_name in app_names:
-        (cfgfile, app, project_name, aconf) = util.read_application(app_name, error)
+        cfgfile, app, project_name, aconf = util.read_application(app_name, error)
         if aconf is not None:
             static = aconf['application']['static']
             if os.path.isdir(static):

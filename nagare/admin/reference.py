@@ -39,7 +39,7 @@ def load_entry_point(app, entry_point):
     Return:
       - (the object, the distribution of the object)
     """
-    apps = dict([(entry.name, entry) for entry in pkg_resources.iter_entry_points(entry_point)])
+    apps = {entry.name: entry for entry in pkg_resources.iter_entry_points(entry_point)}
     entry_point = apps.get(app)
 
     return (entry_point.load(), entry_point.dist) if entry_point else (None, None)
