@@ -25,7 +25,7 @@ from nagare import component, presentation, serializer, database, top, security,
 from nagare.security import dummy_manager
 from nagare.callbacks import CallbackLookupError
 from nagare.callbacks import process as process_callbacks
-from nagare.namespaces import xhtml
+from nagare.namespaces import xhtml5
 
 from nagare.sessions import ExpirationError, SessionSecurityError
 
@@ -61,7 +61,7 @@ class Response(webob.Response):
 class WSGIApp(object):
     request_factory = Request
     response_factory = Response
-    renderer_factory = xhtml.Renderer   # Default renderer
+    renderer_factory = xhtml5.Renderer   # Default renderer
 
     def __init__(self, root_factory):
         """Initialization
