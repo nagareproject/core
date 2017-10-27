@@ -13,6 +13,7 @@ import sys
 import types
 import pickle
 import copy_reg
+from functools import partial
 
 try:
     import stackless  # noqa: F401
@@ -73,41 +74,9 @@ def max_number_of_args(nb):
 
 # -----------------------------------------------------------------------------
 
-class _Partial(object):
-    def __init__(self, _f, *args, **kw):
-        """Callable with predefined parameters
-
-        A partial object when called will behave like ``_f`` called with the
-        positional arguments ``args`` and keyword arguments ``kw``
-
-        Like the standard ``functools.partial()`` but Serializable.
-
-        In:
-          - ``_f`` -- function to wrap
-          - ``args``, ``kw`` -- ``_f`` parameters
-        """
-        self.f = _f
-        self.args = args
-        self.kw = kw
-
-    def __call__(self, *args, **kw):
-        """Call the wrapper function
-
-        In:
-          - ``args`` -- parameters added _after_ ``self.args``
-          - ``kw`` -- parameters that can override ``self.kw``
-
-        Return:
-          - return of the wrapper function
-        """
-        k = self.kw.copy()
-        k.update(kw)
-        return self.f(*(self.args + args), **k)
-
-
 def Partial(__f, *args, **kw):
-    """Don't double wrap a ``_Partial()`` object if not needed"""
-    return _Partial(__f, *args, **kw) if (not isinstance(__f, _Partial) or args or kw) else __f
+    """Don't double wrap a ``partial()`` object if not needed"""
+    return partial(__f, *args, **kw) if (not isinstance(__f, partial) or args or kw) else __f
 
 
 # -----------------------------------------------------------------------------
