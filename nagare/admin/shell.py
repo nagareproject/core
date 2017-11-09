@@ -52,7 +52,8 @@ def activate_applications(cfgfiles, debug, error):
     for cfgfile in cfgfiles:
         # Read the configuration file of the application
         conffile, app, project_name, aconf = util.read_application(cfgfile, error)
-        error('Configuration file "%s" not found' % cfgfile)
+        if conffile is None:
+            error('Configuration file "%s" not found' % cfgfile)
         configs.append((conffile, app, project_name, aconf))
 
         log.configure(aconf['logging'].dict(), aconf['application']['app'])
@@ -120,22 +121,21 @@ def set_shell_options(optparser):
     optparser.usage += ' [application ...]'
 
     optparser.add_option('-d', '--debug', action='store_const', const=True, default=False, dest='debug', help='debug mode for the database engine')
-    optparser.add_option('--plain', action='store_const', const=False, default=True, dest='ipython', help='launch a plain Python interpreter instead of IPython')
+    optparser.add_option('--plain', action='store_const', const=False, default=True, dest='ipython', help='launch a plain Python interpreter instead of PtPython/BPython/IPython')
 
 
 class IPythonShellV1(object):
     """A IPython < 0.11 interpreter
     """
-    def __init__(self, ipython, banner, app_names, ns):
+    def __init__(self, ipython, banner, prompt, ns):
         """Initialisation
 
         In:
           - ``ipython`` -- the ``IPython`` module
           - ``banner`` -- banner to display
-          - ``app_names`` -- names of the activated applications
+          - ``prompt`` -- name of the activated application
           - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
         """
-        prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
         self.shell = ipython.Shell.IPShell(argv=['--prompt_in1=Nagare%s [\\#]: ' % prompt], user_ns=ns)
         self.banner = banner
 
@@ -148,17 +148,16 @@ class IPythonShellV1(object):
 class IPythonShellV2(object):
     """A IPython >= 0.11 interpreter
     """
-    def __init__(self, ipython, banner, app_names, ns):
+    def __init__(self, ipython, banner, prompt, ns):
         """Initialisation
 
         In:
           - ``ipython`` -- the ``IPython`` module
           - ``banner`` -- banner to display
-          - ``app_names`` -- names of the activated applications
+          - ``prompt`` -- name of the activated application
           - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
         """
         config = ipython.config.loader.Config()
-        prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
         config.PromptManager.in_template = 'Nagare%s [\\#]: ' % prompt
 
         self.shell = getattr(ipython, 'frontend', ipython).terminal.embed.InteractiveShellEmbed(config=config, user_ns=ns, banner1=banner)
@@ -173,11 +172,10 @@ class IPythonShellV2(object):
 class IPythonShellV3(object):
     """A IPython >= 5.0 interpreter
     """
-    def __init__(self, ipython, banner, app_names, ns):
+    def __init__(self, ipython, banner, prompt, ns):
 
         class NagarePrompts(ipython.terminal.prompts.Prompts):
             def in_prompt_tokens(self, cli=None):
-                prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
                 return [
                     (ipython.terminal.prompts.Token.Prompt, 'Nagare%s [' % prompt),
                     (ipython.terminal.prompts.Token.PromptNum, str(self.shell.execution_count)),
@@ -194,20 +192,20 @@ class IPythonShellV3(object):
 class PythonShell(code.InteractiveConsole):
     """A plain Python interpreter
     """
-    def __init__(self, banner, app_names, ns):
+    def __init__(self, banner, prompt, ns):
         """Initialisation
 
         In:
           - ``banner`` -- banner to display
-          - ``app_names`` -- names of the activated applications
+          - ``prompt`` -- name of the activated application
           - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
         """
         code.InteractiveConsole.__init__(self, ns)
         self.banner = banner
-        self.prompt = '[%s]' % app_names[0] if len(app_names) == 1 else ''
+        self.prompt = prompt
 
     def raw_input(self, prompt):
-        return code.InteractiveConsole.raw_input(self, 'nagare' + self.prompt + prompt)
+        return code.InteractiveConsole.raw_input(self, 'Nagare' + self.prompt + prompt)
 
     def __call__(self):
         self.interact(self.banner)
@@ -238,7 +236,7 @@ class PythonShellWithHistory(PythonShell):
         readline.write_history_file(history_path)
 
 
-def create_python_shell(ipython, banner, app_names, ns):
+def create_python_shell(ipython, banner, prompt, ns):
     """Shell factory
 
     Create a shell according to the installed modules (``readline`` and ``ipython``)
@@ -246,10 +244,51 @@ def create_python_shell(ipython, banner, app_names, ns):
     In:
       - ``ipython`` -- does the user want a IPython shell?
       - ``banner`` -- banner to display
-      - ``app_names`` -- names of the activated applications
+      - ``prompt`` -- name of the activated application
       - ``ns`` -- the namespace with the ``apps`` and ``session`` variables defined
     """
     if ipython:
+        try:
+            from ptpython import repl, prompt_style
+        except ImportError:
+            pass
+        else:
+            def configure(repl):
+                class NagarePrompt(prompt_style.ClassicPrompt):
+                    def in_tokens(self, cli):
+                        return [(prompt_style.Token.Prompt, 'Nagare%s>>> ' % prompt)]
+
+                repl.all_prompt_styles['nagare'] = NagarePrompt()
+                repl.prompt_style = 'nagare'
+
+            print banner
+
+            repl.embed(
+                globals(), ns,
+                history_filename=os.path.expanduser('~/.nagarehistory'),
+                configure=configure
+            )
+            return
+
+        try:
+            from bpython import curtsies, embed
+        except ImportError:
+            pass
+        else:
+            class FullCurtsiesRepl(curtsies.FullCurtsiesRepl):
+                def __init__(self, config, *args, **kw):
+                    config.hist_file = os.path.expanduser('~/.nagarehistory')
+                    super(FullCurtsiesRepl, self).__init__(config, *args, **kw)
+
+                @property
+                def ps1(self):
+                    return 'Nagare' + prompt + super(FullCurtsiesRepl, self).ps1
+
+            curtsies.FullCurtsiesRepl = FullCurtsiesRepl
+
+            embed(ns, banner=banner)
+            return
+
         try:
             import IPython
         except ImportError:
@@ -259,17 +298,18 @@ def create_python_shell(ipython, banner, app_names, ns):
             if ipython_version < pkg_resources.parse_version('0.11'):
                 shell_factory = IPythonShellV1
             elif ipython_version < pkg_resources.parse_version('5.0'):
+                import IPython.config
                 shell_factory = IPythonShellV2
             else:
                 shell_factory = IPythonShellV3
 
-            shell_factory(IPython, banner, app_names, ns)()
+            shell_factory(IPython, banner, prompt, ns)()
             return
 
     try:
         import readline
 
-        PythonShellWithHistory(banner, app_names, ns)(readline)
+        PythonShellWithHistory(banner, prompt, ns)(readline)
     except ImportError:
         PythonShell(banner, app_names, ns)()
 
@@ -294,7 +334,14 @@ def shell(parser, options, args):
         pkg_resources.get_distribution('nagare').version
     )
 
-    create_python_shell(options.ipython, banner, [app.name for app in ns['apps'].values()], ns)
+    apps = ns['apps'].values()
+
+    create_python_shell(
+        options.ipython,
+        banner,
+        '[%s]' % apps[0].name if len(apps) == 1 else '',
+        ns
+    )
 
 
 class Shell(command.Command):

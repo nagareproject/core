@@ -82,7 +82,7 @@ def Partial(__f, *args, **kw):
 # -----------------------------------------------------------------------------
 
 class Decorator(object):
-    """Use a ``_Partial()`` to decorate a function
+    """Use a ``partial()`` to decorate a function
     """
     def __init__(self, f, new_f, *args, **kw):
         """Decorate a function or a method
