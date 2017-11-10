@@ -11,12 +11,12 @@ import os
 import csv
 import operator
 
+from nagare import database
 from elixir import setup_all, create_all, drop_all, session
 from elixir import Entity, Field, Unicode, has_many, belongs_to
 from sqlalchemy import MetaData
 
-from nose import with_setup
-from paste.fixture import TestApp
+from paste import fixture
 
 from nagare.namespaces import xml
 from nagare import presentation
@@ -36,28 +36,10 @@ def create_FixtureApp(app):
     app.set_sessions_manager(SessionsWithPickledStates())
     app.start()
 
-    return TestApp(app)
+    return fixture.TestApp(app)
 
 
-__metadata__ = MetaData()
-__metadata__.bind = "sqlite:///:memory:"
-__metadata__.bind.echo = False
-
-
-# Setup / Teardown functions
-def setup():
-    setup_all()
-
-setup_module = setup
-
-
-def setup_func():
-    create_all()
-
-
-def teardown_func():
-    session.expunge_all()
-    drop_all()
+__metadata__ = MetaData("sqlite:///:memory:")
 
 
 class Language(Entity):
@@ -65,7 +47,7 @@ class Language(Entity):
     label = Field(Unicode(50))
 
 
-class App1:
+class App1(object):
     def __init__(self):
         self.languages = []
 
@@ -78,7 +60,6 @@ def render_app1(self, h, *args):
     return h.helloWorlds([h.helloWorld(language.label, {'language': language.id}) for language in self.languages])
 
 
-@with_setup(setup_func, teardown_func)
 def test_1():
     """ database - simple test with sqlalchemy/elixir """
     Language(id=u"english", label=u"hello world")
@@ -96,7 +77,6 @@ def test_1():
     assert language.label == u"bonjour monde"
 
 
-@with_setup(setup_func, teardown_func)
 def test_2():
     """ database - simple test with sqlalchemy/elixir unicode test """
     filePath = os.path.join(os.path.dirname(__file__), 'helloworld.csv')
@@ -112,7 +92,6 @@ def test_2():
         assert language.label == res[language.id]
 
 
-@with_setup(setup_func, teardown_func)
 def test_3():
     """ database - test with elixir & framework render method """
     app = App1()
@@ -149,7 +128,6 @@ class Child(Entity):
     belongs_to('father', of_kind='Father')
 
 
-@with_setup(setup_func, teardown_func)
 def test4():
     """ database - test children relation with sqlalchemy/elixir """
 
@@ -165,12 +143,6 @@ def test4():
     session.flush()
 
     assert reduce(operator.__and__, [(elt.father.id == f.id) for elt in Child.query.all()])
-
-
-def setup_func_2():
-    create_all()
-    Father(name=u"Charles Ingalls")
-    session.flush()
 
 
 class My_database_app():
@@ -204,7 +176,6 @@ def render_database_app(self, h, comp, *args):
     return h.root
 
 
-@with_setup(setup_func_2, teardown_func)
 def test5():
     """ database - Get element in database """
     myApp = My_database_app
@@ -213,14 +184,11 @@ def test5():
     assert u"Charles Ingalls" in res
 
 
-@with_setup(setup_func_2, teardown_func)
 def test6():
     """ database - Add element in database """
     myApp = My_database_app
     app = create_FixtureApp(myApp)
     res = app.get('/')
-
-    print res
 
     res = res.click(linkid="add_mary")
     assert Child.get_by(name=u"Mary Ingalls") is not None
@@ -230,7 +198,6 @@ def test6():
     assert u"Charles Ingalls" in res
 
 
-@with_setup(setup_func_2, teardown_func)
 def test7():
     """ database - Add 2 elements in database """
     myApp = My_database_app
@@ -249,7 +216,6 @@ def test7():
     assert u"Charles Ingalls" in res
 
 
-@with_setup(setup_func_2, teardown_func)
 def test8():
     """ database - Add 2 elements in database and test rollback on Exception """
     myApp = My_database_app
@@ -275,3 +241,22 @@ def test8():
     assert u"Mary Ingalls" in res
     res = res.click(linkid="get_name")
     assert u"Charles Ingalls" in res
+
+
+# Setup / Teardown functions
+# --------------------------
+
+def setup_module():
+    setup_all()
+
+
+def setup_function(_):
+    create_all()
+    Father(name=u"Charles Ingalls")
+    session.flush()
+
+
+def teardown_function(_):
+    session.expunge_all()
+    drop_all()
+
