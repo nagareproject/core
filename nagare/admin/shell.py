@@ -311,7 +311,7 @@ def create_python_shell(ipython, banner, prompt, ns):
 
         PythonShellWithHistory(banner, prompt, ns)(readline)
     except ImportError:
-        PythonShell(banner, app_names, ns)()
+        PythonShell(banner, prompt, ns)()
 
 
 def shell(parser, options, args):

@@ -13,8 +13,10 @@ variables:
 tests:
     image: $CI_IMAGE
     script:
+        - /opt/stackless/bin/pip install flake8
+        - /opt/stackless/bin/flake8 nagare
         - /opt/stackless/bin/pip install -i http://packages.net-ng.com/repository/pypi/simple --trusted-host packages.net-ng.com -e ".[database,i18n,test]"
-        - /opt/stackless/bin/nosetests
+        - /opt/stackless/bin/pytest
 
 pages:
     image: $CI_IMAGE

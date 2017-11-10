@@ -16,7 +16,7 @@ from lxml import etree as ET
 from nagare.namespaces import xml
 
 
-def append_text_test1():
+def test_append_text1():
     """ XML namespace unit test - append_text Append text to an empty node
 
     In:
@@ -33,7 +33,7 @@ def append_text_test1():
     assert node.write_xmlstring() == '<node>test</node>'
 
 
-def append_text_test2():
+def test_append_text2():
     """ XML namespace unit test - append_text - Append text to node with text child
 
     In:
@@ -50,7 +50,7 @@ def append_text_test2():
     assert node.write_xmlstring() == '<node>test1test2</node>'
 
 
-def append_text_test3():
+def test_append_text3():
     """ XML namespace unit test - append_text - Append text to node with node child
 
     In:
@@ -67,7 +67,7 @@ def append_text_test3():
     assert node.write_xmlstring() == '<node><child/>test</node>'
 
 
-def append_text_test4():
+def test_append4():
     """ XML namespace unit test - append_text - Append text to node with text & node children
 
     In:
@@ -85,7 +85,7 @@ def append_text_test4():
     assert node.write_xmlstring() == '<node>test1<child/>test2</node>'
 
 
-def add_child_test1():
+def test_add_child1():
     """ XML namespace unit test - add_child - add text
 
     In:
@@ -101,7 +101,7 @@ def add_child_test1():
     assert node.write_xmlstring() == '<node>test</node>'
 
 
-def add_child_test2():
+def test_add_child2():
     """ XML namespace unit test - add_child - add node
 
     In:
@@ -118,7 +118,7 @@ def add_child_test2():
     assert node.write_xmlstring() == '<node><child/></node>'
 
 
-def add_child_test3():
+def test_add_child3():
     """ XML namespace unit test - add_child - add dictionnary
 
     In:
@@ -134,7 +134,7 @@ def add_child_test3():
     assert node.write_xmlstring() == '<node test="test"/>'
 
 
-def add_child_test4():
+def test_add_child4():
     """ XML namespace unit test - add_child - add attribute with keyword
 
     In:
@@ -150,7 +150,7 @@ def add_child_test4():
     assert node.write_xmlstring() == '<node test="test"/>'
 
 
-def add_child_test5():
+def test_add_child5():
     """ XML namespace unit test - add_child - add tuple (text, node, text, dict)
 
     In:
@@ -171,7 +171,7 @@ def add_child_test5():
     assert node.write_xmlstring() == '<node test="test">test<child/>test</node>'
 
 
-def add_child_test6():
+def test_add_child6():
     """ XML namespace unit test - add_child - add list [text, node, text, dict]
 
     In:
@@ -192,7 +192,7 @@ def add_child_test6():
     assert node.write_xmlstring() == '<node test="test">test<child/>test</node>'
 
 
-def add_child_test7():
+def test_add_child7():
     """ XML namespace unit test - add_child - add int
 
     In:
@@ -208,7 +208,7 @@ def add_child_test7():
     assert node.write_xmlstring() == '<node>42</node>'
 
 
-def add_child_test8():
+def test_add_child8():
     """ XML namespace unit test - add_child - add float
 
     In:
@@ -224,7 +224,7 @@ def add_child_test8():
     assert node.write_xmlstring() == '<node>0.1</node>'
 
 
-def add_child_test9():
+def test_add_child9():
     """ XML namespace unit test - add_child - add dictionnary with python keyword
 
     In:
@@ -240,7 +240,7 @@ def add_child_test9():
     assert node.write_xmlstring() == '<node class="test"/>'
 
 
-def add_child_test10():
+def test_add_child10():
     """ XML namespace unit test - add_child - add attribute with python keyword
 
     In:
@@ -256,7 +256,7 @@ def add_child_test10():
     assert node.write_xmlstring() == '<node class="test"/>'
 
 
-def add_child_test11():
+def test_add_child11():
     """ XML namespace unit test - add_child - add object instance and raise exception
 
     In:
@@ -275,7 +275,7 @@ def add_child_test11():
         assert False
 
 
-def replace_test1():
+def test_replace1():
     """ XML namespace unit test - replace - replace simple node by node
 
     In:
@@ -295,7 +295,7 @@ def replace_test1():
     assert node.write_xmlstring() == '<node><child2/></node>'
 
 
-def replace_test2():
+def test_replace2():
     """ XML namespace unit test - replace - replace simple node with text before by node
 
     In:
@@ -315,7 +315,7 @@ def replace_test2():
     assert node.write_xmlstring() == '<node>test<child2/></node>'
 
 
-def replace_test3():
+def test_replace3():
     """ XML namespace unit test - replace - replace simple node with text after by node
 
     In:
@@ -335,7 +335,7 @@ def replace_test3():
     assert node.write_xmlstring() == '<node><child2/>test</node>'
 
 
-def replace_test4():
+def test_replace4():
     """ XML namespace unit test - replace - replace simple node by text
 
     In:
@@ -354,7 +354,7 @@ def replace_test4():
     assert node.write_xmlstring() == '<node>test</node>'
 
 
-def replace_test5():
+def test_replace5():
     """ XML namespace unit test - replace - replace simple node by node + text
 
     In:
@@ -374,7 +374,7 @@ def replace_test5():
     assert node.write_xmlstring() == '<node>test<child2/></node>'
 
 
-def replace_test6():
+def test_replace6():
     """ XML namespace unit test - replace - replace root node
 
     In:
@@ -397,7 +397,7 @@ xml_test1_in = """
 """
 
 
-def repeat_test1():
+def test_repeat1():
     """ XML namespace unit test - repeat - Repeat with 2 simple text, use childname argument"""
     x = xml.Renderer()
     node = x.parse_xmlstring(xml_test1_in)
@@ -408,7 +408,7 @@ def repeat_test1():
     assert [child.text for child in node.getchildren()] == ['test1', 'test2']
 
 
-def repeat_test2():
+def test_repeat2():
     """ XML namespace unit test - repeat - Repeat with 2 simple text, don't use childname argument"""
     x = xml.Renderer()
     node = x.parse_xmlstring(xml_test1_in)
@@ -420,7 +420,7 @@ def repeat_test2():
     assert [child.text for child in node.getchildren()] == ['test1', 'test2']
 
 
-def repeat_test3():
+def test_repeat3():
     """ XML namespace unit test - repeat - findmeld in repeat loop """
     h = xml.Renderer()
 
@@ -436,7 +436,7 @@ def repeat_test3():
     assert h.root.write_xmlstring() == '<div xmlns:meld="http://www.plope.com/software/meld3"><ul><li meld:id="entry"><span meld:id="count">0</span></li><li meld:id="entry"><span meld:id="count">1</span></li></ul></div>'
 
 
-def root_test1():
+def test_root1():
     """ XML namespace unit test - root - one element """
     x = xml.Renderer()
     x << x.node()
@@ -444,7 +444,7 @@ def root_test1():
     assert not isinstance(x.root, ListType)
 
 
-def root_test2():
+def test_root2():
     """ XML namespace unit test - root - two elements """
     x = xml.Renderer()
     x << x.node()
@@ -453,7 +453,7 @@ def root_test2():
     assert isinstance(x.root, ListType)
 
 
-def parse_xmlstring_test1():
+def test_parse_xmlstring1():
     """ XML namespace unit test - parse_xmlstring - good encoding """
     try:
         x = xml.Renderer()
@@ -466,7 +466,7 @@ def parse_xmlstring_test1():
         assert True
 
 
-def parse_xmlstring_test2():
+def test_parse_xmlstring2():
     """ XML namespace unit test - parse_xmlstring - bad encoding """
     try:
         x = xml.Renderer()
@@ -482,7 +482,7 @@ def parse_xmlstring_test2():
 xml_fragments_1 = """leading_text<fragment1></fragment1>text<fragment2></fragment2>"""
 
 
-def parse_xmlstring_test3():
+def test_parse_xmlstring3():
     """ XML namespace unit test - parse_xmlstring - parse fragment xml with fragment flag """
     x = xml.Renderer()
     roots = x.parse_xmlstring(xml_fragments_1, fragment=True)
@@ -492,7 +492,7 @@ def parse_xmlstring_test3():
     assert roots[2].write_xmlstring() == "<fragment2/>"
 
 
-def parse_xmlstring_test4():
+def test_parse_xmlstring4():
     """ XML namespace unit test - parse_xmlstring - parse xml tree with fragment flag """
     x = xml.Renderer()
     roots = x.parse_xmlstring(xml_fragments_1, fragment=True, no_leading_text=True)
@@ -504,14 +504,14 @@ def parse_xmlstring_test4():
 xml_tree_1 = "<a>text</a>"
 
 
-def parse_xmlstring_test5():
+def test_parse_xmlstring5():
     """ XML namespace unit test - parse_xmlstring - Test parse child type """
     x = xml.Renderer()
     root = x.parse_xmlstring(xml_tree_1)
     assert type(root) == xml._Tag
 
 
-def parse_xml_test1():
+def test_parse_xml1():
     """ XML namespace unit test - parse_xmlstring - good encoding """
     try:
         x = xml.Renderer()
@@ -522,7 +522,7 @@ def parse_xml_test1():
         assert True
 
 
-def findmeld_test1():
+def test_findmeld1():
     """ XML namespace unit test - find_meld - one element """
     x = xml.Renderer()
     node = x.parse_xmlstring(xml_test1_in)
@@ -531,7 +531,7 @@ def findmeld_test1():
     assert child is not None
 
 
-def findmeld_test2():
+def test_findmeld2():
     """ XML namespace unit test - find_meld - zero element """
     x = xml.Renderer()
     node = x.parse_xmlstring("""<node xmlns:meld="http://www.plope.com/software/meld3"></node>""")
@@ -539,7 +539,7 @@ def findmeld_test2():
     assert child is None
 
 
-def findmeld_test3():
+def test_findmeld3():
     """ XML namespace unit test - find_meld - zero element and default argument """
     x = xml.Renderer()
     node = x.parse_xmlstring("""<node xmlns:meld="http://www.plope.com/software/meld3"></node>""")
@@ -580,7 +580,7 @@ xml_test2_in = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     </html>"""
 
 
-def global_test1():
+def test_global1():
     """ XML namespace unit test - create xml by procedural way """
     x = xml.Renderer()
 
@@ -601,7 +601,7 @@ def global_test1():
     assert xmlToTest == xmlToCompare
 
 
-def global_test2():
+def test_global2():
     """ XML namespace unit test - create xml by functionnal way """
     x = xml.Renderer()
 
@@ -621,7 +621,7 @@ def global_test2():
     assert xmlToTest == xmlToCompare
 
 
-def global_test3():
+def test_global3():
     """ XML namespace unit test - test parse_xmlstring method """
     x = xml.Renderer()
 
@@ -637,7 +637,7 @@ def global_test3():
     assert xmlToTest == xmlToCompare
 
 
-def global_test4():
+def test_global4():
     """ XML namespace unit test - meld3 - test findmeld with children affectation """
 
     x = xml.Renderer()
@@ -661,7 +661,7 @@ def global_test4():
     assert root.xpath('.//x:form', namespaces={'x': 'http://www.w3.org/1999/xhtml'})[0].attrib['action'] == './handler'
 
 
-def global_test5():
+def test_global5():
     """ XML namespace unit test - meld3 - test findmeld & replace method """
     x = xml.Renderer()
     root = x.parse_xmlstring(xml_test2_in)
@@ -684,7 +684,7 @@ def global_test5():
     assert [elt.text for elt in root.xpath('.//td')] == ['Girls', 'Pretty', 'Boys', 'Ugly']
 
 
-def global_test6():
+def test_global6():
     """ XML namespace unit test - meld3 - test option write_xmlstring method with option pipeline=False """
     x = xml.Renderer()
     root = x.parse_xmlstring(xml_test2_in)
@@ -709,7 +709,7 @@ def global_test6():
     assert root.findmeld('content_well') is None
 
 
-def global_test7():
+def test_global7():
     """ XML namespace unit test - meld3 - test option write_xmlstring method with option pipeline=True """
     x = xml.Renderer()
     root = x.parse_xmlstring(xml_test2_in)
@@ -734,7 +734,7 @@ def global_test7():
     assert root.findmeld('content_well') is None
 
 
-def global_test8():
+def test_global8():
     """ XML namespace unit test - create xml """
     x = xml.Renderer()
     x.namespaces = {'meld': 'http://www.plope.com/software/meld3'}

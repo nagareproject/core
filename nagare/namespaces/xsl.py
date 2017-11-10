@@ -47,23 +47,29 @@ class Renderer(xml.XmlRenderer):
     key = TagProp('key', {'name', 'match', 'use'})
     message = TagProp('message', {'terminate'})
     namespace_alias = TagProp('namespace-alias', {'stylesheet-prefix'})
-    number = TagProp('number', {'level', 'count', 'from', 'value', 'format',
-                                    'lang', 'letter-value', 'grouping-separator',
-                                    'grouping-size'})
+    number = TagProp('number', {
+        'level', 'count', 'from', 'value', 'format',
+        'lang', 'letter-value', 'grouping-separator',
+        'grouping-size'
+    })
     otherwise = TagProp('otherwise', set())
-    output = TagProp('output', {'method', 'version', 'encoding',
-                                    'omit-xml-declaration', 'standalone',
-                                    'doctype-public', 'doctype-system',
-                                    'cdata-section-elements', 'indent',
-                                    'media-type'})
+    output = TagProp('output', {
+        'method', 'version', 'encoding',
+        'omit-xml-declaration', 'standalone',
+        'doctype-public', 'doctype-system',
+        'cdata-section-elements', 'indent',
+        'media-type'
+    })
     param = TagProp('param', {'name', 'select'})
     preserve_space = TagProp('preserve-space', {'elements'})
     processing_instruction = TagProp('processing-instruction', {'name'})
     sort = TagProp('sort', {'select', 'lang', 'data-type', 'order', 'case-order'})
     strip_space = TagProp('strip-space', {'elements'})
-    stylesheet = TagProp('stylesheet', {'version', 'id',
-                                            'extension-element-prefixes',
-                                            'exclude-result-prefixes'})
+    stylesheet = TagProp('stylesheet', {
+        'version', 'id',
+        'extension-element-prefixes',
+        'exclude-result-prefixes'
+    })
     template = TagProp('template', {'match', 'name', 'priority', 'mode'})
     transform = TagProp('transform', {
         'version', 'id',

@@ -18,6 +18,7 @@ nbproject
 build
 .cache
 .idea
+.eggs
 doc/_build
 doc/source
 

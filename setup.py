@@ -69,25 +69,23 @@ setup(
         'nagare-peak-rules', 'ConfigObj', 'lxml', 'WebOb',
         'Paste', 'flup==1.0.3.dev-20110405', 'python-memcached'
     ),
-    message_extractors={'nagare': [
-        ('test/**', 'ignore', None),
-        ('**.py', 'python', None),
-    ]},
+    message_extractors={'nagare': [('**.py', 'python', None)]},
     extras_require={
         'debug': ('WebError',),
         'database': ('SQLAlchemy>0.5.8', 'Elixir'),
         'doc': ('sphinx', 'sphinx_rtd_theme<0.3'),
-        'test': ('nose',),
+        'test': ('pytest',),
         'i18n': ('Babel>=2.5.0', 'pytz'),
         'full': (
             'WebError',
             'SQLAlchemy>0.5.8', 'Elixir',
             'sphinx', 'sphinx_rtd_theme<0.3',
-            'nose',
+            'pytest',
             'Babel>=2.5.0', 'pytz'
         ),
     },
-    test_suite='nose.collector',
+    setup_requires=('pytest-runner',),
+    tests_require=('nagare[test,i18n]'),
     entry_points='''
         [console_scripts]
         nagare-admin = nagare.admin.command:run

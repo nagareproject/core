@@ -154,13 +154,13 @@ class _Tag(ET.ElementBase):
         # We can not replace the root of the tree
         if parent is not None:
             tail = self.tail
-            l = len(parent)
+            nb_siblings = len(parent)
 
             i = parent.index(self)
             parent.fill(parent.text or '', parent[:i], children, self.tail or '', parent[i + 1:])
 
-            if len(parent) >= l:
-                parent[i - l].tail = tail
+            if len(parent) >= nb_siblings:
+                parent[i - nb_siblings].tail = tail
 
     def repeat(self, iterable, childname=None):
         """Iterate over a sequence, cloning a new child each time
