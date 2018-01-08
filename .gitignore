@@ -3,6 +3,7 @@
 *.orig
 *.rej
 *.egg-info
+.eggs
 dist
 *.db
 *.log

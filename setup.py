@@ -68,7 +68,7 @@ setup(
     zip_safe=False,
     dependency_links=('http://www.nagare.org/download/',),
     install_requires=(
-        'PEAK-Rules', 'ConfigObj', 'lxml', 'WebOb',
+        'PEAK-Rules', 'ConfigObj', 'lxml', 'WebOb<1.8',
         'Paste', 'flup==1.0.3.dev-20110405', 'python-memcached'
     ),
     message_extractors={'nagare': [
