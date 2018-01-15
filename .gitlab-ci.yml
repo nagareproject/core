@@ -14,7 +14,7 @@ tests:
     image: $CI_IMAGE
     script:
         - /opt/stackless/bin/python setup.py develop
-        - /opt/stackless/bin/easy_install 'nagare[database,i18n,test]'
+        - /opt/stackless/bin/easy_install 'nagare[test]'
         - /opt/stackless/bin/nosetests
 
 pages:

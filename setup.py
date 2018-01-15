@@ -79,14 +79,18 @@ setup(
         'debug': ('WebError',),
         'database': ('SQLAlchemy>0.5.8', 'Elixir'),
         'doc': ('sphinx', 'sphinx_rtd_theme<0.3'),
-        'test': ('nose',),
-        'i18n': ('Babel>=2.5.0', 'pytz'),
+        'i18n': ('Babel>=2.5.3', 'pytz'),
+        'test': (
+            'SQLAlchemy>0.5.8', 'Elixir',
+            'Babel>=2.5.3', 'pytz',
+            'nose'
+        ),
         'full': (
             'WebError',
             'SQLAlchemy>0.5.8', 'Elixir',
             'sphinx', 'sphinx_rtd_theme<0.3',
-            'nose',
-            'Babel>=2.5.0', 'pytz'
+            'Babel>=2.5.3', 'pytz',
+            'nose'
         ),
     },
     test_suite='nose.collector',
