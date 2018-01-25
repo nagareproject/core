@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>nagare-admin &mdash; Nagare 0.5.0 documentation</title>
+  <title>nagare-admin &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="The application configuration file" href="configuration_file.html"/>
         <link rel="prev" title="Nagare upgrade" href="framework_upgrade.html"/> 
 
@@ -211,15 +211,15 @@
             
   <div class="section" id="nagare-admin">
 <h1>nagare-admin<a class="headerlink" href="#nagare-admin" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal"><span class="pre">nagare-admin</span></code> command is used to create, configure and launch applications.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">nagare-admin</span></code> command is used to create, configure and launch applications.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>You can get a comprehensive list of the available commands by invoking <code class="docutils literal"><span class="pre">nagare-admin</span></code>
-with the <code class="docutils literal"><span class="pre">--help</span></code> or <code class="docutils literal"><span class="pre">-h</span></code> options:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin --help
+<p>You can get a comprehensive list of the available commands by invoking <code class="docutils literal notranslate"><span class="pre">nagare-admin</span></code>
+with the <code class="docutils literal notranslate"><span class="pre">--help</span></code> or <code class="docutils literal notranslate"><span class="pre">-h</span></code> options:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin --help
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Usage</span> <span class="p">:</span> <span class="n">nagare</span><span class="o">-</span><span class="n">admin</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span> <span class="p">:</span> <span class="n">nagare</span><span class="o">-</span><span class="n">admin</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span>
 
 <span class="k">with</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span> <span class="p">:</span>
  <span class="o">-</span> <span class="n">batch</span>       <span class="p">:</span> <span class="n">Execute</span> <span class="n">Python</span> <span class="n">statements</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">file</span>
@@ -234,7 +234,7 @@ with the <code class="docutils literal"><span class="pre">--help</span></code> o
 </pre></div>
 </div>
 <p>And you can get an help about a specific command by entering :</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin &lt;command&gt; --help
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin &lt;command&gt; --help
 </pre></div>
 </div>
 </div>
@@ -242,15 +242,15 @@ with the <code class="docutils literal"><span class="pre">--help</span></code> o
 <h2>Full commands reference<a class="headerlink" href="#full-commands-reference" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="batch">
 <h3>batch<a class="headerlink" href="#batch" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">batch</span></code> command executes a python file.</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin batch &lt;application&gt; &lt;batch.py&gt; <span class="o">[</span>batch options ...<span class="o">]</span>
+<p>The <code class="docutils literal notranslate"><span class="pre">batch</span></code> command executes a python file.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin batch &lt;application&gt; &lt;batch.py&gt; <span class="o">[</span>batch options ...<span class="o">]</span>
 </pre></div>
 </div>
 <p>Once launched, two variables are available:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">apps</span></code> is a dictionary that associates the name of an application to its
+<li><code class="docutils literal notranslate"><span class="pre">apps</span></code> is a dictionary that associates the name of an application to its
 activated application object.</li>
-<li><code class="docutils literal"><span class="pre">session</span></code> is the SQLAlchemy session (don’t forget the <code class="docutils literal"><span class="pre">session.commit()</span></code>
+<li><code class="docutils literal notranslate"><span class="pre">session</span></code> is the SQLAlchemy session (don’t forget the <code class="docutils literal notranslate"><span class="pre">session.commit()</span></code>
 statement at the end of your batch if database entities are manipulated)</li>
 </ul>
 <p>The available options are:</p>
@@ -268,21 +268,21 @@ statement at the end of your batch if database entities are manipulated)</li>
 </div>
 <div class="section" id="create-app">
 <h3>create-app<a class="headerlink" href="#create-app" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">create-app</span></code> command creates the whole directories and files structure
+<p>The <code class="docutils literal notranslate"><span class="pre">create-app</span></code> command creates the whole directories and files structure
 of a skeleton application:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-app &lt;application_name&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-app &lt;application_name&gt;
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="application_creation.html"><span class="doc">Create an application</span></a></p>
 </div>
 <div class="section" id="create-db">
 <h3>create-db<a class="headerlink" href="#create-db" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">create-db</span></code> command creates the database tables from an application
+<p>The <code class="docutils literal notranslate"><span class="pre">create-db</span></code> command creates the database tables from an application
 entities description:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db &lt;application&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db &lt;application&gt;
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">metadata</span></code> parameter of the <code class="docutils literal"><span class="pre">[database]</span></code> section of
+<p>The <code class="docutils literal notranslate"><span class="pre">metadata</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">[database]</span></code> section of
 <a class="reference internal" href="configuration_file.html"><span class="doc">The application configuration file</span></a> must be an <a class="reference internal" href="object_references.html"><span class="doc">Object references</span></a> to an
 <a class="reference external" href="http://docs.sqlalchemy.org/en/latest/core/metadata.html">SQLAlchemy metadata object</a>.
 The usage of the metadata object is described in <a class="reference internal" href="database.html"><span class="doc">Database tier</span></a>.</p>
@@ -295,9 +295,9 @@ The usage of the metadata object is described in <a class="reference internal" h
 <tr><td class="option-group">
 <kbd><span class="option">--no-populate</span></kbd></td>
 <td>by default, after the tables creation, the function
-referenced by the <code class="docutils literal"><span class="pre">populate</span></code> parameter of the <code class="docutils literal"><span class="pre">[database]</span></code>
+referenced by the <code class="docutils literal notranslate"><span class="pre">populate</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">[database]</span></code>
 section is called to initialize the database. The
-<code class="docutils literal"><span class="pre">--no-populate</span></code> option disable this behaviour.</td></tr>
+<code class="docutils literal notranslate"><span class="pre">--no-populate</span></code> option disable this behaviour.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--drop</span></kbd></td>
 <td>if this option is given, the database tables are dropped
@@ -311,12 +311,12 @@ before to be re-created.</td></tr>
 </div>
 <div class="section" id="create-rules">
 <h3>create-rules<a class="headerlink" href="#create-rules" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">create-rules</span></code> command generates rewrite rules for the <code class="docutils literal"><span class="pre">apache</span></code>,
-<code class="docutils literal"><span class="pre">lighttpd</span></code> or <code class="docutils literal"><span class="pre">nginx</span></code> web servers. These rules associate the URL
-<code class="docutils literal"><span class="pre">/static/&lt;application&gt;</span></code> to the directory path of the static contents of the
+<p>The <code class="docutils literal notranslate"><span class="pre">create-rules</span></code> command generates rewrite rules for the <code class="docutils literal notranslate"><span class="pre">apache</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lighttpd</span></code> or <code class="docutils literal notranslate"><span class="pre">nginx</span></code> web servers. These rules associate the URL
+<code class="docutils literal notranslate"><span class="pre">/static/&lt;application&gt;</span></code> to the directory path of the static contents of the
 application. With such rules activated, the web server will deliver the static
 contents instead of Nagare.</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-rules <span class="o">[</span>&lt;application&gt; ...<span class="o">]</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-rules <span class="o">[</span>&lt;application&gt; ...<span class="o">]</span>
 </pre></div>
 </div>
 <p>If no applications are given, the rules for all the registered applications are
@@ -343,11 +343,11 @@ applications are generated.</p>
 </div>
 <div class="section" id="drop-db">
 <h3>drop-db<a class="headerlink" href="#drop-db" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">drop-db</span></code> command deletes the database tables of the application:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin drop-db
+<p>The <code class="docutils literal notranslate"><span class="pre">drop-db</span></code> command deletes the database tables of the application:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin drop-db
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">metadata</span></code> parameter of the <code class="docutils literal"><span class="pre">[database]</span></code> section of
+<p>The <code class="docutils literal notranslate"><span class="pre">metadata</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">[database]</span></code> section of
 <a class="reference internal" href="configuration_file.html"><span class="doc">The application configuration file</span></a> must be an <a class="reference internal" href="object_references.html"><span class="doc">Object references</span></a> to an
 <a class="reference external" href="http://docs.sqlalchemy.org/en/latest/core/metadata.html">SQLAlchemy metadata object</a>.
 The usage of the metadata object is described in <a class="reference internal" href="database.html"><span class="doc">Database tier</span></a>.</p>
@@ -366,16 +366,16 @@ The usage of the metadata object is described in <a class="reference internal" h
 </div>
 <div class="section" id="info">
 <h3>info<a class="headerlink" href="#info" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">info</span></code> command displays informations about your system environment
+<p>The <code class="docutils literal notranslate"><span class="pre">info</span></code> command displays informations about your system environment
 (suitable to be added into a bug ticket):</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin info
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin info
 </pre></div>
 </div>
 </div>
 <div class="section" id="serve">
 <h3>serve<a class="headerlink" href="#serve" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">serve</span></code> command launches one or several applications:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve &lt;application&gt; ...
+<p>The <code class="docutils literal notranslate"><span class="pre">serve</span></code> command launches one or several applications:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve &lt;application&gt; ...
 </pre></div>
 </div>
 <p>The <em>&lt;application&gt;</em> argument can be the name of a registered application or
@@ -394,12 +394,12 @@ applications.</p>
 local interface. If you want to accept external requests,
 set this parameter to the internet address of your external
 interface or to ‘0.0.0.0’ to listen to on all the interfaces
-of your system. This option overwrites the <code class="docutils literal"><span class="pre">host</span></code> parameter
+of your system. This option overwrites the <code class="docutils literal notranslate"><span class="pre">host</span></code> parameter
 of the <a class="reference internal" href="publisher_file.html"><span class="doc">The publisher configuration file</span></a></td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-p</span>, <span class="option">--port</span></kbd></td>
 <td>port where to listen to the requests. This option overwrites
-the <code class="docutils literal"><span class="pre">port</span></code> parameter of the <a class="reference internal" href="publisher_file.html"><span class="doc">The publisher configuration file</span></a></td></tr>
+the <code class="docutils literal notranslate"><span class="pre">port</span></code> parameter of the <a class="reference internal" href="publisher_file.html"><span class="doc">The publisher configuration file</span></a></td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-c</span>, <span class="option">--conf</span></kbd></td>
 <td>path to the <a class="reference internal" href="publisher_file.html"><span class="doc">The publisher configuration file</span></a>. If not given, the
@@ -407,9 +407,9 @@ standalone Python threaded HTTP server is used.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-d</span>, <span class="option">--debug</span></kbd></td>
 <td>display the web debug page when an exception occurs. This
-option overwrites the <code class="docutils literal"><span class="pre">debug</span></code> option of
+option overwrites the <code class="docutils literal notranslate"><span class="pre">debug</span></code> option of
 <a class="reference internal" href="configuration_file.html"><span class="doc">The application configuration file</span></a>.
-The <code class="docutils literal"><span class="pre">nagare[debug]</span></code> extra must be installed.</td></tr>
+The <code class="docutils literal notranslate"><span class="pre">nagare[debug]</span></code> extra must be installed.</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--reload</span></kbd></td>
 <td>This option activates the reloader process which automatically
@@ -420,19 +420,19 @@ detect source changes and re-launch the application.</td></tr>
 </div>
 <div class="section" id="serve-module">
 <h3>serve-module<a class="headerlink" href="#serve-module" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">serve-module</span></code> command directly launches a component. It’s a simplified
-version of the <code class="docutils literal"><span class="pre">server</span></code> command, that don’t need a configuration file, mainly
+<p>The <code class="docutils literal notranslate"><span class="pre">serve-module</span></code> command directly launches a component. It’s a simplified
+version of the <code class="docutils literal notranslate"><span class="pre">server</span></code> command, that don’t need a configuration file, mainly
 used to quickly prototype some code that doesn’t need database accesses:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path_to_module:component_factory&gt; &lt;url&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path_to_module:component_factory&gt; &lt;url&gt;
 </pre></div>
 </div>
 <p><em>/url</em> will be the URL of the application.</p>
 <p>The <em>path_to_module</em> parameter can be a filesystem path as:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module /tmp/nagare/examples/counter.py:Counter counter
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module /tmp/nagare/examples/counter.py:Counter counter
 </pre></div>
 </div>
 <p>or a module name as:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module nagare.examples.counter:Counter counter
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module nagare.examples.counter:Counter counter
 </pre></div>
 </div>
 <p>The available options are:</p>
@@ -460,22 +460,22 @@ it with this option.</td></tr>
 </div></blockquote>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">The <code class="docutils literal"><span class="pre">serve-module</span></code> command always uses the standalone publisher and sessions
+<p class="last">The <code class="docutils literal notranslate"><span class="pre">serve-module</span></code> command always uses the standalone publisher and sessions
 manager, with a reloader activated. So don’t use it in production.</p>
 </div>
 </div>
 <div class="section" id="shell">
 <h3>shell<a class="headerlink" href="#shell" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">shell</span></code> command launches an interactive Python (or IPython, if available)
+<p>The <code class="docutils literal notranslate"><span class="pre">shell</span></code> command launches an interactive Python (or IPython, if available)
 interpreter:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin shell &lt;application&gt; ...
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin shell &lt;application&gt; ...
 </pre></div>
 </div>
 <p>Once launched, two variables are available:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">apps</span></code> is a dictionary that associates the name of an application to its
+<li><code class="docutils literal notranslate"><span class="pre">apps</span></code> is a dictionary that associates the name of an application to its
 activated application object.</li>
-<li><code class="docutils literal"><span class="pre">session</span></code> is the SQLAlchemy session (don’t forget the <code class="docutils literal"><span class="pre">session.commit()</span></code>
+<li><code class="docutils literal notranslate"><span class="pre">session</span></code> is the SQLAlchemy session (don’t forget the <code class="docutils literal notranslate"><span class="pre">session.commit()</span></code>
 statement if database entities are manipulated)</li>
 </ul>
 <p>The available options are:</p>
@@ -540,7 +540,7 @@ available</td></tr>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

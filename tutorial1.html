@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Nagare Tutorial, learning concepts &mdash; Nagare 0.5.0 documentation</title>
+  <title>Nagare Tutorial, learning concepts &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Nagare Tutorial, learning concepts" href="tutorial2.html"/>
         <link rel="prev" title="Installing a third party application" href="third_party.html"/> 
 
@@ -201,16 +201,16 @@
 <h1>Nagare Tutorial, learning concepts<a class="headerlink" href="#nagare-tutorial-learning-concepts" title="Permalink to this headline">¶</a></h1>
 <p>This tutorial will guide you through the basics of Nagare applications.</p>
 <p>We will assume that you already have installed Nagare. To check if Nagare is properly installed, you can run the Python interactive interpreter and type:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">nagare</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">nagare</span>
 </pre></div>
 </div>
 <p>If any error occurs see <a class="reference internal" href="framework_installation.html"><span class="doc">Nagare installation</span></a>.</p>
 <div class="section" id="part-1-create-an-application">
 <h2>Part 1. Create an application<a class="headerlink" href="#part-1-create-an-application" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>When installed, Nagare comes with one application, called <code class="docutils literal"><span class="pre">admin</span></code>. You can see it by running the following command:</li>
+<li>When installed, Nagare comes with one application, called <code class="docutils literal notranslate"><span class="pre">admin</span></code>. You can see it by running the following command:</li>
 </ol>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ nagare-admin serve
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ nagare-admin serve
 Available applications:
   - admin
 </pre></div>
@@ -218,7 +218,7 @@ Available applications:
 <ol class="arabic simple" start="2">
 <li>Move to a working directory and ask Nagare to create your application skeleton:</li>
 </ol>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /tmp
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /tmp
 $ nagare-admin create-app tutorial
 Application <span class="s1">&#39;tutorial&#39;</span> created.
 
@@ -232,7 +232,7 @@ Note:
 <ol class="arabic simple" start="3">
 <li>To add your application to the known applications, you have to register it:</li>
 </ol>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> tutorial
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> tutorial
 $ python setup.py develop
 ...
 Finished processing dependencies <span class="k">for</span> <span class="nv">tutorial</span><span class="o">==</span><span class="m">0</span>.0.1
@@ -241,16 +241,16 @@ Finished processing dependencies <span class="k">for</span> <span class="nv">tut
 <ol class="arabic simple" start="3">
 <li>Now the application can be served:</li>
 </ol>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ nagare-admin serve
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ nagare-admin serve
 Available applications:
  - admin
  - tutorial
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Launch your application in <code class="docutils literal"><span class="pre">reload</span></code> mode, this way any modification made to your files will automatically restart your application.</li>
+<li>Launch your application in <code class="docutils literal notranslate"><span class="pre">reload</span></code> mode, this way any modification made to your files will automatically restart your application.</li>
 </ol>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ nagare-admin serve --reload tutorial
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ nagare-admin serve --reload tutorial
 Application <span class="s1">&#39;app tutorial&#39;</span> registered as <span class="s1">&#39;/tutorial&#39;</span>
 <span class="m">02</span>/28/11 <span class="m">11</span>:33:04 - serving on http://127.0.0.1:8080
 </pre></div>
@@ -304,7 +304,7 @@ Application <span class="s1">&#39;app tutorial&#39;</span> registered as <span c
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

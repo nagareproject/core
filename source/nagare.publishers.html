@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>nagare.publishers package &mdash; Nagare 0.5.0 documentation</title>
+  <title>nagare.publishers package &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="../index.html"/> 
+    <link rel="top" title="Nagare 0.5.1 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -203,7 +203,7 @@
 <dl class="class">
 <dt id="nagare.publishers.common.Publisher">
 <em class="property">class </em><code class="descclassname">nagare.publishers.common.</code><code class="descname">Publisher</code><a class="headerlink" href="#nagare.publishers.common.Publisher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class of all the publishers</p>
 <dl class="attribute">
 <dt id="nagare.publishers.common.Publisher.default_port">
@@ -229,10 +229,10 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app_name</span></code> – name of the application</li>
-<li><code class="docutils literal"><span class="pre">name</span></code> – url of the application</li>
-<li><code class="docutils literal"><span class="pre">app</span></code> – the WSGI application</li>
-<li><code class="docutils literal"><span class="pre">wsgi_pipe</span></code> – the pipe of WSGI “middlewares”</li>
+<li><code class="docutils literal notranslate"><span class="pre">app_name</span></code> – name of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – url of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">app</span></code> – the WSGI application</li>
+<li><code class="docutils literal notranslate"><span class="pre">wsgi_pipe</span></code> – the pipe of WSGI “middlewares”</li>
 </ul>
 </dd>
 </dl>
@@ -245,14 +245,14 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">name</span></code> – the URL of the contents will be prefix by <code class="docutils literal"><span class="pre">/static/&lt;name&gt;/</span></code></li>
-<li><code class="docutils literal"><span class="pre">get_file</span></code> – function that will received the URL of the static content
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – the URL of the contents will be prefix by <code class="docutils literal notranslate"><span class="pre">/static/&lt;name&gt;/</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">get_file</span></code> – function that will received the URL of the static content
 and will return its filename</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>URL prefix (<code class="docutils literal"><span class="pre">/static/&lt;name&gt;/</span></code>)</li>
+<li>URL prefix (<code class="docutils literal notranslate"><span class="pre">/static/&lt;name&gt;/</span></code>)</li>
 </ul>
 </dd>
 </dl>
@@ -265,9 +265,9 @@ and will return its filename</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">filename</span></code> – the path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 </dl>
@@ -287,7 +287,7 @@ and will return its filename</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">filename</span></code> – path of the file to serve</li>
+<li><code class="docutils literal notranslate"><span class="pre">filename</span></code> – path of the file to serve</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -311,7 +311,7 @@ and will return its filename</li>
 <dl class="class">
 <dt id="nagare.publishers.fcgi_publisher.Publisher">
 <em class="property">class </em><code class="descclassname">nagare.publishers.fcgi_publisher.</code><code class="descname">Publisher</code><a class="headerlink" href="#nagare.publishers.fcgi_publisher.Publisher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.publishers.common.Publisher" title="nagare.publishers.common.Publisher"><code class="xref py py-class docutils literal"><span class="pre">nagare.publishers.common.Publisher</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">flup.server.fcgi_fork.WSGIServer</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.publishers.common.Publisher" title="nagare.publishers.common.Publisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.publishers.common.Publisher</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">flup.server.fcgi_fork.WSGIServer</span></code></p>
 <p>The FastCGI publisher</p>
 <dl class="attribute">
 <dt id="nagare.publishers.fcgi_publisher.Publisher.default_port">
@@ -325,14 +325,14 @@ and will return its filename</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">name</span></code> – the URL of the contents will be prefix by <code class="docutils literal"><span class="pre">/static/&lt;name&gt;/</span></code></li>
-<li><code class="docutils literal"><span class="pre">get_file</span></code> – function that will received the URL of the static content
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – the URL of the contents will be prefix by <code class="docutils literal notranslate"><span class="pre">/static/&lt;name&gt;/</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">get_file</span></code> – function that will received the URL of the static content
 and will return its filename</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>URL prefix (<code class="docutils literal"><span class="pre">/static/&lt;name&gt;/</span></code>)</li>
+<li>URL prefix (<code class="docutils literal notranslate"><span class="pre">/static/&lt;name&gt;/</span></code>)</li>
 </ul>
 </dd>
 </dl>
@@ -340,7 +340,7 @@ and will return its filename</li>
 <p class="first admonition-title">Warning</p>
 <p><strong>Dummy method</strong></p>
 <p>The front HTTP server must be configurated to serve the static contents</p>
-<p class="last">(you can use the administrative command <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">create-rules</span></code> to generate
+<p class="last">(you can use the administrative command <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">create-rules</span></code> to generate
 the rewrite rules if you are using the lighttpd or nginx servers)</p>
 </div>
 </dd></dl>
@@ -352,9 +352,9 @@ the rewrite rules if you are using the lighttpd or nginx servers)</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">filename</span></code> – the path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 </dl>
@@ -362,7 +362,7 @@ the rewrite rules if you are using the lighttpd or nginx servers)</p>
 
 <dl class="attribute">
 <dt id="nagare.publishers.fcgi_publisher.Publisher.spec">
-<code class="descname">spec</code><em class="property"> = {'socket': 'string(default=&quot;&quot;)', 'maxChildren': 'integer(default=None)', 'maxRequests': 'integer(default=None)', 'umask': 'integer(default=None)', 'minSpare': 'integer(default=None)', 'host': 'string(default=None)', 'maxSpare': 'integer(default=None)', 'multiplexed': 'boolean(default=None)', 'port': 'integer(default=9000)'}</em><a class="headerlink" href="#nagare.publishers.fcgi_publisher.Publisher.spec" title="Permalink to this definition">¶</a></dt>
+<code class="descname">spec</code><em class="property"> = {'host': 'string(default=None)', 'maxChildren': 'integer(default=None)', 'maxRequests': 'integer(default=None)', 'maxSpare': 'integer(default=None)', 'minSpare': 'integer(default=None)', 'multiplexed': 'boolean(default=None)', 'port': 'integer(default=9000)', 'socket': 'string(default=&quot;&quot;)', 'umask': 'integer(default=None)'}</em><a class="headerlink" href="#nagare.publishers.fcgi_publisher.Publisher.spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -374,7 +374,7 @@ the rewrite rules if you are using the lighttpd or nginx servers)</p>
 <dl class="class">
 <dt id="nagare.publishers.standalone_publisher.Publisher">
 <em class="property">class </em><code class="descclassname">nagare.publishers.standalone_publisher.</code><code class="descname">Publisher</code><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.publishers.common.Publisher" title="nagare.publishers.common.Publisher"><code class="xref py py-class docutils literal"><span class="pre">nagare.publishers.common.Publisher</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.publishers.common.Publisher" title="nagare.publishers.common.Publisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.publishers.common.Publisher</span></code></a></p>
 <p>The HTTP publisher</p>
 <dl class="method">
 <dt id="nagare.publishers.standalone_publisher.Publisher.serve">
@@ -383,9 +383,9 @@ the rewrite rules if you are using the lighttpd or nginx servers)</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">filename</span></code> – the path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 </dl>
@@ -393,17 +393,17 @@ the rewrite rules if you are using the lighttpd or nginx servers)</p>
 
 <dl class="attribute">
 <dt id="nagare.publishers.standalone_publisher.Publisher.server_spec">
-<code class="descname">server_spec</code><em class="property"> = {'daemon_threads': 'boolean(default=None)', 'use_threadpool': 'boolean(default=None)', 'socket_timeout': 'integer(default=None)', 'host': 'string(default=None)', 'threadpool_workers': 'integer(default=None)', 'protocol_version': 'string(default=None)', 'port': 'integer(default=None)', 'server_version': 'string(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.server_spec" title="Permalink to this definition">¶</a></dt>
+<code class="descname">server_spec</code><em class="property"> = {'daemon_threads': 'boolean(default=None)', 'host': 'string(default=None)', 'port': 'integer(default=None)', 'protocol_version': 'string(default=None)', 'server_version': 'string(default=None)', 'socket_timeout': 'integer(default=None)', 'threadpool_workers': 'integer(default=None)', 'use_threadpool': 'boolean(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.server_spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="nagare.publishers.standalone_publisher.Publisher.spec">
-<code class="descname">spec</code><em class="property"> = {'daemon_threads': 'boolean(default=None)', 'spawn_if_under': 'integer(default=None)', 'use_threadpool': 'boolean(default=None)', 'socket_timeout': 'integer(default=None)', 'max_requests': 'integer(default=None)', 'dying_limit': 'integer(default=None)', 'host': 'string(default=None)', 'max_zombie_threads_before_die': 'integer(default=None)', 'hung_thread_limit': 'integer(default=None)', 'hung_check_period': 'integer(default=None)', 'threadpool_workers': 'integer(default=None)', 'protocol_version': 'string(default=None)', 'kill_thread_limit': 'integer(default=None)', 'port': 'integer(default=None)', 'server_version': 'string(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.spec" title="Permalink to this definition">¶</a></dt>
+<code class="descname">spec</code><em class="property"> = {'daemon_threads': 'boolean(default=None)', 'dying_limit': 'integer(default=None)', 'host': 'string(default=None)', 'hung_check_period': 'integer(default=None)', 'hung_thread_limit': 'integer(default=None)', 'kill_thread_limit': 'integer(default=None)', 'max_requests': 'integer(default=None)', 'max_zombie_threads_before_die': 'integer(default=None)', 'port': 'integer(default=None)', 'protocol_version': 'string(default=None)', 'server_version': 'string(default=None)', 'socket_timeout': 'integer(default=None)', 'spawn_if_under': 'integer(default=None)', 'threadpool_workers': 'integer(default=None)', 'use_threadpool': 'boolean(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="nagare.publishers.standalone_publisher.Publisher.threadpool_spec">
-<code class="descname">threadpool_spec</code><em class="property"> = {'dying_limit': 'integer(default=None)', 'max_zombie_threads_before_die': 'integer(default=None)', 'spawn_if_under': 'integer(default=None)', 'hung_check_period': 'integer(default=None)', 'max_requests': 'integer(default=None)', 'kill_thread_limit': 'integer(default=None)', 'hung_thread_limit': 'integer(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.threadpool_spec" title="Permalink to this definition">¶</a></dt>
+<code class="descname">threadpool_spec</code><em class="property"> = {'dying_limit': 'integer(default=None)', 'hung_check_period': 'integer(default=None)', 'hung_thread_limit': 'integer(default=None)', 'kill_thread_limit': 'integer(default=None)', 'max_requests': 'integer(default=None)', 'max_zombie_threads_before_die': 'integer(default=None)', 'spawn_if_under': 'integer(default=None)'}</em><a class="headerlink" href="#nagare.publishers.standalone_publisher.Publisher.threadpool_spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -447,7 +447,7 @@ the rewrite rules if you are using the lighttpd or nginx servers)</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

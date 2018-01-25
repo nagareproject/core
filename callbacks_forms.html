@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Callbacks and forms &mdash; Nagare 0.5.0 documentation</title>
+  <title>Callbacks and forms &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="The Renderer objects" href="renderer.html"/>
         <link rel="prev" title="Database tier" href="database.html"/> 
 
@@ -129,12 +129,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#checkboxes-reset">Checkboxes reset</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#the-var-var-objects">The <code class="docutils literal"><span class="pre">var.Var()</span></code> objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-var-var-objects">The <code class="docutils literal notranslate"><span class="pre">var.Var()</span></code> objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#form-validation">Form validation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#erroneous-element">Erroneous element</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-editor-property-objects">The <code class="docutils literal"><span class="pre">editor.Property</span></code> objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-validator-module">The <code class="docutils literal"><span class="pre">validator</span></code> module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-editor-editor-objects">The <code class="docutils literal"><span class="pre">editor.Editor</span></code> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-editor-property-objects">The <code class="docutils literal notranslate"><span class="pre">editor.Property</span></code> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-validator-module">The <code class="docutils literal notranslate"><span class="pre">validator</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-editor-editor-objects">The <code class="docutils literal notranslate"><span class="pre">editor.Editor</span></code> objects</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#putting-all-together">Putting all together</a></li>
 </ul>
 </li>
@@ -224,7 +224,7 @@ without manual analysis of the requests received.</p>
 of the application.</p>
 <p>In this example, a callback is associated to a link, to count how many times
 this link is clicked:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 <span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
 
 <span class="k">class</span> <span class="nc">ClickCounter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -243,12 +243,12 @@ this link is clicked:</p>
 </pre></div>
 </div>
 <p>To test this snippet, launched it with:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:ClickCounter clic
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:ClickCounter clic
 </pre></div>
 </div>
 <p>This simple <em>GuessBook</em> example associates a callback to a textarea element,
 that append the new messages to the list of the existing ones:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">var</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">var</span>
 <span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
 
 <span class="k">class</span> <span class="nc">GuestBook</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -273,7 +273,7 @@ that append the new messages to the list of the existing ones:</p>
 </pre></div>
 </div>
 <p>You can test it with:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:GuestBook book
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:GuestBook book
 </pre></div>
 </div>
 </div>
@@ -294,82 +294,82 @@ that append the new messages to the list of the existing ones:</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.a</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.a</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td><em>no parameter</em></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.form</span></code></td>
-<td><code class="docutils literal"><span class="pre">.pre_action(callback)</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.form</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.pre_action(callback)</span></code></td>
 <td><em>no parameter</em></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.form</span></code></td>
-<td><code class="docutils literal"><span class="pre">.post_action(callback)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.form</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.post_action(callback)</span></code></td>
 <td><em>no parameter</em></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.input</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td>the text received</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='text)</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='text)</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td>the text received</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='password')</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='password')</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td>the text received</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='radio')</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='radio')</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td><em>no parameter</em></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='checkbox')</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
-<td>the value of the <code class="docutils literal"><span class="pre">value</span></code> attribute (<code class="docutils literal"><span class="pre">on</span></code> if no
-<code class="docutils literal"><span class="pre">value</span></code> attribute is set)</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='checkbox')</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
+<td>the value of the <code class="docutils literal notranslate"><span class="pre">value</span></code> attribute (<code class="docutils literal notranslate"><span class="pre">on</span></code> if no
+<code class="docutils literal notranslate"><span class="pre">value</span></code> attribute is set)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='submit')</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='submit')</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td><em>no parameter</em></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='hidden')</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
-<td>the value of the <code class="docutils literal"><span class="pre">value</span></code> attribute (empty string
-if no <code class="docutils literal"><span class="pre">value</span></code> attribut is set)</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='hidden')</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
+<td>the value of the <code class="docutils literal notranslate"><span class="pre">value</span></code> attribute (empty string
+if no <code class="docutils literal notranslate"><span class="pre">value</span></code> attribut is set)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='file')</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='file')</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td>an empty string if no file was uploaded, else
-a <code class="docutils literal"><span class="pre">cgi.FieldStorage</span></code> object</td>
+a <code class="docutils literal notranslate"><span class="pre">cgi.FieldStorage</span></code> object</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='image')</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='image')</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td><p class="first">the callback is called twice:</p>
 <ol class="last arabic simple">
-<li>with the parameters <code class="docutils literal"><span class="pre">True</span></code> and the <em>x</em> value</li>
-<li>with the parameters <code class="docutils literal"><span class="pre">False</span></code> and the <em>y</em> value</li>
+<li>with the parameters <code class="docutils literal notranslate"><span class="pre">True</span></code> and the <em>x</em> value</li>
+<li>with the parameters <code class="docutils literal notranslate"><span class="pre">False</span></code> and the <em>y</em> value</li>
 </ol>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.textarea</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.textarea</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td>the text received</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.select</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.select</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td>the selected option value</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.select(multiple=1)</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.select(multiple=1)</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td>a tuple of the selected options value (even if
 only one option is selected)</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.img</span></code></td>
-<td><code class="docutils literal"><span class="pre">.action(callback)</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.img</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">.action(callback)</span></code></td>
 <td><em>no parameter</em>
 The callback is called when the browser requests
 the image. The callback is called with the response
 object as parameter and must return the image data.
-If the <code class="docutils literal"><span class="pre">content_type</span></code> attribut of the response
+If the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> attribut of the response
 object is not set by the callback, Nagare will try
 to guess the image type.</td>
 </tr>
@@ -385,23 +385,23 @@ as unicode strings.</p>
 <h3>Callback order<a class="headerlink" href="#callback-order" title="Permalink to this headline">¶</a></h3>
 <p>The callbacks are processed in this order:</p>
 <ol class="arabic simple">
-<li>the <code class="docutils literal"><span class="pre">form</span></code> <code class="docutils literal"><span class="pre">pre_action()</span></code> callback</li>
-<li>the <code class="docutils literal"><span class="pre">select</span></code>, <code class="docutils literal"><span class="pre">textarea</span></code> and <code class="docutils literal"><span class="pre">input</span></code> of type <code class="docutils literal"><span class="pre">text</span></code>, <code class="docutils literal"><span class="pre">password</span></code>,
-<code class="docutils literal"><span class="pre">radio</span></code>, <code class="docutils literal"><span class="pre">checkbox</span></code>, <code class="docutils literal"><span class="pre">hidden</span></code> and <code class="docutils literal"><span class="pre">file</span></code> <code class="docutils literal"><span class="pre">action()</span></code> callback</li>
-<li>the <code class="docutils literal"><span class="pre">form</span></code> <code class="docutils literal"><span class="pre">post_action()</span></code> callback</li>
-<li>the <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">input(type='submit')</span></code> <code class="docutils literal"><span class="pre">action()</span></code> callback</li>
-<li>the <code class="docutils literal"><span class="pre">input(type='image')</span></code> <code class="docutils literal"><span class="pre">action()</span></code> callback</li>
-<li>the <code class="docutils literal"><span class="pre">img</span></code> <code class="docutils literal"><span class="pre">action()</span></code> callback</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">form</span></code> <code class="docutils literal notranslate"><span class="pre">pre_action()</span></code> callback</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">select</span></code>, <code class="docutils literal notranslate"><span class="pre">textarea</span></code> and <code class="docutils literal notranslate"><span class="pre">input</span></code> of type <code class="docutils literal notranslate"><span class="pre">text</span></code>, <code class="docutils literal notranslate"><span class="pre">password</span></code>,
+<code class="docutils literal notranslate"><span class="pre">radio</span></code>, <code class="docutils literal notranslate"><span class="pre">checkbox</span></code>, <code class="docutils literal notranslate"><span class="pre">hidden</span></code> and <code class="docutils literal notranslate"><span class="pre">file</span></code> <code class="docutils literal notranslate"><span class="pre">action()</span></code> callback</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">form</span></code> <code class="docutils literal notranslate"><span class="pre">post_action()</span></code> callback</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">input(type='submit')</span></code> <code class="docutils literal notranslate"><span class="pre">action()</span></code> callback</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">input(type='image')</span></code> <code class="docutils literal notranslate"><span class="pre">action()</span></code> callback</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">img</span></code> <code class="docutils literal notranslate"><span class="pre">action()</span></code> callback</li>
 </ol>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Only modify the components graph in the <code class="docutils literal"><span class="pre">a</span></code>, <code class="docutils literal"><span class="pre">input(type='submit')</span></code> or
-<code class="docutils literal"><span class="pre">input(type='image')</span></code> callbacks.</p>
+<p class="last">Only modify the components graph in the <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">input(type='submit')</span></code> or
+<code class="docutils literal notranslate"><span class="pre">input(type='image')</span></code> callbacks.</p>
 </div>
 </div>
 <div class="section" id="elements-selection">
 <h3>Elements selection<a class="headerlink" href="#elements-selection" title="Permalink to this headline">¶</a></h3>
-<p>Some form elements have an helper <code class="docutils literal"><span class="pre">.selected()</span></code> method to select it:</p>
+<p>Some form elements have an helper <code class="docutils literal notranslate"><span class="pre">.selected()</span></code> method to select it:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -409,17 +409,17 @@ as unicode strings.</p>
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Element</th>
-<th class="head"><code class="docutils literal"><span class="pre">.selected()</span></code> parameter</th>
+<th class="head"><code class="docutils literal notranslate"><span class="pre">.selected()</span></code> parameter</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.input(type='radio')</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='radio')</span></code></td>
 <td>a boolean to select or unselect the radio button</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h.input(type='checkbox')</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">h.input(type='checkbox')</span></code></td>
 <td>a boolean to select or unselect the checkbox</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">h.option</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">h.option</span></code></td>
 <td>a list of values of the options to select</td>
 </tr>
 </tbody>
@@ -427,11 +427,11 @@ as unicode strings.</p>
 </div>
 <div class="section" id="checkboxes-reset">
 <h3>Checkboxes reset<a class="headerlink" href="#checkboxes-reset" title="Permalink to this headline">¶</a></h3>
-<p>The callbacks of the <code class="docutils literal"><span class="pre">h.input(type='checkbox')</span></code> are only called for the
+<p>The callbacks of the <code class="docutils literal notranslate"><span class="pre">h.input(type='checkbox')</span></code> are only called for the
 selected checkboxes. So, you need to reset the attributes that keep the current
 selected checkboxes before to process the callbacks. This reset method is
-typically the <code class="docutils literal"><span class="pre">`pre_action</span></code> callback of the <code class="docutils literal"><span class="pre">h.form</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+typically the <code class="docutils literal notranslate"><span class="pre">`pre_action</span></code> callback of the <code class="docutils literal notranslate"><span class="pre">h.form</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 
 <span class="k">class</span> <span class="nc">ColorSelection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -458,7 +458,7 @@ typically the <code class="docutils literal"><span class="pre">`pre_action</span
 </pre></div>
 </div>
 <p>or, with a more compact view:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ColorSelection</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ColorSelection</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;Selected colors: &#39;</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">hr</span>
 
@@ -475,8 +475,8 @@ typically the <code class="docutils literal"><span class="pre">`pre_action</span
 </div>
 </div>
 <div class="section" id="the-var-var-objects">
-<h2>The <code class="docutils literal"><span class="pre">var.Var()</span></code> objects<a class="headerlink" href="#the-var-var-objects" title="Permalink to this headline">¶</a></h2>
-<p>The instances of the <code class="docutils literal"><span class="pre">Var</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.var.Var" title="nagare.var.Var"><code class="xref py py-class docutils literal"><span class="pre">nagare.var.Var</span></code></a> are
+<h2>The <code class="docutils literal notranslate"><span class="pre">var.Var()</span></code> objects<a class="headerlink" href="#the-var-var-objects" title="Permalink to this headline">¶</a></h2>
+<p>The instances of the <code class="docutils literal notranslate"><span class="pre">Var</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.var.Var" title="nagare.var.Var"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.var.Var</span></code></a> are
 variable-like objects that provide a “functional” interface:</p>
 <ul class="simple">
 <li>calling the object with a value, set the variable value and return the value</li>
@@ -485,7 +485,7 @@ variable-like objects that provide a “functional” interface:</p>
 <p>They can be usefull to directly get / set variables in a lambda expression
 callback.</p>
 <p>For example, the first snippet can be rewrote as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">var</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">var</span>
 <span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
 
 <span class="k">class</span> <span class="nc">ClickCounter</span><span class="p">:</span>
@@ -506,9 +506,9 @@ callback.</p>
 <h2>Form validation<a class="headerlink" href="#form-validation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="erroneous-element">
 <h3>Erroneous element<a class="headerlink" href="#erroneous-element" title="Permalink to this headline">¶</a></h3>
-<p>Calling the <code class="docutils literal"><span class="pre">.error(msg)</span></code> method on an element wrap it into styled <code class="docutils literal"><span class="pre">div</span></code>
-if <code class="docutils literal"><span class="pre">msg</span></code> is not <code class="docutils literal"><span class="pre">None</span></code>:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<p>Calling the <code class="docutils literal notranslate"><span class="pre">.error(msg)</span></code> method on an element wrap it into styled <code class="docutils literal notranslate"><span class="pre">div</span></code>
+if <code class="docutils literal notranslate"><span class="pre">msg</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">input</span>
@@ -529,27 +529,27 @@ if <code class="docutils literal"><span class="pre">msg</span></code> is not <co
 <span class="go">&lt;/div&gt;</span>
 </pre></div>
 </div>
-<p>So your application can defined the <code class="docutils literal"><span class="pre">nagare-error-field</span></code>, <code class="docutils literal"><span class="pre">nagare-error-input</span></code>
-and <code class="docutils literal"><span class="pre">nagare-error-message</span></code> css classes to design the erroneous fields rendering.</p>
+<p>So your application can defined the <code class="docutils literal notranslate"><span class="pre">nagare-error-field</span></code>, <code class="docutils literal notranslate"><span class="pre">nagare-error-input</span></code>
+and <code class="docutils literal notranslate"><span class="pre">nagare-error-message</span></code> css classes to design the erroneous fields rendering.</p>
 </div>
 <div class="section" id="the-editor-property-objects">
-<h3>The <code class="docutils literal"><span class="pre">editor.Property</span></code> objects<a class="headerlink" href="#the-editor-property-objects" title="Permalink to this headline">¶</a></h3>
-<p>The instances of the <code class="docutils literal"><span class="pre">Property</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.editor.Property" title="nagare.editor.Property"><code class="xref py py-class docutils literal"><span class="pre">nagare.editor.Property</span></code></a>
+<h3>The <code class="docutils literal notranslate"><span class="pre">editor.Property</span></code> objects<a class="headerlink" href="#the-editor-property-objects" title="Permalink to this headline">¶</a></h3>
+<p>The instances of the <code class="docutils literal notranslate"><span class="pre">Property</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.editor.Property" title="nagare.editor.Property"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.editor.Property</span></code></a>
 are objects:</p>
 <ul class="simple">
-<li>with a validation function, set by calling its <code class="docutils literal"><span class="pre">.validate()</span></code> method. A
+<li>with a validation function, set by calling its <code class="docutils literal notranslate"><span class="pre">.validate()</span></code> method. A
 validation function, when called with a value, must validate and, eventually,
 convert it. If the value is valid, the (converted) value is returned.
-Else the <code class="docutils literal"><span class="pre">ValueError</span></code> exception must be raised with an error message.</li>
-<li>that can be set with a value, by calling its <code class="docutils literal"><span class="pre">.set()</span></code> method or by directly
+Else the <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception must be raised with an error message.</li>
+<li>that can be set with a value, by calling its <code class="docutils literal notranslate"><span class="pre">.set()</span></code> method or by directly
 be called</li>
-<li>that always keeps the value in its <code class="docutils literal"><span class="pre">input</span></code> attribute</li>
+<li>that always keeps the value in its <code class="docutils literal notranslate"><span class="pre">input</span></code> attribute</li>
 <li>that validates the value, by calling its validating function</li>
-<li>that keeps the last valid value in its <code class="docutils literal"><span class="pre">value</span></code> attribute</li>
-<li>that keeps the error message of the validation in its <code class="docutils literal"><span class="pre">error</span></code> attribute,
-or <code class="docutils literal"><span class="pre">None</span></code> if the value is valid.</li>
+<li>that keeps the last valid value in its <code class="docutils literal notranslate"><span class="pre">value</span></code> attribute</li>
+<li>that keeps the error message of the validation in its <code class="docutils literal notranslate"><span class="pre">error</span></code> attribute,
+or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the value is valid.</li>
 </ul>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.editor</span> <span class="kn">import</span> <span class="n">Property</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.editor</span> <span class="kn">import</span> <span class="n">Property</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">is_lesser_than_10</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">n</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">:</span>
@@ -604,11 +604,11 @@ or <code class="docutils literal"><span class="pre">None</span></code> if the va
 </div>
 </div>
 <div class="section" id="the-validator-module">
-<h3>The <code class="docutils literal"><span class="pre">validator</span></code> module<a class="headerlink" href="#the-validator-module" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference internal" href="source/nagare.html#module-nagare.validator" title="nagare.validator"><code class="xref py py-mod docutils literal"><span class="pre">nagare.validator</span></code></a> module defines a <code class="docutils literal"><span class="pre">IntValidator</span></code> and a
-<code class="docutils literal"><span class="pre">StringValidator</span></code> objects to validate the numbers and the strings. They are
-suitable to be used as a validating function of a <code class="docutils literal"><span class="pre">editor.Property</span></code> object:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.validator</span> <span class="kn">import</span> <span class="n">IntValidator</span>
+<h3>The <code class="docutils literal notranslate"><span class="pre">validator</span></code> module<a class="headerlink" href="#the-validator-module" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="source/nagare.html#module-nagare.validator" title="nagare.validator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.validator</span></code></a> module defines a <code class="docutils literal notranslate"><span class="pre">IntValidator</span></code> and a
+<code class="docutils literal notranslate"><span class="pre">StringValidator</span></code> objects to validate the numbers and the strings. They are
+suitable to be used as a validating function of a <code class="docutils literal notranslate"><span class="pre">editor.Property</span></code> object:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.validator</span> <span class="kn">import</span> <span class="n">IntValidator</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.editor</span> <span class="kn">import</span> <span class="n">Property</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">number</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
@@ -647,19 +647,19 @@ suitable to be used as a validating function of a <code class="docutils literal"
 </div>
 </div>
 <div class="section" id="the-editor-editor-objects">
-<h3>The <code class="docutils literal"><span class="pre">editor.Editor</span></code> objects<a class="headerlink" href="#the-editor-editor-objects" title="Permalink to this headline">¶</a></h3>
-<p>An instances of the <code class="docutils literal"><span class="pre">Editor</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.editor.Editor" title="nagare.editor.Editor"><code class="xref py py-class docutils literal"><span class="pre">nagare.editor.Editor</span></code></a>
+<h3>The <code class="docutils literal notranslate"><span class="pre">editor.Editor</span></code> objects<a class="headerlink" href="#the-editor-editor-objects" title="Permalink to this headline">¶</a></h3>
+<p>An instances of the <code class="docutils literal notranslate"><span class="pre">Editor</span></code> class in <a class="reference internal" href="source/nagare.html#nagare.editor.Editor" title="nagare.editor.Editor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.editor.Editor</span></code></a>
 is an intermediary between the values received from a form an a target object.</p>
-<p>An <code class="docutils literal"><span class="pre">Editor</span></code> object automatically creates <code class="docutils literal"><span class="pre">editor.Property</span></code> objects reflecting
+<p>An <code class="docutils literal notranslate"><span class="pre">Editor</span></code> object automatically creates <code class="docutils literal notranslate"><span class="pre">editor.Property</span></code> objects reflecting
 the attributes of the target object we want to edit with the form.</p>
-<p>An <code class="docutils literal"><span class="pre">Editor</span></code> object will modified the target object attributes only if all the
+<p>An <code class="docutils literal notranslate"><span class="pre">Editor</span></code> object will modified the target object attributes only if all the
 validating functions of its properties validate the data from the form.</p>
 </div>
 <div class="section" id="putting-all-together">
 <h3>Putting all together<a class="headerlink" href="#putting-all-together" title="Permalink to this headline">¶</a></h3>
-<p>In this example, we’ve got pure Python <code class="docutils literal"><span class="pre">Person</span></code> objects with <code class="docutils literal"><span class="pre">name</span></code> and
-<code class="docutils literal"><span class="pre">age</span></code> attributes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">editor</span><span class="p">,</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">component</span>
+<p>In this example, we’ve got pure Python <code class="docutils literal notranslate"><span class="pre">Person</span></code> objects with <code class="docutils literal notranslate"><span class="pre">name</span></code> and
+<code class="docutils literal notranslate"><span class="pre">age</span></code> attributes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">editor</span><span class="p">,</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">component</span>
 <span class="kn">from</span> <span class="nn">nagare.validator</span> <span class="kn">import</span> <span class="n">StringValidator</span><span class="p">,</span> <span class="n">IntValidator</span>
 
 <span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -670,7 +670,7 @@ validating functions of its properties validate the data from the form.</p>
 </div>
 <p>We create a dedicated editor for this objects, to be able to edit these
 attributes with a web form:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PersonEditor</span><span class="p">(</span><span class="n">editor</span><span class="o">.</span><span class="n">Editor</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PersonEditor</span><span class="p">(</span><span class="n">editor</span><span class="o">.</span><span class="n">Editor</span><span class="p">):</span>
     <span class="c1"># The ``__init__`` method receives the target ``Person`` object</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">person</span><span class="p">):</span>
         <span class="c1"># We create the ``name`` and ``age`` ``Properties``, initialized</span>
@@ -690,9 +690,9 @@ attributes with a web form:</p>
         <span class="nb">super</span><span class="p">(</span><span class="n">PersonEditor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">commit</span><span class="p">((</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Then we can create a view on the <code class="docutils literal"><span class="pre">PersonEditor</span></code> objects to render the web
+<p>Then we can create a view on the <code class="docutils literal notranslate"><span class="pre">PersonEditor</span></code> objects to render the web
 form:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">PersonEditor</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">PersonEditor</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
         <span class="c1"># The ``action()`` callback calls the ``name`` property of the editor</span>
@@ -712,9 +712,9 @@ form:</p>
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
 </pre></div>
 </div>
-<p>Finally, an application creates a <code class="docutils literal"><span class="pre">Person</span></code> object and wraps it into a
-<code class="docutils literal"><span class="pre">PersonEditor</span></code> component to edit these properties:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<p>Finally, an application creates a <code class="docutils literal notranslate"><span class="pre">Person</span></code> object and wraps it into a
+<code class="docutils literal notranslate"><span class="pre">PersonEditor</span></code> component to edit these properties:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
 
@@ -738,11 +738,11 @@ form:</p>
 </pre></div>
 </div>
 <p>Now launch this example with:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="go">&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:App editor</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="go">&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module &lt;path/to/the/example/file.py&gt;:App editor</span>
 </pre></div>
 </div>
 <p>and check that the validation error messages are displayed and that the
-<code class="docutils literal"><span class="pre">Person</span></code> target object is only modified is all the values are valid.</p>
+<code class="docutils literal notranslate"><span class="pre">Person</span></code> target object is only modified is all the values are valid.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">For more complete examples of validations, use of all the possible form
@@ -796,7 +796,7 @@ elements, inter-fields validation … see the
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

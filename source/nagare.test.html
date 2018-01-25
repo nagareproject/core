@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>nagare.test package &mdash; Nagare 0.5.0 documentation</title>
+  <title>nagare.test package &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="../index.html"/> 
+    <link rel="top" title="Nagare 0.5.1 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -207,13 +207,13 @@
 <dl class="class">
 <dt id="nagare.test.test_component.Bar">
 <em class="property">class </em><code class="descclassname">nagare.test.test_component.</code><code class="descname">Bar</code><a class="headerlink" href="#nagare.test.test_component.Bar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_component.Foo" title="nagare.test.test_component.Foo"><code class="xref py py-class docutils literal"><span class="pre">nagare.test.test_component.Foo</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_component.Foo" title="nagare.test.test_component.Foo"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.test.test_component.Foo</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_component.Foo">
 <em class="property">class </em><code class="descclassname">nagare.test.test_component.</code><code class="descname">Foo</code><a class="headerlink" href="#nagare.test.test_component.Foo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_component.Foo.set_my_property">
 <code class="descname">set_my_property</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_component.Foo.set_my_property" title="Permalink to this definition">¶</a></dt>
@@ -274,11 +274,27 @@
 <dl class="class">
 <dt id="nagare.test.test_form.MyEditor">
 <em class="property">class </em><code class="descclassname">nagare.test.test_form.</code><code class="descname">MyEditor</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyEditor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.editor.Editor" title="nagare.editor.Editor"><code class="xref py py-class docutils literal"><span class="pre">nagare.editor.Editor</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.editor.Editor" title="nagare.editor.Editor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.editor.Editor</span></code></a></p>
 <dl class="method">
 <dt id="nagare.test.test_form.MyEditor.commit">
 <code class="descname">commit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyEditor.commit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Write back the value of the property to the target object, only if
+they are all valid</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">properties_to_commit</span></code> – names of properties to check then to
+write to the target object</li>
+<li><code class="docutils literal notranslate"><span class="pre">properties_to_validate</span></code> – additional names of properties to check</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>are all the properties valid ?</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="nagare.test.test_form.MyEditor.fields">
@@ -295,11 +311,27 @@
 <dl class="class">
 <dt id="nagare.test.test_form.MyStringEditor">
 <em class="property">class </em><code class="descclassname">nagare.test.test_form.</code><code class="descname">MyStringEditor</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyStringEditor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.editor.Editor" title="nagare.editor.Editor"><code class="xref py py-class docutils literal"><span class="pre">nagare.editor.Editor</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.editor.Editor" title="nagare.editor.Editor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.editor.Editor</span></code></a></p>
 <dl class="method">
 <dt id="nagare.test.test_form.MyStringEditor.commit">
 <code class="descname">commit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyStringEditor.commit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Write back the value of the property to the target object, only if
+they are all valid</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">properties_to_commit</span></code> – names of properties to check then to
+write to the target object</li>
+<li><code class="docutils literal notranslate"><span class="pre">properties_to_validate</span></code> – additional names of properties to check</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>are all the properties valid ?</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="nagare.test.test_form.MyStringEditor.fields">
@@ -316,31 +348,31 @@
 <dl class="class">
 <dt id="nagare.test.test_form.MyStringEditor1">
 <em class="property">class </em><code class="descclassname">nagare.test.test_form.</code><code class="descname">MyStringEditor1</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyStringEditor1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_form.MyStringEditor2">
 <em class="property">class </em><code class="descclassname">nagare.test.test_form.</code><code class="descname">MyStringEditor2</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyStringEditor2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_form.MyStringEditor3">
 <em class="property">class </em><code class="descclassname">nagare.test.test_form.</code><code class="descname">MyStringEditor3</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyStringEditor3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_form.MyStringEditor4">
 <em class="property">class </em><code class="descclassname">nagare.test.test_form.</code><code class="descname">MyStringEditor4</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyStringEditor4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_form.MyStringEditor5">
 <em class="property">class </em><code class="descclassname">nagare.test.test_form.</code><code class="descname">MyStringEditor5</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_form.MyStringEditor5" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.test.test_form.MyStringEditor" title="nagare.test.test_form.MyStringEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.test.test_form.MyStringEditor</span></code></a></p>
 </dd></dl>
 
 <dl class="function">
@@ -426,17 +458,18 @@
 <dl class="class">
 <dt id="nagare.test.test_i18n.Locale">
 <em class="property">class </em><code class="descclassname">nagare.test.test_i18n.</code><code class="descname">Locale</code><span class="sig-paren">(</span><em>language='en'</em>, <em>territory=None</em>, <em>script=None</em>, <em>variant=None</em>, <em>dirname=None</em>, <em>domain=None</em>, <em>timezone=None</em>, <em>default_timezone=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.Locale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.i18n.Locale" title="nagare.i18n.Locale"><code class="xref py py-class docutils literal"><span class="pre">nagare.i18n.Locale</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.i18n.Locale" title="nagare.i18n.Locale"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.i18n.Locale</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_i18n.TestContext">
 <em class="property">class </em><code class="descclassname">nagare.test.test_i18n.</code><code class="descname">TestContext</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestContext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestContext.setUp">
 <code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestContext.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestContext.test_context_manager">
@@ -448,11 +481,12 @@
 <dl class="class">
 <dt id="nagare.test.test_i18n.TestDateNames">
 <em class="property">class </em><code class="descclassname">nagare.test.test_i18n.</code><code class="descname">TestDateNames</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestDateNames" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestDateNames.setUp">
 <code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestDateNames.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestDateNames.test_get_date_format">
@@ -514,11 +548,12 @@
 <dl class="class">
 <dt id="nagare.test.test_i18n.TestFormats">
 <em class="property">class </em><code class="descclassname">nagare.test.test_i18n.</code><code class="descname">TestFormats</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestFormats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestFormats.setUp">
 <code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestFormats.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestFormats.test_format_currency">
@@ -595,11 +630,12 @@
 <dl class="class">
 <dt id="nagare.test.test_i18n.TestParsing">
 <em class="property">class </em><code class="descclassname">nagare.test.test_i18n.</code><code class="descname">TestParsing</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestParsing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestParsing.setUp">
 <code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestParsing.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestParsing.test_parse_date_en">
@@ -626,7 +662,7 @@
 <dl class="class">
 <dt id="nagare.test.test_i18n.TestTimezones">
 <em class="property">class </em><code class="descclassname">nagare.test.test_i18n.</code><code class="descname">TestTimezones</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestTimezones" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestTimezones.test_format_date_date">
 <code class="descname">test_format_date_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestTimezones.test_format_date_date" title="Permalink to this definition">¶</a></dt>
@@ -747,11 +783,12 @@
 <dl class="class">
 <dt id="nagare.test.test_i18n.TestTranslations">
 <em class="property">class </em><code class="descclassname">nagare.test.test_i18n.</code><code class="descname">TestTranslations</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestTranslations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestTranslations.setUp">
 <code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.TestTranslations.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nagare.test.test_i18n.TestTranslations.test_LN_ungettext_plural">
@@ -898,7 +935,7 @@
 <dl class="class">
 <dt id="nagare.test.test_i18n.Translation">
 <em class="property">class </em><code class="descclassname">nagare.test.test_i18n.</code><code class="descname">Translation</code><a class="headerlink" href="#nagare.test.test_i18n.Translation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_i18n.Translation.gettext">
 <code class="descname">gettext</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_i18n.Translation.gettext" title="Permalink to this definition">¶</a></dt>
@@ -927,7 +964,7 @@
 <dl class="class">
 <dt id="nagare.test.test_serializer.TestSerializer">
 <em class="property">class </em><code class="descclassname">nagare.test.test_serializer.</code><code class="descname">TestSerializer</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_serializer.TestSerializer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_serializer.TestSerializer.test_comment">
 <code class="descname">test_comment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_serializer.TestSerializer.test_comment" title="Permalink to this definition">¶</a></dt>
@@ -981,7 +1018,7 @@
 <dl class="class">
 <dt id="nagare.test.test_top.TestTop">
 <em class="property">class </em><code class="descclassname">nagare.test.test_top.</code><code class="descname">TestTop</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_top.TestTop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_top.TestTop.check_html">
 <code class="descname">check_html</code><span class="sig-paren">(</span><em>html</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_top.TestTop.check_html" title="Permalink to this definition">¶</a></dt>
@@ -990,7 +1027,8 @@
 <dl class="method">
 <dt id="nagare.test.test_top.TestTop.setUp">
 <code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_top.TestTop.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nagare.test.test_top.TestTop.test_1">
@@ -1200,29 +1238,57 @@
 <dl class="class">
 <dt id="nagare.test.test_wsgi.App">
 <em class="property">class </em><code class="descclassname">nagare.test.test_wsgi.</code><code class="descname">App</code><span class="sig-paren">(</span><em>session_manager=&lt;nagare.test.test_wsgi.SessionManager object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_wsgi.App" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.wsgi.WSGIApp" title="nagare.wsgi.WSGIApp"><code class="xref py py-class docutils literal"><span class="pre">nagare.wsgi.WSGIApp</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.wsgi.WSGIApp" title="nagare.wsgi.WSGIApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.wsgi.WSGIApp</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_wsgi.ExpiredSessionManager">
 <em class="property">class </em><code class="descclassname">nagare.test.test_wsgi.</code><code class="descname">ExpiredSessionManager</code><span class="sig-paren">(</span><em>states_history=True</em>, <em>security_cookie_httponly=True</em>, <em>security_cookie_name='_nagare'</em>, <em>security_cookie_secure=False</em>, <em>serializer=&lt;class 'nagare.sessions.serializer.Dummy'&gt;</em>, <em>pickler=None</em>, <em>unpickler=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_wsgi.ExpiredSessionManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nagare.sessions.html#nagare.sessions.common.Sessions" title="nagare.sessions.common.Sessions"><code class="xref py py-class docutils literal"><span class="pre">nagare.sessions.common.Sessions</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="nagare.sessions.html#nagare.sessions.common.Sessions" title="nagare.sessions.common.Sessions"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.sessions.common.Sessions</span></code></a></p>
 <dl class="method">
 <dt id="nagare.test.test_wsgi.ExpiredSessionManager.get_lock">
 <code class="descname">get_lock</code><span class="sig-paren">(</span><em>session_id</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_wsgi.ExpiredSessionManager.get_lock" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve the lock of a session</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>the lock</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="nagare.test.test_wsgi.ExpiredSessionManager.get_state">
 <code class="descname">get_state</code><span class="sig-paren">(</span><em>request</em>, <em>response</em>, <em>use_same_state</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_wsgi.ExpiredSessionManager.get_state" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create a new state or return an existing one</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response object</li>
+<li><code class="docutils literal notranslate"><span class="pre">use_same_state</span></code> – is a copy of the state to created?</li>
+</ul>
+</dd>
+<dt>Return:</dt>
+<dd><ul class="first last simple">
+<li>the state</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_wsgi.Lock">
 <em class="property">class </em><code class="descclassname">nagare.test.test_wsgi.</code><code class="descname">Lock</code><a class="headerlink" href="#nagare.test.test_wsgi.Lock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="nagare.test.test_wsgi.Lock.acquire">
 <code class="descname">acquire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_wsgi.Lock.acquire" title="Permalink to this definition">¶</a></dt>
@@ -1238,13 +1304,13 @@
 <dl class="class">
 <dt id="nagare.test.test_wsgi.Response">
 <em class="property">class </em><code class="descclassname">nagare.test.test_wsgi.</code><code class="descname">Response</code><a class="headerlink" href="#nagare.test.test_wsgi.Response" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.test.test_wsgi.SessionManager">
 <em class="property">class </em><code class="descclassname">nagare.test.test_wsgi.</code><code class="descname">SessionManager</code><span class="sig-paren">(</span><em>states_history=True</em>, <em>security_cookie_httponly=True</em>, <em>security_cookie_name='_nagare'</em>, <em>security_cookie_secure=False</em>, <em>serializer=&lt;class 'nagare.sessions.serializer.Dummy'&gt;</em>, <em>pickler=None</em>, <em>unpickler=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.test.test_wsgi.SessionManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nagare.sessions.html#nagare.sessions.common.Sessions" title="nagare.sessions.common.Sessions"><code class="xref py py-class docutils literal"><span class="pre">nagare.sessions.common.Sessions</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="nagare.sessions.html#nagare.sessions.common.Sessions" title="nagare.sessions.common.Sessions"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.sessions.common.Sessions</span></code></a></p>
 </dd></dl>
 
 <dl class="function">
@@ -1308,7 +1374,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

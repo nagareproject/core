@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The application configuration file &mdash; Nagare 0.5.0 documentation</title>
+  <title>The application configuration file &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="The publisher configuration file" href="publisher_file.html"/>
         <link rel="prev" title="nagare-admin" href="nagare-admin.html"/> 
 
@@ -206,20 +206,20 @@
 <h1>The application configuration file<a class="headerlink" href="#the-application-configuration-file" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="using-the-configuration-file">
 <h2>Using the configuration file<a class="headerlink" href="#using-the-configuration-file" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">serve</span></code> administrative command needs a proper configuration file to
+<p>The <code class="docutils literal notranslate"><span class="pre">serve</span></code> administrative command needs a proper configuration file to
 launch an application.</p>
-<p>You can directly give the configuration file to the <code class="docutils literal"><span class="pre">serve</span></code> command, as:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve /path/to/the/config.cfg
+<p>You can directly give the configuration file to the <code class="docutils literal notranslate"><span class="pre">serve</span></code> command, as:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve /path/to/the/config.cfg
 </pre></div>
 </div>
 <p>Or, if the application was registered to the framework
 (as described in <a class="reference internal" href="entry_points.html"><span class="doc">Entry points</span></a>), then you can launch it with:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve &lt;application&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve &lt;application&gt;
 </pre></div>
 </div>
-<p>In this case, the framework reads the configuration file named <code class="docutils literal"><span class="pre">&lt;application&gt;.cfg</span></code>
-in the directory <code class="docutils literal"><span class="pre">&lt;application&gt;*/conf</span></code> under
-<code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/lib/python2.7/site-packages</span></code>.</p>
+<p>In this case, the framework reads the configuration file named <code class="docutils literal notranslate"><span class="pre">&lt;application&gt;.cfg</span></code>
+in the directory <code class="docutils literal notranslate"><span class="pre">&lt;application&gt;*/conf</span></code> under
+<code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/lib/python2.7/site-packages</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If an application is launched in debug mode, changes in the configuration
@@ -229,11 +229,11 @@ application.</p>
 </div>
 <div class="section" id="structure">
 <h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
-<p>For the boolean parameters, a value of <code class="docutils literal"><span class="pre">true</span></code>, <code class="docutils literal"><span class="pre">yes</span></code>, <code class="docutils literal"><span class="pre">on</span></code> or <code class="docutils literal"><span class="pre">1</span></code> means True
-and a value of <code class="docutils literal"><span class="pre">false</span></code>, <code class="docutils literal"><span class="pre">no</span></code>, <code class="docutils literal"><span class="pre">off</span></code> or <code class="docutils literal"><span class="pre">0</span></code> mean False.</p>
-<p>You can use the <code class="docutils literal"><span class="pre">$here</span></code> variable which contains the path to the directory where
+<p>For the boolean parameters, a value of <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">yes</span></code>, <code class="docutils literal notranslate"><span class="pre">on</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code> means True
+and a value of <code class="docutils literal notranslate"><span class="pre">false</span></code>, <code class="docutils literal notranslate"><span class="pre">no</span></code>, <code class="docutils literal notranslate"><span class="pre">off</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code> mean False.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">$here</span></code> variable which contains the path to the directory where
 the configuration file is located.</p>
-<p>Comments, starting with the <code class="docutils literal"><span class="pre">#</span></code> character can be added to a configuration file.</p>
+<p>Comments, starting with the <code class="docutils literal notranslate"><span class="pre">#</span></code> character can be added to a configuration file.</p>
 <div class="section" id="application-section">
 <h3>[application] section<a class="headerlink" href="#application-section" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
@@ -260,15 +260,15 @@ application (see <a class="reference internal" href="object_references.html"><sp
 <tr class="row-odd"><td>name</td>
 <td>Yes</td>
 <td><em>No default value</em></td>
-<td><code class="docutils literal"><span class="pre">/name</span></code> will be the URL of the application</td>
+<td><code class="docutils literal notranslate"><span class="pre">/name</span></code> will be the URL of the application</td>
 </tr>
 <tr class="row-even"><td>static</td>
 <td>No</td>
-<td><code class="docutils literal"><span class="pre">static</span></code>
+<td><code class="docutils literal notranslate"><span class="pre">static</span></code>
 directory</td>
 <td>Filesystem path to the static contents of
 the application. By default, it’s the
-<code class="docutils literal"><span class="pre">static</span></code> directory under the application
+<code class="docutils literal notranslate"><span class="pre">static</span></code> directory under the application
 installation directory.</td>
 </tr>
 <tr class="row-odd"><td>always_html</td>
@@ -283,7 +283,7 @@ always generated</td>
 <td>No</td>
 <td>no</td>
 <td>Display the web debug page when an exception
-occurs. The <code class="docutils literal"><span class="pre">nagare[debug]</span></code> extra must be installed.</td>
+occurs. The <code class="docutils literal notranslate"><span class="pre">nagare[debug]</span></code> extra must be installed.</td>
 </tr>
 </tbody>
 </table>
@@ -338,10 +338,10 @@ with some initial data (see <a class="reference internal" href="object_reference
 </tbody>
 </table>
 <p>All other parameters, if present, are passed as keywords to the SQLALchemy
-<code class="docutils literal"><span class="pre">create_engine()</span></code> call (see <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#engine-creation-api">http://www.sqlalchemy.org/docs/core/engines.html#engine-creation-api</a>)</p>
+<code class="docutils literal notranslate"><span class="pre">create_engine()</span></code> call (see <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#engine-creation-api">http://www.sqlalchemy.org/docs/core/engines.html#engine-creation-api</a>)</p>
 <p>If an application needs to work with several database, several subsections can
-be embedded into the main <code class="docutils literal"><span class="pre">[database]</span></code> section:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[database]</span>
+be embedded into the main <code class="docutils literal notranslate"><span class="pre">[database]</span></code> section:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[database]</span>
 
 <span class="na">[[database1]]      # The name of a subsection is irrelevant but must be unique</span>
 <span class="na">activated</span> <span class="o">=</span> <span class="s">on</span>
@@ -400,7 +400,7 @@ be embedded into the main <code class="docutils literal"><span class="pre">[data
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The log service &mdash; Nagare 0.5.0 documentation</title>
+  <title>The log service &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Object references" href="object_references.html"/>
         <link rel="prev" title="Internationalization of applications" href="i18n.html"/> 
 
@@ -218,23 +218,23 @@ sensitive information to the end-users.</p>
 <p>Python ships with a <a class="reference external" href="https://docs.python.org/2/library/logging.html">logging</a> module that provides everything we need in a Web
 development context. However, it is relatively complex to configure and it’s
 configuration is a singleton, which is problematic in a multi-applications setup
-(that is, when the same <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code> process serves more than one
+(that is, when the same <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code> process serves more than one
 application).</p>
-<p>In order to solve these problems, Nagare provides its own <a class="reference internal" href="source/nagare.html#module-nagare.log" title="nagare.log"><code class="xref py py-mod docutils literal"><span class="pre">nagare.log</span></code></a> service
+<p>In order to solve these problems, Nagare provides its own <a class="reference internal" href="source/nagare.html#module-nagare.log" title="nagare.log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.log</span></code></a> service
 , which is built on top of the <a class="reference external" href="https://docs.python.org/2/library/logging.html">logging</a> module but greatly
 simplifies its usage and configuration for common use-cases.</p>
 <div class="section" id="basic-usages">
 <h2>Basic Usages<a class="headerlink" href="#basic-usages" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="using-the-default-logger">
 <h3>Using The default logger<a class="headerlink" href="#using-the-default-logger" title="Permalink to this headline">¶</a></h3>
-<p>By default, when you serve Web applications with the <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code>
+<p>By default, when you serve Web applications with the <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code>
 utility, Nagare creates a dedicated logger, handler and formatter for each
 application, and activates them: this is the purpose of the
-<a class="reference internal" href="source/nagare.html#nagare.log.configure" title="nagare.log.configure"><code class="xref py py-class docutils literal"><span class="pre">nagare.log.configure</span></code></a> and <a class="reference internal" href="source/nagare.html#nagare.log.activate" title="nagare.log.activate"><code class="xref py py-class docutils literal"><span class="pre">nagare.log.activate</span></code></a> functions.</p>
-<p>You can use the module level functions of the <code class="docutils literal"><span class="pre">log</span></code> module to write messages
+<a class="reference internal" href="source/nagare.html#nagare.log.configure" title="nagare.log.configure"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.log.configure</span></code></a> and <a class="reference internal" href="source/nagare.html#nagare.log.activate" title="nagare.log.activate"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.log.activate</span></code></a> functions.</p>
+<p>You can use the module level functions of the <code class="docutils literal notranslate"><span class="pre">log</span></code> module to write messages
 to the default logger of the <em>currently running</em> application, as shown in the
 example below:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">log</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">log</span>
 
 <span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">pass</span>
@@ -248,16 +248,16 @@ example below:</p>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Root</span>
 </pre></div>
 </div>
-<p>Then, each time the default view of the <code class="docutils literal"><span class="pre">Root</span></code> component is rendered, this
+<p>Then, each time the default view of the <code class="docutils literal notranslate"><span class="pre">Root</span></code> component is rendered, this
 line should appear in the console shell (which is the output of the default
 logger):</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>2012-06-14 10:22:38,379 - nagare.application.myapp - INFO - Rendering the root component
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2012-06-14 10:22:38,379 - nagare.application.myapp - INFO - Rendering the root component
 </pre></div>
 </div>
-<p>As you see, the messages are issued in the <code class="docutils literal"><span class="pre">nagare.application.myapp</span></code>
+<p>As you see, the messages are issued in the <code class="docutils literal notranslate"><span class="pre">nagare.application.myapp</span></code>
 namespace, which is the namespace of the messages coming from the Nagare
-application called <code class="docutils literal"><span class="pre">myapp</span></code>.</p>
-<p>Here is the full listing of the module-level functions of the&nbsp;<code class="docutils literal"><span class="pre">nagare.log</span></code>
+application called <code class="docutils literal notranslate"><span class="pre">myapp</span></code>.</p>
+<p>Here is the full listing of the module-level functions of the&nbsp;<code class="docutils literal notranslate"><span class="pre">nagare.log</span></code>
 module:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -270,44 +270,44 @@ module:</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">log.debug(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
-<td>Logs a message with <code class="docutils literal"><span class="pre">DEBUG</span></code> level on the application logger</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">log.debug(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
+<td>Logs a message with <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> level on the application logger</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">log.info(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
-<td>Logs a message with <code class="docutils literal"><span class="pre">INFO</span></code> level on the application logger</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">log.info(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
+<td>Logs a message with <code class="docutils literal notranslate"><span class="pre">INFO</span></code> level on the application logger</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">log.warning(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
-<td>Logs a message with <code class="docutils literal"><span class="pre">WARNING</span></code> level on the application logger</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">log.warning(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
+<td>Logs a message with <code class="docutils literal notranslate"><span class="pre">WARNING</span></code> level on the application logger</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">log.error(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
-<td>Logs a message with <code class="docutils literal"><span class="pre">ERROR</span></code> level on the application logger</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">log.error(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
+<td>Logs a message with <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> level on the application logger</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">log.critical(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
-<td>Logs a message with <code class="docutils literal"><span class="pre">CRITICAL</span></code> level on the application logger</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">log.critical(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
+<td>Logs a message with <code class="docutils literal notranslate"><span class="pre">CRITICAL</span></code> level on the application logger</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">log.exception(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
-<td>Logs a message with <code class="docutils literal"><span class="pre">ERROR</span></code> level on the application logger,
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">log.exception(msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
+<td>Logs a message with <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> level on the application logger,
 and also logs the current exception information</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">log.log(level,</span> <span class="pre">msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">log.log(level,</span> <span class="pre">msg,</span> <span class="pre">*args,</span> <span class="pre">**kw)</span></code></td>
 <td>Logs a message with the specified level on the application
 logger</td>
 </tr>
 </tbody>
 </table>
 <p>All these functions accept variable arguments and keyword arguments, which are
-documented in the <code class="docutils literal"><span class="pre">logging</span></code> module, <a class="reference external" href="https://docs.python.org/2/library/logging.html#logging.Logger.debug">here</a>.</p>
+documented in the <code class="docutils literal notranslate"><span class="pre">logging</span></code> module, <a class="reference external" href="https://docs.python.org/2/library/logging.html#logging.Logger.debug">here</a>.</p>
 </div>
 <div class="section" id="overriding-the-default-configuration">
 <h3>Overriding the default configuration<a class="headerlink" href="#overriding-the-default-configuration" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">[[logger]]</span></code>, <code class="docutils literal"><span class="pre">[[hander]]</span></code> and <code class="docutils literal"><span class="pre">[[formatter]]</span></code> sub-sections of the
-<code class="docutils literal"><span class="pre">[logging]</span></code> section in the application configuration file are dedicated to
+<p>The <code class="docutils literal notranslate"><span class="pre">[[logger]]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[hander]]</span></code> and <code class="docutils literal notranslate"><span class="pre">[[formatter]]</span></code> sub-sections of the
+<code class="docutils literal notranslate"><span class="pre">[logging]</span></code> section in the application configuration file are dedicated to
 configure the default application logger.</p>
-<p>The default logging setup is equivalent to the following <code class="docutils literal"><span class="pre">[logging]</span></code> section,
-where <code class="docutils literal"><span class="pre">&lt;name&gt;</span></code> is replaced by the name of the application (please
-refer to the <code class="docutils literal"><span class="pre">logging</span></code>’s module <a class="reference external" href="https://docs.python.org/2/library/logging.config.html#configuration-file-format">configuration file format</a> for a better
+<p>The default logging setup is equivalent to the following <code class="docutils literal notranslate"><span class="pre">[logging]</span></code> section,
+where <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> is replaced by the name of the application (please
+refer to the <code class="docutils literal notranslate"><span class="pre">logging</span></code>’s module <a class="reference external" href="https://docs.python.org/2/library/logging.config.html#configuration-file-format">configuration file format</a> for a better
 understanding of the configuration of loggers, handlers and formatters):</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
 
 <span class="k">[[logger]]</span>
 <span class="na">qualname</span><span class="o">=</span><span class="s">nagare.application.&lt;name&gt;</span>
@@ -323,19 +323,19 @@ understanding of the configuration of loggers, handlers and formatters):</p>
 </pre></div>
 </div>
 <p>As you can see, by default, the log messages with a level greater or equal to
-<code class="docutils literal"><span class="pre">INFO</span></code> are printed to <code class="docutils literal"><span class="pre">sys.stderr</span></code> via a <code class="docutils literal"><span class="pre">StreamHandler</span></code>.</p>
-<p>It’s possible to override this default <code class="docutils literal"><span class="pre">logging</span></code> configuration by adding your
-own <code class="docutils literal"><span class="pre">[logging]</span></code> section to the application configuration file. Here, the
-logging level of the application is set to <code class="docutils literal"><span class="pre">DEBUG</span></code>:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
+<code class="docutils literal notranslate"><span class="pre">INFO</span></code> are printed to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code> via a <code class="docutils literal notranslate"><span class="pre">StreamHandler</span></code>.</p>
+<p>It’s possible to override this default <code class="docutils literal notranslate"><span class="pre">logging</span></code> configuration by adding your
+own <code class="docutils literal notranslate"><span class="pre">[logging]</span></code> section to the application configuration file. Here, the
+logging level of the application is set to <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
 <span class="k">[[logger]]</span>
 <span class="na">level</span><span class="o">=</span><span class="s">DEBUG</span>
 </pre></div>
 </div>
-<p>Here, a new handler is defined to log the messages to the file <code class="docutils literal"><span class="pre">/tmp/myapp.log</span></code>.
-We use a <code class="docutils literal"><span class="pre">RotatingFileHandler</span></code> instead of the classical <code class="docutils literal"><span class="pre">FileHandler</span></code> since
+<p>Here, a new handler is defined to log the messages to the file <code class="docutils literal notranslate"><span class="pre">/tmp/myapp.log</span></code>.
+We use a <code class="docutils literal notranslate"><span class="pre">RotatingFileHandler</span></code> instead of the classical <code class="docutils literal notranslate"><span class="pre">FileHandler</span></code> since
 we want the file to be log-rotated in order to prevent it from becoming too large:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
 <span class="k">[[handler]]</span>
 <span class="na">class</span><span class="o">=</span><span class="s">handlers.RotatingFileHandler</span>
 <span class="na">args</span><span class="o">=</span><span class="s">&quot;(&#39;/tmp/myapp.log&#39;, &#39;a&#39;, 10485760, 10, &#39;UTF-8&#39;)&quot;</span>
@@ -345,7 +345,7 @@ we want the file to be log-rotated in order to prevent it from becoming too larg
 <div class="section" id="using-the-nagare-ide">
 <h3>Using the Nagare IDE<a class="headerlink" href="#using-the-nagare-ide" title="Permalink to this headline">¶</a></h3>
 <p>When the Nagare IDE is launched at the same time than your application
-(i.e <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">serve</span> <span class="pre">&lt;name&gt;</span> <span class="pre">ide</span></code>), a second handler is bound to the default
+(i.e <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">serve</span> <span class="pre">&lt;name&gt;</span> <span class="pre">ide</span></code>), a second handler is bound to the default
 logger so that all the messages are also sent to the
 <a class="reference external" href="http://www.nagare.org/trac/wiki/NagareIde#logger">IDE log panel</a>.</p>
 </div>
@@ -361,18 +361,18 @@ or to analyze the log file which is now filled with numerous log messages.</p>
 <p>In this situation, it’s generally useful to organize the log messages into
 namespaces, so that we can enable/disable the logging of messages in some
 namespaces or send messages with different namespaces to different handlers.</p>
-<p>For this purpose, Nagare offers a <code class="docutils literal"><span class="pre">log.get_logger(namespace)</span></code> function that
+<p>For this purpose, Nagare offers a <code class="docutils literal notranslate"><span class="pre">log.get_logger(namespace)</span></code> function that
 creates a logger which puts the messages into the specified namespace. To create a
 new logger for your application, use a relative name starting with a dot. In this
 case, the new namespace is relative to the application namespace, e.g.
-<code class="docutils literal"><span class="pre">nagare.application.myapp</span></code>.</p>
-<p>The logger object offers the same functions as the <code class="docutils literal"><span class="pre">log</span></code> module for writing
-messages, that is <code class="docutils literal"><span class="pre">logger.debug</span></code>, <code class="docutils literal"><span class="pre">logger.info</span></code>, <code class="docutils literal"><span class="pre">logger.warning</span></code>,
-<code class="docutils literal"><span class="pre">logger.error</span></code>, <code class="docutils literal"><span class="pre">logger.critical</span></code>, <code class="docutils literal"><span class="pre">logger.exception</span></code> and <code class="docutils literal"><span class="pre">logger.log</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nagare.application.myapp</span></code>.</p>
+<p>The logger object offers the same functions as the <code class="docutils literal notranslate"><span class="pre">log</span></code> module for writing
+messages, that is <code class="docutils literal notranslate"><span class="pre">logger.debug</span></code>, <code class="docutils literal notranslate"><span class="pre">logger.info</span></code>, <code class="docutils literal notranslate"><span class="pre">logger.warning</span></code>,
+<code class="docutils literal notranslate"><span class="pre">logger.error</span></code>, <code class="docutils literal notranslate"><span class="pre">logger.critical</span></code>, <code class="docutils literal notranslate"><span class="pre">logger.exception</span></code> and <code class="docutils literal notranslate"><span class="pre">logger.log</span></code>,
 with the same parameters.</p>
 <p>In this example, we will log all the messages generated in the views to a
-specific <code class="docutils literal"><span class="pre">nagare.application.myapp.ui</span></code> namespace:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">log</span>
+specific <code class="docutils literal notranslate"><span class="pre">nagare.application.myapp.ui</span></code> namespace:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">log</span>
 
 <span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Root</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -381,15 +381,15 @@ specific <code class="docutils literal"><span class="pre">nagare.application.mya
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
 </pre></div>
 </div>
-<p>and you can see, the message is now attached to the <code class="docutils literal"><span class="pre">nagare.application.myapp.myapp.ui</span></code>
+<p>and you can see, the message is now attached to the <code class="docutils literal notranslate"><span class="pre">nagare.application.myapp.myapp.ui</span></code>
 namespace:</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>2012-06-14 10:22:38,379 - nagare.application.myapp.ui - INFO - Rendering the root component
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2012-06-14 10:22:38,379 - nagare.application.myapp.ui - INFO - Rendering the root component
 </pre></div>
 </div>
-<p>Being under the <code class="docutils literal"><span class="pre">nagare.application.myapp</span></code> namespace, this logger propagates
+<p>Being under the <code class="docutils literal notranslate"><span class="pre">nagare.application.myapp</span></code> namespace, this logger propagates
 the messages to the default logger. Also this logger inherits the default logger
 configuration, which can be overridden:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[[logging]]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[[logging]]</span>
 <span class="k">[loggers]</span>
 <span class="na">keys</span><span class="o">=</span><span class="s">ui   # Declare the new logger</span>
 
@@ -400,10 +400,10 @@ configuration, which can be overridden:</p>
 <span class="na">handlers</span><span class="o">=</span>
 </pre></div>
 </div>
-<p>Here the log level of the logger is set to <code class="docutils literal"><span class="pre">CRITICAL</span></code>.</p>
+<p>Here the log level of the logger is set to <code class="docutils literal notranslate"><span class="pre">CRITICAL</span></code>.</p>
 <p>Or a more complex configuration can be created, for example to log the messages
 to a specific log file:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
 <span class="k">[[loggers]]</span>
 <span class="na">keys</span><span class="o">=</span><span class="s">ui   # Declare the new logger</span>
 
@@ -433,9 +433,9 @@ to a specific log file:</p>
 <p>Any other general loggers can be created the same way, by just giving a full
 absolute namespace.</p>
 <p>For example the <a class="reference external" href="http://docs.sqlalchemy.org/en/latest/core/engines.html#configuring-logging">SQLAlchemy documentation</a>
-states the name of the SQL query logger is <code class="docutils literal"><span class="pre">sqlalchemy.engine</span></code>. So this
+states the name of the SQL query logger is <code class="docutils literal notranslate"><span class="pre">sqlalchemy.engine</span></code>. So this
 logging configuration will display all the generated SQL queries:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[logging]</span>
 <span class="k">[[loggers]]</span>
 <span class="na">keys</span><span class="o">=</span><span class="s">sa</span>
 
@@ -505,7 +505,7 @@ logging configuration will display all the generated SQL queries:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Object references &mdash; Nagare 0.5.0 documentation</title>
+  <title>Object references &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Entry points" href="entry_points.html"/>
         <link rel="prev" title="The log service" href="log.html"/> 
 
@@ -199,17 +199,17 @@
 <p>Object references are textual references to Python objects. There are
 especially used in the <a class="reference internal" href="configuration_file.html"><span class="doc">application files</span></a> to indicate what
 Python objects to use.</p>
-<p>The general form of an object reference is: <code class="docutils literal"><span class="pre">&lt;schema&gt;</span> <span class="pre">&lt;path&gt;:&lt;object_name&gt;</span></code>.
-Given such an object reference, the <a class="reference internal" href="source/nagare.admin.html#nagare.admin.reference.load_object" title="nagare.admin.reference.load_object"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.reference.load_object()</span></code></a> method
+<p>The general form of an object reference is: <code class="docutils literal notranslate"><span class="pre">&lt;schema&gt;</span> <span class="pre">&lt;path&gt;:&lt;object_name&gt;</span></code>.
+Given such an object reference, the <a class="reference internal" href="source/nagare.admin.html#nagare.admin.reference.load_object" title="nagare.admin.reference.load_object"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.reference.load_object()</span></code></a> method
 returns a tuple where the first item is the Python object, and the second item is the
 <a class="reference external" href="http://setuptools.readthedocs.io/en/latest/pkg_resources.html#distribution-objects">distribution</a>
 where this object is located, if found.</p>
-<p>The available <code class="docutils literal"><span class="pre">schemas</span></code> are:</p>
+<p>The available <code class="docutils literal notranslate"><span class="pre">schemas</span></code> are:</p>
 <ul>
-<li><p class="first"><code class="docutils literal"><span class="pre">python</span> <span class="pre">&lt;module_path&gt;:&lt;object_name&gt;</span></code> – a reference to an object in a
-Python module. The Python module is searched using <code class="docutils literal"><span class="pre">sys.path</span></code>. This
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">&lt;module_path&gt;:&lt;object_name&gt;</span></code> – a reference to an object in a
+Python module. The Python module is searched using <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>. This
 schema is also used by default if no schema is given.</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.admin</span> <span class="kn">import</span> <span class="n">util</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.admin</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">util</span><span class="o">.</span><span class="n">load_object</span><span class="p">(</span><span class="s1">&#39;python xml.sax.xmlreader:XMLReader&#39;</span><span class="p">)</span>
 <span class="go">(&lt;class xml.sax.xmlreader.XMLReader at 0x851f17c&gt;, None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">util</span><span class="o">.</span><span class="n">load_object</span><span class="p">(</span><span class="s1">&#39;xml.sax.xmlreader:XMLReader&#39;</span><span class="p">)</span>
@@ -217,25 +217,25 @@ schema is also used by default if no schema is given.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">file</span> <span class="pre">&lt;filename&gt;:&lt;object_name&gt;</span></code> – a reference to an object in a Python
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">&lt;filename&gt;:&lt;object_name&gt;</span></code> – a reference to an object in a Python
 file.</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.admin</span> <span class="kn">import</span> <span class="n">util</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.admin</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">util</span><span class="o">.</span><span class="n">load_object</span><span class="p">(</span><span class="s1">&#39;file /usr/lib/python2.5/xml/sax/xmlreader.py:XMLReader&#39;</span><span class="p">)</span>
 <span class="go">(&lt;class xmlreader.XMLReader at 0x851f62c&gt;, None)</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">app</span> <span class="pre">&lt;application_name&gt;</span></code> – a reference to a registered Nagare application
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">app</span> <span class="pre">&lt;application_name&gt;</span></code> – a reference to a registered Nagare application
 entry point.</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.admin</span> <span class="kn">import</span> <span class="n">util</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.admin</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">util</span><span class="o">.</span><span class="n">load_object</span><span class="p">(</span><span class="s1">&#39;app admin&#39;</span><span class="p">)</span>
 <span class="go">(&lt;nagare.admin.admin_app.WSGIApp object at 0x8b5148c&gt;, nagare 0.1.0 (/home/apr/projects/nagare/dev/src/nagare/core))</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">egg</span> <span class="pre">&lt;distribution_name&gt;:&lt;application_name&gt;</span></code> – a reference to a specific
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">egg</span> <span class="pre">&lt;distribution_name&gt;:&lt;application_name&gt;</span></code> – a reference to a specific
 registered Nagare application entry point of a distribution.</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.admin</span> <span class="kn">import</span> <span class="n">util</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.admin</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">util</span><span class="o">.</span><span class="n">load_object</span><span class="p">(</span><span class="s1">&#39;egg nagare.examples:wiki&#39;</span><span class="p">)</span>
 <span class="go">(&lt;class &#39;nagare.examples.wiki.wiki9.Wiki&#39;&gt;, nagare.examples 0.1.0 (/home/apr/projects/nagare/dev/src/nagare/examples))</span>
 </pre></div>
@@ -286,7 +286,7 @@ registered Nagare application entry point of a distribution.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

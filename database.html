@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Database tier &mdash; Nagare 0.5.0 documentation</title>
+  <title>Database tier &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Callbacks and forms" href="callbacks_forms.html"/>
         <link rel="prev" title="The Nagare component model" href="components.html"/> 
 
@@ -200,14 +200,14 @@
 layer Elixir with Nagare. For each request received, Nagare creates a
 database transaction which is commited at the end
 of the request handling or rollbacked if an exception is raised.</p>
-<p>The database connection is activated and configurated in the <code class="docutils literal"><span class="pre">[database]</span></code> section
+<p>The database connection is activated and configurated in the <code class="docutils literal notranslate"><span class="pre">[database]</span></code> section
 of the application <a class="reference external" href="configuration_file.html#database-section">configuration file</a>.
 One of the parameters in this section is the location of the
 <a class="reference external" href="http://docs.sqlalchemy.org/en/latest/core/metadata.html">__metadata__</a> object of
 SQLAlchemy:</p>
 <ul>
 <li><p class="first">which must be explicitly created:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">elixir</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">elixir</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">MetaData</span>
 
 <span class="n">__metadata__</span> <span class="o">=</span> <span class="n">MetaData</span><span class="p">()</span>
@@ -271,7 +271,7 @@ if you are using SQLAlchemy only</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

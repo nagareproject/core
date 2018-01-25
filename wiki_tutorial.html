@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Writing your first Nagare application &mdash; Nagare 0.5.0 documentation</title>
+  <title>Writing your first Nagare application &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Create an application" href="application_creation.html"/>
         <link rel="prev" title="Nagare Tutorial, learning concepts" href="tutorial4.html"/> 
 
@@ -232,10 +232,10 @@
 <div class="section" id="creating-your-wiki-app">
 <h2>Creating your wiki app<a class="headerlink" href="#creating-your-wiki-app" title="Permalink to this headline">¶</a></h2>
 <p>Change your current working directory to a directory where you’d like to store
-your wiki code, then run the command <code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/bin/nagare-admin</span> <span class="pre">create-app</span> <span class="pre">mywiki</span></code>
+your wiki code, then run the command <code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/bin/nagare-admin</span> <span class="pre">create-app</span> <span class="pre">mywiki</span></code>
 on command line.</p>
-<p>This will create a <code class="docutils literal"><span class="pre">mywiki</span></code> directory in your current directory with the following elements:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mywiki</span><span class="o">/</span>
+<p>This will create a <code class="docutils literal notranslate"><span class="pre">mywiki</span></code> directory in your current directory with the following elements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mywiki</span><span class="o">/</span>
     <span class="n">conf</span><span class="o">/</span>
         <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
         <span class="n">mywiki</span><span class="o">.</span><span class="n">cfg</span>
@@ -252,16 +252,16 @@ on command line.</p>
 </div>
 <p>These files are:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">__init__.py</span></code>: Empty files needed by Python to treat the directories as packages.</li>
-<li><code class="docutils literal"><span class="pre">models.py</span></code>: File that contains the database model description for wiki.</li>
-<li><code class="docutils literal"><span class="pre">app.py</span></code>: File that contains the wiki classes.</li>
-<li><code class="docutils literal"><span class="pre">setup.py</span></code>: File used by setuptools to package the wiki application.</li>
-<li><code class="docutils literal"><span class="pre">mywiki.cfg</span></code>: Wiki configuration file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>: Empty files needed by Python to treat the directories as packages.</li>
+<li><code class="docutils literal notranslate"><span class="pre">models.py</span></code>: File that contains the database model description for wiki.</li>
+<li><code class="docutils literal notranslate"><span class="pre">app.py</span></code>: File that contains the wiki classes.</li>
+<li><code class="docutils literal notranslate"><span class="pre">setup.py</span></code>: File used by setuptools to package the wiki application.</li>
+<li><code class="docutils literal notranslate"><span class="pre">mywiki.cfg</span></code>: Wiki configuration file.</li>
 </ul>
 <div class="section" id="register-your-wiki-application">
 <h3>Register your wiki application<a class="headerlink" href="#register-your-wiki-application" title="Permalink to this headline">¶</a></h3>
-<p>Change your current working directory to <code class="docutils literal"><span class="pre">mywiki</span></code> directory and run the command
-<code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/bin/python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></code> on command line.</p>
+<p>Change your current working directory to <code class="docutils literal notranslate"><span class="pre">mywiki</span></code> directory and run the command
+<code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/bin/python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></code> on command line.</p>
 </div>
 </div>
 <div class="section" id="presenting-your-pages">
@@ -269,8 +269,8 @@ on command line.</p>
 <div class="section" id="write-a-simple-wiki-page">
 <h3>Write a simple Wiki Page<a class="headerlink" href="#write-a-simple-wiki-page" title="Permalink to this headline">¶</a></h3>
 <p>Let’s create a simple page and view it in a browser.
-Open <code class="docutils literal"><span class="pre">app.py</span></code> and replace its content by the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+Open <code class="docutils literal notranslate"><span class="pre">app.py</span></code> and replace its content by the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 
 <span class="k">class</span> <span class="nc">Page</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
@@ -284,18 +284,18 @@ Open <code class="docutils literal"><span class="pre">app.py</span></code> and r
     <span class="k">return</span> <span class="n">Page</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;FrontPage&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">&#64;presentation.render_for(Page)</span></code> decoration associates the view with the
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;presentation.render_for(Page)</span></code> decoration associates the view with the
 python object. Let’s check if it worked, run the command
-<code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/bin/nagare-admin</span> <span class="pre">serve</span> <span class="pre">mywiki</span> <span class="pre">--reload</span></code>, you should
+<code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/bin/nagare-admin</span> <span class="pre">serve</span> <span class="pre">mywiki</span> <span class="pre">--reload</span></code>, you should
 see the following output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Application</span> <span class="s1">&#39;app mywiki&#39;</span> <span class="n">registered</span> <span class="k">as</span> <span class="s1">&#39;/mywiki&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Application</span> <span class="s1">&#39;app mywiki&#39;</span> <span class="n">registered</span> <span class="k">as</span> <span class="s1">&#39;/mywiki&#39;</span>
 <span class="n">serving</span> <span class="n">on</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">8080</span>
 </pre></div>
 </div>
 <p>The lightweight web server is up and running, try to visit <a class="reference external" href="http://127.0.0.1:8080/mywiki">http://127.0.0.1:8080/mywiki</a>
 with your browser. You’ll see your first wiki page containing
 “This is page *FrontPage*”.</p>
-<p>Hence you launched the server with the option <code class="docutils literal"><span class="pre">--reload</span></code>, any modification
+<p>Hence you launched the server with the option <code class="docutils literal notranslate"><span class="pre">--reload</span></code>, any modification
 made in source code will be automatically reloaded.</p>
 </div>
 <div class="section" id="write-a-page-that-actually-does-something">
@@ -303,7 +303,7 @@ made in source code will be automatically reloaded.</p>
 <p>To generate HTML with Nagare there is no need for templates, it can be completely
 forged out of python code. The templating issue will be discussed later.
 A link is inserted on the page title that will append “clicked” to the pages title:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 
 <span class="k">class</span> <span class="nc">Page</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
@@ -325,17 +325,17 @@ A link is inserted on the page title that will append “clicked” to the pages
     <span class="k">return</span> <span class="n">Page</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;FrontPage&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">a</span></code> tag is generated by the <code class="docutils literal"><span class="pre">h</span></code> renderer wihch is by default the HTML namespace.
-As you can see a method can be hooked to this tag through the use of <code class="docutils literal"><span class="pre">.action()</span></code>.</p>
-<p>Once the action <code class="docutils literal"><span class="pre">click_callBack</span></code> is done the current object is automatically
+<p>The <code class="docutils literal notranslate"><span class="pre">a</span></code> tag is generated by the <code class="docutils literal notranslate"><span class="pre">h</span></code> renderer wihch is by default the HTML namespace.
+As you can see a method can be hooked to this tag through the use of <code class="docutils literal notranslate"><span class="pre">.action()</span></code>.</p>
+<p>Once the action <code class="docutils literal notranslate"><span class="pre">click_callBack</span></code> is done the current object is automatically
 rendered with its associated view.</p>
 </div>
 <div class="section" id="use-different-views-on-the-same-page">
 <h3>Use different views on the same page<a class="headerlink" href="#use-different-views-on-the-same-page" title="Permalink to this headline">¶</a></h3>
-<p>Now, instead of changing the <code class="docutils literal"><span class="pre">title</span></code> when the link is clicked, we will display
+<p>Now, instead of changing the <code class="docutils literal notranslate"><span class="pre">title</span></code> when the link is clicked, we will display
 the wiki component with an other view.</p>
 <p>So, let’s create a new view called “clicked”:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 
 <span class="k">class</span> <span class="nc">Page</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
@@ -376,8 +376,8 @@ the wiki component with an other view.</p>
 <li>its name</li>
 <li>its content</li>
 </ul>
-<p>Open <code class="docutils literal"><span class="pre">models.py</span></code> file and add the following lines:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PageData</span><span class="p">(</span><span class="n">Entity</span><span class="p">):</span>
+<p>Open <code class="docutils literal notranslate"><span class="pre">models.py</span></code> file and add the following lines:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PageData</span><span class="p">(</span><span class="n">Entity</span><span class="p">):</span>
     <span class="n">page_name</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">page_content</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">Unicode</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="mi">1024</span><span class="p">))</span>
 </pre></div>
@@ -387,8 +387,8 @@ the wiki component with an other view.</p>
 <div class="section" id="setup-database-connection">
 <h3>Setup database connection<a class="headerlink" href="#setup-database-connection" title="Permalink to this headline">¶</a></h3>
 <p>We gonna use an SQLite database to store our wikipages.</p>
-<p>Open <code class="docutils literal"><span class="pre">mywiki.cfg</span></code> and modify its <code class="docutils literal"><span class="pre">[database]</span></code> section like this:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[database]</span>
+<p>Open <code class="docutils literal notranslate"><span class="pre">mywiki.cfg</span></code> and modify its <code class="docutils literal notranslate"><span class="pre">[database]</span></code> section like this:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[database]</span>
 <span class="na">activated</span> <span class="o">=</span> <span class="s">on</span>
 <span class="na">uri</span> <span class="o">=</span> <span class="s">sqlite:///$here/../data/mywiki.db</span>
 <span class="na">metadata</span> <span class="o">=</span> <span class="s">mywiki.models:__metadata__</span>
@@ -399,8 +399,8 @@ the wiki component with an other view.</p>
 <div class="section" id="populate-database">
 <h3>Populate database<a class="headerlink" href="#populate-database" title="Permalink to this headline">¶</a></h3>
 <p>Let’s prepare some data for our wiki</p>
-<p>Open <code class="docutils literal"><span class="pre">models.py</span></code> file and add the following lines:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">populate</span><span class="p">():</span>
+<p>Open <code class="docutils literal notranslate"><span class="pre">models.py</span></code> file and add the following lines:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">populate</span><span class="p">():</span>
     <span class="n">PageData</span><span class="p">(</span>
         <span class="n">page_name</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;FrontPage&#39;</span><span class="p">,</span>
         <span class="n">page_content</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;Welcome on my *WikiWiki* !&#39;</span>
@@ -412,8 +412,8 @@ the wiki component with an other view.</p>
     <span class="p">)</span>
 </pre></div>
 </div>
-<p>Open <code class="docutils literal"><span class="pre">mywiki.cfg</span></code> and modify its <code class="docutils literal"><span class="pre">[database]</span></code> section like this:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[database]</span>
+<p>Open <code class="docutils literal notranslate"><span class="pre">mywiki.cfg</span></code> and modify its <code class="docutils literal notranslate"><span class="pre">[database]</span></code> section like this:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[database]</span>
 <span class="na">activated</span> <span class="o">=</span> <span class="s">on</span>
 <span class="na">uri</span> <span class="o">=</span> <span class="s">sqlite:///$here/../data/mywiki.db</span>
 <span class="na">metadata</span> <span class="o">=</span> <span class="s">mywiki.models:__metadata__</span>
@@ -424,14 +424,14 @@ the wiki component with an other view.</p>
 </div>
 <div class="section" id="create-database">
 <h3>Create database<a class="headerlink" href="#create-database" title="Permalink to this headline">¶</a></h3>
-<p>Run the command <code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/bin/nagare-admin</span> <span class="pre">create-db</span> <span class="pre">mywiki</span></code>
+<p>Run the command <code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/bin/nagare-admin</span> <span class="pre">create-db</span> <span class="pre">mywiki</span></code>
 on command line. The SQLite database now contains our two pages <cite>FrontPage</cite>
 and <cite>WikiWiki</cite>.</p>
 </div>
 <div class="section" id="associate-database-object-with-our-previous-page">
 <h3>Associate database object with our previous page<a class="headerlink" href="#associate-database-object-with-our-previous-page" title="Permalink to this headline">¶</a></h3>
 <p>Now we use our previous <cite>Page</cite> object to render our page <cite>Frontpage</cite> data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">PageData</span>
 <span class="o">...</span>
 
@@ -455,9 +455,9 @@ and <cite>WikiWiki</cite>.</p>
 <p>In <cite>Frontage</cite> page there is the wiki word <cite>WikiWiki</cite>. This is the name of the
 second page inserted in our database. Let’s make this word a link
 to the <cite>WikiWiki</cite> page.</p>
-<p>first install the docutils package with the <code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/bin/easy_install</span> <span class="pre">docutils</span></code> command,
-then open <code class="docutils literal"><span class="pre">app.py</span></code> and replace its content by the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<p>first install the docutils package with the <code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/bin/easy_install</span> <span class="pre">docutils</span></code> command,
+then open <code class="docutils literal notranslate"><span class="pre">app.py</span></code> and replace its content by the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="kn">import</span> <span class="nn">docutils.core</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="n">wikiwords</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\b([A-Z]\w+[A-Z]+\w+)&#39;</span><span class="p">)</span>
@@ -504,8 +504,8 @@ then open <code class="docutils literal"><span class="pre">app.py</span></code> 
 <div class="section" id="use-form-to-modify-pages">
 <h3>Use form to modify pages<a class="headerlink" href="#use-form-to-modify-pages" title="Permalink to this headline">¶</a></h3>
 <p>To modify our wiki page, we use another object that will handle the updates.
-Let’s call it <cite>PageEditor</cite>. Open <code class="docutils literal"><span class="pre">app.py</span></code> and add the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+Let’s call it <cite>PageEditor</cite>. Open <code class="docutils literal notranslate"><span class="pre">app.py</span></code> and add the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="kn">from</span> <span class="nn">nagare.var</span> <span class="kn">import</span> <span class="n">Var</span>
 <span class="o">...</span>
 
@@ -555,9 +555,9 @@ Let’s call it <cite>PageEditor</cite>. Open <code class="docutils literal"><sp
 </pre></div>
 </div>
 <p>The <cite>call/answer</cite> mechanism is used to show up the form and handle the posted
-content. When the <code class="docutils literal"><span class="pre">call()</span></code> method is used the form is displayed and the <code class="docutils literal"><span class="pre">edit()</span></code>
+content. When the <code class="docutils literal notranslate"><span class="pre">call()</span></code> method is used the form is displayed and the <code class="docutils literal notranslate"><span class="pre">edit()</span></code>
 method is blocked awaiting an answer that should be send through the use of
-the <code class="docutils literal"><span class="pre">answer()</span></code> method. On every input of a form an action can be hooked. They are
+the <code class="docutils literal notranslate"><span class="pre">answer()</span></code> method. On every input of a form an action can be hooked. They are
 called in the <cite>input &gt; submit</cite> order.</p>
 </div>
 </div>
@@ -565,8 +565,8 @@ called in the <cite>input &gt; submit</cite> order.</p>
 <h2>Refactoring<a class="headerlink" href="#refactoring" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="merge-pages-into-a-real-wiki-app">
 <h3>Merge pages into a real wiki app<a class="headerlink" href="#merge-pages-into-a-real-wiki-app" title="Permalink to this headline">¶</a></h3>
-<p>Open <code class="docutils literal"><span class="pre">app.py</span></code> and replace the <code class="docutils literal"><span class="pre">app()</span></code> function by the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span>
+<p>Open <code class="docutils literal notranslate"><span class="pre">app.py</span></code> and replace the <code class="docutils literal notranslate"><span class="pre">app()</span></code> function by the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span>
 
 <span class="o">...</span>
 
@@ -608,8 +608,8 @@ completely disapeared from the HTML page.</p>
 </div>
 <div class="section" id="compose-components-and-views">
 <h3>Compose components and views<a class="headerlink" href="#compose-components-and-views" title="Permalink to this headline">¶</a></h3>
-<p>Open <code class="docutils literal"><span class="pre">app.py</span></code> and replace the previously inserted code by:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Wiki</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<p>Open <code class="docutils literal notranslate"><span class="pre">app.py</span></code> and replace the previously inserted code by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Wiki</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_page</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="n">Component</span><span class="p">(</span><span class="n">Page</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;FrontPage&#39;</span><span class="p">))</span>
 
@@ -643,7 +643,7 @@ completely disapeared from the HTML page.</p>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Wiki</span>
 </pre></div>
 </div>
-<p>With this new version we only change the <code class="docutils literal"><span class="pre">current_page</span></code> attribute when we
+<p>With this new version we only change the <code class="docutils literal notranslate"><span class="pre">current_page</span></code> attribute when we
 click a link to a page. The Wiki application context is preserved, e.g. the
 bottom part with the link <cite>complete list of pages</cite> is still there.</p>
 </div>
@@ -692,7 +692,7 @@ bottom part with the link <cite>complete list of pages</cite> is still there.</p
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

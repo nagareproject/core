@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>nagare.security package &mdash; Nagare 0.5.0 documentation</title>
+  <title>nagare.security package &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="../index.html"/> 
+    <link rel="top" title="Nagare 0.5.1 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -203,7 +203,7 @@
 <dl class="class">
 <dt id="nagare.security.basic_auth.Authentication">
 <em class="property">class </em><code class="descclassname">nagare.security.basic_auth.</code><code class="descname">Authentication</code><span class="sig-paren">(</span><em>realm</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.basic_auth.Authentication" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Authentication</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.security.common.Authentication</span></code></a></p>
 <p>Authentication manager for the basic HTTP authentication scheme</p>
 <dl class="method">
 <dt id="nagare.security.basic_auth.Authentication.check_password">
@@ -212,9 +212,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">username</span></code> – user id</li>
-<li><code class="docutils literal"><span class="pre">real_password</span></code> – real password of the user</li>
-<li><code class="docutils literal"><span class="pre">password</span></code> – password received</li>
+<li><code class="docutils literal notranslate"><span class="pre">username</span></code> – user id</li>
+<li><code class="docutils literal notranslate"><span class="pre">real_password</span></code> – real password of the user</li>
+<li><code class="docutils literal notranslate"><span class="pre">password</span></code> – password received</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -232,7 +232,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">details</span></code> – a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+<li><code class="docutils literal notranslate"><span class="pre">details</span></code> – a <code class="docutils literal notranslate"><span class="pre">security.common.denial</span></code> object</li>
 </ul>
 </dd>
 </dl>
@@ -245,8 +245,8 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">request</span></code> – the web request object</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the web response object</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response object</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -265,12 +265,12 @@
 <dl class="class">
 <dt id="nagare.security.common.Authentication">
 <em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Authentication</code><a class="headerlink" href="#nagare.security.common.Authentication" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>An <code class="docutils literal"><span class="pre">Authentication</span></code> object identify, authenticate and create the
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An <code class="docutils literal notranslate"><span class="pre">Authentication</span></code> object identify, authenticate and create the
 user objects</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">By definition, the user object <code class="docutils literal"><span class="pre">None</span></code> is the anonymous user</p>
+<p class="last">By definition, the user object <code class="docutils literal notranslate"><span class="pre">None</span></code> is the anonymous user</p>
 </div>
 <dl class="method">
 <dt id="nagare.security.common.Authentication.check_password">
@@ -279,9 +279,9 @@ user objects</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">username</span></code> – the user id</li>
-<li><code class="docutils literal"><span class="pre">password</span></code> – the real password of the user</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – other data for the user</li>
+<li><code class="docutils literal notranslate"><span class="pre">username</span></code> – the user id</li>
+<li><code class="docutils literal notranslate"><span class="pre">password</span></code> – the real password of the user</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – other data for the user</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -305,7 +305,7 @@ user objects</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">detail</span></code> – a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+<li><code class="docutils literal notranslate"><span class="pre">detail</span></code> – a <code class="docutils literal notranslate"><span class="pre">security.common.denial</span></code> object</li>
 </ul>
 </dd>
 </dl>
@@ -318,9 +318,9 @@ user objects</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">request</span></code> – the request object</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the response object</li>
-<li><code class="docutils literal"><span class="pre">session</span></code> – the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the request object</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the response object</li>
+<li><code class="docutils literal notranslate"><span class="pre">session</span></code> – the session</li>
 </ul>
 </dd>
 </dl>
@@ -333,8 +333,8 @@ user objects</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">request</span></code> – the web request object</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the web response object</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response object</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -352,7 +352,7 @@ user objects</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">username</span></code> – the user id</li>
+<li><code class="docutils literal notranslate"><span class="pre">username</span></code> – the user id</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -376,9 +376,9 @@ user objects</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">user</span></code> – the user</li>
-<li><code class="docutils literal"><span class="pre">id</span></code> – the user id</li>
-<li><code class="docutils literal"><span class="pre">**kw</span></code> – the user credentials</li>
+<li><code class="docutils literal notranslate"><span class="pre">user</span></code> – the user</li>
+<li><code class="docutils literal notranslate"><span class="pre">id</span></code> – the user id</li>
+<li><code class="docutils literal notranslate"><span class="pre">**kw</span></code> – the user credentials</li>
 </ul>
 </dd>
 </dl>
@@ -389,40 +389,40 @@ user objects</p>
 <dl class="exception">
 <dt id="nagare.security.common.Denial">
 <em class="property">exception </em><code class="descclassname">nagare.security.common.</code><code class="descname">Denial</code><span class="sig-paren">(</span><em>message='Access forbidden'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Denial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.BaseException</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">exceptions.BaseException</span></code></p>
 <p>Type of the objects return when an access is denied</p>
-<p>In a boolean context, it is evaluated to <code class="docutils literal"><span class="pre">False</span></code></p>
+<p>In a boolean context, it is evaluated to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.security.common.Permission">
 <em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Permission</code><a class="headerlink" href="#nagare.security.common.Permission" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class of all the permissions</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.security.common.Private">
 <em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Private</code><a class="headerlink" href="#nagare.security.common.Private" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Permission" title="nagare.security.common.Permission"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Permission</span></code></a></p>
-<p>To define the <code class="docutils literal"><span class="pre">private</span></code> permission singleton</p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Permission" title="nagare.security.common.Permission"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.security.common.Permission</span></code></a></p>
+<p>To define the <code class="docutils literal notranslate"><span class="pre">private</span></code> permission singleton</p>
 <p>Nobody has access to objects protected with this permission</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.security.common.Public">
 <em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Public</code><a class="headerlink" href="#nagare.security.common.Public" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Permission" title="nagare.security.common.Permission"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Permission</span></code></a></p>
-<p>To define the <code class="docutils literal"><span class="pre">public</span></code> permission singleton</p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Permission" title="nagare.security.common.Permission"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.security.common.Permission</span></code></a></p>
+<p>To define the <code class="docutils literal notranslate"><span class="pre">public</span></code> permission singleton</p>
 <p>Every body has access to objects protected with this permission</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.security.common.Rules">
 <em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">Rules</code><a class="headerlink" href="#nagare.security.common.Rules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Pre-defined security rules</p>
-<p>A rule is an implementation of the <code class="docutils literal"><span class="pre">security.common.Rules.has_permission()</span></code>
+<p>A rule is an implementation of the <code class="docutils literal notranslate"><span class="pre">security.common.Rules.has_permission()</span></code>
 generic method.</p>
 <dl class="method">
 <dt id="nagare.security.common.Rules.check_access_list">
@@ -448,26 +448,26 @@ for at least one permission</p>
 <dl class="method">
 <dt id="nagare.security.common.Rules.full_access">
 <code class="descname">full_access</code><span class="sig-paren">(</span><em>user</em>, <em>perm</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.full_access" title="Permalink to this definition">¶</a></dt>
-<dd><p>Everybody has access to an object protected with the <code class="docutils literal"><span class="pre">public</span></code> permission</p>
+<dd><p>Everybody has access to an object protected with the <code class="docutils literal notranslate"><span class="pre">public</span></code> permission</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="nagare.security.common.Rules.has_permission">
 <code class="descname">has_permission</code><span class="sig-paren">(</span><em>user</em>, <em>perm</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.has_permission" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <code class="docutils literal"><span class="pre">has_permission()</span></code> generic method
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">has_permission()</span></code> generic method
 and default implementation: by default all accesses are denied</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">user</span></code> – user to check the permission for</li>
-<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s) to check</li>
-<li><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permission on</li>
+<li><code class="docutils literal notranslate"><span class="pre">user</span></code> – user to check the permission for</li>
+<li><code class="docutils literal notranslate"><span class="pre">perm</span></code> – permission(s) to check</li>
+<li><code class="docutils literal notranslate"><span class="pre">subject</span></code> – object to check the permission on</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
 <li>True if the access is granted</li>
-<li>Else a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+<li>Else a <code class="docutils literal notranslate"><span class="pre">security.common.denial</span></code> object</li>
 </ul>
 </dd>
 </dl>
@@ -476,7 +476,7 @@ and default implementation: by default all accesses are denied</p>
 <dl class="method">
 <dt id="nagare.security.common.Rules.no_access">
 <code class="descname">no_access</code><span class="sig-paren">(</span><em>user</em>, <em>perm</em>, <em>subject</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.Rules.no_access" title="Permalink to this definition">¶</a></dt>
-<dd><p>Nobody has access to an object protected with the <code class="docutils literal"><span class="pre">private</span></code> permission</p>
+<dd><p>Nobody has access to an object protected with the <code class="docutils literal notranslate"><span class="pre">private</span></code> permission</p>
 </dd></dl>
 
 </dd></dl>
@@ -484,7 +484,7 @@ and default implementation: by default all accesses are denied</p>
 <dl class="class">
 <dt id="nagare.security.common.User">
 <em class="property">class </em><code class="descclassname">nagare.security.common.</code><code class="descname">User</code><span class="sig-paren">(</span><em>id=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.common.User" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for the user objects</p>
 <dl class="method">
 <dt id="nagare.security.common.User.get_id">
@@ -505,7 +505,7 @@ and default implementation: by default all accesses are denied</p>
 <dl class="class">
 <dt id="nagare.security.digest_auth.Authentication">
 <em class="property">class </em><code class="descclassname">nagare.security.digest_auth.</code><code class="descname">Authentication</code><span class="sig-paren">(</span><em>realm</em>, <em>private_key</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.digest_auth.Authentication" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Authentication</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.security.common.Authentication</span></code></a></p>
 <p>Authentication manager for the digest HTTP authentication scheme</p>
 <dl class="method">
 <dt id="nagare.security.digest_auth.Authentication.check_password">
@@ -514,11 +514,11 @@ and default implementation: by default all accesses are denied</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">username</span></code> – user id</li>
-<li><code class="docutils literal"><span class="pre">password</span></code> – real password of the user</li>
-<li><code class="docutils literal"><span class="pre">encoding</span></code> – encoding of username and password on the client</li>
-<li><code class="docutils literal"><span class="pre">response</span></code>, <code class="docutils literal"><span class="pre">realm</span></code>, <code class="docutils literal"><span class="pre">uri</span></code>, <code class="docutils literal"><span class="pre">nonce</span></code>, <code class="docutils literal"><span class="pre">nc</span></code>, <code class="docutils literal"><span class="pre">cnonce</span></code>,
-<code class="docutils literal"><span class="pre">qop</span></code> – elements of the challenge response</li>
+<li><code class="docutils literal notranslate"><span class="pre">username</span></code> – user id</li>
+<li><code class="docutils literal notranslate"><span class="pre">password</span></code> – real password of the user</li>
+<li><code class="docutils literal notranslate"><span class="pre">encoding</span></code> – encoding of username and password on the client</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code>, <code class="docutils literal notranslate"><span class="pre">realm</span></code>, <code class="docutils literal notranslate"><span class="pre">uri</span></code>, <code class="docutils literal notranslate"><span class="pre">nonce</span></code>, <code class="docutils literal notranslate"><span class="pre">nc</span></code>, <code class="docutils literal notranslate"><span class="pre">cnonce</span></code>,
+<code class="docutils literal notranslate"><span class="pre">qop</span></code> – elements of the challenge response</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -536,7 +536,7 @@ and default implementation: by default all accesses are denied</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">details</span></code> – a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+<li><code class="docutils literal notranslate"><span class="pre">details</span></code> – a <code class="docutils literal notranslate"><span class="pre">security.common.denial</span></code> object</li>
 </ul>
 </dd>
 </dl>
@@ -549,8 +549,8 @@ and default implementation: by default all accesses are denied</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">request</span></code> – the web request object</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the web response object</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response object</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -570,7 +570,7 @@ and default implementation: by default all accesses are denied</p>
 <dl class="class">
 <dt id="nagare.security.dummy_manager.Manager">
 <em class="property">class </em><code class="descclassname">nagare.security.dummy_manager.</code><code class="descname">Manager</code><a class="headerlink" href="#nagare.security.dummy_manager.Manager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Authentication</span></code></a>, <a class="reference internal" href="#nagare.security.common.Rules" title="nagare.security.common.Rules"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.common.Rules</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.common.Authentication" title="nagare.security.common.Authentication"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.security.common.Authentication</span></code></a>, <a class="reference internal" href="#nagare.security.common.Rules" title="nagare.security.common.Rules"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.security.common.Rules</span></code></a></p>
 <p>A security manager is typically a mix-in of an authentication
 manager and security rules</p>
 </dd></dl>
@@ -580,8 +580,8 @@ manager and security rules</p>
 <span id="nagare-security-form-auth-module"></span><h2>nagare.security.form_auth module<a class="headerlink" href="#module-nagare.security.form_auth" title="Permalink to this headline">¶</a></h2>
 <p>Simple form based authentication manager</p>
 <p>The id and password of the user are first searched into the parameters of
-the request. So, first, set a form with the fields names <code class="docutils literal"><span class="pre">__ac_name</span></code>
-and <code class="docutils literal"><span class="pre">__ac_password</span></code> (the prefix <code class="docutils literal"><span class="pre">__ac</span></code> is configurable).</p>
+the request. So, first, set a form with the fields names <code class="docutils literal notranslate"><span class="pre">__ac_name</span></code>
+and <code class="docutils literal notranslate"><span class="pre">__ac_password</span></code> (the prefix <code class="docutils literal notranslate"><span class="pre">__ac</span></code> is configurable).</p>
 <p>Then the user id and the password are automatically kept into a cookie,
 sent back on each request by the browser.</p>
 <div class="admonition warning">
@@ -593,7 +593,7 @@ the HTTP basic authentication.</p>
 <dl class="class">
 <dt id="nagare.security.form_auth.Authentication">
 <em class="property">class </em><code class="descclassname">nagare.security.form_auth.</code><code class="descname">Authentication</code><span class="sig-paren">(</span><em>prefix='__ac'</em>, <em>key=None</em>, <em>max_age=None</em>, <em>path='/'</em>, <em>domain=None</em>, <em>secure=None</em>, <em>httponly=False</em>, <em>comment=None</em>, <em>expires=None</em>, <em>overwrite=False</em>, <em>realm=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.form_auth.Authentication" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.security.basic_auth.Authentication" title="nagare.security.basic_auth.Authentication"><code class="xref py py-class docutils literal"><span class="pre">nagare.security.basic_auth.Authentication</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.security.basic_auth.Authentication" title="nagare.security.basic_auth.Authentication"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.security.basic_auth.Authentication</span></code></a></p>
 <p>Simple form based authentication</p>
 <dl class="method">
 <dt id="nagare.security.form_auth.Authentication.cookie_decode">
@@ -602,7 +602,7 @@ the HTTP basic authentication.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">cookie</span></code> – the data of the user cookie</li>
+<li><code class="docutils literal notranslate"><span class="pre">cookie</span></code> – the data of the user cookie</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -620,7 +620,7 @@ the HTTP basic authentication.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">ids</span></code> – a tuple of data to put into the cookie</li>
+<li><code class="docutils literal notranslate"><span class="pre">ids</span></code> – a tuple of data to put into the cookie</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -638,7 +638,7 @@ the HTTP basic authentication.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">details</span></code> – a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+<li><code class="docutils literal notranslate"><span class="pre">details</span></code> – a <code class="docutils literal notranslate"><span class="pre">security.common.denial</span></code> object</li>
 </ul>
 </dd>
 </dl>
@@ -651,9 +651,9 @@ the HTTP basic authentication.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">request</span></code> – the request object</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the response object</li>
-<li><code class="docutils literal"><span class="pre">session</span></code> – the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the request object</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the response object</li>
+<li><code class="docutils literal notranslate"><span class="pre">session</span></code> – the session</li>
 </ul>
 </dd>
 </dl>
@@ -666,7 +666,7 @@ the HTTP basic authentication.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">cookies</span></code> – cookies dictionary</li>
+<li><code class="docutils literal notranslate"><span class="pre">cookies</span></code> – cookies dictionary</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -685,7 +685,7 @@ parameter</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">params</span></code> – the request parameters</li>
+<li><code class="docutils literal notranslate"><span class="pre">params</span></code> – the request parameters</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -704,8 +704,8 @@ parameter</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">location</span></code> – location to redirect to</li>
-<li><code class="docutils literal"><span class="pre">delete_session</span></code> – is the session expired too ?</li>
+<li><code class="docutils literal notranslate"><span class="pre">location</span></code> – location to redirect to</li>
+<li><code class="docutils literal notranslate"><span class="pre">delete_session</span></code> – is the session expired too ?</li>
 </ul>
 </dd>
 </dl>
@@ -718,9 +718,9 @@ parameter</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">user</span></code> – the user</li>
-<li><code class="docutils literal"><span class="pre">id</span></code> – the user id</li>
-<li><code class="docutils literal"><span class="pre">password</span></code> – the user password</li>
+<li><code class="docutils literal notranslate"><span class="pre">user</span></code> – the user</li>
+<li><code class="docutils literal notranslate"><span class="pre">id</span></code> – the user id</li>
+<li><code class="docutils literal notranslate"><span class="pre">password</span></code> – the user password</li>
 </ul>
 </dd>
 </dl>
@@ -739,16 +739,16 @@ parameter</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – if <code class="docutils literal"><span class="pre">None</span></code> then <code class="docutils literal"><span class="pre">__action</span></code> is a function else a method</li>
-<li><code class="docutils literal"><span class="pre">__action</span></code> – function or method to call</li>
-<li><code class="docutils literal"><span class="pre">__perm</span></code> – permission(s) to check</li>
-<li><code class="docutils literal"><span class="pre">__subject</span></code> – object to check the permissions on</li>
-<li><code class="docutils literal"><span class="pre">args</span></code>, <code class="docutils literal"><span class="pre">kw</span></code> – <code class="docutils literal"><span class="pre">__action</span></code> parameters</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – if <code class="docutils literal notranslate"><span class="pre">None</span></code> then <code class="docutils literal notranslate"><span class="pre">__action</span></code> is a function else a method</li>
+<li><code class="docutils literal notranslate"><span class="pre">__action</span></code> – function or method to call</li>
+<li><code class="docutils literal notranslate"><span class="pre">__perm</span></code> – permission(s) to check</li>
+<li><code class="docutils literal notranslate"><span class="pre">__subject</span></code> – object to check the permissions on</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code>, <code class="docutils literal notranslate"><span class="pre">kw</span></code> – <code class="docutils literal notranslate"><span class="pre">__action</span></code> parameters</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">__action</span></code> return</li>
+<li><code class="docutils literal notranslate"><span class="pre">__action</span></code> return</li>
 </ul>
 </dd>
 </dl>
@@ -757,9 +757,9 @@ parameter</p>
 <dl class="function">
 <dt id="nagare.security.check_permissions">
 <code class="descclassname">nagare.security.</code><code class="descname">check_permissions</code><span class="sig-paren">(</span><em>perm</em>, <em>subject=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.check_permissions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Control that the current user has the permissions <code class="docutils literal"><span class="pre">perm</span></code>
-on the object <code class="docutils literal"><span class="pre">subject</span></code></p>
-<p>Forward the call to the generic method <code class="docutils literal"><span class="pre">has_permission()</span></code> of the
+<dd><p>Control that the current user has the permissions <code class="docutils literal notranslate"><span class="pre">perm</span></code>
+on the object <code class="docutils literal notranslate"><span class="pre">subject</span></code></p>
+<p>Forward the call to the generic method <code class="docutils literal notranslate"><span class="pre">has_permission()</span></code> of the
 current security manager.</p>
 <p>Then let the security manager acts if the permission is denied.</p>
 <div class="admonition note">
@@ -770,14 +770,14 @@ permissions</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s)</li>
-<li><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on</li>
+<li><code class="docutils literal notranslate"><span class="pre">perm</span></code> – permission(s)</li>
+<li><code class="docutils literal notranslate"><span class="pre">subject</span></code> – object to check the permissions on</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
 <li>True if the access is granted</li>
-<li>Else a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+<li>Else a <code class="docutils literal notranslate"><span class="pre">security.common.denial</span></code> object</li>
 </ul>
 </dd>
 </dl>
@@ -813,9 +813,9 @@ permissions</p>
 <dl class="function">
 <dt id="nagare.security.has_permissions">
 <code class="descclassname">nagare.security.</code><code class="descname">has_permissions</code><span class="sig-paren">(</span><em>perm</em>, <em>subject=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.has_permissions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that the current user has the permissions <code class="docutils literal"><span class="pre">perm</span></code>
-on the object <code class="docutils literal"><span class="pre">subject</span></code></p>
-<p>Forward the call to the generic method <code class="docutils literal"><span class="pre">has_permission()</span></code> of the
+<dd><p>Check that the current user has the permissions <code class="docutils literal notranslate"><span class="pre">perm</span></code>
+on the object <code class="docutils literal notranslate"><span class="pre">subject</span></code></p>
+<p>Forward the call to the generic method <code class="docutils literal notranslate"><span class="pre">has_permission()</span></code> of the
 current security manager</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -825,14 +825,14 @@ permissions</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s)</li>
-<li><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on</li>
+<li><code class="docutils literal notranslate"><span class="pre">perm</span></code> – permission(s)</li>
+<li><code class="docutils literal notranslate"><span class="pre">subject</span></code> – object to check the permissions on</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
 <li>True if the access is granted</li>
-<li>Else a <code class="docutils literal"><span class="pre">security.common.denial</span></code> object</li>
+<li>Else a <code class="docutils literal notranslate"><span class="pre">security.common.denial</span></code> object</li>
 </ul>
 </dd>
 </dl>
@@ -842,14 +842,14 @@ permissions</p>
 <dt id="nagare.security.permissions">
 <code class="descclassname">nagare.security.</code><code class="descname">permissions</code><span class="sig-paren">(</span><em>perm</em>, <em>subject=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.permissions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to check the permissions of the current user</p>
-<p>The <code class="docutils literal"><span class="pre">subject</span></code> will be the first argument of the decorated method</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">subject</span></code> will be the first argument of the decorated method</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s)</li>
+<li><code class="docutils literal notranslate"><span class="pre">perm</span></code> – permission(s)</li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on or the first argument</dt>
-<dd>of the decorated method if <code class="docutils literal"><span class="pre">None</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">subject</span></code> – object to check the permissions on or the first argument</dt>
+<dd>of the decorated method if <code class="docutils literal notranslate"><span class="pre">None</span></code></dd>
 </dl>
 </li>
 </ul>
@@ -861,14 +861,14 @@ permissions</p>
 <dt id="nagare.security.permissions_with_subject">
 <code class="descclassname">nagare.security.</code><code class="descname">permissions_with_subject</code><span class="sig-paren">(</span><em>perm</em>, <em>subject=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.security.permissions_with_subject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to check the permissions of the current user</p>
-<p>The <code class="docutils literal"><span class="pre">subject</span></code> will be the first argument of the decorated method</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">subject</span></code> will be the first argument of the decorated method</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s)</li>
+<li><code class="docutils literal notranslate"><span class="pre">perm</span></code> – permission(s)</li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on or the first argument</dt>
-<dd>of the decorated method if <code class="docutils literal"><span class="pre">None</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">subject</span></code> – object to check the permissions on or the first argument</dt>
+<dd>of the decorated method if <code class="docutils literal notranslate"><span class="pre">None</span></code></dd>
 </dl>
 </li>
 </ul>
@@ -883,7 +883,7 @@ permissions</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">manager</span></code> – the new security manager</li>
+<li><code class="docutils literal notranslate"><span class="pre">manager</span></code> – the new security manager</li>
 </ul>
 </dd>
 </dl>
@@ -896,7 +896,7 @@ permissions</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">user</span></code> – the current user</li>
+<li><code class="docutils literal notranslate"><span class="pre">user</span></code> – the current user</li>
 </ul>
 </dd>
 </dl>
@@ -909,9 +909,9 @@ permissions</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">action</span></code> – function or method to wrapper</li>
-<li><code class="docutils literal"><span class="pre">perm</span></code> – permission(s) to check</li>
-<li><code class="docutils literal"><span class="pre">subject</span></code> – object to check the permissions on</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – function or method to wrapper</li>
+<li><code class="docutils literal notranslate"><span class="pre">perm</span></code> – permission(s) to check</li>
+<li><code class="docutils literal notranslate"><span class="pre">subject</span></code> – object to check the permissions on</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -958,7 +958,7 @@ permissions</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

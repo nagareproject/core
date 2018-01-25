@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Internationalization of applications &mdash; Nagare 0.5.0 documentation</title>
+  <title>Internationalization of applications &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="The log service" href="log.html"/>
         <link rel="prev" title="The WSGI Application" href="wsgiapp.html"/> 
 
@@ -214,7 +214,7 @@
             
   <div class="section" id="internationalization-of-applications">
 <h1>Internationalization of applications<a class="headerlink" href="#internationalization-of-applications" title="Permalink to this headline">¶</a></h1>
-<p>The Nagare framework includes a <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal"><span class="pre">nagare.i18n</span></code></a> module that can help you
+<p>The Nagare framework includes a <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.i18n</span></code></a> module that can help you
 to internationalize your Web application.</p>
 <p>There are many aspects to take into account when internationalizing an application:</p>
 <ul class="simple">
@@ -225,28 +225,28 @@ language</li>
 <li>displaying the requested pages in the proper language according to the client browser language
 settings or a setting in the application</li>
 </ul>
-<p>All these aspects are addressed by the <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal"><span class="pre">nagare.i18n</span></code></a> module.</p>
+<p>All these aspects are addressed by the <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.i18n</span></code></a> module.</p>
 <div class="section" id="setup-an-application-for-internationalization">
 <h2>Setup an application for internationalization<a class="headerlink" href="#setup-an-application-for-internationalization" title="Permalink to this headline">¶</a></h2>
-<p>First, the Nagare <code class="docutils literal"><span class="pre">i18n</span></code> extras should be installed in your virtual environment:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ easy_install <span class="s2">&quot;nagare[i18n]&quot;</span>
+<p>First, the Nagare <code class="docutils literal notranslate"><span class="pre">i18n</span></code> extras should be installed in your virtual environment:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ easy_install <span class="s2">&quot;nagare[i18n]&quot;</span>
 </pre></div>
 </div>
-<p>This command installs <code class="docutils literal"><span class="pre">Babel</span></code> and <code class="docutils literal"><span class="pre">pytz</span></code> which are necessary to use the <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal"><span class="pre">nagare.i18n</span></code></a> module.</p>
+<p>This command installs <code class="docutils literal notranslate"><span class="pre">Babel</span></code> and <code class="docutils literal notranslate"><span class="pre">pytz</span></code> which are necessary to use the <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.i18n</span></code></a> module.</p>
 <p>However, if you plan to use the internationalization feature of Nagare in your Web application, you’d
-better change the <code class="docutils literal"><span class="pre">setup.py</span></code> file that is generated when you create the application, in order to specify
-that you need the <code class="docutils literal"><span class="pre">i18n</span></code> extra as a requirement:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
+better change the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file that is generated when you create the application, in order to specify
+that you need the <code class="docutils literal notranslate"><span class="pre">i18n</span></code> extra as a requirement:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
       <span class="o">...</span>
       <span class="n">install_requires</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;nagare[i18n]&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">),</span>
       <span class="o">...</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Then, Nagare will be installed with the <code class="docutils literal"><span class="pre">i18n</span></code> extra when you install your application.</p>
-<p>When you create a new application with <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">create-app</span></code>, Nagare automatically creates a
-<code class="docutils literal"><span class="pre">setup.cfg</span></code> file that contains a default configuration for internationalization:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[extract_messages]</span>
+<p>Then, Nagare will be installed with the <code class="docutils literal notranslate"><span class="pre">i18n</span></code> extra when you install your application.</p>
+<p>When you create a new application with <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">create-app</span></code>, Nagare automatically creates a
+<code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> file that contains a default configuration for internationalization:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[extract_messages]</span>
 <span class="na">keywords</span> <span class="o">=</span> <span class="s">_ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2</span>
 <span class="na">output_file</span> <span class="o">=</span> <span class="s">data/locale/messages.pot</span>
 
@@ -265,8 +265,8 @@ that you need the <code class="docutils literal"><span class="pre">i18n</span></
 <span class="na">domain</span> <span class="o">=</span> <span class="s">messages</span>
 </pre></div>
 </div>
-<p>This configuration file is used by the distutils commands that are automatically registered to <code class="docutils literal"><span class="pre">setuptools</span></code>
-when <code class="docutils literal"><span class="pre">Babel</span></code> is installed. Here is the list of the commands:</p>
+<p>This configuration file is used by the distutils commands that are automatically registered to <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>
+when <code class="docutils literal notranslate"><span class="pre">Babel</span></code> is installed. Here is the list of the commands:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="42%" />
@@ -278,31 +278,31 @@ when <code class="docutils literal"><span class="pre">Babel</span></code> is ins
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">extract_messages</span></code></td>
-<td>Extract the messages from the python sources to a <code class="docutils literal"><span class="pre">.pot</span></code> file</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">extract_messages</span></code></td>
+<td>Extract the messages from the python sources to a <code class="docutils literal notranslate"><span class="pre">.pot</span></code> file</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">init_catalog</span> <span class="pre">-l</span> <span class="pre">&lt;lang&gt;</span></code></td>
-<td>Create a new message catalog (<code class="docutils literal"><span class="pre">.po</span></code> file) for a given
-language, initialized from the <code class="docutils literal"><span class="pre">.pot</span></code> file</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">init_catalog</span> <span class="pre">-l</span> <span class="pre">&lt;lang&gt;</span></code></td>
+<td>Create a new message catalog (<code class="docutils literal notranslate"><span class="pre">.po</span></code> file) for a given
+language, initialized from the <code class="docutils literal notranslate"><span class="pre">.pot</span></code> file</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">update_catalog</span> <span class="pre">[-l</span> <span class="pre">&lt;lang&gt;</span></code>]</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">update_catalog</span> <span class="pre">[-l</span> <span class="pre">&lt;lang&gt;</span></code>]</td>
 <td>Update the message catalog(s) with the new messages found in the
-<code class="docutils literal"><span class="pre">.pot</span></code> file after an <code class="docutils literal"><span class="pre">extract_messages</span></code></td>
+<code class="docutils literal notranslate"><span class="pre">.pot</span></code> file after an <code class="docutils literal notranslate"><span class="pre">extract_messages</span></code></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">compile_catalog</span> <span class="pre">[-l</span> <span class="pre">&lt;lang&gt;</span></code>]</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">compile_catalog</span> <span class="pre">[-l</span> <span class="pre">&lt;lang&gt;</span></code>]</td>
 <td>Compile the message catalog(s) in binary form so that they can be
 used inside the application</td>
 </tr>
 </tbody>
 </table>
 <p>See the <a class="reference external" href="http://babel.pocoo.org/en/latest/setup.html">Babel setup documentation</a> for a complete reference of the commands options.</p>
-<p>The catalog files are stored in the <code class="docutils literal"><span class="pre">data/locale</span></code> directory by default.</p>
+<p>The catalog files are stored in the <code class="docutils literal notranslate"><span class="pre">data/locale</span></code> directory by default.</p>
 </div>
 <div class="section" id="marking-the-messages-to-translate">
 <h2>Marking the messages to translate<a class="headerlink" href="#marking-the-messages-to-translate" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal"><span class="pre">nagare.i18n</span></code></a> module provides functions to translate the strings that appear in your code. The most
-useful function is <code class="docutils literal"><span class="pre">nagare.i18n._</span></code> which returns the translation of the given string as a unicode string:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<p>The <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.i18n</span></code></a> module provides functions to translate the strings that appear in your code. The most
+useful function is <code class="docutils literal notranslate"><span class="pre">nagare.i18n._</span></code> which returns the translation of the given string as a unicode string:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 <span class="hll"><span class="kn">from</span> <span class="nn">nagare.i18n</span> <span class="kn">import</span> <span class="n">_</span>
 </span>
 <span class="k">class</span> <span class="nc">I18nExample</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -317,7 +317,7 @@ useful function is <code class="docutils literal"><span class="pre">nagare.i18n.
 <span class="n">app</span> <span class="o">=</span> <span class="n">I18nExample</span>
 </pre></div>
 </div>
-<p>There are also many more functions that deals with strings in the <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal"><span class="pre">nagare.i18n</span></code></a> module:</p>
+<p>There are also many more functions that deals with strings in the <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.i18n</span></code></a> module:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="41%" />
@@ -329,53 +329,53 @@ useful function is <code class="docutils literal"><span class="pre">nagare.i18n.
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">_</span></code></td>
-<td>Shortcut to <code class="docutils literal"><span class="pre">ugettext</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">_</span></code></td>
+<td>Shortcut to <code class="docutils literal notranslate"><span class="pre">ugettext</span></code></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">_N</span></code></td>
-<td>Shortcut to <code class="docutils literal"><span class="pre">ungettext</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">_N</span></code></td>
+<td>Shortcut to <code class="docutils literal notranslate"><span class="pre">ungettext</span></code></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">_L</span></code></td>
-<td>Shortcut to <code class="docutils literal"><span class="pre">lazy_ugettext</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">_L</span></code></td>
+<td>Shortcut to <code class="docutils literal notranslate"><span class="pre">lazy_ugettext</span></code></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">_LN</span></code></td>
-<td>Shortcut to <code class="docutils literal"><span class="pre">lazy_ungettext</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">_LN</span></code></td>
+<td>Shortcut to <code class="docutils literal notranslate"><span class="pre">lazy_ungettext</span></code></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">gettext</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">gettext</span></code></td>
 <td>Return the localized translation of a message as a 8-bit string
 encoded with the catalog’s charset encoding, based on the current
 locale set by Nagare</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">ugettext</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ugettext</span></code></td>
 <td>Return the localized translation of a message as a unicode string,
 based on the current locale set by Nagare</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">ngettext</span></code></td>
-<td>Like <code class="docutils literal"><span class="pre">gettext</span></code> but consider plurals forms</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ngettext</span></code></td>
+<td>Like <code class="docutils literal notranslate"><span class="pre">gettext</span></code> but consider plurals forms</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">nugettext</span></code></td>
-<td>Like <code class="docutils literal"><span class="pre">ugettext</span></code> but consider plurals forms</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">nugettext</span></code></td>
+<td>Like <code class="docutils literal notranslate"><span class="pre">ugettext</span></code> but consider plurals forms</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">lazy_gettext</span></code></td>
-<td>Like <code class="docutils literal"><span class="pre">gettext</span></code> but with lazy evaluation</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">lazy_gettext</span></code></td>
+<td>Like <code class="docutils literal notranslate"><span class="pre">gettext</span></code> but with lazy evaluation</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">lazy_ugettext</span></code></td>
-<td>Like <code class="docutils literal"><span class="pre">ugettext</span></code> but with lazy evaluation</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">lazy_ugettext</span></code></td>
+<td>Like <code class="docutils literal notranslate"><span class="pre">ugettext</span></code> but with lazy evaluation</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">lazy_ngettext</span></code></td>
-<td>Like <code class="docutils literal"><span class="pre">ngettext</span></code> but with lazy evaluation</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">lazy_ngettext</span></code></td>
+<td>Like <code class="docutils literal notranslate"><span class="pre">ngettext</span></code> but with lazy evaluation</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">lazy_nugettext</span></code></td>
-<td>Like <code class="docutils literal"><span class="pre">nugettext</span></code> but with lazy evaluation</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">lazy_nugettext</span></code></td>
+<td>Like <code class="docutils literal notranslate"><span class="pre">nugettext</span></code> but with lazy evaluation</td>
 </tr>
 </tbody>
 </table>
-<p>Note that the <code class="docutils literal"><span class="pre">lazy_*</span></code> variants don’t fetch the translation when they are evaluated. Instead Nagare automatically
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">lazy_*</span></code> variants don’t fetch the translation when they are evaluated. Instead Nagare automatically
 takes care of fetching the translation at the rendering time when it encounters a lazy translation. This is especially
 useful when you want to use translated strings in module or class constants, which are evaluated at definition
 time and consequently don’t have access to the current locale which, as you will see later, is scoped to the request.
 Here is how you would define a class constant for use in a view:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 <span class="kn">from</span> <span class="nn">nagare.i18n</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">_L</span>
 
 <span class="k">class</span> <span class="nc">I18nExample</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -396,20 +396,20 @@ Here is how you would define a class constant for use in a view:</p>
 </div>
 <div class="section" id="extracting-the-messages">
 <h2>Extracting the messages<a class="headerlink" href="#extracting-the-messages" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">Babel</span></code> automatically takes care of the messages extraction from the sources when you run the
-<code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">extract_messages</span></code> command. Specifically, when it extracts the localizable strings from the sources
+<p><code class="docutils literal notranslate"><span class="pre">Babel</span></code> automatically takes care of the messages extraction from the sources when you run the
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">extract_messages</span></code> command. Specifically, when it extracts the localizable strings from the sources
 files, it only considers the strings enclosed in specific keywords calls. The list of the supported keywords appear in
-the <code class="docutils literal"><span class="pre">setup.cfg</span></code> file:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[extract_messages]</span>
+the <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[extract_messages]</span>
 <span class="na">keywords</span> <span class="o">=</span> <span class="s">_ , _N:1,2 , _L , _LN:1,2 , gettext , ugettext , ngettext:1,2 , ungettext:1,2 , lazy_gettext , lazy_ugettext , lazy_ngettext:1,2 , lazy_ungettext:1,2</span>
 </pre></div>
 </div>
-<p>All the <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal"><span class="pre">nagare.i18n</span></code></a> functions that deal with strings appear in this list, so you don’t have to change this line
+<p>All the <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.i18n</span></code></a> functions that deal with strings appear in this list, so you don’t have to change this line
 in most cases. However, if you need to add additional translation functions, don’t forget to update the keywords
 list in this file.</p>
-<p>Furthermore, the <code class="docutils literal"><span class="pre">setup.py</span></code> file created by <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">create-app</span></code> contains a line that configures the messages
-extractors that <code class="docutils literal"><span class="pre">Babel</span></code> will use in order to extract the messages from your source files:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
+<p>Furthermore, the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file created by <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">create-app</span></code> contains a line that configures the messages
+extractors that <code class="docutils literal notranslate"><span class="pre">Babel</span></code> will use in order to extract the messages from your source files:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
       <span class="o">...</span>
       <span class="n">message_extractors</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;i18n_example&#39;</span> <span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;**.py&#39;</span><span class="p">,</span> <span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)]</span> <span class="p">},</span>
       <span class="o">...</span>
@@ -417,11 +417,11 @@ extractors that <code class="docutils literal"><span class="pre">Babel</span></c
 </pre></div>
 </div>
 <p>By default, Nagare set up an extractor for the python files. If you have other files that contain localizable
-strings (such as <code class="docutils literal"><span class="pre">.js</span></code> files), you’ll have to add additional message extractors by yourself. Please refer the
+strings (such as <code class="docutils literal notranslate"><span class="pre">.js</span></code> files), you’ll have to add additional message extractors by yourself. Please refer the
 <a class="reference external" href="http://babel.pocoo.org/en/latest/messages.html#message-extraction">Babel messages extractor documentation</a> to understand how to add additional message extractors.</p>
-<p>If you run the <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">extract_messages</span></code> command on the previous code, you should obtain a <code class="docutils literal"><span class="pre">messages.pot</span></code>
+<p>If you run the <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">extract_messages</span></code> command on the previous code, you should obtain a <code class="docutils literal notranslate"><span class="pre">messages.pot</span></code>
 file that looks like this one:</p>
-<div class="highlight-po"><div class="highlight"><pre><span></span><span class="c1"># Translations template for nagare.examples.</span>
+<div class="highlight-po notranslate"><div class="highlight"><pre><span></span><span class="c1"># Translations template for nagare.examples.</span>
 <span class="c1"># Copyright (C) 2012 ORGANIZATION</span>
 <span class="c1"># This file is distributed under the same license as the nagare.examples</span>
 <span class="c1"># project.</span>
@@ -451,40 +451,40 @@ file that looks like this one:</p>
 </pre></div>
 </div>
 <p>All the localizable strings of your application should appear in this file after extraction. Note that the string
-<code class="docutils literal"><span class="pre">This</span> <span class="pre">string</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">translated</span></code> of the previous example was not included because it was not enclosed in a call
+<code class="docutils literal notranslate"><span class="pre">This</span> <span class="pre">string</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">translated</span></code> of the previous example was not included because it was not enclosed in a call
 to a translation keyword.</p>
 </div>
 <div class="section" id="translating-the-messages">
 <h2>Translating the messages<a class="headerlink" href="#translating-the-messages" title="Permalink to this headline">¶</a></h2>
-<p>Once the <code class="docutils literal"><span class="pre">.pot</span></code> file is produced (after message extraction), you have to create a message catalog for each language
-with the help of the <code class="docutils literal"><span class="pre">init_catalog</span></code> catalog, for example:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python setup.py init_catalog -l fr
+<p>Once the <code class="docutils literal notranslate"><span class="pre">.pot</span></code> file is produced (after message extraction), you have to create a message catalog for each language
+with the help of the <code class="docutils literal notranslate"><span class="pre">init_catalog</span></code> catalog, for example:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ python setup.py init_catalog -l fr
 $ python setup.py init_catalog -l en
 </pre></div>
 </div>
-<p>Then update the <code class="docutils literal"><span class="pre">.po</span></code> files that have just been created and provide the translations for all the strings that
-do not have one. You can use either a dedicated <code class="docutils literal"><span class="pre">.po</span></code> file editor, or a simple text editor and fill the
-<code class="docutils literal"><span class="pre">msgstr</span></code> lines for each <code class="docutils literal"><span class="pre">msgid</span></code>. Please refer to the <a class="reference external" href="http://www.gnu.org/software/gettext/manual/gettext.html#PO-Files">PO Files section of the Gettext Manual</a> for more
+<p>Then update the <code class="docutils literal notranslate"><span class="pre">.po</span></code> files that have just been created and provide the translations for all the strings that
+do not have one. You can use either a dedicated <code class="docutils literal notranslate"><span class="pre">.po</span></code> file editor, or a simple text editor and fill the
+<code class="docutils literal notranslate"><span class="pre">msgstr</span></code> lines for each <code class="docutils literal notranslate"><span class="pre">msgid</span></code>. Please refer to the <a class="reference external" href="http://www.gnu.org/software/gettext/manual/gettext.html#PO-Files">PO Files section of the Gettext Manual</a> for more
 information about this process.</p>
 <p>Finally, compile the catalogs in binary form:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python setup.py compile_catalog
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ python setup.py compile_catalog
 </pre></div>
 </div>
 <p>If you change the source files and add new messages to translate, you have to update the message catalogs:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python setup.py extract_messages
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ python setup.py extract_messages
 $ python setup.py update_catalog
 </pre></div>
 </div>
-<p>Then, fill in the missing translations in the <code class="docutils literal"><span class="pre">.po</span></code> files and compile the catalogs again.</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python setup.py compile_catalog
+<p>Then, fill in the missing translations in the <code class="docutils literal notranslate"><span class="pre">.po</span></code> files and compile the catalogs again.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ python setup.py compile_catalog
 </pre></div>
 </div>
 </div>
 <div class="section" id="formatting-numbers-dates-times-currencies-and-dealing-with-timezones">
 <h2>Formatting numbers, dates, times, currencies and dealing with timezones<a class="headerlink" href="#formatting-numbers-dates-times-currencies-and-dealing-with-timezones" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal"><span class="pre">nagare.i18n</span></code></a> module also defines functions for formatting numbers, dates, times, currencies and for timezones
+<p>The <a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.i18n</span></code></a> module also defines functions for formatting numbers, dates, times, currencies and for timezones
 calculations, according to the locale of the user. We have grouped these functions by category. See the Nagare
-<a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal"><span class="pre">nagare.i18n</span></code></a> API documentation for more information on these functions.</p>
+<a class="reference internal" href="source/nagare.html#module-nagare.i18n" title="nagare.i18n"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nagare.i18n</span></code></a> API documentation for more information on these functions.</p>
 <div class="section" id="numbers">
 <h3>Numbers<a class="headerlink" href="#numbers" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
@@ -498,37 +498,37 @@ calculations, according to the locale of the user. We have grouped these functio
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_decimal_symbol</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_decimal_symbol</span></code></td>
 <td>Return the symbol used to separate decimal fractions</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">get_plus_sign_symbol</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">get_plus_sign_symbol</span></code></td>
 <td>Return the plus sign symbol</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_minus_sign_symbol</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_minus_sign_symbol</span></code></td>
 <td>Return the minus sign symbol</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">get_exponential_symbol</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">get_exponential_symbol</span></code></td>
 <td>Return the symbol used to separate mantissa and exponent</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_group_symbol</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_group_symbol</span></code></td>
 <td>Return the symbol used to separate groups of thousands</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">format_number</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">format_number</span></code></td>
 <td>Return the given integer number formatted</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">format_decimal</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">format_decimal</span></code></td>
 <td>Return the given decimal number formatted</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">format_percent</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">format_percent</span></code></td>
 <td>Return the formatted percentage value</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">format_scientific</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">format_scientific</span></code></td>
 <td>Return the value formatted in scientific notation, e.g. 1.23E06</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">parse_number</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">parse_number</span></code></td>
 <td>Parse the localized number string into a long integer</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">parse_decimal</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">parse_decimal</span></code></td>
 <td>Parse the localized decimal string into a float</td>
 </tr>
 </tbody>
@@ -547,13 +547,13 @@ calculations, according to the locale of the user. We have grouped these functio
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_currency_name</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_currency_name</span></code></td>
 <td>Return the name used for the specified currency</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">get_currency_symbol</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">get_currency_symbol</span></code></td>
 <td>Return the symbol used for the specified currency</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">format_currency</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">format_currency</span></code></td>
 <td>Return the formatted currency value</td>
 </tr>
 </tbody>
@@ -572,60 +572,60 @@ calculations, according to the locale of the user. We have grouped these functio
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_period_names</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_period_names</span></code></td>
 <td>Return the names for day periods (AM/PM)</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">get_day_names</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">get_day_names</span></code></td>
 <td>Return the day names in the specified format</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_month_names</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_month_names</span></code></td>
 <td>Return the month names in the specified format</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">get_quarter_names</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">get_quarter_names</span></code></td>
 <td>Return the quarter names in the specified format</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_era_names</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_era_names</span></code></td>
 <td>Return the era names used in the specified format</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">get_date_format</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">get_date_format</span></code></td>
 <td>Return the date formatting pattern in the specified format</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_datetime_format</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_datetime_format</span></code></td>
 <td>Return the datetime formatting pattern in the specified format</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">get_time_format</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">get_time_format</span></code></td>
 <td>Return the time formatting pattern in the specified format</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_timezone_gmt</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_timezone_gmt</span></code></td>
 <td>Return the timezone associated with the given datetime object,
 formatted as a string indicating the offset from GMT</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">get_timezone_location</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">get_timezone_location</span></code></td>
 <td>Return a representation of the given timezone using the “location
 format”, i.e. the human-readable name of the timezone</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">get_timezone_name</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">get_timezone_name</span></code></td>
 <td>Return the localized display name for the given timezone</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">format_time</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">format_time</span></code></td>
 <td>Return a time formatted according to the given pattern</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">format_date</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">format_date</span></code></td>
 <td>Return a date formatted according to the given pattern</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">format_datetime</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">format_datetime</span></code></td>
 <td>Return a datetime formatted according to the given pattern</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">parse_time</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">parse_time</span></code></td>
 <td>Parse a time from a string</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">parse_date</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">parse_date</span></code></td>
 <td>Parse a date from a string</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">to_timezone</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">to_timezone</span></code></td>
 <td>Return a localized datetime object</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">to_utc</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">to_utc</span></code></td>
 <td>Return a UTC datetime object</td>
 </tr>
 </tbody>
@@ -638,8 +638,8 @@ format”, i.e. the human-readable name of the timezone</td>
 <em>language setting</em>. There are many ways to implement a language setting:</p>
 <ul class="simple">
 <li>use a per-application setting, for example provide the language setting in the application configuration</li>
-<li>use the client browser language settings, i.e. deal with the <code class="docutils literal"><span class="pre">Accept-Language</span></code> headers from the HTTP request</li>
-<li>use a URL prefix, for example <code class="docutils literal"><span class="pre">/en</span></code> for english and <code class="docutils literal"><span class="pre">/fr</span></code> for french (see <a class="reference internal" href="restful.html"><span class="doc">Significative “RESTful” URLs</span></a> to learn how
+<li>use the client browser language settings, i.e. deal with the <code class="docutils literal notranslate"><span class="pre">Accept-Language</span></code> headers from the HTTP request</li>
+<li>use a URL prefix, for example <code class="docutils literal notranslate"><span class="pre">/en</span></code> for english and <code class="docutils literal notranslate"><span class="pre">/fr</span></code> for french (see <a class="reference internal" href="restful.html"><span class="doc">Significative “RESTful” URLs</span></a> to learn how
 to set up URLs)</li>
 <li>use a per-user setting: for example, read the locale setting from a user profile stored in a database</li>
 <li>use a per-session setting, for example store the language setting as an attribute of a component
@@ -647,11 +647,11 @@ file</li>
 </ul>
 <p>You may even want to combine two or more of these schemes in your application!  As you will see next, Nagare makes
 it easy to change the locale at runtime, it doesn’t really matter where the language setting comes from.</p>
-<p>The locale can be changed with either the <a class="reference internal" href="source/nagare.html#nagare.wsgi.WSGIApp.set_default_locale" title="nagare.wsgi.WSGIApp.set_default_locale"><code class="xref py py-class docutils literal"><span class="pre">nagare.wsgi.WSGIApp.set_default_locale</span></code></a> method or the <a class="reference internal" href="source/nagare.html#nagare.wsgi.WSGIApp.set_locale" title="nagare.wsgi.WSGIApp.set_locale"><code class="xref py py-class docutils literal"><span class="pre">nagare.wsgi.WSGIApp.set_locale</span></code></a> method.</p>
+<p>The locale can be changed with either the <a class="reference internal" href="source/nagare.html#nagare.wsgi.WSGIApp.set_default_locale" title="nagare.wsgi.WSGIApp.set_default_locale"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.wsgi.WSGIApp.set_default_locale</span></code></a> method or the <a class="reference internal" href="source/nagare.html#nagare.wsgi.WSGIApp.set_locale" title="nagare.wsgi.WSGIApp.set_locale"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.wsgi.WSGIApp.set_locale</span></code></a> method.</p>
 <div class="section" id="example-1-application-wide-locale">
 <h3>Example 1: application-wide locale<a class="headerlink" href="#example-1-application-wide-locale" title="Permalink to this headline">¶</a></h3>
-<p>Use the <code class="docutils literal"><span class="pre">set_default_locale()</span></code> if the locale if only set once for the application:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">wsgi</span><span class="p">,</span> <span class="mi">18</span><span class="n">n</span>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">set_default_locale()</span></code> if the locale if only set once for the application:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">wsgi</span><span class="p">,</span> <span class="mi">18</span><span class="n">n</span>
 
 <span class="k">class</span> <span class="nc">I18nExampleApp</span><span class="p">(</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIApp</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_factory</span><span class="p">):</span>
@@ -661,7 +661,7 @@ it easy to change the locale at runtime, it doesn’t really matter where the la
 </pre></div>
 </div>
 <p>or:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">wsgi</span><span class="p">,</span> <span class="mi">18</span><span class="n">n</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">wsgi</span><span class="p">,</span> <span class="mi">18</span><span class="n">n</span>
 
 <span class="k">class</span> <span class="nc">I18nExampleApp</span><span class="p">(</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIApp</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">set_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_filename</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">error</span><span class="p">):</span>
@@ -677,13 +677,13 @@ it easy to change the locale at runtime, it doesn’t really matter where the la
 </div>
 <div class="section" id="example-2-using-a-negociated-browser-locale">
 <h3>Example 2: using a negociated browser locale<a class="headerlink" href="#example-2-using-a-negociated-browser-locale" title="Permalink to this headline">¶</a></h3>
-<p>Use the <code class="docutils literal"><span class="pre">set_locale()</span></code> method if the locale can change between requests.</p>
-<p>The best place where to change the locale is in the <a class="reference internal" href="source/nagare.html#nagare.wsgi.WSGIApp.start_request" title="nagare.wsgi.WSGIApp.start_request"><code class="xref py py-class docutils literal"><span class="pre">nagare.wsgi.WSGIApp.start_request</span></code></a> method
+<p>Use the <code class="docutils literal notranslate"><span class="pre">set_locale()</span></code> method if the locale can change between requests.</p>
+<p>The best place where to change the locale is in the <a class="reference internal" href="source/nagare.html#nagare.wsgi.WSGIApp.start_request" title="nagare.wsgi.WSGIApp.start_request"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.wsgi.WSGIApp.start_request</span></code></a> method
 since we have access to both the request and to the authenticated user (when necessary)
 there. Furthermore, since a user may change his language setting between two requests, the locale setting is scoped
 to the HTTP request by design in Nagare.</p>
 <p>As an illustration, let’s use a negociated browser locale:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">wsgi</span><span class="p">,</span> <span class="n">i18n</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">wsgi</span><span class="p">,</span> <span class="n">i18n</span>
 
 <span class="o">...</span>
 
@@ -708,22 +708,22 @@ to the HTTP request by design in Nagare.</p>
 <span class="n">app</span> <span class="o">=</span> <span class="n">I18nExampleApp</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">component</span><span class="o">.</span><span class="n">Component</span><span class="p">(</span><span class="n">I18nExample</span><span class="p">()))</span>
 </pre></div>
 </div>
-<p>We first create an application class that inherit from <code class="docutils literal"><span class="pre">wsgi.WSGIApp</span></code> so that we can override the default
-<code class="docutils literal"><span class="pre">start_request</span></code> behavior in order to install a negociated browser locale.</p>
-<p>Since we must pass the list of the available locales to the <code class="docutils literal"><span class="pre">i18n.NegotiatedLocale</span></code> constructor, we define a
-<code class="docutils literal"><span class="pre">AVAILABLE_LANGUAGES</span></code> class constant. The available locales should be given as a list of <code class="docutils literal"><span class="pre">(language,</span> <span class="pre">territory)</span></code>
+<p>We first create an application class that inherit from <code class="docutils literal notranslate"><span class="pre">wsgi.WSGIApp</span></code> so that we can override the default
+<code class="docutils literal notranslate"><span class="pre">start_request</span></code> behavior in order to install a negociated browser locale.</p>
+<p>Since we must pass the list of the available locales to the <code class="docutils literal notranslate"><span class="pre">i18n.NegotiatedLocale</span></code> constructor, we define a
+<code class="docutils literal notranslate"><span class="pre">AVAILABLE_LANGUAGES</span></code> class constant. The available locales should be given as a list of <code class="docutils literal notranslate"><span class="pre">(language,</span> <span class="pre">territory)</span></code>
 tuples. The territory has been omitted here since we don’t use territory variants of the languages yet.</p>
-<p>The <a class="reference internal" href="source/nagare.html#nagare.i18n.NegotiatedLocale" title="nagare.i18n.NegotiatedLocale"><code class="xref py py-class docutils literal"><span class="pre">nagare.i18n.NegotiatedLocale</span></code></a> constructor accepts
+<p>The <a class="reference internal" href="source/nagare.html#nagare.i18n.NegotiatedLocale" title="nagare.i18n.NegotiatedLocale"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.i18n.NegotiatedLocale</span></code></a> constructor accepts
 the request as first parameter, the list of the available locales as second parameter and some optional parameters.
-It examines the <code class="docutils literal"><span class="pre">Accept-Language</span></code> headers of the request in order to determine the best locale to use for the
-current request according to the available locales. The <code class="docutils literal"><span class="pre">default_locale</span></code> optional parameter can be used to define
-the default <code class="docutils literal"><span class="pre">(language,</span> <span class="pre">territory)</span></code> value when the negociation fails.</p>
+It examines the <code class="docutils literal notranslate"><span class="pre">Accept-Language</span></code> headers of the request in order to determine the best locale to use for the
+current request according to the available locales. The <code class="docutils literal notranslate"><span class="pre">default_locale</span></code> optional parameter can be used to define
+the default <code class="docutils literal notranslate"><span class="pre">(language,</span> <span class="pre">territory)</span></code> value when the negociation fails.</p>
 </div>
 <div class="section" id="example-3-using-a-per-session-locale-setting">
 <h3>Example 3: using a per-session locale setting<a class="headerlink" href="#example-3-using-a-per-session-locale-setting" title="Permalink to this headline">¶</a></h3>
 <p>Let’s show another example: we will allow the user to change the language setting using links and store the setting
 in the session in order to persist the change for the next requests. Here is the code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Encoding: utf-8</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Encoding: utf-8</span>
 <span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">wsgi</span><span class="p">,</span> <span class="n">i18n</span><span class="p">,</span> <span class="n">var</span>
 <span class="kn">from</span> <span class="nn">nagare.i18n</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">_L</span>
 
@@ -780,19 +780,19 @@ in the session in order to persist the change for the next requests. Here is the
 <span class="n">app</span> <span class="o">=</span> <span class="n">I18nExampleApp</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">component</span><span class="o">.</span><span class="n">Component</span><span class="p">(</span><span class="n">I18nExample</span><span class="p">()))</span>
 </pre></div>
 </div>
-<p>We moved the <code class="docutils literal"><span class="pre">AVAILABLE_LANGUAGES</span></code> list to the <code class="docutils literal"><span class="pre">I18nExample</span></code> component since we’ll show a list of
+<p>We moved the <code class="docutils literal notranslate"><span class="pre">AVAILABLE_LANGUAGES</span></code> list to the <code class="docutils literal notranslate"><span class="pre">I18nExample</span></code> component since we’ll show a list of
 language change links in its view.</p>
-<p>In the associated view, we iterate the <code class="docutils literal"><span class="pre">AVAILABLE_LANGUAGES</span></code> list in order to display a link for each language.
-The links actions call the <code class="docutils literal"><span class="pre">set_language</span></code> method, passing the associated language code to it.</p>
-<p>The <code class="docutils literal"><span class="pre">I18nExample.set_language</span></code> method performs two operations. First, it remembers the language setting as an
+<p>In the associated view, we iterate the <code class="docutils literal notranslate"><span class="pre">AVAILABLE_LANGUAGES</span></code> list in order to display a link for each language.
+The links actions call the <code class="docutils literal notranslate"><span class="pre">set_language</span></code> method, passing the associated language code to it.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">I18nExample.set_language</span></code> method performs two operations. First, it remembers the language setting as an
 attribute. Since the component will be pickled into the session after the request, the language
 setting is effectively stored in the session and will be back in the next request when the session is unpickled.
-The language setting is then used in the <code class="docutils literal"><span class="pre">I18nExampleApp.start_request</span></code> method for reinstalling the locale for
+The language setting is then used in the <code class="docutils literal notranslate"><span class="pre">I18nExampleApp.start_request</span></code> method for reinstalling the locale for
 subsequent requests.</p>
 <p>Second, it changes the locale in the current request so that the
 rendering of the component is immediately affected by the change. However, we can’t call
-<code class="docutils literal"><span class="pre">I18nExampleApp.set_locale</span></code> here, because we don’t have access to the application instance from the component.
-Instead, we have to install the locale ourselves by calling the <code class="docutils literal"><span class="pre">i18n.set_locale</span></code> directly.</p>
+<code class="docutils literal notranslate"><span class="pre">I18nExampleApp.set_locale</span></code> here, because we don’t have access to the application instance from the component.
+Instead, we have to install the locale ourselves by calling the <code class="docutils literal notranslate"><span class="pre">i18n.set_locale</span></code> directly.</p>
 <p>These three examples explain the basics for setting the locale in a Nagare application. Real-world implementations may
 store the language setting by other means (see the list at the top-most paragraph of this section) and use a
 combination of these two techniques.</p>
@@ -842,7 +842,7 @@ combination of these two techniques.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

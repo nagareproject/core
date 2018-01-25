@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Demo installation &mdash; Nagare 0.5.0 documentation</title>
+  <title>Demo installation &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Demo upgrade" href="demo_upgrade.html"/>
         <link rel="prev" title="Entry points" href="entry_points.html"/> 
 
@@ -204,11 +204,11 @@
 <div class="section" id="installation">
 <h2>1. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>To install the demonstration, enter the command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install nagare.examples
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install nagare.examples
 </pre></div>
 </div>
 <p>or, in Windows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">NAGARE_HOME</span><span class="o">&gt;</span>\<span class="n">Scripts</span>\<span class="n">easy_install</span><span class="o">.</span><span class="n">exe</span> <span class="n">nagare</span><span class="o">.</span><span class="n">examples</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">NAGARE_HOME</span><span class="o">&gt;</span>\<span class="n">Scripts</span>\<span class="n">easy_install</span><span class="o">.</span><span class="n">exe</span> <span class="n">nagare</span><span class="o">.</span><span class="n">examples</span>
 </pre></div>
 </div>
 </div>
@@ -216,18 +216,18 @@
 <h2>2. Developers installation<a class="headerlink" href="#developers-installation" title="Permalink to this headline">¶</a></h2>
 <p>If you want to work with the latest demo sources, first grab the sources from
 the repository:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;NAGARE_HOME&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;NAGARE_HOME&gt;
 git clone https://github.com/nagareproject/examples.git
 </pre></div>
 </div>
 <p>Second, install the demo from the sources:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> examples
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> examples
 &lt;NAGARE_HOME&gt;/bin/python setup.py develop
 </pre></div>
 </div>
-<p>You can now work with the sources of the demo in <code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/examples/nagare</span></code>
+<p>You can now work with the sources of the demo in <code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/examples/nagare</span></code>
 and, when you want to update the sources from the repository, do:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;NAGARE_HOME&gt;/examples
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;NAGARE_HOME&gt;/examples
 git pull
 &lt;NAGARE_HOME&gt;/bin/python setup.py develop
 </pre></div>
@@ -237,15 +237,15 @@ git pull
 <h2>3. Lauching the demo applications<a class="headerlink" href="#lauching-the-demo-applications" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">On windows, replace the command <code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/bin/nagare-admin</span></code> by
-<code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;\Scripts\nagare-admin.exe</span></code></p>
+<p class="last">On windows, replace the command <code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/bin/nagare-admin</span></code> by
+<code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;\Scripts\nagare-admin.exe</span></code></p>
 </div>
 <p>To check the installation, the command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve
 </pre></div>
 </div>
 <p>must display the applications installed with the demo:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>Available applications:
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>Available applications:
   - admin
   - demo
   - gallery
@@ -254,26 +254,26 @@ git pull
 </pre></div>
 </div>
 <p>To launch the “demo” application, enter:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve demo
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve demo
 </pre></div>
 </div>
 <p>and browse to <a class="reference external" href="http://127.0.0.1:8080/demo">http://127.0.0.1:8080/demo</a>.</p>
 <p>The “wiki”, “gallery” and “portal” applications need a database so the extra step
 of the database creation is required before to launch them.</p>
 <p>To launch the “wiki” application, enter the commands:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db wiki
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db wiki
 &lt;NAGARE_HOME&gt;/bin/nagare-admin serve wiki
 </pre></div>
 </div>
 <p>and browse to <a class="reference external" href="http://127.0.0.1:8080/wiki">http://127.0.0.1:8080/wiki</a>.</p>
 <p>for the “gallery” application, enter the commands:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db gallery
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db gallery
 &lt;NAGARE_HOME&gt;/bin/nagare-admin serve gallery
 </pre></div>
 </div>
 <p>and browse to <a class="reference external" href="http://127.0.0.1:8080/gallery">http://127.0.0.1:8080/gallery</a>.</p>
 <p>or, for the “portal” application:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db portal
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db portal
 &lt;NAGARE_HOME&gt;/bin/nagare-admin serve portal
 </pre></div>
 </div>
@@ -323,7 +323,7 @@ of the database creation is required before to launch them.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

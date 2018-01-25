@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>nagare.namespaces package &mdash; Nagare 0.5.0 documentation</title>
+  <title>nagare.namespaces package &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="../index.html"/> 
+    <link rel="top" title="Nagare 0.5.1 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -218,7 +218,7 @@
 <dl class="class">
 <dt id="nagare.namespaces.common.Renderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.common.</code><code class="descname">Renderer</code><a class="headerlink" href="#nagare.namespaces.common.Renderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="nagare.namespaces.common.Renderer.end_rendering">
 <code class="descname">end_rendering</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.common.Renderer.end_rendering" title="Permalink to this definition">¶</a></dt>
@@ -226,7 +226,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">output</span></code> – the rendering tree</li>
+<li><code class="docutils literal notranslate"><span class="pre">output</span></code> – the rendering tree</li>
 </ul>
 </dd>
 </dl>
@@ -239,7 +239,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">prefix</span></code> – prefix of the generated id</li>
+<li><code class="docutils literal notranslate"><span class="pre">prefix</span></code> – prefix of the generated id</li>
 </ul>
 </dd>
 </dl>
@@ -258,8 +258,8 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">comp</span></code> – the component to render</li>
-<li><code class="docutils literal"><span class="pre">model</span></code> – the view to render</li>
+<li><code class="docutils literal notranslate"><span class="pre">comp</span></code> – the component to render</li>
+<li><code class="docutils literal notranslate"><span class="pre">model</span></code> – the view to render</li>
 </ul>
 </dd>
 </dl>
@@ -274,7 +274,7 @@
 <dl class="class">
 <dt id="nagare.namespaces.esi.Renderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.esi.</code><code class="descname">Renderer</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.esi.Renderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
 <p>The ESI renderer</p>
 <dl class="attribute">
 <dt id="nagare.namespaces.esi.Renderer.attempt">
@@ -300,11 +300,11 @@
 <dl class="method">
 <dt id="nagare.namespaces.esi.Renderer.esi">
 <code class="descname">esi</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.esi.Renderer.esi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a <code class="docutils literal"><span class="pre">esi</span></code> comment element</p>
+<dd><p>Generate a <code class="docutils literal notranslate"><span class="pre">esi</span></code> comment element</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">text</span></code> – comment text</li>
+<li><code class="docutils literal notranslate"><span class="pre">text</span></code> – comment text</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -381,8 +381,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.A">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">A</code><a class="headerlink" href="#nagare.namespaces.xhtml.A" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;a&gt;</span></code> tags</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;a&gt;</span></code> tags</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.A.async_action">
 <code class="descname">async_action</code><span class="sig-paren">(</span><em>renderer</em>, <em>action</em>, <em>with_request</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.A.async_action" title="Permalink to this definition">¶</a></dt>
@@ -390,9 +390,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -405,9 +405,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -418,13 +418,13 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.AsyncHeadRenderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">AsyncHeadRenderer</code><span class="sig-paren">(</span><em>static_url</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.AsyncHeadRenderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml.HeadRenderer" title="nagare.namespaces.xhtml.HeadRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml.HeadRenderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml.HeadRenderer" title="nagare.namespaces.xhtml.HeadRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml.HeadRenderer</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.AsyncRenderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">AsyncRenderer</code><span class="sig-paren">(</span><em>parent=None</em>, <em>session=None</em>, <em>request=None</em>, <em>response=None</em>, <em>static_url=''</em>, <em>static_path=''</em>, <em>url='/'</em>, <em>async_header=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.AsyncRenderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a></p>
 <p>The XHTML asynchronous renderer</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.AsyncRenderer.AsyncRenderer">
@@ -459,9 +459,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">tag</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">tag</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -474,7 +474,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">output</span></code> – rendered tree</li>
+<li><code class="docutils literal notranslate"><span class="pre">output</span></code> – rendered tree</li>
 </ul>
 </dd>
 <dt>Out:</dt>
@@ -493,7 +493,7 @@
 <dl class="attribute">
 <dt id="nagare.namespaces.xhtml.AsyncRenderer.head_renderer_factory">
 <code class="descname">head_renderer_factory</code><a class="headerlink" href="#nagare.namespaces.xhtml.AsyncRenderer.head_renderer_factory" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#nagare.namespaces.xhtml.AsyncHeadRenderer" title="nagare.namespaces.xhtml.AsyncHeadRenderer"><code class="xref py py-class docutils literal"><span class="pre">AsyncHeadRenderer</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="#nagare.namespaces.xhtml.AsyncHeadRenderer" title="nagare.namespaces.xhtml.AsyncHeadRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncHeadRenderer</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
@@ -504,15 +504,24 @@
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.AsyncRenderer.start_rendering">
 <code class="descname">start_rendering</code><span class="sig-paren">(</span><em>component</em>, <em>model</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.AsyncRenderer.start_rendering" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Method called before to render a component</p>
+<dl class="docutils">
+<dt>In:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">component</span></code> – component to render</li>
+<li><code class="docutils literal notranslate"><span class="pre">model</span></code> – name of the view to use</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.CheckboxInput">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">CheckboxInput</code><a class="headerlink" href="#nagare.namespaces.xhtml.CheckboxInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal"><span class="pre">type=checkbox</span></code> attributes</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal notranslate"><span class="pre">type=checkbox</span></code> attributes</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.CheckboxInput.async_action">
 <code class="descname">async_action</code><span class="sig-paren">(</span><em>renderer</em>, <em>action</em>, <em>with_request</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.CheckboxInput.async_action" title="Permalink to this definition">¶</a></dt>
@@ -520,9 +529,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -535,12 +544,12 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">flag</span></code> – boolean to deselect / select the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">flag</span></code> – boolean to deselect / select the tag</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -551,8 +560,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.FileInput">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">FileInput</code><a class="headerlink" href="#nagare.namespaces.xhtml.FileInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal"><span class="pre">type=file</span></code> attributes</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal notranslate"><span class="pre">type=file</span></code> attributes</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.FileInput.async_action">
 <code class="descname">async_action</code><span class="sig-paren">(</span><em>renderer</em>, <em>action</em>, <em>with_request</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.FileInput.async_action" title="Permalink to this definition">¶</a></dt>
@@ -560,9 +569,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -575,12 +584,12 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -591,13 +600,13 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.Form">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">Form</code><a class="headerlink" href="#nagare.namespaces.xhtml.Form" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
-<p>The <code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> tag</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;form&gt;</span></code> tag</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Form.add_child">
 <code class="descname">add_child</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Form.add_child" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a child to this <code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> tag</p>
-<p>Delete the existing <code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> tags in the child tree</p>
+<dd><p>Add a child to this <code class="docutils literal notranslate"><span class="pre">&lt;form&gt;</span></code> tag</p>
+<p>Delete the existing <code class="docutils literal notranslate"><span class="pre">&lt;form&gt;</span></code> tags in the child tree</p>
 </dd></dl>
 
 <dl class="method">
@@ -607,12 +616,12 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -620,12 +629,12 @@
 
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Form.post_action">
-<code class="descname">post_action</code><span class="sig-paren">(</span><em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Form.post_action" title="Permalink to this definition">¶</a></dt>
+<code class="descname">post_action</code><span class="sig-paren">(</span><em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Form.post_action" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Form.pre_action">
-<code class="descname">pre_action</code><span class="sig-paren">(</span><em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Form.pre_action" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pre_action</code><span class="sig-paren">(</span><em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Form.pre_action" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -633,7 +642,7 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.HeadRenderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">HeadRenderer</code><span class="sig-paren">(</span><em>static_url</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.HeadRenderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml_base.HeadRenderer" title="nagare.namespaces.xhtml_base.HeadRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml_base.HeadRenderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml_base.HeadRenderer" title="nagare.namespaces.xhtml_base.HeadRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml_base.HeadRenderer</span></code></a></p>
 <p>The XHTML head Renderer</p>
 <p>This renderer knows about the static contents of the application</p>
 <dl class="method">
@@ -643,14 +652,14 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">name</span></code> – unique name of this css style (to prevent double definition)</li>
-<li><code class="docutils literal"><span class="pre">style</span></code> – the css style</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – attributes of the generated <code class="docutils literal"><span class="pre">&lt;style&gt;</span></code> tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – unique name of this css style (to prevent double definition)</li>
+<li><code class="docutils literal notranslate"><span class="pre">style</span></code> – the css style</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – attributes of the generated <code class="docutils literal notranslate"><span class="pre">&lt;style&gt;</span></code> tag</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">()</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">()</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -663,13 +672,13 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">url</span></code> – the css style URL</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – attributes of the generated <code class="docutils literal"><span class="pre">&lt;link&gt;</span></code> tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">url</span></code> – the css style URL</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – attributes of the generated <code class="docutils literal notranslate"><span class="pre">&lt;link&gt;</span></code> tag</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">()</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">()</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -682,14 +691,14 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">name</span></code> – unique name of this javascript code (to prevent double definition)</li>
-<li><code class="docutils literal"><span class="pre">script</span></code> – the javascript code</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – attributes of the generated <code class="docutils literal"><span class="pre">&lt;script&gt;</span></code> tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – unique name of this javascript code (to prevent double definition)</li>
+<li><code class="docutils literal notranslate"><span class="pre">script</span></code> – the javascript code</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – attributes of the generated <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> tag</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">()</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">()</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -702,13 +711,13 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">url</span></code> – the javascript URL</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – attributes of the the generated <code class="docutils literal"><span class="pre">&lt;script&gt;</span></code> tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">url</span></code> – the javascript URL</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – attributes of the the generated <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> tag</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">()</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">()</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -719,8 +728,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.HiddenInput">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">HiddenInput</code><a class="headerlink" href="#nagare.namespaces.xhtml.HiddenInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal"><span class="pre">type=hidden</span></code> attributes</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal notranslate"><span class="pre">type=hidden</span></code> attributes</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.HiddenInput.async_action">
 <code class="descname">async_action</code><span class="sig-paren">(</span><em>renderer</em>, <em>action</em>, <em>with_request</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.HiddenInput.async_action" title="Permalink to this definition">¶</a></dt>
@@ -728,9 +737,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -741,8 +750,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.ImageInput">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">ImageInput</code><a class="headerlink" href="#nagare.namespaces.xhtml.ImageInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal"><span class="pre">type=image</span></code> attributes</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal notranslate"><span class="pre">type=image</span></code> attributes</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.ImageInput.add_child">
 <code class="descname">add_child</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.ImageInput.add_child" title="Permalink to this definition">¶</a></dt>
@@ -750,7 +759,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">child</span></code> – attributes dictionary</li>
+<li><code class="docutils literal notranslate"><span class="pre">child</span></code> – attributes dictionary</li>
 </ul>
 </dd>
 </dl>
@@ -761,8 +770,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.Img">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">Img</code><a class="headerlink" href="#nagare.namespaces.xhtml.Img" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;img&gt;</span></code> tags</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;img&gt;</span></code> tags</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Img.add_child">
 <code class="descname">add_child</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Img.add_child" title="Permalink to this definition">¶</a></dt>
@@ -770,7 +779,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">child</span></code> – attributes dictionary</li>
+<li><code class="docutils literal notranslate"><span class="pre">child</span></code> – attributes dictionary</li>
 </ul>
 </dd>
 </dl>
@@ -784,11 +793,11 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
-<li><code class="docutils literal"><span class="pre">permissions</span></code> – permissions needed to execute the action</li>
-<li><code class="docutils literal"><span class="pre">subject</span></code> – subject to test the permissions on</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">permissions</span></code> – permissions needed to execute the action</li>
+<li><code class="docutils literal notranslate"><span class="pre">subject</span></code> – subject to test the permissions on</li>
 </ul>
 </dd>
 </dl>
@@ -802,11 +811,11 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
-<li><code class="docutils literal"><span class="pre">permissions</span></code> – permissions needed to execute the action</li>
-<li><code class="docutils literal"><span class="pre">subject</span></code> – subject to test the permissions on</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">permissions</span></code> – permissions needed to execute the action</li>
+<li><code class="docutils literal notranslate"><span class="pre">subject</span></code> – subject to test the permissions on</li>
 </ul>
 </dd>
 </dl>
@@ -817,8 +826,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.Label">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">Label</code><a class="headerlink" href="#nagare.namespaces.xhtml.Label" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;label&gt;</span></code> tags</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;label&gt;</span></code> tags</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Label.init">
 <code class="descname">init</code><span class="sig-paren">(</span><em>renderer</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Label.init" title="Permalink to this definition">¶</a></dt>
@@ -826,12 +835,12 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -842,8 +851,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.Option">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">Option</code><a class="headerlink" href="#nagare.namespaces.xhtml.Option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;options&gt;</span></code> tags</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;options&gt;</span></code> tags</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Option.selected">
 <code class="descname">selected</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Option.selected" title="Permalink to this definition">¶</a></dt>
@@ -851,12 +860,12 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">values</span></code> – name or list of names of the tags to select</li>
+<li><code class="docutils literal notranslate"><span class="pre">values</span></code> – name or list of names of the tags to select</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -867,8 +876,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.PasswordInput">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">PasswordInput</code><a class="headerlink" href="#nagare.namespaces.xhtml.PasswordInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal"><span class="pre">type=password</span></code> attributes</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal notranslate"><span class="pre">type=password</span></code> attributes</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.PasswordInput.async_action">
 <code class="descname">async_action</code><span class="sig-paren">(</span><em>renderer</em>, <em>action</em>, <em>with_request</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.PasswordInput.async_action" title="Permalink to this definition">¶</a></dt>
@@ -876,9 +885,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -889,8 +898,8 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.RadioInput">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">RadioInput</code><a class="headerlink" href="#nagare.namespaces.xhtml.RadioInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal"><span class="pre">type=radio</span></code> attributes</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal notranslate"><span class="pre">type=radio</span></code> attributes</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.RadioInput.async_action">
 <code class="descname">async_action</code><span class="sig-paren">(</span><em>renderer</em>, <em>action</em>, <em>with_request</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.RadioInput.async_action" title="Permalink to this definition">¶</a></dt>
@@ -898,9 +907,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -913,12 +922,12 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">flag</span></code> – boolean to deselect / select the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">flag</span></code> – boolean to deselect / select the tag</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -929,7 +938,7 @@
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.Renderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">Renderer</code><span class="sig-paren">(</span><em>parent=None</em>, <em>session=None</em>, <em>request=None</em>, <em>response=None</em>, <em>static_url=''</em>, <em>static_path=''</em>, <em>url='/'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Renderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml_base.Renderer" title="nagare.namespaces.xhtml_base.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml_base.Renderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml_base.Renderer" title="nagare.namespaces.xhtml_base.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml_base.Renderer</span></code></a></p>
 <p>The XHTML synchronous renderer</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Renderer.AsyncRenderer">
@@ -981,9 +990,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">tag</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">tag</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -992,12 +1001,12 @@
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Renderer.add_sessionid_in_form">
 <code class="descname">add_sessionid_in_form</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Renderer.add_sessionid_in_form" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the session and continuation ids into a <code class="docutils literal"><span class="pre">&lt;form&gt;</span></code></p>
+<dd><p>Add the session and continuation ids into a <code class="docutils literal notranslate"><span class="pre">&lt;form&gt;</span></code></p>
 <p>Forward this call to the sessions manager</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">form</span></code> – the form tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">form</span></code> – the form tag</li>
 </ul>
 </dd>
 </dl>
@@ -1011,8 +1020,8 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">u</span></code> – the url</li>
-<li><code class="docutils literal"><span class="pre">params</span></code> – query string of the url</li>
+<li><code class="docutils literal notranslate"><span class="pre">u</span></code> – the url</li>
+<li><code class="docutils literal notranslate"><span class="pre">params</span></code> – query string of the url</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1043,7 +1052,7 @@
 <dd><p>Class initialisation</p>
 <dl class="docutils">
 <dt>In:</dt>
-<dd>– <code class="docutils literal"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
+<dd>– <code class="docutils literal notranslate"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
 </dl>
 </dd></dl>
 
@@ -1069,8 +1078,8 @@ Else, use the HTML ou XHTML content type of this renderer</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">element</span></code> – the element in error</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the error text</li>
+<li><code class="docutils literal notranslate"><span class="pre">element</span></code> – the element in error</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the error text</li>
 </ul>
 </dd>
 </dl>
@@ -1101,7 +1110,7 @@ Else, use the HTML ou XHTML doctypes of this renderer</p>
 <dl class="attribute">
 <dt id="nagare.namespaces.xhtml.Renderer.head_renderer_factory">
 <code class="descname">head_renderer_factory</code><a class="headerlink" href="#nagare.namespaces.xhtml.Renderer.head_renderer_factory" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#nagare.namespaces.xhtml.HeadRenderer" title="nagare.namespaces.xhtml.HeadRenderer"><code class="xref py py-class docutils literal"><span class="pre">HeadRenderer</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="#nagare.namespaces.xhtml.HeadRenderer" title="nagare.namespaces.xhtml.HeadRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeadRenderer</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1132,7 +1141,7 @@ Else, use the HTML ou XHTML doctypes of this renderer</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">tag</span></code> – name of the tag to create</li>
+<li><code class="docutils literal notranslate"><span class="pre">tag</span></code> – name of the tag to create</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1157,19 +1166,19 @@ Else, use the HTML ou XHTML doctypes of this renderer</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">source</span></code> – can be a filename or a file object</li>
-<li><code class="docutils literal"><span class="pre">fragment</span></code> – if <code class="docutils literal"><span class="pre">True</span></code>, can parse a HTML fragment i.e a HTML without
+<li><code class="docutils literal notranslate"><span class="pre">source</span></code> – can be a filename or a file object</li>
+<li><code class="docutils literal notranslate"><span class="pre">fragment</span></code> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, can parse a HTML fragment i.e a HTML without
 a unique root</li>
-<li><code class="docutils literal"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, <code class="docutils literal"><span class="pre">no_leading_text</span></code>
-is <code class="docutils literal"><span class="pre">False</span></code> and the HTML to parsed begins by a text, this text is keeped</li>
-<li><code class="docutils literal"><span class="pre">xhtml</span></code> – is the HTML to parse a valid XHTML ?</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – keywords parameters are passed to the HTML parser</li>
+<li><code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code>
+is <code class="docutils literal notranslate"><span class="pre">False</span></code> and the HTML to parsed begins by a text, this text is keeped</li>
+<li><code class="docutils literal notranslate"><span class="pre">xhtml</span></code> – is the HTML to parse a valid XHTML ?</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – keywords parameters are passed to the HTML parser</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the root element of the parsed HTML, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">False</span></code></li>
-<li>a list of HTML elements, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code></li>
+<li>the root element of the parsed HTML, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li>a list of HTML elements, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -1182,18 +1191,18 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">source</span></code> – can be a filename or a file object</li>
-<li><code class="docutils literal"><span class="pre">fragment</span></code> – if <code class="docutils literal"><span class="pre">True</span></code>, can parse a XML fragment i.e a XML without
+<li><code class="docutils literal notranslate"><span class="pre">source</span></code> – can be a filename or a file object</li>
+<li><code class="docutils literal notranslate"><span class="pre">fragment</span></code> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, can parse a XML fragment i.e a XML without
 a unique root</li>
-<li><code class="docutils literal"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, <code class="docutils literal"><span class="pre">no_leading_text</span></code>
-is <code class="docutils literal"><span class="pre">False</span></code> and the XML to parsed begins by a text, this text is keeped</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – keywords parameters are passed to the XML parser</li>
+<li><code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code>
+is <code class="docutils literal notranslate"><span class="pre">False</span></code> and the XML to parsed begins by a text, this text is keeped</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – keywords parameters are passed to the XML parser</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the root element of the parsed XML, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">False</span></code></li>
-<li>a list of XML elements, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code></li>
+<li>the root element of the parsed XML, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li>a list of XML elements, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -1207,10 +1216,10 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">priority</span></code> - -priority of the action</li>
-<li><code class="docutils literal"><span class="pre">f</span></code> – the action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
-<li><code class="docutils literal"><span class="pre">render</span></code> – render method to generate the view after the <code class="docutils literal"><span class="pre">f</span></code> action will be called</li>
+<li><code class="docutils literal notranslate"><span class="pre">priority</span></code> - -priority of the action</li>
+<li><code class="docutils literal notranslate"><span class="pre">f</span></code> – the action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">render</span></code> – render method to generate the view after the <code class="docutils literal notranslate"><span class="pre">f</span></code> action will be called</li>
 </ul>
 </dd>
 </dl>
@@ -1237,8 +1246,8 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">component</span></code> – component to render</li>
-<li><code class="docutils literal"><span class="pre">model</span></code> – name of the view to use</li>
+<li><code class="docutils literal notranslate"><span class="pre">component</span></code> – component to render</li>
+<li><code class="docutils literal notranslate"><span class="pre">model</span></code> – name of the view to use</li>
 </ul>
 </dd>
 </dl>
@@ -1263,17 +1272,17 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.Script">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">Script</code><a class="headerlink" href="#nagare.namespaces.xhtml.Script" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.Select">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">Select</code><a class="headerlink" href="#nagare.namespaces.xhtml.Select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;select&gt;</span></code> tags</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;select&gt;</span></code> tags</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.Select.action">
-<code class="descname">action</code><span class="sig-paren">(</span><em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Select.action" title="Permalink to this definition">¶</a></dt>
+<code class="descname">action</code><span class="sig-paren">(</span><em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.Select.action" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1283,9 +1292,9 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -1306,24 +1315,24 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.Style">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">Style</code><a class="headerlink" href="#nagare.namespaces.xhtml.Style" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.SubmitInput">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">SubmitInput</code><a class="headerlink" href="#nagare.namespaces.xhtml.SubmitInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal"><span class="pre">type=submit</span></code> attributes</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> tags with <code class="docutils literal notranslate"><span class="pre">type=submit</span></code> attributes</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.TextArea">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">TextArea</code><a class="headerlink" href="#nagare.namespaces.xhtml.TextArea" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p><code class="docutils literal"><span class="pre">&lt;textarea&gt;</span></code> tags</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;textarea&gt;</span></code> tags</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.TextArea.action">
-<code class="descname">action</code><span class="sig-paren">(</span><em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.TextArea.action" title="Permalink to this definition">¶</a></dt>
+<code class="descname">action</code><span class="sig-paren">(</span><em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.TextArea.action" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1333,9 +1342,9 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -1356,8 +1365,8 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml.TextInput">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">TextInput</code><a class="headerlink" href="#nagare.namespaces.xhtml.TextInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
-<p>Dispatcher class for all the <code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tags</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<p>Dispatcher class for all the <code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> tags</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml.TextInput.async_action">
 <code class="descname">async_action</code><span class="sig-paren">(</span><em>renderer</em>, <em>action</em>, <em>with_request</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.TextInput.async_action" title="Permalink to this definition">¶</a></dt>
@@ -1365,9 +1374,9 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -1382,8 +1391,8 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">url</span></code> – url to convert</li>
-<li><code class="docutils literal"><span class="pre">static</span></code> – URL prefix of the static contents</li>
+<li><code class="docutils literal notranslate"><span class="pre">url</span></code> – url to convert</li>
+<li><code class="docutils literal notranslate"><span class="pre">static</span></code> – URL prefix of the static contents</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1397,13 +1406,13 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="function">
 <dt id="nagare.namespaces.xhtml.add_ajax_attribute">
 <code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">add_ajax_attribute</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.add_ajax_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an attribute with a <code class="docutils literal"><span class="pre">ajax.Update</span></code> value</p>
+<dd><p>Add an attribute with a <code class="docutils literal notranslate"><span class="pre">ajax.Update</span></code> value</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">name</span></code> – name of the attribute</li>
-<li><code class="docutils literal"><span class="pre">value</span></code> – <code class="docutils literal"><span class="pre">ajax.Update</span></code> value</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – name of the attribute</li>
+<li><code class="docutils literal notranslate"><span class="pre">value</span></code> – <code class="docutils literal notranslate"><span class="pre">ajax.Update</span></code> value</li>
 </ul>
 </dd>
 </dl>
@@ -1421,9 +1430,9 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">name</span></code> – name of the attribute</li>
-<li><code class="docutils literal"><span class="pre">value</span></code> – function value</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – name of the attribute</li>
+<li><code class="docutils literal notranslate"><span class="pre">value</span></code> – function value</li>
 </ul>
 </dd>
 </dl>
@@ -1432,13 +1441,13 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="function">
 <dt id="nagare.namespaces.xhtml.add_js_attribute">
 <code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">add_js_attribute</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.add_js_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an attribute with a <code class="docutils literal"><span class="pre">ajax.JS</span></code> value</p>
+<dd><p>Add an attribute with a <code class="docutils literal notranslate"><span class="pre">ajax.JS</span></code> value</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">name</span></code> – name of the attribute</li>
-<li><code class="docutils literal"><span class="pre">value</span></code> – <code class="docutils literal"><span class="pre">ajax.JS</span></code> value</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – name of the attribute</li>
+<li><code class="docutils literal notranslate"><span class="pre">value</span></code> – <code class="docutils literal notranslate"><span class="pre">ajax.JS</span></code> value</li>
 </ul>
 </dd>
 </dl>
@@ -1451,9 +1460,9 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">name</span></code> – name of the attribute</li>
-<li><code class="docutils literal"><span class="pre">value</span></code> – method value</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – name of the attribute</li>
+<li><code class="docutils literal notranslate"><span class="pre">value</span></code> – method value</li>
 </ul>
 </dd>
 </dl>
@@ -1466,8 +1475,8 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">script</span></code> – the script to add</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">script</span></code> – the script to add</li>
 </ul>
 </dd>
 </dl>
@@ -1480,8 +1489,8 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">style</span></code> – the style to add</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">style</span></code> – the style to add</li>
 </ul>
 </dd>
 </dl>
@@ -1490,16 +1499,16 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="function">
 <dt id="nagare.namespaces.xhtml.render">
 <code class="descclassname">nagare.namespaces.xhtml.</code><code class="descname">render</code><span class="sig-paren">(</span><em>self</em>, <em>h</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate the <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code> tree</p>
+<dd><p>Generate the <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code> tree</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">h</span></code> – <em>not used</em></li>
+<li><code class="docutils literal notranslate"><span class="pre">h</span></code> – <em>not used</em></li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code> tree</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code> tree</li>
 </ul>
 </dd>
 </dl>
@@ -1512,7 +1521,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">h</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">h</span></code> – the current renderer</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1530,7 +1539,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml5.AsyncRenderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml5.</code><code class="descname">AsyncRenderer</code><span class="sig-paren">(</span><em>parent=None</em>, <em>session=None</em>, <em>request=None</em>, <em>response=None</em>, <em>static_url=''</em>, <em>static_path=''</em>, <em>url='/'</em>, <em>async_header=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml5.AsyncRenderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml.AsyncRenderer" title="nagare.namespaces.xhtml.AsyncRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml.AsyncRenderer</span></code></a>, <a class="reference internal" href="#nagare.namespaces.xhtml5.Renderer" title="nagare.namespaces.xhtml5.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml5.Renderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml.AsyncRenderer" title="nagare.namespaces.xhtml.AsyncRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml.AsyncRenderer</span></code></a>, <a class="reference internal" href="#nagare.namespaces.xhtml5.Renderer" title="nagare.namespaces.xhtml5.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml5.Renderer</span></code></a></p>
 <p>The XHTML5 asynchronous renderer</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml5.AsyncRenderer.SyncRenderer">
@@ -1550,7 +1559,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml5.Input">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml5.</code><code class="descname">Input</code><a class="headerlink" href="#nagare.namespaces.xhtml5.Input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml._HTMLActionTag</span></code></p>
 <p>Class of all the new input types of HTML5</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml5.Input.async_action">
@@ -1559,9 +1568,9 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">renderer</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">action</span></code> – action</li>
-<li><code class="docutils literal"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
+<li><code class="docutils literal notranslate"><span class="pre">renderer</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">action</span></code> – action</li>
+<li><code class="docutils literal notranslate"><span class="pre">with_request</span></code> – will the request and response objects be passed to the action?</li>
 </ul>
 </dd>
 </dl>
@@ -1572,14 +1581,14 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml5.ObsoleteTagProp">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml5.</code><code class="descname">ObsoleteTagProp</code><span class="sig-paren">(</span><em>name</em>, <em>authorized_attribs=None</em>, <em>factory=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml5.ObsoleteTagProp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.TagProp" title="nagare.namespaces.xml.TagProp"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xml.TagProp</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.TagProp" title="nagare.namespaces.xml.TagProp"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xml.TagProp</span></code></a></p>
 <p>Class of all the HTML4 tags obsolete in HTML5</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml5.Renderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml5.</code><code class="descname">Renderer</code><span class="sig-paren">(</span><em>parent=None</em>, <em>session=None</em>, <em>request=None</em>, <em>response=None</em>, <em>static_url=''</em>, <em>static_path=''</em>, <em>url='/'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml5.Renderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a></p>
 <p>The XHTML5 synchronous renderer</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml5.Renderer.AsyncRenderer">
@@ -1668,7 +1677,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dd><p>Class initialisation</p>
 <dl class="docutils">
 <dt>In:</dt>
-<dd>– <code class="docutils literal"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
+<dd>– <code class="docutils literal notranslate"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
 </dl>
 </dd></dl>
 
@@ -1919,7 +1928,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xhtml5.Source">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml5.</code><code class="descname">Source</code><a class="headerlink" href="#nagare.namespaces.xhtml5.Source" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml_base._HTMLTag</span></code></p>
 <p>The &lt;source&gt; tag</p>
 <dl class="method">
 <dt id="nagare.namespaces.xhtml5.Source.add_child">
@@ -1933,14 +1942,14 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <div class="section" id="module-nagare.namespaces.xhtml_base">
 <span id="nagare-namespaces-xhtml-base-module"></span><h2>nagare.namespaces.xhtml_base module<a class="headerlink" href="#module-nagare.namespaces.xhtml_base" title="Permalink to this headline">¶</a></h2>
 <p>The XHTML renderer</p>
-<p>This renderer only depends of the <code class="docutils literal"><span class="pre">nagare.namespaces.xml</span></code> module.
+<p>This renderer only depends of the <code class="docutils literal notranslate"><span class="pre">nagare.namespaces.xml</span></code> module.
 Having not dependencies to the framework make it suitable to be used in others frameworks.</p>
 <dl class="class">
 <dt id="nagare.namespaces.xhtml_base.HeadRenderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml_base.</code><code class="descname">HeadRenderer</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml_base.HeadRenderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
 <p>The XHTML head Renderer</p>
-<p>This renderer knows about the possible tags of a html <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code></p>
+<p>This renderer knows about the possible tags of a html <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code></p>
 <dl class="attribute">
 <dt id="nagare.namespaces.xhtml_base.HeadRenderer.base">
 <code class="descname">base</code><a class="headerlink" href="#nagare.namespaces.xhtml_base.HeadRenderer.base" title="Permalink to this definition">¶</a></dt>
@@ -1954,7 +1963,7 @@ Having not dependencies to the framework make it suitable to be used in others f
 <dd><p>Class initialisation</p>
 <dl class="docutils">
 <dt>In:</dt>
-<dd>– <code class="docutils literal"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
+<dd>– <code class="docutils literal notranslate"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
 </dl>
 </dd></dl>
 
@@ -2005,7 +2014,7 @@ Having not dependencies to the framework make it suitable to be used in others f
 <dl class="class">
 <dt id="nagare.namespaces.xhtml_base.Renderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xhtml_base.</code><code class="descname">Renderer</code><span class="sig-paren">(</span><em>parent=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xhtml_base.Renderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.namespaces.xhtml_base.Renderer.a">
 <code class="descname">a</code><a class="headerlink" href="#nagare.namespaces.xhtml_base.Renderer.a" title="Permalink to this definition">¶</a></dt>
@@ -2146,7 +2155,7 @@ Having not dependencies to the framework make it suitable to be used in others f
 <dd><p>Class initialisation</p>
 <dl class="docutils">
 <dt>In:</dt>
-<dd>– <code class="docutils literal"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
+<dd>– <code class="docutils literal notranslate"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
 </dl>
 </dd></dl>
 
@@ -2329,7 +2338,7 @@ Having not dependencies to the framework make it suitable to be used in others f
 <dl class="attribute">
 <dt id="nagare.namespaces.xhtml_base.Renderer.head_renderer_factory">
 <code class="descname">head_renderer_factory</code><a class="headerlink" href="#nagare.namespaces.xhtml_base.Renderer.head_renderer_factory" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#nagare.namespaces.xhtml_base.HeadRenderer" title="nagare.namespaces.xhtml_base.HeadRenderer"><code class="xref py py-class docutils literal"><span class="pre">HeadRenderer</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="#nagare.namespaces.xhtml_base.HeadRenderer" title="nagare.namespaces.xhtml_base.HeadRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeadRenderer</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -2428,7 +2437,7 @@ Having not dependencies to the framework make it suitable to be used in others f
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">tag</span></code> – name of the tag to create</li>
+<li><code class="docutils literal notranslate"><span class="pre">tag</span></code> – name of the tag to create</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -2516,19 +2525,19 @@ Having not dependencies to the framework make it suitable to be used in others f
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">source</span></code> – can be a filename or a file object</li>
-<li><code class="docutils literal"><span class="pre">fragment</span></code> – if <code class="docutils literal"><span class="pre">True</span></code>, can parse a HTML fragment i.e a HTML without
+<li><code class="docutils literal notranslate"><span class="pre">source</span></code> – can be a filename or a file object</li>
+<li><code class="docutils literal notranslate"><span class="pre">fragment</span></code> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, can parse a HTML fragment i.e a HTML without
 a unique root</li>
-<li><code class="docutils literal"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, <code class="docutils literal"><span class="pre">no_leading_text</span></code>
-is <code class="docutils literal"><span class="pre">False</span></code> and the HTML to parsed begins by a text, this text is keeped</li>
-<li><code class="docutils literal"><span class="pre">xhtml</span></code> – is the HTML to parse a valid XHTML ?</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – keywords parameters are passed to the HTML parser</li>
+<li><code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code>
+is <code class="docutils literal notranslate"><span class="pre">False</span></code> and the HTML to parsed begins by a text, this text is keeped</li>
+<li><code class="docutils literal notranslate"><span class="pre">xhtml</span></code> – is the HTML to parse a valid XHTML ?</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – keywords parameters are passed to the HTML parser</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the root element of the parsed HTML, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">False</span></code></li>
-<li>a list of HTML elements, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code></li>
+<li>the root element of the parsed HTML, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li>a list of HTML elements, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -2541,20 +2550,20 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">text</span></code> – can be a <code class="docutils literal"><span class="pre">str</span></code> or <code class="docutils literal"><span class="pre">unicode</span></code> strings</li>
-<li><code class="docutils literal"><span class="pre">source</span></code> – can be a filename or a file object</li>
-<li><code class="docutils literal"><span class="pre">fragment</span></code> – if <code class="docutils literal"><span class="pre">True</span></code>, can parse a HTML fragment i.e a HTML without
+<li><code class="docutils literal notranslate"><span class="pre">text</span></code> – can be a <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">unicode</span></code> strings</li>
+<li><code class="docutils literal notranslate"><span class="pre">source</span></code> – can be a filename or a file object</li>
+<li><code class="docutils literal notranslate"><span class="pre">fragment</span></code> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, can parse a HTML fragment i.e a HTML without
 a unique root</li>
-<li><code class="docutils literal"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, <code class="docutils literal"><span class="pre">no_leading_text</span></code>
-is <code class="docutils literal"><span class="pre">False</span></code> and the HTML to parsed begins by a text, this text is keeped</li>
-<li><code class="docutils literal"><span class="pre">xhtml</span></code> – is the HTML to parse a valid XHTML ?</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – keywords parameters are passed to the HTML parser</li>
+<li><code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code>
+is <code class="docutils literal notranslate"><span class="pre">False</span></code> and the HTML to parsed begins by a text, this text is keeped</li>
+<li><code class="docutils literal notranslate"><span class="pre">xhtml</span></code> – is the HTML to parse a valid XHTML ?</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – keywords parameters are passed to the HTML parser</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the root element of the parsed HTML, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">False</span></code></li>
-<li>a list of HTML elements, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code></li>
+<li>the root element of the parsed HTML, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li>a list of HTML elements, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -2749,8 +2758,8 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">element</span></code> – the tag to add</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">element</span></code> – the tag to add</li>
 </ul>
 </dd>
 </dl>
@@ -2763,10 +2772,10 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xml.Renderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xml.</code><code class="descname">Renderer</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xml.Renderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
 <p>The XML Renderer</p>
 <p>This renderer generate any tags you give</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">foo</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span><span class="o">.</span><span class="n">write_xmlstring</span><span class="p">()</span>
 <span class="go">&#39;&lt;foo&gt;&lt;bar/&gt;&lt;/foo&gt;&#39;</span>
 </pre></div>
@@ -2776,16 +2785,16 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xml.RendererMetaClass">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xml.</code><code class="descname">RendererMetaClass</code><a class="headerlink" href="#nagare.namespaces.xml.RendererMetaClass" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">type</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
 <p>Meta class for the renderer class</p>
 <p>Discover the tags that have a special factory and pass them to the
-<code class="docutils literal"><span class="pre">class_init()</span></code> method of the class</p>
+<code class="docutils literal notranslate"><span class="pre">class_init()</span></code> method of the class</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.namespaces.xml.TagProp">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xml.</code><code class="descname">TagProp</code><span class="sig-paren">(</span><em>name</em>, <em>authorized_attribs=None</em>, <em>factory=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xml.TagProp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Tag factory with a behavior of an object attribute</p>
 <p>Each time this attribute is read, a new tag is created</p>
 </dd></dl>
@@ -2793,7 +2802,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xml.XmlRenderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xml.</code><code class="descname">XmlRenderer</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xml.XmlRenderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.common.Renderer" title="nagare.namespaces.common.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.common.Renderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.common.Renderer" title="nagare.namespaces.common.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.common.Renderer</span></code></a></p>
 <p>The base class of all the renderers that generate a XML dialect</p>
 <dl class="classmethod">
 <dt id="nagare.namespaces.xml.XmlRenderer.class_init">
@@ -2801,7 +2810,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dd><p>Class initialisation</p>
 <dl class="docutils">
 <dt>In:</dt>
-<dd>– <code class="docutils literal"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
+<dd>– <code class="docutils literal notranslate"><span class="pre">special_tags</span></code> – tags that have a special factory</dd>
 </dl>
 </dd></dl>
 
@@ -2812,7 +2821,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">text</span></code> – text of the comment</li>
+<li><code class="docutils literal notranslate"><span class="pre">text</span></code> – text of the comment</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -2835,7 +2844,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the default namespace or <code class="docutils literal"><span class="pre">None</span></code> if no default namespace was set</li>
+<li>the default namespace or <code class="docutils literal notranslate"><span class="pre">None</span></code> if no default namespace was set</li>
 </ul>
 </dd>
 </dl>
@@ -2849,16 +2858,16 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="method">
 <dt id="nagare.namespaces.xml.XmlRenderer.enter">
 <code class="descname">enter</code><span class="sig-paren">(</span><em>current</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xml.XmlRenderer.enter" title="Permalink to this definition">¶</a></dt>
-<dd><p>A new tag is pushed by a <code class="docutils literal"><span class="pre">with</span></code> statement</p>
+<dd><p>A new tag is pushed by a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">current</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">current</span></code> – the tag</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">current</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">current</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -2867,7 +2876,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="method">
 <dt id="nagare.namespaces.xml.XmlRenderer.exit">
 <code class="descname">exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xml.XmlRenderer.exit" title="Permalink to this definition">¶</a></dt>
-<dd><p>End of a <code class="docutils literal"><span class="pre">with</span></code> statement</p>
+<dd><p>End of a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement</p>
 </dd></dl>
 
 <dl class="method">
@@ -2877,7 +2886,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">tag</span></code> – name of the tag to create</li>
+<li><code class="docutils literal notranslate"><span class="pre">tag</span></code> – name of the tag to create</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -2895,18 +2904,18 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">source</span></code> – can be a filename or a file object</li>
-<li><code class="docutils literal"><span class="pre">fragment</span></code> – if <code class="docutils literal"><span class="pre">True</span></code>, can parse a XML fragment i.e a XML without
+<li><code class="docutils literal notranslate"><span class="pre">source</span></code> – can be a filename or a file object</li>
+<li><code class="docutils literal notranslate"><span class="pre">fragment</span></code> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, can parse a XML fragment i.e a XML without
 a unique root</li>
-<li><code class="docutils literal"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, <code class="docutils literal"><span class="pre">no_leading_text</span></code>
-is <code class="docutils literal"><span class="pre">False</span></code> and the XML to parsed begins by a text, this text is keeped</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – keywords parameters are passed to the XML parser</li>
+<li><code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code>
+is <code class="docutils literal notranslate"><span class="pre">False</span></code> and the XML to parsed begins by a text, this text is keeped</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – keywords parameters are passed to the XML parser</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the root element of the parsed XML, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">False</span></code></li>
-<li>a list of XML elements, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code></li>
+<li>the root element of the parsed XML, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li>a list of XML elements, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -2919,18 +2928,18 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">text</span></code> – can be a <code class="docutils literal"><span class="pre">str</span></code> or <code class="docutils literal"><span class="pre">unicode</span></code> string</li>
-<li><code class="docutils literal"><span class="pre">fragment</span></code> – if <code class="docutils literal"><span class="pre">True</span></code>, can parse a XML fragment i.e a XML without
+<li><code class="docutils literal notranslate"><span class="pre">text</span></code> – can be a <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">unicode</span></code> string</li>
+<li><code class="docutils literal notranslate"><span class="pre">fragment</span></code> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, can parse a XML fragment i.e a XML without
 a unique root</li>
-<li><code class="docutils literal"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, <code class="docutils literal"><span class="pre">no_leading_text</span></code>
-is <code class="docutils literal"><span class="pre">False</span></code> and the XML to parsed begins by a text, this text is keeped</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – keywords parameters are passed to the XML parser</li>
+<li><code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code> – if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code>
+is <code class="docutils literal notranslate"><span class="pre">False</span></code> and the XML to parsed begins by a text, this text is keeped</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – keywords parameters are passed to the XML parser</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the root element of the parsed XML, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">False</span></code></li>
-<li>a list of XML elements, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code></li>
+<li>the root element of the parsed XML, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li>a list of XML elements, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -2943,9 +2952,9 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">target</span></code> – the PI target</li>
-<li><code class="docutils literal"><span class="pre">text</span></code> – the PI text</li>
-<li><code class="docutils literal"><span class="pre">kw</span></code> – pseudo attributes</li>
+<li><code class="docutils literal notranslate"><span class="pre">target</span></code> – the PI target</li>
+<li><code class="docutils literal notranslate"><span class="pre">text</span></code> – the PI text</li>
+<li><code class="docutils literal notranslate"><span class="pre">kw</span></code> – pseudo attributes</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -2982,9 +2991,9 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">name</span></code> – name of the attribute to add</li>
-<li><code class="docutils literal"><span class="pre">value</span></code> – value of the attribute to add</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – name of the attribute to add</li>
+<li><code class="docutils literal notranslate"><span class="pre">value</span></code> – value of the attribute to add</li>
 </ul>
 </dd>
 </dl>
@@ -2997,12 +3006,12 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the tag</li>
-<li><code class="docutils literal"><span class="pre">o</span></code> – object to add</li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the tag</li>
+<li><code class="docutils literal notranslate"><span class="pre">o</span></code> – object to add</li>
 </ul>
 </dd>
 </dl>
-<p>Try to add the result of <code class="docutils literal"><span class="pre">o.render()</span></code> to the tag</p>
+<p>Try to add the result of <code class="docutils literal notranslate"><span class="pre">o.render()</span></code> to the tag</p>
 </dd></dl>
 
 </div>
@@ -3012,7 +3021,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
 <dl class="class">
 <dt id="nagare.namespaces.xsl.Renderer">
 <em class="property">class </em><code class="descclassname">nagare.namespaces.xsl.</code><code class="descname">Renderer</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.namespaces.xsl.Renderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.namespaces.xml.XmlRenderer" title="nagare.namespaces.xml.XmlRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xml.XmlRenderer</span></code></a></p>
 <p>The XSL renderer</p>
 <dl class="attribute">
 <dt id="nagare.namespaces.xsl.Renderer.apply_imports">
@@ -3305,7 +3314,7 @@ is <code class="docutils literal"><span class="pre">False</span></code> and the 
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

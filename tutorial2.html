@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Nagare Tutorial, learning concepts &mdash; Nagare 0.5.0 documentation</title>
+  <title>Nagare Tutorial, learning concepts &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Nagare Tutorial, learning concepts" href="tutorial3.html"/>
         <link rel="prev" title="Nagare Tutorial, learning concepts" href="tutorial1.html"/> 
 
@@ -208,20 +208,20 @@
 <div class="section" id="part-2-modify-the-default-application">
 <h2>Part 2. Modify the default application<a class="headerlink" href="#part-2-modify-the-default-application" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">With <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">create-app</span></code> a complete <code class="docutils literal"><span class="pre">setuptools</span></code> compatible package is created.
+<li><p class="first">With <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">create-app</span></code> a complete <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> compatible package is created.
 Some Nagare specific files are also created:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">conf/tutorial.cfg</span></code>: application configuration file</li>
-<li><code class="docutils literal"><span class="pre">data</span></code>: folder where read/write datas are expected (sqlite database, csv files, etc.)</li>
-<li><code class="docutils literal"><span class="pre">static</span></code>: folder where html static files are stored (css, images and javascripts)</li>
-<li><code class="docutils literal"><span class="pre">tutorial/models.py</span></code>: module where the database models are defined using Elixir/SQLAlchemy ORM</li>
-<li><code class="docutils literal"><span class="pre">tutorial/app.py</span></code>: code of your application</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf/tutorial.cfg</span></code>: application configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">data</span></code>: folder where read/write datas are expected (sqlite database, csv files, etc.)</li>
+<li><code class="docutils literal notranslate"><span class="pre">static</span></code>: folder where html static files are stored (css, images and javascripts)</li>
+<li><code class="docutils literal notranslate"><span class="pre">tutorial/models.py</span></code>: module where the database models are defined using Elixir/SQLAlchemy ORM</li>
+<li><code class="docutils literal notranslate"><span class="pre">tutorial/app.py</span></code>: code of your application</li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Let’s start with a pure python class. Replace the whole content of <code class="docutils literal"><span class="pre">tutorial/app.py</span></code> with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<li><p class="first">Let’s start with a pure python class. Replace the whole content of <code class="docutils literal notranslate"><span class="pre">tutorial/app.py</span></code> with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="mi">0</span>
@@ -234,23 +234,23 @@ Some Nagare specific files are also created:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Now, add an HTML view for the <code class="docutils literal"><span class="pre">Counter</span></code> class:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<li><p class="first">Now, add an HTML view for the <code class="docutils literal notranslate"><span class="pre">Counter</span></code> class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 <span class="o">...</span>
 <span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="k">return</span> <span class="s1">&#39;Hello&#39;</span>
 </pre></div>
 </div>
-<p>For Nagare, a view is just a function that takes the object to render and a renderer (<code class="docutils literal"><span class="pre">h</span></code>)
+<p>For Nagare, a view is just a function that takes the object to render and a renderer (<code class="docutils literal notranslate"><span class="pre">h</span></code>)
 as parameters and returns a DOM tree. In this example, we return a simple DOM tree with
-only a single text node. To bind the view to the <code class="docutils literal"><span class="pre">Counter</span></code> class, we import the Nagare
-presentation service and use the <code class="docutils literal"><span class="pre">render_for</span></code> decorator.</p>
+only a single text node. To bind the view to the <code class="docutils literal notranslate"><span class="pre">Counter</span></code> class, we import the Nagare
+presentation service and use the <code class="docutils literal notranslate"><span class="pre">render_for</span></code> decorator.</p>
 </li>
 <li><p class="first">Define the Nagare application:</p>
 <p>For Nagare, an application is just an object factory (i.e. a callable that returns an objects graph),
-and obviously a class is, so we just have to add the following to our <code class="docutils literal"><span class="pre">app.py</span></code> file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+and obviously a class is, so we just have to add the following to our <code class="docutils literal notranslate"><span class="pre">app.py</span></code> file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="c1"># define app</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Counter</span>
 </pre></div>
@@ -262,17 +262,17 @@ and obviously a class is, so we just have to add the following to our <code clas
 <p>If you take a look at the page source, you could see that Nagare has wrapped the text node into a valid html structure. By default, the DOM tree is serialized as HTML4. This can be changed in the application configuration file, to use XHTML if the browser accepts it or HTML5.</p>
 <ol class="arabic" start="6">
 <li><p class="first">A more complex DOM tree:</p>
-<p>Replace the <code class="docutils literal"><span class="pre">Counter</span></code> view with the following one:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<p>Replace the <code class="docutils literal notranslate"><span class="pre">Counter</span></code> view with the following one:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="s1">&#39;Value: &#39;</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
 <span class="o">...</span>
 </pre></div>
 </div>
-<p>As you can see the <code class="docutils literal"><span class="pre">h</span></code> HTML renderer can be used as a factory for all the HTML tags.</p>
-<p>As we build a server-side DOM tree, we are protected against code injection. For example, if <code class="docutils literal"><span class="pre">counter.val</span></code> contains something like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;&lt;script&gt;alert(&#39;Hello World&#39;);&lt;/script&gt;&quot;</span>
+<p>As you can see the <code class="docutils literal notranslate"><span class="pre">h</span></code> HTML renderer can be used as a factory for all the HTML tags.</p>
+<p>As we build a server-side DOM tree, we are protected against code injection. For example, if <code class="docutils literal notranslate"><span class="pre">counter.val</span></code> contains something like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;&lt;script&gt;alert(&#39;Hello World&#39;);&lt;/script&gt;&quot;</span>
 </pre></div>
 </div>
 <p>This string would be escaped and no javascript will ever be executed.</p>
@@ -323,7 +323,7 @@ and obviously a class is, so we just have to add the following to our <code clas
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

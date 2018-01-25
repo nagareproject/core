@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Nagare installation &mdash; Nagare 0.5.0 documentation</title>
+  <title>Nagare installation &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Nagare upgrade" href="framework_upgrade.html"/>
         <link rel="prev" title="QuickStart" href="quickstart.html"/> 
 
@@ -220,7 +220,7 @@
 is available.</p>
 <p>Else, to install Stackless Python from its sources, to the <em>&lt;STACKLESS_HOME&gt;</em>
 directory, do:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> /tmp
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /tmp
 wget http://www.stackless.com/binaries/stackless-2714-export.tar.xz
 tar xvf stackless-2714-export.tar.xz
 
@@ -233,13 +233,13 @@ make install
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last">
-<li><p class="first">If the &lt;STACKLESS_HOME&gt; is a system directory (like <code class="docutils literal"><span class="pre">/opt</span></code> or <code class="docutils literal"><span class="pre">/usr/local</span></code>),
-you will have to be logged as <strong>root</strong> to launch the last <code class="docutils literal"><span class="pre">make</span> <span class="pre">install</span></code> command.</p>
+<li><p class="first">If the &lt;STACKLESS_HOME&gt; is a system directory (like <code class="docutils literal notranslate"><span class="pre">/opt</span></code> or <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>),
+you will have to be logged as <strong>root</strong> to launch the last <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> command.</p>
 </li>
 <li><p class="first">Some packages can be needed for the installation of Stackless Python and
 Nagare, especially some “devel” ones. For example, with debian/ubuntu, you
 would have to install:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>sudo apt-get install ca-certificates wget gcc libbz2-dev libgdbm-dev libc6-dev libreadline6-dev libsqlite3-dev libssl-dev make xz-utils zlib1g-dev libyaml-dev libxml2-dev libxslt1-dev
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo apt-get install ca-certificates wget gcc libbz2-dev libgdbm-dev libc6-dev libreadline6-dev libsqlite3-dev libssl-dev make xz-utils zlib1g-dev libyaml-dev libxml2-dev libxslt1-dev
 </pre></div>
 </div>
 </li>
@@ -263,7 +263,7 @@ and doesn’t require root privileges.</p>
 <p>To create a virtual environment into the <em>&lt;NAGARE_HOME&gt;</em> directory, download
 <a class="reference external" href="https://virtualenv.pypa.io">virtualenv</a> and launch it <strong>with Stackless Python</strong>.</p>
 <p>On Linux:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> /tmp
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /tmp
 wget https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz
 tar xvf virtualenv-15.1.0.tar.gz
 
@@ -276,9 +276,9 @@ tar xvf virtualenv-15.1.0.tar.gz
 </li>
 <li><p class="first">Download the
 <a class="reference external" href="https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz">virtualenv archive</a>
-and extract the file <code class="docutils literal"><span class="pre">virtualenv.py</span></code> (you may need an archiver like <code class="docutils literal"><span class="pre">7-zip</span></code> or <code class="docutils literal"><span class="pre">winrar</span></code>).</p>
+and extract the file <code class="docutils literal notranslate"><span class="pre">virtualenv.py</span></code> (you may need an archiver like <code class="docutils literal notranslate"><span class="pre">7-zip</span></code> or <code class="docutils literal notranslate"><span class="pre">winrar</span></code>).</p>
 <p>then launch:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">STACKLESS_HOME</span><span class="o">&gt;</span>\<span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">virtualenv</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">NAGARE_HOME</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">STACKLESS_HOME</span><span class="o">&gt;</span>\<span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">virtualenv</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">NAGARE_HOME</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </li>
@@ -286,11 +286,11 @@ and extract the file <code class="docutils literal"><span class="pre">virtualenv
 <p>The final step is to install the framework into this newly created virtual
 environment.</p>
 <p>On Linux:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install <span class="s1">&#39;nagare[full]&#39;</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install <span class="s1">&#39;nagare[full]&#39;</span>
 </pre></div>
 </div>
 <p>On Windows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">NAGARE_HOME</span><span class="o">&gt;</span>\<span class="n">Scripts</span>\<span class="n">easy_install</span><span class="o">.</span><span class="n">exe</span> <span class="n">nagare</span><span class="p">[</span><span class="n">full</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">NAGARE_HOME</span><span class="o">&gt;</span>\<span class="n">Scripts</span>\<span class="n">easy_install</span><span class="o">.</span><span class="n">exe</span> <span class="n">nagare</span><span class="p">[</span><span class="n">full</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -298,15 +298,15 @@ environment.</p>
 <h3>2.2. System-wide installation<a class="headerlink" href="#system-wide-installation" title="Permalink to this headline">¶</a></h3>
 <p>If Stackless Python is installed in a system directory, you will need to have
 the <strong>root</strong> privileges.</p>
-<p>First, install <code class="docutils literal"><span class="pre">easy_install</span></code> by downloading
+<p>First, install <code class="docutils literal notranslate"><span class="pre">easy_install</span></code> by downloading
 <a class="reference external" href="https://bootstrap.pypa.io/ez_setup.py">ez_setup.py</a> and launch it
 <strong>with stackless Python</strong>.</p>
 <p>Second, install the framework on Linux:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;STACKLESS_HOME&gt;/bin/easy_install <span class="s1">&#39;nagare[full]&#39;</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;STACKLESS_HOME&gt;/bin/easy_install <span class="s1">&#39;nagare[full]&#39;</span>
 </pre></div>
 </div>
 <p>or, on Windows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">STACKLESS_HOME</span><span class="o">&gt;</span>\<span class="n">Scripts</span>\<span class="n">easy_install</span><span class="o">.</span><span class="n">exe</span> <span class="n">nagare</span><span class="p">[</span><span class="n">full</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">STACKLESS_HOME</span><span class="o">&gt;</span>\<span class="n">Scripts</span>\<span class="n">easy_install</span><span class="o">.</span><span class="n">exe</span> <span class="n">nagare</span><span class="p">[</span><span class="n">full</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>See the following chapter if you don’t want to install the framework with all
@@ -315,26 +315,26 @@ its modules.</p>
 </div>
 <div class="section" id="installation-options">
 <h2>3. Installation options<a class="headerlink" href="#installation-options" title="Permalink to this headline">¶</a></h2>
-<p>The framework installation is modular. The command <code class="docutils literal"><span class="pre">easy_install</span> <span class="pre">nagare</span></code> installs
+<p>The framework installation is modular. The command <code class="docutils literal notranslate"><span class="pre">easy_install</span> <span class="pre">nagare</span></code> installs
 only the framework core with the minimum number of features. More features,
-called “extras”, can be installed with the syntax <code class="docutils literal"><span class="pre">easy_install</span> <span class="pre">'nagare[extra1,extra2...]'</span></code>.</p>
+called “extras”, can be installed with the syntax <code class="docutils literal notranslate"><span class="pre">easy_install</span> <span class="pre">'nagare[extra1,extra2...]'</span></code>.</p>
 <p>Currently, the available extras are:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">debug</span></code> – install the debug web page, displayed when an exception is raised</li>
-<li><code class="docutils literal"><span class="pre">database</span></code> – install the Python modules needed, for an application, to access relational databases</li>
-<li><code class="docutils literal"><span class="pre">doc</span></code> – install the Python modules needed to generate the framework documentation</li>
-<li><code class="docutils literal"><span class="pre">test</span></code> – install the unit tests manager</li>
-<li><code class="docutils literal"><span class="pre">i18n</span></code> – install the internationalization modules</li>
-<li><code class="docutils literal"><span class="pre">full</span></code> – install all of the above extras (i.e <code class="docutils literal"><span class="pre">easy_install</span> <span class="pre">'nagare[full]'</span></code>
-is equivalent to <code class="docutils literal"><span class="pre">easy_install</span> <span class="pre">'nagare[debug,database,doc,test,i18n]'</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – install the debug web page, displayed when an exception is raised</li>
+<li><code class="docutils literal notranslate"><span class="pre">database</span></code> – install the Python modules needed, for an application, to access relational databases</li>
+<li><code class="docutils literal notranslate"><span class="pre">doc</span></code> – install the Python modules needed to generate the framework documentation</li>
+<li><code class="docutils literal notranslate"><span class="pre">test</span></code> – install the unit tests manager</li>
+<li><code class="docutils literal notranslate"><span class="pre">i18n</span></code> – install the internationalization modules</li>
+<li><code class="docutils literal notranslate"><span class="pre">full</span></code> – install all of the above extras (i.e <code class="docutils literal notranslate"><span class="pre">easy_install</span> <span class="pre">'nagare[full]'</span></code>
+is equivalent to <code class="docutils literal notranslate"><span class="pre">easy_install</span> <span class="pre">'nagare[debug,database,doc,test,i18n]'</span></code>)</li>
 </ul>
 </div>
 <div class="section" id="developers-framework-installation">
 <h2>4. Developers framework installation<a class="headerlink" href="#developers-framework-installation" title="Permalink to this headline">¶</a></h2>
 <p>To work with the latest framework sources directly from its repository, first
-create a virtual environment into the <em>&lt;NAGARE_HOME&gt;</em> directory: download <code class="docutils literal"><span class="pre">virtualenv</span></code>
+create a virtual environment into the <em>&lt;NAGARE_HOME&gt;</em> directory: download <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>
 and launch it <strong>with Stackless Python</strong>.</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> /tmp
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /tmp
 wget https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz
 tar xvf virtualenv-15.1.0.tar.gz
 
@@ -342,19 +342,19 @@ tar xvf virtualenv-15.1.0.tar.gz
 </pre></div>
 </div>
 <p>Second, grab the framework sources from the repository:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;NAGARE_HOME&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;NAGARE_HOME&gt;
 git clone https://github.com/nagareproject/core.git
 </pre></div>
 </div>
 <p>Third, install the framework from the sources:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> core
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> core
 &lt;NAGARE_HOME&gt;/bin/python setup.py develop
 &lt;NAGARE_HOME&gt;/bin/easy_install <span class="s1">&#39;nagare[full]&#39;</span>
 </pre></div>
 </div>
-<p>You can now work with the sources of the framework in <code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/core/nagare</span></code>
+<p>You can now work with the sources of the framework in <code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/core/nagare</span></code>
 and, when you want to update the sources from the repository, do:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;NAGARE_HOME&gt;/core
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;NAGARE_HOME&gt;/core
 git pull
 &lt;NAGARE_HOME&gt;/bin/python setup.py develop
 </pre></div>
@@ -363,15 +363,15 @@ git pull
 <div class="section" id="testing-the-installation">
 <h2>5. Testing the installation<a class="headerlink" href="#testing-the-installation" title="Permalink to this headline">¶</a></h2>
 <p>To test the installation, launch the adminstrative interface:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve admin
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve admin
 </pre></div>
 </div>
 <p>or, in Windows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">NAGARE_HOME</span><span class="o">&gt;</span>\<span class="n">Scripts</span>\<span class="n">nagare</span><span class="o">-</span><span class="n">admin</span><span class="o">.</span><span class="n">exe</span> <span class="n">serve</span> <span class="n">admin</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">NAGARE_HOME</span><span class="o">&gt;</span>\<span class="n">Scripts</span>\<span class="n">nagare</span><span class="o">-</span><span class="n">admin</span><span class="o">.</span><span class="n">exe</span> <span class="n">serve</span> <span class="n">admin</span>
 </pre></div>
 </div>
 <p>which must results in the following display:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>Application <span class="s1">&#39;app admin&#39;</span> registered as <span class="s1">&#39;/admin&#39;</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>Application <span class="s1">&#39;app admin&#39;</span> registered as <span class="s1">&#39;/admin&#39;</span>
 Application <span class="s1">&#39;app admin&#39;</span> registered as <span class="s1">&#39;/&#39;</span>
 serving on http://127.0.0.1:8080
 </pre></div>
@@ -423,7 +423,7 @@ interface.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

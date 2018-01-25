@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Nagare Tutorial, learning concepts &mdash; Nagare 0.5.0 documentation</title>
+  <title>Nagare Tutorial, learning concepts &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Writing your first Nagare application" href="wiki_tutorial.html"/>
         <link rel="prev" title="Nagare Tutorial, learning concepts" href="tutorial3.html"/> 
 
@@ -204,8 +204,8 @@
 <h2>Part 4. Re-use components<a class="headerlink" href="#part-4-re-use-components" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
 <li><p class="first">An application with 2 counters:</p>
-<p>Rename the <code class="docutils literal"><span class="pre">app.py</span></code> module to <code class="docutils literal"><span class="pre">counter.py</span></code> and create a new <code class="docutils literal"><span class="pre">app.py</span></code> file with the following code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span><span class="p">,</span> <span class="n">presentation</span>
+<p>Rename the <code class="docutils literal notranslate"><span class="pre">app.py</span></code> module to <code class="docutils literal notranslate"><span class="pre">counter.py</span></code> and create a new <code class="docutils literal notranslate"><span class="pre">app.py</span></code> file with the following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span><span class="p">,</span> <span class="n">presentation</span>
 <span class="kn">from</span> <span class="nn">counter</span> <span class="kn">import</span> <span class="n">Counter</span>
 
 <span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -227,18 +227,18 @@
 <span class="n">app</span> <span class="o">=</span> <span class="n">App</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">app</span></code> is now a composite application with two independent <code class="docutils literal"><span class="pre">Counter</span></code> components, each with its own state.</p>
+<p><code class="docutils literal notranslate"><span class="pre">app</span></code> is now a composite application with two independent <code class="docutils literal notranslate"><span class="pre">Counter</span></code> components, each with its own state.</p>
 <p>Don’t think about a Nagare application as a set of HTML pages reachable though URL. But instead model it as a tree of components which is modified then rendered when navigating.</p>
 </li>
 <li><p class="first">Multiviews</p>
-<p>Several views can be bound to a component. For example, here we add a new <code class="docutils literal"><span class="pre">freezed</span></code> named view to our <code class="docutils literal"><span class="pre">Counter</span></code> components:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;freezed&#39;</span><span class="p">)</span>
+<p>Several views can be bound to a component. For example, here we add a new <code class="docutils literal notranslate"><span class="pre">freezed</span></code> named view to our <code class="docutils literal notranslate"><span class="pre">Counter</span></code> components:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;freezed&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">h1</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then, we can tell <code class="docutils literal"><span class="pre">counter1</span></code> to use this <code class="docutils literal"><span class="pre">freezed</span></code> view as its default one:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<p>Then, we can tell <code class="docutils literal notranslate"><span class="pre">counter1</span></code> to use this <code class="docutils literal notranslate"><span class="pre">freezed</span></code> view as its default one:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -250,14 +250,14 @@
 <p>The application now displays two counters with two different views</p>
 </li>
 <li><p class="first">Navigating</p>
-<p>Now, we would like to switch between views at runtime. To achieve that, we just need to replace the inner object of the <code class="docutils literal"><span class="pre">counter1</span></code> component with the exact same object but with a different model:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<p>Now, we would like to switch between views at runtime. To achieve that, we just need to replace the inner object of the <code class="docutils literal notranslate"><span class="pre">counter1</span></code> component with the exact same object but with a different model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">counter1</span><span class="o">.</span><span class="n">becomes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counter1</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;freezed&#39;</span><span class="p">)</span>
 <span class="o">...</span>
 </pre></div>
 </div>
-<p>That can be done via a callback registered in the <code class="docutils literal"><span class="pre">Counter</span></code> default view:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
+<p>That can be done via a callback registered in the <code class="docutils literal notranslate"><span class="pre">Counter</span></code> default view:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="s1">&#39;Value: &#39;</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
 
@@ -271,9 +271,9 @@
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
 </pre></div>
 </div>
-<p>As you can see one of the optional arguments is <code class="docutils literal"><span class="pre">comp</span></code>, the component wrapping the <code class="docutils literal"><span class="pre">counter</span></code> object.</p>
-<p>In this example we used the <code class="docutils literal"><span class="pre">becomes()</span></code> method to only change the default view of a component.
-But <code class="docutils literal"><span class="pre">becomes()</span></code> can actually swap the whole inner object to a new one. This is in fact how
+<p>As you can see one of the optional arguments is <code class="docutils literal notranslate"><span class="pre">comp</span></code>, the component wrapping the <code class="docutils literal notranslate"><span class="pre">counter</span></code> object.</p>
+<p>In this example we used the <code class="docutils literal notranslate"><span class="pre">becomes()</span></code> method to only change the default view of a component.
+But <code class="docutils literal notranslate"><span class="pre">becomes()</span></code> can actually swap the whole inner object to a new one. This is in fact how
 navigating into an application is done in Nagare. For example
 <a class="reference external" href="http://www.nagare.org/trac/blog/tabbed-navigation-with-nagare">this blog post</a>  shows how to
 navigate in a tabbed menu.</p>
@@ -281,25 +281,25 @@ navigate in a tabbed menu.</p>
 <li><p class="first">Going async</p>
 <p>With Nagare, a component can be rendered synchronously (default) or asynchronously without any change to its code.</p>
 <p>First, note the statement we used to add a counter view to the DOM tree:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter1</span>
 <span class="o">...</span>
 </pre></div>
 </div>
 <p>is in fact a shortcut for:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter1</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
 <span class="o">...</span>
 </pre></div>
 </div>
-<p>Using this full method call, we can now create and pass an asynchronous renderer instead of <code class="docutils literal"><span class="pre">h</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<p>Using this full method call, we can now create and pass an asynchronous renderer instead of <code class="docutils literal notranslate"><span class="pre">h</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
 <span class="o">...</span>
 <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter1</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">xhtml</span><span class="o">.</span><span class="n">AsyncRenderer</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
 <span class="o">...</span>
 </pre></div>
 </div>
-<p>This way <code class="docutils literal"><span class="pre">counter1</span></code> is rendered asynchronously whereas <code class="docutils literal"><span class="pre">counter2</span></code> is rendered synchronously. When you look at the generated html page you can see that for <code class="docutils literal"><span class="pre">counter1</span></code> links are disabled (attribute <code class="docutils literal"><span class="pre">href</span></code> set to <code class="docutils literal"><span class="pre">#</span></code>) and some javascript is added (attribute <code class="docutils literal"><span class="pre">`onclick</span></code> added with a call to the <code class="docutils literal"><span class="pre">nagare_getAndEval()</span></code> javascript function).</p>
+<p>This way <code class="docutils literal notranslate"><span class="pre">counter1</span></code> is rendered asynchronously whereas <code class="docutils literal notranslate"><span class="pre">counter2</span></code> is rendered synchronously. When you look at the generated html page you can see that for <code class="docutils literal notranslate"><span class="pre">counter1</span></code> links are disabled (attribute <code class="docutils literal notranslate"><span class="pre">href</span></code> set to <code class="docutils literal notranslate"><span class="pre">#</span></code>) and some javascript is added (attribute <code class="docutils literal notranslate"><span class="pre">`onclick</span></code> added with a call to the <code class="docutils literal notranslate"><span class="pre">nagare_getAndEval()</span></code> javascript function).</p>
 </li>
 </ol>
 <p>That’s all folks, if you’d like to learn more, feel free to join us on the <a class="reference external" href="http://groups.google.com/group/nagare-users">Nagare users group</a> .</p>
@@ -348,7 +348,7 @@ navigate in a tabbed menu.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

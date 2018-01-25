@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Create an application &mdash; Nagare 0.5.0 documentation</title>
+  <title>Create an application &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Presentation tier" href="presentation.html"/>
         <link rel="prev" title="Writing your first Nagare application" href="wiki_tutorial.html"/> 
 
@@ -213,24 +213,24 @@
 <div class="section" id="create-the-application-skeleton">
 <h2>1. Create the application skeleton<a class="headerlink" href="#create-the-application-skeleton" title="Permalink to this headline">¶</a></h2>
 <p>In a directory of your choice, create the application skeleton:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-app my_app
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-app my_app
 </pre></div>
 </div>
 <p>This command creates a <em>my_app</em> directory with the structure:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">setup.py</span></code> – setuptools configuration file</li>
-<li><code class="docutils literal"><span class="pre">conf</span></code> – directory with all the configuration files of the application</li>
-<li><code class="docutils literal"><span class="pre">data</span></code> – data directory, contains all the read/write data (database files for example) used by the application</li>
-<li><code class="docutils literal"><span class="pre">static</span></code> – static directory, contains all the read only data (images, css, js…) used by the application</li>
-<li><code class="docutils literal"><span class="pre">my_app</span></code> – source directory, contains the application source files</li>
+<li><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> – setuptools configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf</span></code> – directory with all the configuration files of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">data</span></code> – data directory, contains all the read/write data (database files for example) used by the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">static</span></code> – static directory, contains all the read only data (images, css, js…) used by the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">my_app</span></code> – source directory, contains the application source files</li>
 </ul>
 </div>
 <div class="section" id="configure-your-application">
 <h2>2. Configure your application<a class="headerlink" href="#configure-your-application" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="file-setup-py">
 <h3>2.1. File setup.py<a class="headerlink" href="#file-setup-py" title="Permalink to this headline">¶</a></h3>
-<p>In your application directory, edit the <code class="docutils literal"><span class="pre">setup.py</span></code> file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">VERSION</span> <span class="o">=</span> <span class="s1">&#39;0.0.1&#39;</span>
+<p>In your application directory, edit the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">VERSION</span> <span class="o">=</span> <span class="s1">&#39;0.0.1&#39;</span>
 
 <span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span>
 
@@ -255,9 +255,9 @@
      <span class="p">)</span>
 </pre></div>
 </div>
-<p>Change the keywords of the <code class="docutils literal"><span class="pre">setup()</span></code> call (ie: author = ‘John Doe’, description =
+<p>Change the keywords of the <code class="docutils literal notranslate"><span class="pre">setup()</span></code> call (ie: author = ‘John Doe’, description =
 ‘This is my first application’…) to correctly describe your application.</p>
-<p>Note that the <code class="docutils literal"><span class="pre">install_requires</span></code> keyword initially list the <code class="docutils literal"><span class="pre">nagare</span></code> package.
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">install_requires</span></code> keyword initially list the <code class="docutils literal notranslate"><span class="pre">nagare</span></code> package.
 Such that, if someone wants to install you application in a system where
 Nagare is not currently installed, it will be automatically downloaded and
 installed.</p>
@@ -267,8 +267,8 @@ documentation.</p>
 </div>
 <div class="section" id="application-configuration-file">
 <h3>2.2. Application configuration file<a class="headerlink" href="#application-configuration-file" title="Permalink to this headline">¶</a></h3>
-<p>Edit the <code class="docutils literal"><span class="pre">conf/my_app.cfg</span></code> file:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[application]</span>
+<p>Edit the <code class="docutils literal notranslate"><span class="pre">conf/my_app.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[application]</span>
 <span class="na">path</span> <span class="o">=</span> <span class="s">app my_app</span>
 <span class="na">name</span> <span class="o">=</span> <span class="s">my_app</span>
 <span class="na">debug</span> <span class="o">=</span> <span class="s">off</span>
@@ -287,35 +287,35 @@ documentation.</p>
 </div>
 <p>Briefly, the <strong>[application]</strong> section contains:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">path</span></code> – factory component reference, used by the framework to create the root component of the application</li>
-<li><code class="docutils literal"><span class="pre">name</span></code> – the url of the application (i.e <a class="reference external" href="http://localhost:8080/my_app">http://localhost:8080/my_app</a>)</li>
-<li><code class="docutils literal"><span class="pre">debug</span></code> – debug mode to (de)activate the web error page</li>
+<li><code class="docutils literal notranslate"><span class="pre">path</span></code> – factory component reference, used by the framework to create the root component of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code> – the url of the application (i.e <a class="reference external" href="http://localhost:8080/my_app">http://localhost:8080/my_app</a>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – debug mode to (de)activate the web error page</li>
 </ul>
 <p>and the <strong>[database]</strong> section contains:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">activated</span></code> – indicate if the application uses a database</li>
-<li><code class="docutils literal"><span class="pre">uri</span></code> – database URI for SQLAlchemy</li>
-<li><code class="docutils literal"><span class="pre">metadata</span></code> – reference to the SQLAlchemy metadata object</li>
-<li><code class="docutils literal"><span class="pre">debug</span></code> – debug mode to (de)activate the display of the SQL requests</li>
+<li><code class="docutils literal notranslate"><span class="pre">activated</span></code> – indicate if the application uses a database</li>
+<li><code class="docutils literal notranslate"><span class="pre">uri</span></code> – database URI for SQLAlchemy</li>
+<li><code class="docutils literal notranslate"><span class="pre">metadata</span></code> – reference to the SQLAlchemy metadata object</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – debug mode to (de)activate the display of the SQL requests</li>
 </ul>
 </div>
 </div>
 <div class="section" id="register-your-application-to-the-nagare-framework">
 <h2>3. Register your application to the Nagare framework<a class="headerlink" href="#register-your-application-to-the-nagare-framework" title="Permalink to this headline">¶</a></h2>
-<p>As the default generated <code class="docutils literal"><span class="pre">setup.py</span></code> declares a <code class="docutils literal"><span class="pre">nagare.applications</span></code> entry point,
+<p>As the default generated <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> declares a <code class="docutils literal notranslate"><span class="pre">nagare.applications</span></code> entry point,
 once installed, the application is automatically registered to Nagare.</p>
-<p>So to register your application, go into the <code class="docutils literal"><span class="pre">my_apps</span></code> directory and simply
+<p>So to register your application, go into the <code class="docutils literal notranslate"><span class="pre">my_apps</span></code> directory and simply
 enter the command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/python setup.py develop
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/python setup.py develop
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The entry points you can declare in the <code class="docutils literal"><span class="pre">setup.py</span></code> file are described
+<p class="last">The entry points you can declare in the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file are described
 in <a class="reference internal" href="entry_points.html"><span class="doc">Entry points</span></a>.</p>
 </div>
 <p>You can check your application is correctly registered by launching the command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve
 </pre></div>
 </div>
 <p>which list all the applications known by the framework.</p>
@@ -329,10 +329,10 @@ database with the framework.</p>
 </div>
 <p>If your application uses a database you will need to create the database tables
 prior to launch the application:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db my_app
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db my_app
 </pre></div>
 </div>
-<p>The options available with the <code class="docutils literal"><span class="pre">create-db</span></code> administrative command are:</p>
+<p>The options available with the <code class="docutils literal notranslate"><span class="pre">create-db</span></code> administrative command are:</p>
 <blockquote>
 <div><table class="docutils option-list" frame="void" rules="none">
 <col class="option" />
@@ -351,14 +351,14 @@ prior to launch the application:</p>
 </table>
 </div></blockquote>
 <p>The database tables can be removed with the command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin drop-db my_app
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin drop-db my_app
 </pre></div>
 </div>
 </div>
 <div class="section" id="launch-your-application">
 <h2>5. Launch your application<a class="headerlink" href="#launch-your-application" title="Permalink to this headline">¶</a></h2>
 <p>The following command launches the application:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve my_app
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve my_app
 </pre></div>
 </div>
 <p>which becomes available at <a class="reference external" href="http://localhost:8080/my_app">http://localhost:8080/my_app</a></p>
@@ -387,11 +387,11 @@ commands with all their options</p>
 <h2>6. Distribute your application<a class="headerlink" href="#distribute-your-application" title="Permalink to this headline">¶</a></h2>
 <p>When your application is ready to be released, you can create a source
 distribution (tarball on Unix, ZIP file on Windows) with the command (into the
-<code class="docutils literal"><span class="pre">my_apps</span></code> directory):</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/python setup.py sdist
+<code class="docutils literal notranslate"><span class="pre">my_apps</span></code> directory):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/python setup.py sdist
 </pre></div>
 </div>
-<p>The source distribution is created into the <code class="docutils literal"><span class="pre">dist</span></code> directory.</p>
+<p>The source distribution is created into the <code class="docutils literal notranslate"><span class="pre">dist</span></code> directory.</p>
 <p>If you want to globally distribute your application, you can
 register on the central <a class="reference external" href="https://pypi.python.org">PyPI</a> repository and
 <a class="reference external" href="https://packaging.python.org/tutorials/distributing-packages/#upload-your-distributions">uploaded</a> it there.</p>
@@ -442,7 +442,7 @@ installer for example, as explain in <a class="reference external" href="https:/
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Significative “RESTful” URLs &mdash; Nagare 0.5.0 documentation</title>
+  <title>Significative “RESTful” URLs &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="The WSGI Application" href="wsgiapp.html"/>
         <link rel="prev" title="The Renderer objects" href="renderer.html"/> 
 
@@ -221,14 +221,14 @@ of significative URL to the components state (the URL scheme) is made in 2 steps
 <li>When an URL is received, initialize the components state from it</li>
 </ol>
 <p>To illustrate these steps, we will use a timezone-aware clock example. First,
-install the require <code class="docutils literal"><span class="pre">pytz</span></code> python module:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install pytz
+install the require <code class="docutils literal notranslate"><span class="pre">pytz</span></code> python module:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install pytz
 </pre></div>
 </div>
-<p>Then we can define our <code class="docutils literal"><span class="pre">Clock</span></code> component with two associated views, the default
-view which displays the local time and a view called <code class="docutils literal"><span class="pre">timezone</span></code> to display
+<p>Then we can define our <code class="docutils literal notranslate"><span class="pre">Clock</span></code> component with two associated views, the default
+view which displays the local time and a view called <code class="docutils literal notranslate"><span class="pre">timezone</span></code> to display
 its timezone offset:</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -296,27 +296,27 @@ its timezone offset:</p>
 </pre></div>
 </td></tr></table></div>
 <p>To test this component, we define a factory:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test1</span><span class="p">():</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test1</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">Clock</span><span class="p">(</span><span class="s1">&#39;America/New_York&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>and then launch it with:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin module-serve clock.py:test1 test1
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin module-serve clock.py:test1 test1
 </pre></div>
 </div>
 <p>Browsing to <a class="reference external" href="http://localhost:8080/test1">http://localhost:8080/test1</a> gives:</p>
 <div class="htmlscreen"><div style="font-size: 150%">08:15</div>
-<a href="?_s=6428714020224300&amp;_c=00014&amp;_action414144870">Time Zone</a></div><p>and after a click on the <code class="docutils literal"><span class="pre">Time</span> <span class="pre">Zone</span></code> link:</p>
+<a href="?_s=6428714020224300&amp;_c=00014&amp;_action414144870">Time Zone</a></div><p>and after a click on the <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">Zone</span></code> link:</p>
 <div class="htmlscreen"><div style="font-size: 150%">-0400 EDT</div>
-<a href="?_s=6428714020224300&amp;_c=00015&amp;_action465356083">Time</a></div><p>The <code class="docutils literal"><span class="pre">Clock</span></code> component was developped in straight pure Python, without thinking
-about a URL scheme. You can see that switching between the <code class="docutils literal"><span class="pre">Time</span> <span class="pre">Zone</span></code> and
-<code class="docutils literal"><span class="pre">Time</span></code> views don’t change the URL path <a class="reference external" href="http://localhost:8080/test1/">http://localhost:8080/test1/</a>.</p>
+<a href="?_s=6428714020224300&amp;_c=00015&amp;_action465356083">Time</a></div><p>The <code class="docutils literal notranslate"><span class="pre">Clock</span></code> component was developped in straight pure Python, without thinking
+about a URL scheme. You can see that switching between the <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">Zone</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Time</span></code> views don’t change the URL path <a class="reference external" href="http://localhost:8080/test1/">http://localhost:8080/test1/</a>.</p>
 <div class="section" id="adding-url">
 <h3>1. Adding URL<a class="headerlink" href="#adding-url" title="Permalink to this headline">¶</a></h3>
 <p>It’s easy to change the URL path when a link is clicked. Just add a normal relative
-<code class="docutils literal"><span class="pre">href</span></code> attribut to the link definition.</p>
+<code class="docutils literal notranslate"><span class="pre">href</span></code> attribut to the link definition.</p>
 <p>In our example, we modify the lines #19 and #31:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="c1"># When the ``Time zone`` link is clicked, change to the ``timezone`` view of this object</span>
 <span class="hll"><span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="s1">&#39;Time Zone&#39;</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;timezone&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="n">comp</span><span class="o">.</span><span class="n">becomes</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;timezone&#39;</span><span class="p">)</span>
 </span><span class="o">...</span>
@@ -329,38 +329,38 @@ about a URL scheme. You can see that switching between the <code class="docutils
 </div>
 <p>Now, when you click on the links, the URL path is changed to
 <a class="reference external" href="http://localhost:8080/test1/time">http://localhost:8080/test1/time</a> or <a class="reference external" href="http://localhost:8080/test1/timezone">http://localhost:8080/test1/timezone</a>.</p>
-<p>But if you directly enter the URL <code class="docutils literal"><span class="pre">http://localhost:8080/test1/timezone</span></code> in your
-browser, the default view if displayed, not the <code class="docutils literal"><span class="pre">timezone</span></code> one. The following
+<p>But if you directly enter the URL <code class="docutils literal notranslate"><span class="pre">http://localhost:8080/test1/timezone</span></code> in your
+browser, the default view if displayed, not the <code class="docutils literal notranslate"><span class="pre">timezone</span></code> one. The following
 chapter describes how to initialize the components state with the received URL.</p>
 </div>
 <div class="section" id="components-initialization">
 <h3>2. Components initialization<a class="headerlink" href="#components-initialization" title="Permalink to this headline">¶</a></h3>
 <p>When an URL is received, without a session and a continuation parameters or when
 the session is expired, Nagare tries to initialized the application components
-from the URL path by calling the generic method <code class="docutils literal"><span class="pre">presentation.init_for()</span></code> on
+from the URL path by calling the generic method <code class="docutils literal notranslate"><span class="pre">presentation.init_for()</span></code> on
 the application root component, with the parameters:</p>
 <ol class="arabic simple">
-<li><code class="docutils literal"><span class="pre">self</span></code> – the root object</li>
-<li><code class="docutils literal"><span class="pre">url</span></code> – a tuple of the unicode parts of the URL path (starting after the application name)</li>
-<li><code class="docutils literal"><span class="pre">comp</span></code> – the component wrapping the root object</li>
-<li><code class="docutils literal"><span class="pre">http_method</span></code> – the HTTP method (<code class="docutils literal"><span class="pre">GET</span></code>, <code class="docutils literal"><span class="pre">POST</span></code>, <code class="docutils literal"><span class="pre">PUT</span></code> …)</li>
-<li><code class="docutils literal"><span class="pre">request</span></code> – the HTTP <a class="reference external" href="https://webob.readthedocs.io/en/stable/reference.html#request">request</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">self</span></code> – the root object</li>
+<li><code class="docutils literal notranslate"><span class="pre">url</span></code> – a tuple of the unicode parts of the URL path (starting after the application name)</li>
+<li><code class="docutils literal notranslate"><span class="pre">comp</span></code> – the component wrapping the root object</li>
+<li><code class="docutils literal notranslate"><span class="pre">http_method</span></code> – the HTTP method (<code class="docutils literal notranslate"><span class="pre">GET</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code>, <code class="docutils literal notranslate"><span class="pre">PUT</span></code> …)</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the HTTP <a class="reference external" href="https://webob.readthedocs.io/en/stable/reference.html#request">request</a></li>
 </ol>
 <p>It’s up to the developper to implement the generic methods to initialize the
 root component.</p>
-<p>A <code class="docutils literal"><span class="pre">presentation.HTTPNotFound()</span></code> exception can be raised to
-send a <code class="docutils literal"><span class="pre">404</span> <span class="pre">Not</span> <span class="pre">Found</span></code> result to the client.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">presentation.HTTPNotFound()</span></code> exception can be raised to
+send a <code class="docutils literal notranslate"><span class="pre">404</span> <span class="pre">Not</span> <span class="pre">Found</span></code> result to the client.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
 <li>If no generic method matches, Nagare automatically raises the
-<code class="docutils literal"><span class="pre">presentation.HTTPNotFound()</span></code> exception</li>
-<li>Any <code class="docutils literal"><span class="pre">webob.exc</span></code> exception can also be raised (<code class="docutils literal"><span class="pre">HTTPMethodNotAllowed</span></code>,
-<code class="docutils literal"><span class="pre">HTTPForbidden</span></code> …)</li>
+<code class="docutils literal notranslate"><span class="pre">presentation.HTTPNotFound()</span></code> exception</li>
+<li>Any <code class="docutils literal notranslate"><span class="pre">webob.exc</span></code> exception can also be raised (<code class="docutils literal notranslate"><span class="pre">HTTPMethodNotAllowed</span></code>,
+<code class="docutils literal notranslate"><span class="pre">HTTPForbidden</span></code> …)</li>
 </ul>
 </div>
 <p>In our example, we implement 2 conditions:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># If no URL is given or url is &#39;time&#39;, set the default view</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># If no URL is given or url is &#39;time&#39;, set the default view</span>
 <span class="nd">@presentation.init_for</span><span class="p">(</span><span class="n">Clock</span><span class="p">,</span> <span class="s1">&#39;not url or url == (u&quot;time&quot;,)&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">http_method</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
     <span class="n">comp</span><span class="o">.</span><span class="n">becomes</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
@@ -377,26 +377,26 @@ clicked.</p>
 <p class="first admonition-title">Note</p>
 <p>If you want to set the state of a component as if it was called, don’t directly
 do:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">comp</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>but use the <code class="docutils literal"><span class="pre">component.call_wrapper()</span></code> function:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span>
+<p>but use the <code class="docutils literal notranslate"><span class="pre">component.call_wrapper()</span></code> function:</p>
+<div class="last highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span>
 
 <span class="n">component</span><span class="o">.</span><span class="n">call_wrapper</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">comp</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
-<p>You can now directly enter the <code class="docutils literal"><span class="pre">http://localhost:8080/test1/time</span></code> or
-<code class="docutils literal"><span class="pre">http://localhost:8080/test1/timezone</span></code> URL. Of course, you can also bookmark
+<p>You can now directly enter the <code class="docutils literal notranslate"><span class="pre">http://localhost:8080/test1/time</span></code> or
+<code class="docutils literal notranslate"><span class="pre">http://localhost:8080/test1/timezone</span></code> URL. Of course, you can also bookmark
 them, send them in an email …</p>
 </div>
 </div>
 <div class="section" id="components-composition">
 <h2>Components composition<a class="headerlink" href="#components-composition" title="Permalink to this headline">¶</a></h2>
-<p>The example is now enhanced with a <code class="docutils literal"><span class="pre">Clocks</span></code> component that can display several
-<code class="docutils literal"><span class="pre">Clock</span></code> components:</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<p>The example is now enhanced with a <code class="docutils literal notranslate"><span class="pre">Clocks</span></code> component that can display several
+<code class="docutils literal notranslate"><span class="pre">Clock</span></code> components:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -497,7 +497,7 @@ them, send them in an email …</p>
 </td></tr></table></div>
 <p>Once again, this component is developed without taking care about the URL management
 and can be launched with:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin module-serve clock.py:Clocks test2
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin module-serve clock.py:Clocks test2
 </pre></div>
 </div>
 <p>Browsing to <a class="reference external" href="http://localhost:8080/test2">http://localhost:8080/test2</a> gives:</p>
@@ -528,17 +528,17 @@ operational:</p>
 </div></span></div><div class="section" id="id1">
 <h3>1. Adding URL<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>A Nagare application is made of a dynamic tree of components. A parent component
-can fix the URL prefix their children will use for their links, by using the <code class="docutils literal"><span class="pre">url</span></code>
+can fix the URL prefix their children will use for their links, by using the <code class="docutils literal notranslate"><span class="pre">url</span></code>
 parameter of:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">component.Component(o,</span> <span class="pre">url='...')</span></code></li>
-<li><code class="docutils literal"><span class="pre">comp.becomes(o,</span> <span class="pre">url='...')</span></code></li>
-<li><code class="docutils literal"><span class="pre">comp.call(o,</span> <span class="pre">url='...')</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">component.Component(o,</span> <span class="pre">url='...')</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">comp.becomes(o,</span> <span class="pre">url='...')</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">comp.call(o,</span> <span class="pre">url='...')</span></code></li>
 </ul>
-<p>In our example, we decide that the URL of the links generated by the <code class="docutils literal"><span class="pre">Clock</span></code>
-views will began by the name of the city. So we add the parameter <code class="docutils literal"><span class="pre">url=&lt;city</span> <span class="pre">name&gt;</span></code>
-line #21 and <code class="docutils literal"><span class="pre">href=&lt;city_name&gt;</span></code> line #43:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>    <span class="o">...</span>
+<p>In our example, we decide that the URL of the links generated by the <code class="docutils literal notranslate"><span class="pre">Clock</span></code>
+views will began by the name of the city. So we add the parameter <code class="docutils literal notranslate"><span class="pre">url=&lt;city</span> <span class="pre">name&gt;</span></code>
+line #21 and <code class="docutils literal notranslate"><span class="pre">href=&lt;city_name&gt;</span></code> line #43:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="o">...</span>
     <span class="k">def</span> <span class="nf">change_city</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">becomes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cities</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 </span>    <span class="o">...</span>
@@ -550,25 +550,25 @@ line #21 and <code class="docutils literal"><span class="pre">href=&lt;city_name
 </pre></div>
 </div>
 <p>Now, the URL path changes to <a class="reference external" href="http://localhost:8080/test2/Paris/time">http://localhost:8080/test2/Paris/time</a> or
-<a class="reference external" href="http://localhost:8080/test2/Sydney/timezone">http://localhost:8080/test2/Sydney/timezone</a> … Where the first part (<code class="docutils literal"><span class="pre">Paris</span></code>,
-<code class="docutils literal"><span class="pre">Sydney</span></code> …) is set by the <code class="docutils literal"><span class="pre">Clocks</span></code> component and the last part (<code class="docutils literal"><span class="pre">time</span></code>
-or <code class="docutils literal"><span class="pre">timezone</span></code>) is set by the <code class="docutils literal"><span class="pre">Clock</span></code> component.</p>
+<a class="reference external" href="http://localhost:8080/test2/Sydney/timezone">http://localhost:8080/test2/Sydney/timezone</a> … Where the first part (<code class="docutils literal notranslate"><span class="pre">Paris</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Sydney</span></code> …) is set by the <code class="docutils literal notranslate"><span class="pre">Clocks</span></code> component and the last part (<code class="docutils literal notranslate"><span class="pre">time</span></code>
+or <code class="docutils literal notranslate"><span class="pre">timezone</span></code>) is set by the <code class="docutils literal notranslate"><span class="pre">Clock</span></code> component.</p>
 </div>
 <div class="section" id="id2">
 <h3>2. Components initialization<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>First a parent component initializes itself with parts of the received URL. Then
-it delegates the initialization to their children by calling their <code class="docutils literal"><span class="pre">init()</span></code>
+it delegates the initialization to their children by calling their <code class="docutils literal notranslate"><span class="pre">init()</span></code>
 method with the parameters:</p>
 <ol class="arabic simple">
-<li><code class="docutils literal"><span class="pre">url</span></code> – the rest of the URL parts</li>
-<li><code class="docutils literal"><span class="pre">http_method</span></code> – the HTTP method (<code class="docutils literal"><span class="pre">GET</span></code>, <code class="docutils literal"><span class="pre">POST</span></code>, <code class="docutils literal"><span class="pre">PUT</span></code> …)</li>
-<li><code class="docutils literal"><span class="pre">request</span></code> – the HTTP <a class="reference external" href="https://webob.readthedocs.io/en/stable/reference.html#request">request</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">url</span></code> – the rest of the URL parts</li>
+<li><code class="docutils literal notranslate"><span class="pre">http_method</span></code> – the HTTP method (<code class="docutils literal notranslate"><span class="pre">GET</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code>, <code class="docutils literal notranslate"><span class="pre">PUT</span></code> …)</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the HTTP <a class="reference external" href="https://webob.readthedocs.io/en/stable/reference.html#request">request</a></li>
 </ol>
-<p>So, we add a <code class="docutils literal"><span class="pre">presentation.init_for()</span></code> implementation for the <code class="docutils literal"><span class="pre">Clocks</span></code>
+<p>So, we add a <code class="docutils literal notranslate"><span class="pre">presentation.init_for()</span></code> implementation for the <code class="docutils literal notranslate"><span class="pre">Clocks</span></code>
 component that uses the first part of the URL (the city name) to initialize
-itself. Then we delegate the finalisation of the initialization to the <code class="docutils literal"><span class="pre">content</span></code>
+itself. Then we delegate the finalisation of the initialization to the <code class="docutils literal notranslate"><span class="pre">content</span></code>
 component, passing it the rest of the URL:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.init_for</span><span class="p">(</span><span class="n">Clocks</span><span class="p">,</span> <span class="s1">&#39;len(url) &gt;= 1&#39;</span><span class="p">)</span> <span class="c1"># The url must have at least 1 part</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.init_for</span><span class="p">(</span><span class="n">Clocks</span><span class="p">,</span> <span class="s1">&#39;len(url) &gt;= 1&#39;</span><span class="p">)</span> <span class="c1"># The url must have at least 1 part</span>
 <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">http_method</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
     <span class="n">city</span> <span class="o">=</span> <span class="n">url</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="c1"># The first part of the url is the city name</span>
     <span class="k">if</span> <span class="n">city</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cities</span><span class="p">:</span> <span class="c1"># Check if the city name is valid</span>
@@ -584,14 +584,14 @@ component, passing it the rest of the URL:</p>
 </div>
 <div class="section" id="restful-url">
 <h2>RESTful URL<a class="headerlink" href="#restful-url" title="Permalink to this headline">¶</a></h2>
-<p>You may have noticed the <code class="docutils literal"><span class="pre">presentation.init_for()</span></code> also received the <code class="docutils literal"><span class="pre">http_method</span></code>
-parameter (typically <code class="docutils literal"><span class="pre">GET</span></code>, <code class="docutils literal"><span class="pre">POST</span></code>, <code class="docutils literal"><span class="pre">PUT</span></code> and <code class="docutils literal"><span class="pre">DELETE</span></code>) and the full
+<p>You may have noticed the <code class="docutils literal notranslate"><span class="pre">presentation.init_for()</span></code> also received the <code class="docutils literal notranslate"><span class="pre">http_method</span></code>
+parameter (typically <code class="docutils literal notranslate"><span class="pre">GET</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code>, <code class="docutils literal notranslate"><span class="pre">PUT</span></code> and <code class="docutils literal notranslate"><span class="pre">DELETE</span></code>) and the full
 <a class="reference external" href="https://webob.readthedocs.io/en/stable/reference.html#request">request</a> object.
 In true RESTful style, both these parameters can be used to initialized the
 components tree.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The HTTP method can also be sent by the client though the <code class="docutils literal"><span class="pre">_method</span></code> parameter,
+<p class="last">The HTTP method can also be sent by the client though the <code class="docutils literal notranslate"><span class="pre">_method</span></code> parameter,
 using GET or POST requests.</p>
 </div>
 </div>
@@ -639,7 +639,7 @@ using GET or POST requests.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

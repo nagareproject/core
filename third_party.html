@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installing a third party application &mdash; Nagare 0.5.0 documentation</title>
+  <title>Installing a third party application &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Nagare Tutorial, learning concepts" href="tutorial1.html"/>
         <link rel="prev" title="Deploying Nagare applications in a production environment" href="deployment.html"/> 
 
@@ -210,32 +210,32 @@
 <h2>Installing the application<a class="headerlink" href="#installing-the-application" title="Permalink to this headline">¶</a></h2>
 <p>If the application is available on the <a class="reference external" href="http://pypi.python.org">PyPi</a>, use
 the command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install &lt;application&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install &lt;application&gt;
 </pre></div>
 </div>
 <p>else, retrieve the application archive or egg and install it with:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install &lt;path/to/the/archive&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/easy_install &lt;path/to/the/archive&gt;
 </pre></div>
 </div>
 <p>To check the application is correctly registered to Nagare, enter:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve
 </pre></div>
 </div>
 <p>which lists all the registered applications.</p>
 <p>The application is installed in is own directory under
-<code class="docutils literal"><span class="pre">&lt;NAGARE_HOME&gt;/lib/python2.7/site-packages</span></code></p>
+<code class="docutils literal notranslate"><span class="pre">&lt;NAGARE_HOME&gt;/lib/python2.7/site-packages</span></code></p>
 </div>
 <div class="section" id="serving-the-application">
 <h2>Serving the application<a class="headerlink" href="#serving-the-application" title="Permalink to this headline">¶</a></h2>
-<p>Check, in the <code class="docutils literal"><span class="pre">conf</span></code> directory of the application that the parameters of
+<p>Check, in the <code class="docutils literal notranslate"><span class="pre">conf</span></code> directory of the application that the parameters of
 the configuration file are correct for your environment. For example, check
 that the database URI is correct if the application uses a database.</p>
 <p>If the application uses a database, create the database tables:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db &lt;application&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin create-db &lt;application&gt;
 </pre></div>
 </div>
 <p>Then, the application is launched with:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve &lt;application&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve &lt;application&gt;
 </pre></div>
 </div>
 <p>To know how to configure an application, consult the
@@ -287,7 +287,7 @@ that the database URI is correct if the application uses a database.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

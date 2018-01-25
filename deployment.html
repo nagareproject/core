@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Deploying Nagare applications in a production environment &mdash; Nagare 0.5.0 documentation</title>
+  <title>Deploying Nagare applications in a production environment &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Installing a third party application" href="third_party.html"/>
         <link rel="prev" title="The publisher configuration file" href="publisher_file.html"/> 
 
@@ -211,12 +211,12 @@
 <h1>Deploying Nagare applications in a production environment<a class="headerlink" href="#deploying-nagare-applications-in-a-production-environment" title="Permalink to this headline">¶</a></h1>
 <p>Serving a Nagare application in a development setup is easy. You just have to launch
 the following command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>nagare-admin serve <span class="o">[</span>options<span class="o">]</span> &lt;app_name&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nagare-admin serve <span class="o">[</span>options<span class="o">]</span> &lt;app_name&gt;
 </pre></div>
 </div>
 <p>It starts a standalone threaded server which stores the sessions data in memory.</p>
 <p>This standalone server is very convenient when developing Nagare applications, especially when
-using the <code class="docutils literal"><span class="pre">--reload</span></code> and <code class="docutils literal"><span class="pre">--debug</span></code> options that respectively restart the server when source
+using the <code class="docutils literal notranslate"><span class="pre">--reload</span></code> and <code class="docutils literal notranslate"><span class="pre">--debug</span></code> options that respectively restart the server when source
 files are changed and show the exceptions stacktraces as Web pages instead of in the console
 shell.</p>
 <p>However, this standalone mode is not suitable in a production environment, because it is not
@@ -252,12 +252,12 @@ contents of the application since they cache the data and they are mostly writte
 in C.</p>
 <div class="section" id="the-publisher-configuration">
 <h3>The publisher configuration<a class="headerlink" href="#the-publisher-configuration" title="Permalink to this headline">¶</a></h3>
-<p>In order to serve a Nagare application through FastCGI, we must first tell the <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code> utility
+<p>In order to serve a Nagare application through FastCGI, we must first tell the <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code> utility
 that we don’t want to use the standalone server but FastCGI instead. This is done by creating a publisher
-configuration file (see <a class="reference internal" href="publisher_file.html"><span class="doc">The publisher configuration file</span></a>) and passing it to the <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code> command
-with the <code class="docutils literal"><span class="pre">-c</span></code> option.</p>
+configuration file (see <a class="reference internal" href="publisher_file.html"><span class="doc">The publisher configuration file</span></a>) and passing it to the <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code> command
+with the <code class="docutils literal notranslate"><span class="pre">-c</span></code> option.</p>
 <p>Here is a typical publisher configuration file to serve an application through FastCGI:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[publisher]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[publisher]</span>
 <span class="na">type</span> <span class="o">=</span> <span class="s">fastcgi</span>
 <span class="na">host</span> <span class="o">=</span> <span class="s">127.0.0.1</span>
 <span class="na">port</span> <span class="o">=</span> <span class="s">9000</span>
@@ -268,24 +268,24 @@ with the <code class="docutils literal"><span class="pre">-c</span></code> optio
 <span class="na">port</span> <span class="o">=</span> <span class="s">11211</span>
 </pre></div>
 </div>
-<p>We use the <code class="docutils literal"><span class="pre">fastcgi</span></code> backend for the publisher (with the default settings) and the <code class="docutils literal"><span class="pre">memcache</span></code> backend for
+<p>We use the <code class="docutils literal notranslate"><span class="pre">fastcgi</span></code> backend for the publisher (with the default settings) and the <code class="docutils literal notranslate"><span class="pre">memcache</span></code> backend for
 the sessions management.</p>
 <p>Then, the FastCGI server can be launched by running this command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>nagare-admin serve -c publisher.conf &lt;app_name&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nagare-admin serve -c publisher.conf &lt;app_name&gt;
 </pre></div>
 </div>
 <p>By default, the FastCGI server forks 5 worker processes at startup to handle the incoming requests received on
 port 9000. However, the number of worker processes can grow or shrink depending on the workload.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>When an application is served through FastCGI, you must use a <code class="docutils literal"><span class="pre">memcache</span></code>
-backend for storing the sessions data. The default <code class="docutils literal"><span class="pre">standalone</span></code> session
+<p>When an application is served through FastCGI, you must use a <code class="docutils literal notranslate"><span class="pre">memcache</span></code>
+backend for storing the sessions data. The default <code class="docutils literal notranslate"><span class="pre">standalone</span></code> session
 backend will not work with FastCGI because the session data is stored
 in memory, and since the processes spawned by the FastCGI server don’t
 share memory (by definition), the sessions data stored in one process would
 not be available in another process.</p>
 <p class="last">That’s why a kind of distributed “shared memory” session backend should be
-used with the FastCGI publisher. So don’t forget to launch your <code class="docutils literal"><span class="pre">memcached</span></code>
+used with the FastCGI publisher. So don’t forget to launch your <code class="docutils literal notranslate"><span class="pre">memcached</span></code>
 server.</p>
 </div>
 <p>As the sessions are shared through the memcached server, the same FastCGI
@@ -300,26 +300,26 @@ show you how to achieve that with <a class="reference external" href="http://htt
 server supporting FastCGI if you want to.</p>
 <div class="section" id="apache">
 <h4>Apache<a class="headerlink" href="#apache" title="Permalink to this headline">¶</a></h4>
-<p>On Apache, the FastCGI support is provided by the <code class="docutils literal"><span class="pre">mod_fastcgi</span></code> module which is not installed by default.
+<p>On Apache, the FastCGI support is provided by the <code class="docutils literal notranslate"><span class="pre">mod_fastcgi</span></code> module which is not installed by default.
 You should download and install it by yourself, as described <a class="reference external" href="http://www.fastcgi.com/mod_fastcgi/INSTALL">here</a>.
-Then, the <code class="docutils literal"><span class="pre">mod_fastcgi</span></code> module should be activated by including it in the main apache configuration file as shown
+Then, the <code class="docutils literal notranslate"><span class="pre">mod_fastcgi</span></code> module should be activated by including it in the main apache configuration file as shown
 below:</p>
-<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span> fastcgi_module <span class="sx">/path/to/mod_fastcgi.so</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span> fastcgi_module <span class="sx">/path/to/mod_fastcgi.so</span>
 </pre></div>
 </div>
 <p>The rewrite rules serving the static files of your application can be generated with this command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>nagare-admin create-rules --apache &lt;application&gt; &gt; rewrite_rules.apache
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nagare-admin create-rules --apache &lt;application&gt; &gt; rewrite_rules.apache
 </pre></div>
 </div>
 <p>You should obtain something like this:</p>
-<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">RewriteEngine</span> <span class="k">On</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nb">RewriteEngine</span> <span class="k">On</span>
 <span class="nb">RewriteRule</span> ^/static/nagare/(.*)$ <span class="sx">/path/to/python/site-packages/nagare-0.5.0-py2.7.egg/static/</span>$1 [L]
 <span class="nb">RewriteRule</span> ^/static/myapp/(.*)$ <span class="sx">/path/to/python/site-packages/myapp-0.0.1-py2.7.egg/static/</span>$1 [L]
 </pre></div>
 </div>
-<p>Then, you must create a <code class="docutils literal"><span class="pre">VirtualHost</span></code> for your application and include the rewrite rules file
+<p>Then, you must create a <code class="docutils literal notranslate"><span class="pre">VirtualHost</span></code> for your application and include the rewrite rules file
 into the configuration, as shown below:</p>
-<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="c"># virtualhost configuration for http://www.myapp.com</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="c"># virtualhost configuration for http://www.myapp.com</span>
 <span class="nt">&lt;VirtualHost</span> <span class="s">*:80</span><span class="nt">&gt;</span>
     <span class="nb">ServerName</span> www.myapp.com
 
@@ -330,13 +330,13 @@ into the configuration, as shown below:</p>
 <span class="nt">&lt;/VirtualHost&gt;</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">FastCGIExternalServer</span></code> directive instructs Apache to forward the requests directed to
-<code class="docutils literal"><span class="pre">/path/to/python/site-packages/fcgi</span></code> to the FastCGI server listening at <code class="docutils literal"><span class="pre">127.0.0.1</span></code> on port
-<code class="docutils literal"><span class="pre">9000</span></code> which has been launched externally, and the last <code class="docutils literal"><span class="pre">RewriteRule</span></code> directive redirects
-the requests not handled by the other rewrite rules to <code class="docutils literal"><span class="pre">/path/to/python/site-packages/fcgi</span></code>,
+<p>The <code class="docutils literal notranslate"><span class="pre">FastCGIExternalServer</span></code> directive instructs Apache to forward the requests directed to
+<code class="docutils literal notranslate"><span class="pre">/path/to/python/site-packages/fcgi</span></code> to the FastCGI server listening at <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> on port
+<code class="docutils literal notranslate"><span class="pre">9000</span></code> which has been launched externally, and the last <code class="docutils literal notranslate"><span class="pre">RewriteRule</span></code> directive redirects
+the requests not handled by the other rewrite rules to <code class="docutils literal notranslate"><span class="pre">/path/to/python/site-packages/fcgi</span></code>,
 thus forwarding those requests to the FastCGI processes.</p>
-<p>Finally, you should <code class="docutils literal"><span class="pre">include</span></code> the <code class="docutils literal"><span class="pre">VirtualHost</span></code> configuration file into the main
-apache configuration file, or put it in the <code class="docutils literal"><span class="pre">conf.d</span></code> directory of your apache installation,
+<p>Finally, you should <code class="docutils literal notranslate"><span class="pre">include</span></code> the <code class="docutils literal notranslate"><span class="pre">VirtualHost</span></code> configuration file into the main
+apache configuration file, or put it in the <code class="docutils literal notranslate"><span class="pre">conf.d</span></code> directory of your apache installation,
 and restart Apache.</p>
 </div>
 <div class="section" id="nginx">
@@ -344,11 +344,11 @@ and restart Apache.</p>
 <p>Nginx has builtin support for FastCGI thanks to the <a class="reference external" href="http://wiki.nginx.org/HttpFastcgiModule">Nginx’s HttpFastcgiModule</a>, so no
 manual installation is necessary.</p>
 <p>The rewrite rules serving the static files can be generated with this command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>nagare-admin create-rules --nginx &lt;application&gt; &gt; rewrite_rules.nginx
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nagare-admin create-rules --nginx &lt;application&gt; &gt; rewrite_rules.nginx
 </pre></div>
 </div>
 <p>You should obtain something like this:</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="s">/static/nagare/</span> <span class="p">{</span>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="s">/static/nagare/</span> <span class="p">{</span>
   <span class="kn">alias</span> <span class="s">/path/to/python/site-packages/nagare-0.5.0-py2.7.egg/static/</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -358,7 +358,7 @@ manual installation is necessary.</p>
 </pre></div>
 </div>
 <p>Then, you must create a server configuration, as shown below:</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span></span><span class="k">server</span> <span class="p">{</span>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span> <span class="p">{</span>
     <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
     <span class="kn">server_name</span> <span class="s">www.myapp.com</span><span class="p">;</span>
     <span class="kn">access_log</span> <span class="s">/var/log/nginx/myapp.access.log</span><span class="p">;</span>
@@ -378,21 +378,21 @@ manual installation is necessary.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Note that, in addition to the default FastCGI parameters specified in <code class="docutils literal"><span class="pre">/etc/nginx/fastcgi_params</span></code>,
-we must also set the <code class="docutils literal"><span class="pre">PATH_INFO</span></code> parameter which is required by Nagare.</p>
-<p>Finally, you must copy the configuration file in <code class="docutils literal"><span class="pre">/etc/nginx/conf.d/</span></code>, or create a symbolic link
+<p>Note that, in addition to the default FastCGI parameters specified in <code class="docutils literal notranslate"><span class="pre">/etc/nginx/fastcgi_params</span></code>,
+we must also set the <code class="docutils literal notranslate"><span class="pre">PATH_INFO</span></code> parameter which is required by Nagare.</p>
+<p>Finally, you must copy the configuration file in <code class="docutils literal notranslate"><span class="pre">/etc/nginx/conf.d/</span></code>, or create a symbolic link
 there pointing to your configuration file, and restart Nginx.</p>
 </div>
 <div class="section" id="lighttpd">
 <h4>Lighttpd<a class="headerlink" href="#lighttpd" title="Permalink to this headline">¶</a></h4>
 <p>Lighttpd has also builtin support for FastCGI thanks to the <a class="reference external" href="http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ModFastCGI">Lighttpd’s mod_fastcgi</a> module.</p>
 <p>The rewrite rules serving the static files can be generated with this command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>nagare-admin create-rules --lighttpd &lt;application&gt; &gt; rewrite_rules.lighttpd
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nagare-admin create-rules --lighttpd &lt;application&gt; &gt; rewrite_rules.lighttpd
 </pre></div>
 </div>
-<p>However, it’s easier the generate the rewrite rules in an <code class="docutils literal"><span class="pre">include_shell</span></code> directive.
+<p>However, it’s easier the generate the rewrite rules in an <code class="docutils literal notranslate"><span class="pre">include_shell</span></code> directive.
 An example of Lighttpd server configuration is show below:</p>
-<div class="highlight-lighttpd"><div class="highlight"><pre><span></span><span class="k">server.modules</span> <span class="o">=</span> <span class="p">(</span> <span class="s2">&quot;mod_rewrite&quot;</span><span class="p">,</span> <span class="s2">&quot;mod_fastcgi&quot;</span> <span class="p">)</span>
+<div class="highlight-lighttpd notranslate"><div class="highlight"><pre><span></span><span class="k">server.modules</span> <span class="o">=</span> <span class="p">(</span> <span class="s2">&quot;mod_rewrite&quot;</span><span class="p">,</span> <span class="s2">&quot;mod_fastcgi&quot;</span> <span class="p">)</span>
 <span class="k">server.errorlog</span> <span class="o">=</span> <span class="s2">&quot;/tmp/lighttpd.log&quot;</span>
 <span class="k">server.indexfiles</span> <span class="o">=</span> <span class="p">(</span> <span class="s2">&quot;index.html&quot;</span> <span class="p">)</span>
 
@@ -474,7 +474,7 @@ An example of Lighttpd server configuration is show below:</p>
  <span class="p">)</span>
 </pre></div>
 </div>
-<p>Then, place this config file in <code class="docutils literal"><span class="pre">/etc/lighttpd/lighttpd.conf</span></code> and restart Lighttpd.</p>
+<p>Then, place this config file in <code class="docutils literal notranslate"><span class="pre">/etc/lighttpd/lighttpd.conf</span></code> and restart Lighttpd.</p>
 </div>
 </div>
 </div>
@@ -483,7 +483,7 @@ An example of Lighttpd server configuration is show below:</p>
 <p>Since the FastCGI processes are launched externally from the Web server, you can use any monitoring
 tool to handle the processes, such as <a class="reference external" href="http://supervisord.org/">Supervisor</a>. Here is a typical configuration file that starts
 a Nagare application as a daemon with Supervisor:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[unix_http_server]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[unix_http_server]</span>
 <span class="na">file</span><span class="o">=</span><span class="s">/path/to/supervisord/supervisor.sock</span>
 
 <span class="k">[supervisord]</span>
@@ -507,12 +507,12 @@ a Nagare application as a daemon with Supervisor:</p>
 </pre></div>
 </div>
 <p>Then, you can start the application by running this command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>/path/to/supervisord -c /path/to/supervisord.conf
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>/path/to/supervisord -c /path/to/supervisord.conf
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">supervisord</span></code> process daemonizes itself and starts the FastCGI processes through
-the <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code> command. Furthermore, they are restarted automatically when something goes
-wrong thanks to the <code class="docutils literal"><span class="pre">autorestart</span></code> option.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> process daemonizes itself and starts the FastCGI processes through
+the <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">serve</span></code> command. Furthermore, they are restarted automatically when something goes
+wrong thanks to the <code class="docutils literal notranslate"><span class="pre">autorestart</span></code> option.</p>
 </div>
 </div>
 
@@ -558,7 +558,7 @@ wrong thanks to the <code class="docutils literal"><span class="pre">autorestart
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

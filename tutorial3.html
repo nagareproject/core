@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Nagare Tutorial, learning concepts &mdash; Nagare 0.5.0 documentation</title>
+  <title>Nagare Tutorial, learning concepts &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Nagare Tutorial, learning concepts" href="tutorial4.html"/>
         <link rel="prev" title="Nagare Tutorial, learning concepts" href="tutorial2.html"/> 
 
@@ -212,8 +212,8 @@
 <h2>Part 3. Add actions<a class="headerlink" href="#part-3-add-actions" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
 <li><p class="first">Add active nodes into DOM tree:</p>
-<p>Change the default view of your <code class="docutils literal"><span class="pre">Counter</span></code> class to add html links (<code class="docutils literal"><span class="pre">a</span></code> tags):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<p>Change the default view of your <code class="docutils literal notranslate"><span class="pre">Counter</span></code> class to add html links (<code class="docutils literal notranslate"><span class="pre">a</span></code> tags):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="s1">&#39;Value: &#39;</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
@@ -225,11 +225,11 @@
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
 </pre></div>
 </div>
-<p>Here, the “lshift” <code class="docutils literal"><span class="pre">&lt;&lt;</span></code> operator is used to append nodes to the renderer. Then its <code class="docutils literal"><span class="pre">root</span></code> node is finally returned.</p>
+<p>Here, the “lshift” <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> operator is used to append nodes to the renderer. Then its <code class="docutils literal notranslate"><span class="pre">root</span></code> node is finally returned.</p>
 </li>
 <li><p class="first">Bind action to active nodes:</p>
-<p>As active nodes, <code class="docutils literal"><span class="pre">a</span></code> nodes have a special <code class="docutils literal"><span class="pre">action()</span></code> method which is used to bind action to the node. An action can be any callable as, in this case, a bound method:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
+<p>As active nodes, <code class="docutils literal notranslate"><span class="pre">a</span></code> nodes have a special <code class="docutils literal notranslate"><span class="pre">action()</span></code> method which is used to bind action to the node. An action can be any callable as, in this case, a bound method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="s1">&#39;Value: &#39;</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
@@ -250,23 +250,23 @@
 <li>Phase #2: the presentation service generates a DOM tree from the different views of the components. The DOM tree is then serialized to HTML and sent back to the browser.</li>
 </ul>
 <p>If you look closely at the URL, you will see something like:</p>
-<p><code class="docutils literal"><span class="pre">?_s=2171996978143275&amp;_c=00011&amp;_action480534548</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">?_s=2171996978143275&amp;_c=00011&amp;_action480534548</span></code></p>
 <p>where:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">_s</span></code>: id of the session created for the application,</li>
-<li><code class="docutils literal"><span class="pre">_c</span></code>: id of the snapshot (the continuation) to use,</li>
-<li><code class="docutils literal"><span class="pre">_actionxxx</span></code>: id of the action to call.</li>
+<li><code class="docutils literal notranslate"><span class="pre">_s</span></code>: id of the session created for the application,</li>
+<li><code class="docutils literal notranslate"><span class="pre">_c</span></code>: id of the snapshot (the continuation) to use,</li>
+<li><code class="docutils literal notranslate"><span class="pre">_actionxxx</span></code>: id of the action to call.</li>
 </ul>
 <p>As you can see the URL are non-significative by default.</p>
 <p>With a MVC framework you must always map an URL to an action, even if its result is not a resource (in REST terminology), like the third step of a wizard or a contextual shopping basket.</p>
 <p>With Nagare you DON’T HAVE to use significative URL but you totally CAN if you NEED it (see <a class="reference internal" href="restful.html"><span class="doc">Significative “RESTful” URLs</span></a>). Also, non-significative URL with randomized sessions and actions ids improve security.</p>
 </li>
 <li><p class="first">Back and Fork</p>
-<p>Start with a counter at 0, do ten times <code class="docutils literal"><span class="pre">++</span></code> and see what happens when you use your browser back button 4 times.
-What do you expect when doing <code class="docutils literal"><span class="pre">++</span></code> now?
+<p>Start with a counter at 0, do ten times <code class="docutils literal notranslate"><span class="pre">++</span></code> and see what happens when you use your browser back button 4 times.
+What do you expect when doing <code class="docutils literal notranslate"><span class="pre">++</span></code> now?
 11?
 7?</p>
-<p>Now open a new tab on <code class="docutils literal"><span class="pre">--</span></code> link, you get one tab with a value of 7 and one tab with a value of 6.
+<p>Now open a new tab on <code class="docutils literal notranslate"><span class="pre">--</span></code> link, you get one tab with a value of 7 and one tab with a value of 6.
 Play with the 2 counters, that’s right, you’ve got 2 different counters!</p>
 </li>
 </ol>
@@ -315,7 +315,7 @@ Play with the 2 counters, that’s right, you’ve got 2 different counters!</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

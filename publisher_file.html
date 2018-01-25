@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The publisher configuration file &mdash; Nagare 0.5.0 documentation</title>
+  <title>The publisher configuration file &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Deploying Nagare applications in a production environment" href="deployment.html"/>
         <link rel="prev" title="The application configuration file" href="configuration_file.html"/> 
 
@@ -207,21 +207,21 @@
 <h1>The publisher configuration file<a class="headerlink" href="#the-publisher-configuration-file" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="using-the-configuration-file">
 <h2>Using the configuration file<a class="headerlink" href="#using-the-configuration-file" title="Permalink to this headline">¶</a></h2>
-<p>To configure how an application is published, use the <code class="docutils literal"><span class="pre">-c</span></code> option of the
-<code class="docutils literal"><span class="pre">serve</span></code> administrative command:</p>
+<p>To configure how an application is published, use the <code class="docutils literal notranslate"><span class="pre">-c</span></code> option of the
+<code class="docutils literal notranslate"><span class="pre">serve</span></code> administrative command:</p>
 <blockquote>
-<div><div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve -c /path/to/the/publisher/config.cfg &lt;application&gt;
+<div><div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve -c /path/to/the/publisher/config.cfg &lt;application&gt;
 </pre></div>
 </div>
 </div></blockquote>
-<p>Several examples of publisher configurations are located into <code class="docutils literal"><span class="pre">conf/publishers</span></code>
+<p>Several examples of publisher configurations are located into <code class="docutils literal notranslate"><span class="pre">conf/publishers</span></code>
 under the framework installation directory.</p>
 </div>
 <div class="section" id="structure">
 <h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
-<p>For the boolean parameters, a value of <code class="docutils literal"><span class="pre">true</span></code>, <code class="docutils literal"><span class="pre">yes</span></code>, <code class="docutils literal"><span class="pre">on</span></code> or <code class="docutils literal"><span class="pre">1</span></code> means True
-and a value of <code class="docutils literal"><span class="pre">false</span></code>, <code class="docutils literal"><span class="pre">no</span></code>, <code class="docutils literal"><span class="pre">off</span></code> or <code class="docutils literal"><span class="pre">0</span></code> mean False.</p>
-<p>Comments start with the <code class="docutils literal"><span class="pre">#</span></code> character.</p>
+<p>For the boolean parameters, a value of <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">yes</span></code>, <code class="docutils literal notranslate"><span class="pre">on</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code> means True
+and a value of <code class="docutils literal notranslate"><span class="pre">false</span></code>, <code class="docutils literal notranslate"><span class="pre">no</span></code>, <code class="docutils literal notranslate"><span class="pre">off</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code> mean False.</p>
+<p>Comments start with the <code class="docutils literal notranslate"><span class="pre">#</span></code> character.</p>
 <div class="section" id="publisher-section">
 <h3>[publisher] section<a class="headerlink" href="#publisher-section" title="Permalink to this headline">¶</a></h3>
 <p>This section defines the publisher to use.</p>
@@ -247,14 +247,14 @@ and a value of <code class="docutils literal"><span class="pre">false</span></co
 <p>The current choices are:</p>
 <blockquote class="last">
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">standalone</span></code>: Python threaded HTTP server
+<li><code class="docutils literal notranslate"><span class="pre">standalone</span></code>: Python threaded HTTP server
 (convenient in development mode)</li>
-<li><code class="docutils literal"><span class="pre">fastcgi</span></code>: multi-processes fastcgi server.
+<li><code class="docutils literal notranslate"><span class="pre">fastcgi</span></code>: multi-processes fastcgi server.
 A external HTTP is required (recommended in
 production)</li>
-<li><code class="docutils literal"><span class="pre">fapws3</span></code>: fast event-driven HTTP server
+<li><code class="docutils literal notranslate"><span class="pre">fapws3</span></code>: fast event-driven HTTP server
 (experimental)</li>
-<li><code class="docutils literal"><span class="pre">eventlet</span></code>: fast event-driven HTTP server
+<li><code class="docutils literal notranslate"><span class="pre">eventlet</span></code>: fast event-driven HTTP server
 (experimental)</li>
 </ul>
 </div></blockquote>
@@ -269,7 +269,7 @@ external requests, set this parameter to the
 internet address of your external interface or
 to ‘0.0.0.0’ to listen to on all the interfaces
 of your system.
-The optional <code class="docutils literal"><span class="pre">--host</span></code> on the command line
+The optional <code class="docutils literal notranslate"><span class="pre">--host</span></code> on the command line
 takes precedence over this parameter.</td>
 </tr>
 <tr class="row-even"><td>port</td>
@@ -277,11 +277,11 @@ takes precedence over this parameter.</td>
 <td><em>publisher
 dependent</em></td>
 <td>Port where to listen to the requests. If no
-value is explicitly given, the <code class="docutils literal"><span class="pre">standalone</span></code>,
-<code class="docutils literal"><span class="pre">fapws3</span></code> and <code class="docutils literal"><span class="pre">eventlet</span></code> publishers listen on
-port <code class="docutils literal"><span class="pre">8080</span></code>. And the <code class="docutils literal"><span class="pre">fastcgi</span></code> publisher
-listen on <code class="docutils literal"><span class="pre">9000</span></code>.
-The optional <code class="docutils literal"><span class="pre">--port</span> <span class="pre">/</span> <span class="pre">-p</span></code> on the command line
+value is explicitly given, the <code class="docutils literal notranslate"><span class="pre">standalone</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fapws3</span></code> and <code class="docutils literal notranslate"><span class="pre">eventlet</span></code> publishers listen on
+port <code class="docutils literal notranslate"><span class="pre">8080</span></code>. And the <code class="docutils literal notranslate"><span class="pre">fastcgi</span></code> publisher
+listen on <code class="docutils literal notranslate"><span class="pre">9000</span></code>.
+The optional <code class="docutils literal notranslate"><span class="pre">--port</span> <span class="pre">/</span> <span class="pre">-p</span></code> on the command line
 takes precedence over this parameter.</td>
 </tr>
 <tr class="row-odd"><td>debug</td>
@@ -292,7 +292,7 @@ takes precedence over this parameter.</td>
 </tbody>
 </table>
 <p>If the application is publisher by the FastCGI publisher (i.e
-<code class="docutils literal"><span class="pre">type=fastcgi</span></code>), these parameters can also be set:</p>
+<code class="docutils literal notranslate"><span class="pre">type=fastcgi</span></code>), these parameters can also be set:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="20%" />
@@ -345,8 +345,8 @@ before being killed</td>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">New publishers can be added to the framework, and then selected with the <code class="docutils literal"><span class="pre">type</span></code>
-parameter, by registering them under the <code class="docutils literal"><span class="pre">[nagare.publishers]</span></code> <a class="reference internal" href="entry_points.html"><span class="doc">entry point</span></a>.</p>
+<p class="last">New publishers can be added to the framework, and then selected with the <code class="docutils literal notranslate"><span class="pre">type</span></code>
+parameter, by registering them under the <code class="docutils literal notranslate"><span class="pre">[nagare.publishers]</span></code> <a class="reference internal" href="entry_points.html"><span class="doc">entry point</span></a>.</p>
 </div>
 </div>
 <div class="section" id="sessions-section">
@@ -374,10 +374,10 @@ parameter, by registering them under the <code class="docutils literal"><span cl
 <p>The current choices are:</p>
 <blockquote class="last">
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">standalone</span></code>: threads-safe in-memory sessions
-manager. Can be used with the <code class="docutils literal"><span class="pre">standalone</span></code>,
-<code class="docutils literal"><span class="pre">fapws3</span></code> or <code class="docutils literal"><span class="pre">eventlet</span></code> publisher.</li>
-<li><code class="docutils literal"><span class="pre">memcache</span></code>: the sessions are stored and
+<li><code class="docutils literal notranslate"><span class="pre">standalone</span></code>: threads-safe in-memory sessions
+manager. Can be used with the <code class="docutils literal notranslate"><span class="pre">standalone</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fapws3</span></code> or <code class="docutils literal notranslate"><span class="pre">eventlet</span></code> publisher.</li>
+<li><code class="docutils literal notranslate"><span class="pre">memcache</span></code>: the sessions are stored and
 shared into an external memcached server.
 Can be use will all the publishers</li>
 </ul>
@@ -386,7 +386,7 @@ Can be use will all the publishers</li>
 </tr>
 </tbody>
 </table>
-<p>If the <code class="docutils literal"><span class="pre">type</span></code> parameter has the value <code class="docutils literal"><span class="pre">standalone</span></code>, the following parameters
+<p>If the <code class="docutils literal notranslate"><span class="pre">type</span></code> parameter has the value <code class="docutils literal notranslate"><span class="pre">standalone</span></code>, the following parameters
 can be configured:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -410,7 +410,7 @@ can be configured:</p>
 </tr>
 </tbody>
 </table>
-<p>If the <code class="docutils literal"><span class="pre">type</span></code> parameter has the value <code class="docutils literal"><span class="pre">memcache</span></code>, the following parameters
+<p>If the <code class="docutils literal notranslate"><span class="pre">type</span></code> parameter has the value <code class="docutils literal notranslate"><span class="pre">memcache</span></code>, the following parameters
 can be configured:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -441,7 +441,7 @@ can be configured:</p>
 <td>No</td>
 <td>0</td>
 <td>How long (in seconds) does the session live?
-A value of <code class="docutils literal"><span class="pre">0</span></code> means the sessions are managed
+A value of <code class="docutils literal notranslate"><span class="pre">0</span></code> means the sessions are managed
 in LRU.</td>
 </tr>
 <tr class="row-odd"><td>reset</td>
@@ -461,7 +461,7 @@ application (re)starts.</td>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">New sessions managers can be added to the framework, and then selected with the
-<code class="docutils literal"><span class="pre">type</span></code> parameter, by registering them under the <code class="docutils literal"><span class="pre">[nagare.sessions]</span></code>
+<code class="docutils literal notranslate"><span class="pre">type</span></code> parameter, by registering them under the <code class="docutils literal notranslate"><span class="pre">[nagare.sessions]</span></code>
 <a class="reference internal" href="entry_points.html"><span class="doc">entry point</span></a>.</p>
 </div>
 </div>
@@ -545,7 +545,7 @@ source changes</td>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>nagare.sessions package &mdash; Nagare 0.5.0 documentation</title>
+  <title>nagare.sessions package &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="../index.html"/> 
+    <link rel="top" title="Nagare 0.5.1 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -203,7 +203,7 @@
 <dl class="class">
 <dt id="nagare.sessions.common.Sessions">
 <em class="property">class </em><code class="descclassname">nagare.sessions.common.</code><code class="descname">Sessions</code><span class="sig-paren">(</span><em>states_history=True</em>, <em>security_cookie_httponly=True</em>, <em>security_cookie_name='_nagare'</em>, <em>security_cookie_secure=False</em>, <em>serializer=&lt;class 'nagare.sessions.serializer.Dummy'&gt;</em>, <em>pickler=None</em>, <em>unpickler=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.common.Sessions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The sessions managers</p>
 <dl class="method">
 <dt id="nagare.sessions.common.Sessions.check_session_id">
@@ -212,12 +212,12 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – id of a session</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – id of a session</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>is <code class="docutils literal"><span class="pre">session_id</span></code> the id of an existing session?</li>
+<li>is <code class="docutils literal notranslate"><span class="pre">session_id</span></code> the id of an existing session?</li>
 </ul>
 </dd>
 </dl>
@@ -230,9 +230,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – id of the session</li>
-<li><code class="docutils literal"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
-<li><code class="docutils literal"><span class="pre">lock</span></code> – the lock of the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – id of the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">lock</span></code> – the lock of the session</li>
 </ul>
 </dd>
 </dl>
@@ -245,7 +245,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -263,7 +263,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – id of the session to delete</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – id of the session to delete</li>
 </ul>
 </dd>
 </dl>
@@ -276,8 +276,8 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id of this state</li>
-<li><code class="docutils literal"><span class="pre">state_id</span></code> – id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_id</span></code> – id of this state</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -298,7 +298,7 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -316,8 +316,8 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id of this state</li>
-<li><code class="docutils literal"><span class="pre">state_id</span></code> – id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_id</span></code> – id of this state</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -337,9 +337,9 @@
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">request</span></code> – the web request object</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the web response object</li>
-<li><code class="docutils literal"><span class="pre">use_same_state</span></code> – is a copy of the state to created?</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response object</li>
+<li><code class="docutils literal notranslate"><span class="pre">use_same_state</span></code> – is a copy of the state to created?</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -358,9 +358,9 @@ hidden ids</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">h</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">request</span></code> – the web request object</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the web response object</li>
+<li><code class="docutils literal notranslate"><span class="pre">h</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request object</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response object</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -378,14 +378,14 @@ hidden ids</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">request</span></code> – the web request</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the web response</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
 <li>session id parameter</li>
-<li>state id parameter (optional, only if <code class="docutils literal"><span class="pre">states_history</span></code> is <code class="docutils literal"><span class="pre">True</span></code>)</li>
+<li>state id parameter (optional, only if <code class="docutils literal notranslate"><span class="pre">states_history</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
 </ul>
 </dd>
 </dl>
@@ -398,9 +398,9 @@ hidden ids</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">filename</span></code> – the path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 </dl>
@@ -413,11 +413,11 @@ hidden ids</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id of this state</li>
-<li><code class="docutils literal"><span class="pre">state_id</span></code> – id of this state</li>
-<li><code class="docutils literal"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
-<li><code class="docutils literal"><span class="pre">use_same_state</span></code> – is a copy of this state to be created?</li>
-<li><code class="docutils literal"><span class="pre">data</span></code> – the objects graph</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_id</span></code> – id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">use_same_state</span></code> – is a copy of this state to be created?</li>
+<li><code class="docutils literal notranslate"><span class="pre">data</span></code> – the objects graph</li>
 </ul>
 </dd>
 </dl>
@@ -425,7 +425,7 @@ hidden ids</p>
 
 <dl class="attribute">
 <dt id="nagare.sessions.common.Sessions.spec">
-<code class="descname">spec</code><em class="property"> = {'pickler': 'string(default=&quot;cPickle:Pickler&quot;)', 'unpickler': 'string(default=&quot;cPickle:Unpickler&quot;)', 'states_history': 'boolean(default=True)', 'security_cookie_secure': 'boolean(default=False)', 'security_cookie_httponly': 'boolean(default=True)', 'security_cookie_name': 'string(default=&quot;_nagare&quot;)', 'serializer': 'string(default=&quot;nagare.sessions.serializer:Dummy&quot;)'}</em><a class="headerlink" href="#nagare.sessions.common.Sessions.spec" title="Permalink to this definition">¶</a></dt>
+<code class="descname">spec</code><em class="property"> = {'pickler': 'string(default=&quot;cPickle:Pickler&quot;)', 'security_cookie_httponly': 'boolean(default=True)', 'security_cookie_name': 'string(default=&quot;_nagare&quot;)', 'security_cookie_secure': 'boolean(default=False)', 'serializer': 'string(default=&quot;nagare.sessions.serializer:Dummy&quot;)', 'states_history': 'boolean(default=True)', 'unpickler': 'string(default=&quot;cPickle:Unpickler&quot;)'}</em><a class="headerlink" href="#nagare.sessions.common.Sessions.spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -435,12 +435,12 @@ hidden ids</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id of this state</li>
-<li><code class="docutils literal"><span class="pre">state_id</span></code> – id of this state</li>
-<li><code class="docutils literal"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
-<li><code class="docutils literal"><span class="pre">use_same_state</span></code> – is this state to be stored in the previous snapshot?</li>
-<li><code class="docutils literal"><span class="pre">session_data</span></code> – data to keep into the session</li>
-<li><code class="docutils literal"><span class="pre">state_data</span></code> – data to keep into the state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_id</span></code> – id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">use_same_state</span></code> – is this state to be stored in the previous snapshot?</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_data</span></code> – data to keep into the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_data</span></code> – data to keep into the state</li>
 </ul>
 </dd>
 </dl>
@@ -451,7 +451,7 @@ hidden ids</p>
 <dl class="class">
 <dt id="nagare.sessions.common.State">
 <em class="property">class </em><code class="descclassname">nagare.sessions.common.</code><code class="descname">State</code><span class="sig-paren">(</span><em>sessions_manager</em>, <em>session_id</em>, <em>state_id</em>, <em>secure_id</em>, <em>use_same_state</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.common.State" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A state (objects graph serialized / de-serialized by a sessions manager)</p>
 <dl class="method">
 <dt id="nagare.sessions.common.State.acquire">
@@ -472,7 +472,7 @@ hidden ids</p>
 <dl class="docutils">
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the objects graph (<code class="docutils literal"><span class="pre">None</span></code> if this state is new)</li>
+<li>the objects graph (<code class="docutils literal notranslate"><span class="pre">None</span></code> if this state is new)</li>
 </ul>
 </dd>
 </dl>
@@ -491,9 +491,9 @@ hidden ids</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">h</span></code> – the current renderer</li>
-<li><code class="docutils literal"><span class="pre">request</span></code> – the web request</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the web response</li>
+<li><code class="docutils literal notranslate"><span class="pre">h</span></code> – the current renderer</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -511,8 +511,8 @@ hidden ids</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">request</span></code> – the web request</li>
-<li><code class="docutils literal"><span class="pre">response</span></code> – the web response</li>
+<li><code class="docutils literal notranslate"><span class="pre">request</span></code> – the web request</li>
+<li><code class="docutils literal notranslate"><span class="pre">response</span></code> – the web response</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -531,8 +531,8 @@ hidden ids</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">use_same_state</span></code> – is the objects graph to be stored in this state or in a new one?</li>
-<li><code class="docutils literal"><span class="pre">data</span></code> – the objects graph</li>
+<li><code class="docutils literal notranslate"><span class="pre">use_same_state</span></code> – is the objects graph to be stored in this state or in a new one?</li>
+<li><code class="docutils literal notranslate"><span class="pre">data</span></code> – the objects graph</li>
 </ul>
 </dd>
 </dl>
@@ -549,7 +549,7 @@ key is added.</p>
 <dl class="class">
 <dt id="nagare.sessions.lru_dict.LRUDict">
 <em class="property">class </em><code class="descclassname">nagare.sessions.lru_dict.</code><code class="descname">LRUDict</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.lru_dict.LRUDict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A LRU dictionary is a dictionary with a fixed maximum number of keys</p>
 <dl class="method">
 <dt id="nagare.sessions.lru_dict.LRUDict.debug">
@@ -561,7 +561,7 @@ key is added.</p>
 <dl class="class">
 <dt id="nagare.sessions.lru_dict.ThreadSafeLRUDict">
 <em class="property">class </em><code class="descclassname">nagare.sessions.lru_dict.</code><code class="descname">ThreadSafeLRUDict</code><span class="sig-paren">(</span><em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.lru_dict.ThreadSafeLRUDict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.lru_dict.LRUDict" title="nagare.sessions.lru_dict.LRUDict"><code class="xref py py-class docutils literal"><span class="pre">nagare.sessions.lru_dict.LRUDict</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.lru_dict.LRUDict" title="nagare.sessions.lru_dict.LRUDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.sessions.lru_dict.LRUDict</span></code></a></p>
 <p>Tread safe version of a LRU dictionary</p>
 </dd></dl>
 
@@ -571,7 +571,7 @@ key is added.</p>
 <dl class="class">
 <dt id="nagare.sessions.memcached_sessions.Lock">
 <em class="property">class </em><code class="descclassname">nagare.sessions.memcached_sessions.</code><code class="descname">Lock</code><span class="sig-paren">(</span><em>connection</em>, <em>lock_id</em>, <em>ttl</em>, <em>poll_time</em>, <em>max_wait_time</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.memcached_sessions.Lock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="nagare.sessions.memcached_sessions.Lock.acquire">
 <code class="descname">acquire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.memcached_sessions.Lock.acquire" title="Permalink to this definition">¶</a></dt>
@@ -589,7 +589,7 @@ key is added.</p>
 <dl class="class">
 <dt id="nagare.sessions.memcached_sessions.Sessions">
 <em class="property">class </em><code class="descclassname">nagare.sessions.memcached_sessions.</code><code class="descname">Sessions</code><span class="sig-paren">(</span><em>host='127.0.0.1'</em>, <em>port=11211</em>, <em>ttl=0</em>, <em>lock_ttl=0</em>, <em>lock_poll_time=0.1</em>, <em>lock_max_wait_time=5</em>, <em>min_compress_len=0</em>, <em>reset=False</em>, <em>debug=True</em>, <em>serializer=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.memcached_sessions.Sessions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.common.Sessions" title="nagare.sessions.common.Sessions"><code class="xref py py-class docutils literal"><span class="pre">nagare.sessions.common.Sessions</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.common.Sessions" title="nagare.sessions.common.Sessions"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.sessions.common.Sessions</span></code></a></p>
 <p>Sessions manager for sessions kept in an external memcached server</p>
 <dl class="method">
 <dt id="nagare.sessions.memcached_sessions.Sessions.create">
@@ -598,9 +598,9 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – id of the session</li>
-<li><code class="docutils literal"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
-<li><code class="docutils literal"><span class="pre">lock</span></code> – the lock of the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – id of the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">lock</span></code> – the lock of the session</li>
 </ul>
 </dd>
 </dl>
@@ -613,7 +613,7 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – id of the session to delete</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – id of the session to delete</li>
 </ul>
 </dd>
 </dl>
@@ -626,8 +626,8 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id of this state</li>
-<li><code class="docutils literal"><span class="pre">state_id</span></code> – id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_id</span></code> – id of this state</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -654,7 +654,7 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -672,9 +672,9 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">filename</span></code> – the path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 </dl>
@@ -682,7 +682,7 @@ key is added.</p>
 
 <dl class="attribute">
 <dt id="nagare.sessions.memcached_sessions.Sessions.spec">
-<code class="descname">spec</code><em class="property"> = {'lock_max_wait_time': 'float(default=5.)', 'min_compress_len': 'integer(default=0)', 'lock_ttl': 'float(default=0.)', 'host': 'string(default=&quot;127.0.0.1&quot;)', 'ttl': 'integer(default=0)', 'security_cookie_httponly': 'boolean(default=True)', 'pickler': 'string(default=&quot;cPickle:Pickler&quot;)', 'port': 'integer(default=11211)', 'reset': 'boolean(default=True)', 'unpickler': 'string(default=&quot;cPickle:Unpickler&quot;)', 'states_history': 'boolean(default=True)', 'lock_poll_time': 'float(default=0.1)', 'security_cookie_secure': 'boolean(default=False)', 'debug': 'boolean(default=False)', 'security_cookie_name': 'string(default=&quot;_nagare&quot;)', 'serializer': 'string(default=&quot;nagare.sessions.serializer:Pickle&quot;)'}</em><a class="headerlink" href="#nagare.sessions.memcached_sessions.Sessions.spec" title="Permalink to this definition">¶</a></dt>
+<code class="descname">spec</code><em class="property"> = {'debug': 'boolean(default=False)', 'host': 'string(default=&quot;127.0.0.1&quot;)', 'lock_max_wait_time': 'float(default=5.)', 'lock_poll_time': 'float(default=0.1)', 'lock_ttl': 'float(default=0.)', 'min_compress_len': 'integer(default=0)', 'pickler': 'string(default=&quot;cPickle:Pickler&quot;)', 'port': 'integer(default=11211)', 'reset': 'boolean(default=True)', 'security_cookie_httponly': 'boolean(default=True)', 'security_cookie_name': 'string(default=&quot;_nagare&quot;)', 'security_cookie_secure': 'boolean(default=False)', 'serializer': 'string(default=&quot;nagare.sessions.serializer:Pickle&quot;)', 'states_history': 'boolean(default=True)', 'ttl': 'integer(default=0)', 'unpickler': 'string(default=&quot;cPickle:Unpickler&quot;)'}</em><a class="headerlink" href="#nagare.sessions.memcached_sessions.Sessions.spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -692,12 +692,12 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id of this state</li>
-<li><code class="docutils literal"><span class="pre">state_id</span></code> – id of this state</li>
-<li><code class="docutils literal"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
-<li><code class="docutils literal"><span class="pre">use_same_state</span></code> – is this state to be stored in the previous snapshot?</li>
-<li><code class="docutils literal"><span class="pre">session_data</span></code> – data to keep into the session</li>
-<li><code class="docutils literal"><span class="pre">state_data</span></code> – data to keep into the state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_id</span></code> – id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">use_same_state</span></code> – is this state to be stored in the previous snapshot?</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_data</span></code> – data to keep into the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_data</span></code> – data to keep into the state</li>
 </ul>
 </dd>
 </dl>
@@ -712,15 +712,15 @@ key is added.</p>
 <dl class="docutils">
 <dt>These sessions managers keep:</dt>
 <dd><ul class="first last simple">
-<li>the last recently used <code class="docutils literal"><span class="pre">DEFAULT_NB_SESSIONS</span></code> sessions</li>
-<li>for each session, the last recently used <code class="docutils literal"><span class="pre">DEFAULT_NB_STATES</span></code> states</li>
+<li>the last recently used <code class="docutils literal notranslate"><span class="pre">DEFAULT_NB_SESSIONS</span></code> sessions</li>
+<li>for each session, the last recently used <code class="docutils literal notranslate"><span class="pre">DEFAULT_NB_STATES</span></code> states</li>
 </ul>
 </dd>
 </dl>
 <dl class="class">
 <dt id="nagare.sessions.memory_sessions.Sessions">
 <em class="property">class </em><code class="descclassname">nagare.sessions.memory_sessions.</code><code class="descname">Sessions</code><span class="sig-paren">(</span><em>nb_sessions=10000</em>, <em>nb_states=20</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.memory_sessions.Sessions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.common.Sessions" title="nagare.sessions.common.Sessions"><code class="xref py py-class docutils literal"><span class="pre">nagare.sessions.common.Sessions</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.common.Sessions" title="nagare.sessions.common.Sessions"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.sessions.common.Sessions</span></code></a></p>
 <p>Sessions manager for states kept in memory</p>
 <dl class="method">
 <dt id="nagare.sessions.memory_sessions.Sessions.check_session_id">
@@ -729,12 +729,12 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – id of a session</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – id of a session</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>is <code class="docutils literal"><span class="pre">session_id</span></code> the id of an existing session?</li>
+<li>is <code class="docutils literal notranslate"><span class="pre">session_id</span></code> the id of an existing session?</li>
 </ul>
 </dd>
 </dl>
@@ -747,9 +747,9 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – id of the session</li>
-<li><code class="docutils literal"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
-<li><code class="docutils literal"><span class="pre">lock</span></code> – the lock of the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – id of the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">lock</span></code> – the lock of the session</li>
 </ul>
 </dd>
 </dl>
@@ -762,7 +762,7 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -780,7 +780,7 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – id of the session to delete</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – id of the session to delete</li>
 </ul>
 </dd>
 </dl>
@@ -793,8 +793,8 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id of this state</li>
-<li><code class="docutils literal"><span class="pre">state_id</span></code> – id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_id</span></code> – id of this state</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -815,7 +815,7 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -833,9 +833,9 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">filename</span></code> – path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">conf</span></code> – <code class="docutils literal"><span class="pre">ConfigObj</span></code> object created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">filename</span></code> – path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf</span></code> – <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – function to call in case of configuration errors</li>
 </ul>
 </dd>
 </dl>
@@ -843,7 +843,7 @@ key is added.</p>
 
 <dl class="attribute">
 <dt id="nagare.sessions.memory_sessions.Sessions.spec">
-<code class="descname">spec</code><em class="property"> = {'security_cookie_name': 'string(default=&quot;_nagare&quot;)', 'security_cookie_secure': 'boolean(default=False)', 'security_cookie_httponly': 'boolean(default=True)', 'unpickler': 'string(default=&quot;cPickle:Unpickler&quot;)', 'pickler': 'string(default=&quot;cPickle:Pickler&quot;)', 'nb_states': 'integer(default=20)', 'states_history': 'boolean(default=True)', 'serializer': 'string(default=&quot;nagare.sessions.serializer:Dummy&quot;)', 'nb_sessions': 'integer(default=10000)'}</em><a class="headerlink" href="#nagare.sessions.memory_sessions.Sessions.spec" title="Permalink to this definition">¶</a></dt>
+<code class="descname">spec</code><em class="property"> = {'nb_sessions': 'integer(default=10000)', 'nb_states': 'integer(default=20)', 'pickler': 'string(default=&quot;cPickle:Pickler&quot;)', 'security_cookie_httponly': 'boolean(default=True)', 'security_cookie_name': 'string(default=&quot;_nagare&quot;)', 'security_cookie_secure': 'boolean(default=False)', 'serializer': 'string(default=&quot;nagare.sessions.serializer:Dummy&quot;)', 'states_history': 'boolean(default=True)', 'unpickler': 'string(default=&quot;cPickle:Unpickler&quot;)'}</em><a class="headerlink" href="#nagare.sessions.memory_sessions.Sessions.spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -853,12 +853,12 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_id</span></code> – session id of this state</li>
-<li><code class="docutils literal"><span class="pre">state_id</span></code> – id of this state</li>
-<li><code class="docutils literal"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
-<li><code class="docutils literal"><span class="pre">use_same_state</span></code> – is this state to be stored in the previous snapshot?</li>
-<li><code class="docutils literal"><span class="pre">session_data</span></code> – data to keep into the session</li>
-<li><code class="docutils literal"><span class="pre">state_data</span></code> – data to keep into the state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_id</span></code> – session id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_id</span></code> – id of this state</li>
+<li><code class="docutils literal notranslate"><span class="pre">secure_id</span></code> – the secure number associated to the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">use_same_state</span></code> – is this state to be stored in the previous snapshot?</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_data</span></code> – data to keep into the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_data</span></code> – data to keep into the state</li>
 </ul>
 </dd>
 </dl>
@@ -869,11 +869,11 @@ key is added.</p>
 <dl class="class">
 <dt id="nagare.sessions.memory_sessions.SessionsWithPickledStates">
 <em class="property">class </em><code class="descclassname">nagare.sessions.memory_sessions.</code><code class="descname">SessionsWithPickledStates</code><span class="sig-paren">(</span><em>serializer=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.memory_sessions.SessionsWithPickledStates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.memory_sessions.Sessions" title="nagare.sessions.memory_sessions.Sessions"><code class="xref py py-class docutils literal"><span class="pre">nagare.sessions.memory_sessions.Sessions</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.memory_sessions.Sessions" title="nagare.sessions.memory_sessions.Sessions"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.sessions.memory_sessions.Sessions</span></code></a></p>
 <p>Sessions manager for states pickled / unpickled in memory</p>
 <dl class="attribute">
 <dt id="nagare.sessions.memory_sessions.SessionsWithPickledStates.spec">
-<code class="descname">spec</code><em class="property"> = {'pickler': 'string(default=&quot;cPickle:Pickler&quot;)', 'unpickler': 'string(default=&quot;cPickle:Unpickler&quot;)', 'states_history': 'boolean(default=True)', 'security_cookie_secure': 'boolean(default=False)', 'security_cookie_httponly': 'boolean(default=True)', 'security_cookie_name': 'string(default=&quot;_nagare&quot;)', 'nb_states': 'integer(default=20)', 'serializer': 'string(default=&quot;nagare.sessions.serializer:Pickle&quot;)', 'nb_sessions': 'integer(default=10000)'}</em><a class="headerlink" href="#nagare.sessions.memory_sessions.SessionsWithPickledStates.spec" title="Permalink to this definition">¶</a></dt>
+<code class="descname">spec</code><em class="property"> = {'nb_sessions': 'integer(default=10000)', 'nb_states': 'integer(default=20)', 'pickler': 'string(default=&quot;cPickle:Pickler&quot;)', 'security_cookie_httponly': 'boolean(default=True)', 'security_cookie_name': 'string(default=&quot;_nagare&quot;)', 'security_cookie_secure': 'boolean(default=False)', 'serializer': 'string(default=&quot;nagare.sessions.serializer:Pickle&quot;)', 'states_history': 'boolean(default=True)', 'unpickler': 'string(default=&quot;cPickle:Unpickler&quot;)'}</em><a class="headerlink" href="#nagare.sessions.memory_sessions.SessionsWithPickledStates.spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -884,7 +884,7 @@ key is added.</p>
 <dl class="class">
 <dt id="nagare.sessions.serializer.Dummy">
 <em class="property">class </em><code class="descclassname">nagare.sessions.serializer.</code><code class="descname">Dummy</code><span class="sig-paren">(</span><em>pickler=None</em>, <em>unpickler=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.serializer.Dummy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="nagare.sessions.serializer.Dummy.dumps">
 <code class="descname">dumps</code><span class="sig-paren">(</span><em>data</em>, <em>clean_callbacks</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.serializer.Dummy.dumps" title="Permalink to this definition">¶</a></dt>
@@ -892,8 +892,8 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">data</span></code> – the objects graph</li>
-<li><code class="docutils literal"><span class="pre">clean_callbacks</span></code> – do we have to forget the old callbacks?</li>
+<li><code class="docutils literal notranslate"><span class="pre">data</span></code> – the objects graph</li>
+<li><code class="docutils literal notranslate"><span class="pre">clean_callbacks</span></code> – do we have to forget the old callbacks?</li>
 </ul>
 </dd>
 <dt>Out:</dt>
@@ -912,8 +912,8 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_data</span></code> – data from the session</li>
-<li><code class="docutils literal"><span class="pre">state_data</span></code> – data from the state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_data</span></code> – data from the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_data</span></code> – data from the state</li>
 </ul>
 </dd>
 <dt>Out:</dt>
@@ -930,7 +930,7 @@ key is added.</p>
 <dl class="class">
 <dt id="nagare.sessions.serializer.DummyFile">
 <em class="property">class </em><code class="descclassname">nagare.sessions.serializer.</code><code class="descname">DummyFile</code><a class="headerlink" href="#nagare.sessions.serializer.DummyFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A write-only file that does nothing</p>
 <dl class="method">
 <dt id="nagare.sessions.serializer.DummyFile.write">
@@ -942,7 +942,7 @@ key is added.</p>
 <dl class="class">
 <dt id="nagare.sessions.serializer.Pickle">
 <em class="property">class </em><code class="descclassname">nagare.sessions.serializer.</code><code class="descname">Pickle</code><span class="sig-paren">(</span><em>pickler=None</em>, <em>unpickler=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.serializer.Pickle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.serializer.Dummy" title="nagare.sessions.serializer.Dummy"><code class="xref py py-class docutils literal"><span class="pre">nagare.sessions.serializer.Dummy</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.sessions.serializer.Dummy" title="nagare.sessions.serializer.Dummy"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.sessions.serializer.Dummy</span></code></a></p>
 <dl class="method">
 <dt id="nagare.sessions.serializer.Pickle.dumps">
 <code class="descname">dumps</code><span class="sig-paren">(</span><em>data</em>, <em>clean_callbacks</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.serializer.Pickle.dumps" title="Permalink to this definition">¶</a></dt>
@@ -950,8 +950,8 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">data</span></code> – the objects graph</li>
-<li><code class="docutils literal"><span class="pre">clean_callbacks</span></code> – do we have to forget the old callbacks?</li>
+<li><code class="docutils literal notranslate"><span class="pre">data</span></code> – the objects graph</li>
+<li><code class="docutils literal notranslate"><span class="pre">clean_callbacks</span></code> – do we have to forget the old callbacks?</li>
 </ul>
 </dd>
 <dt>Out:</dt>
@@ -970,8 +970,8 @@ key is added.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">session_data</span></code> – data from the session</li>
-<li><code class="docutils literal"><span class="pre">state_data</span></code> – data from the state</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_data</span></code> – data from the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">state_data</span></code> – data from the state</li>
 </ul>
 </dd>
 <dt>Out:</dt>
@@ -988,25 +988,25 @@ key is added.</p>
 <dl class="function">
 <dt id="nagare.sessions.serializer.persistent_id">
 <code class="descclassname">nagare.sessions.serializer.</code><code class="descname">persistent_id</code><span class="sig-paren">(</span><em>o</em>, <em>clean_callbacks</em>, <em>callbacks</em>, <em>session_data</em>, <em>tasklets</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.sessions.serializer.persistent_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>An object with a <code class="docutils literal"><span class="pre">_persistent_id</span></code> attribute is stored into the session
+<dd><p>An object with a <code class="docutils literal notranslate"><span class="pre">_persistent_id</span></code> attribute is stored into the session
 not into the state snapshot</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">o</span></code> – object to check</li>
-<li><code class="docutils literal"><span class="pre">clean_callbacks</span></code> – do we have to forget the old callbacks?</li>
+<li><code class="docutils literal notranslate"><span class="pre">o</span></code> – object to check</li>
+<li><code class="docutils literal notranslate"><span class="pre">clean_callbacks</span></code> – do we have to forget the old callbacks?</li>
 </ul>
 </dd>
 <dt>Out:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">callbacks</span></code> – merge of the callbacks from all the components</li>
-<li><code class="docutils literal"><span class="pre">session_data</span></code> – dict persistent_id -&gt; object of the objects to store into the session</li>
-<li><code class="docutils literal"><span class="pre">tasklets</span></code> – set of the serialized tasklets</li>
+<li><code class="docutils literal notranslate"><span class="pre">callbacks</span></code> – merge of the callbacks from all the components</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_data</span></code> – dict persistent_id -&gt; object of the objects to store into the session</li>
+<li><code class="docutils literal notranslate"><span class="pre">tasklets</span></code> – set of the serialized tasklets</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the persistent id or <code class="docutils literal"><span class="pre">None</span></code></li>
+<li>the persistent id or <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -1023,14 +1023,14 @@ not into the state snapshot</p>
 <dl class="exception">
 <dt id="nagare.sessions.ExpirationError">
 <em class="property">exception </em><code class="descclassname">nagare.sessions.</code><code class="descname">ExpirationError</code><a class="headerlink" href="#nagare.sessions.ExpirationError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.LookupError</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">exceptions.LookupError</span></code></p>
 <p>Raised when a session or a state id is no longer valid</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="nagare.sessions.SessionSecurityError">
 <em class="property">exception </em><code class="descclassname">nagare.sessions.</code><code class="descname">SessionSecurityError</code><a class="headerlink" href="#nagare.sessions.SessionSecurityError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.LookupError</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">exceptions.LookupError</span></code></p>
 <p>Raised when the secure id of a session is not valid</p>
 </dd></dl>
 
@@ -1070,7 +1070,7 @@ not into the state snapshot</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

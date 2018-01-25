@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>nagare.admin package &mdash; Nagare 0.5.0 documentation</title>
+  <title>nagare.admin package &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="../index.html"/> 
+    <link rel="top" title="Nagare 0.5.1 documentation" href="../index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -214,29 +214,29 @@
 <div class="section" id="module-nagare.admin.admin_app">
 <span id="nagare-admin-admin-app-module"></span><h2>nagare.admin.admin_app module<a class="headerlink" href="#module-nagare.admin.admin_app" title="Permalink to this headline">¶</a></h2>
 <p>This is the admin application. By default, when launched, it’s mapped to url
-<code class="docutils literal"><span class="pre">/admin</span></code> and <code class="docutils literal"><span class="pre">/</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">/admin</span></code> and <code class="docutils literal notranslate"><span class="pre">/</span></code>.</p>
 <p>The default view of this application is the administration view
 of the framework.</p>
 <dl class="class">
 <dt id="nagare.admin.admin_app.Admin">
 <em class="property">class </em><code class="descclassname">nagare.admin.admin_app.</code><code class="descname">Admin</code><span class="sig-paren">(</span><em>apps</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.admin_app.Admin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The root component of the admin application</p>
-<p>It loads all the components registered under the <code class="docutils literal"><span class="pre">nagare.admin</span></code> entry point and renders them
+<p>It loads all the components registered under the <code class="docutils literal notranslate"><span class="pre">nagare.admin</span></code> entry point and renders them
 into its view.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.admin.admin_app.WSGIApp">
 <em class="property">class </em><code class="descclassname">nagare.admin.admin_app.</code><code class="descname">WSGIApp</code><span class="sig-paren">(</span><em>root_factory</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.admin_app.WSGIApp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.wsgi.WSGIApp" title="nagare.wsgi.WSGIApp"><code class="xref py py-class docutils literal"><span class="pre">nagare.wsgi.WSGIApp</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="nagare.html#nagare.wsgi.WSGIApp" title="nagare.wsgi.WSGIApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.wsgi.WSGIApp</span></code></a></p>
 <p>The admin application</p>
-<p>Read the additional boolean parameter <code class="docutils literal"><span class="pre">as_root</span></code> into the <code class="docutils literal"><span class="pre">[application]</span></code> section.
-If <code class="docutils literal"><span class="pre">True</span></code>, mappes itself to the <code class="docutils literal"><span class="pre">/</span></code> url.</p>
+<p>Read the additional boolean parameter <code class="docutils literal notranslate"><span class="pre">as_root</span></code> into the <code class="docutils literal notranslate"><span class="pre">[application]</span></code> section.
+If <code class="docutils literal notranslate"><span class="pre">True</span></code>, mappes itself to the <code class="docutils literal notranslate"><span class="pre">/</span></code> url.</p>
 <dl class="method">
 <dt id="nagare.admin.admin_app.WSGIApp.create_root">
 <code class="descname">create_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.admin_app.WSGIApp.create_root" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an <code class="docutils literal"><span class="pre">admin</span></code> object</p>
+<dd><p>Create an <code class="docutils literal notranslate"><span class="pre">admin</span></code> object</p>
 <dl class="docutils">
 <dt>Return:</dt>
 <dd><ul class="first last simple">
@@ -249,14 +249,14 @@ If <code class="docutils literal"><span class="pre">True</span></code>, mappes i
 <dl class="method">
 <dt id="nagare.admin.admin_app.WSGIApp.set_config">
 <code class="descname">set_config</code><span class="sig-paren">(</span><em>config_filename</em>, <em>conf</em>, <em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.admin_app.WSGIApp.set_config" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the value of the <code class="docutils literal"><span class="pre">as_root</span></code> parameter and keeps the list of all
+<dd><p>Read the value of the <code class="docutils literal notranslate"><span class="pre">as_root</span></code> parameter and keeps the list of all
 the launched applications</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">config_filename</span></code> – the path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">config</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">config_filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">config</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 </dl>
@@ -265,11 +265,11 @@ the launched applications</p>
 <dl class="method">
 <dt id="nagare.admin.admin_app.WSGIApp.set_publisher">
 <code class="descname">set_publisher</code><span class="sig-paren">(</span><em>publisher</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.admin_app.WSGIApp.set_publisher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the value of the <code class="docutils literal"><span class="pre">as_root</span></code> parameter and keeps a reference to the publisher</p>
+<dd><p>Read the value of the <code class="docutils literal notranslate"><span class="pre">as_root</span></code> parameter and keeps a reference to the publisher</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">publisher</span></code> – the publisher of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">publisher</span></code> – the publisher of the application</li>
 </ul>
 </dd>
 </dl>
@@ -286,13 +286,13 @@ the launched applications</p>
 </div>
 <div class="section" id="module-nagare.admin.command">
 <span id="nagare-admin-command-module"></span><h2>nagare.admin.command module<a class="headerlink" href="#module-nagare.admin.command" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">nagare-admin</span></code> executable</p>
-<p>The <code class="docutils literal"><span class="pre">run()</span></code> function is called by the <code class="docutils literal"><span class="pre">nagare-admin</span></code> console script, created
-by  <code class="docutils literal"><span class="pre">setuptools</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">nagare-admin</span></code> executable</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">run()</span></code> function is called by the <code class="docutils literal notranslate"><span class="pre">nagare-admin</span></code> console script, created
+by  <code class="docutils literal notranslate"><span class="pre">setuptools</span></code></p>
 <dl class="class">
 <dt id="nagare.admin.command.Command">
 <em class="property">class </em><code class="descclassname">nagare.admin.command.</code><code class="descname">Command</code><a class="headerlink" href="#nagare.admin.command.Command" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The base class of all the commands</p>
 <dl class="attribute">
 <dt id="nagare.admin.command.Command.desc">
@@ -306,7 +306,7 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">commands</span></code> – parent commands of this command</li>
+<li><code class="docutils literal notranslate"><span class="pre">commands</span></code> – parent commands of this command</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -324,8 +324,8 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">argv</span></code> – list of the arguments on the command line</li>
-<li><code class="docutils literal"><span class="pre">commands</span></code> – parent commands of this command</li>
+<li><code class="docutils literal notranslate"><span class="pre">argv</span></code> – list of the arguments on the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">commands</span></code> – parent commands of this command</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -343,9 +343,9 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – this <code class="docutils literal"><span class="pre">optparse.OptionParser</span></code> has parsed the command line</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – the options read on the command line</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments left on the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – this <code class="docutils literal notranslate"><span class="pre">optparse.OptionParser</span></code> has parsed the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – the options read on the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments left on the command line</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -363,7 +363,7 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="docutils">
 <dt>Out:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – this <code class="docutils literal"><span class="pre">optparse.OptionParser</span></code> will parse the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – this <code class="docutils literal notranslate"><span class="pre">optparse.OptionParser</span></code> will parse the command line</li>
 </ul>
 </dd>
 </dl>
@@ -374,7 +374,7 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="class">
 <dt id="nagare.admin.command.Commands">
 <em class="property">class </em><code class="descclassname">nagare.admin.command.</code><code class="descname">Commands</code><a class="headerlink" href="#nagare.admin.command.Commands" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Command with sub-commands</p>
 <dl class="method">
 <dt id="nagare.admin.command.Commands.add_command">
@@ -383,8 +383,8 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">names</span></code> – list of names of the sub-command</li>
-<li><code class="docutils literal"><span class="pre">command</span></code> – the sub-command object</li>
+<li><code class="docutils literal notranslate"><span class="pre">names</span></code> – list of names of the sub-command</li>
+<li><code class="docutils literal notranslate"><span class="pre">command</span></code> – the sub-command object</li>
 </ul>
 </dd>
 </dl>
@@ -397,7 +397,7 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">commands</span></code> – parent commands of this command</li>
+<li><code class="docutils literal notranslate"><span class="pre">commands</span></code> – parent commands of this command</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -415,8 +415,8 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">argv</span></code> – list of the arguments on the command line</li>
-<li><code class="docutils literal"><span class="pre">commands</span></code> – parent commands of this command</li>
+<li><code class="docutils literal notranslate"><span class="pre">argv</span></code> – list of the arguments on the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">commands</span></code> – parent commands of this command</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -430,12 +430,12 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="method">
 <dt id="nagare.admin.command.Commands.usage">
 <code class="descname">usage</code><span class="sig-paren">(</span><em>commands</em>, <em>error=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.command.Commands.usage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the usage of this command on <code class="docutils literal"><span class="pre">stderr</span></code></p>
+<dd><p>Print the usage of this command on <code class="docutils literal notranslate"><span class="pre">stderr</span></code></p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">commands</span></code> – parent commands of this command</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> - optional error message</li>
+<li><code class="docutils literal notranslate"><span class="pre">commands</span></code> – parent commands of this command</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> - optional error message</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -451,19 +451,19 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 <dl class="function">
 <dt id="nagare.admin.command.run">
 <code class="descclassname">nagare.admin.command.</code><code class="descname">run</code><span class="sig-paren">(</span><em>entry_point_section='nagare.commands'</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.command.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dispatcher for the <code class="docutils literal"><span class="pre">nagare-admin</span></code> commands</p>
-<p>The commands are classes, registered under the <code class="docutils literal"><span class="pre">entry_point_section</span></code> entry point</p>
+<dd><p>Dispatcher for the <code class="docutils literal notranslate"><span class="pre">nagare-admin</span></code> commands</p>
+<p>The commands are classes, registered under the <code class="docutils literal notranslate"><span class="pre">entry_point_section</span></code> entry point</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-nagare.admin.create">
 <span id="nagare-admin-create-module"></span><h2>nagare.admin.create module<a class="headerlink" href="#module-nagare.admin.create" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">create</span></code> administrative command</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">create</span></code> administrative command</p>
 <p>Generate the directory structure and the skeleton of an application.</p>
 <dl class="class">
 <dt id="nagare.admin.create.Create">
 <em class="property">class </em><code class="descclassname">nagare.admin.create.</code><code class="descname">Create</code><a class="headerlink" href="#nagare.admin.create.Create" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.admin.create.Create.desc">
 <code class="descname">desc</code><em class="property"> = 'Create an application skeleton'</em><a class="headerlink" href="#nagare.admin.create.Create.desc" title="Permalink to this definition">¶</a></dt>
@@ -471,12 +471,12 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 
 <dl class="staticmethod">
 <dt id="nagare.admin.create.Create.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.create.Create.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.create.Create.run" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.create.Create.set_options">
-<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><em>optparser</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.create.Create.set_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.create.Create.set_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -539,7 +539,7 @@ by  <code class="docutils literal"><span class="pre">setuptools</span></code></p
 </div>
 <div class="section" id="module-nagare.admin.create_rules">
 <span id="nagare-admin-create-rules-module"></span><h2>nagare.admin.create_rules module<a class="headerlink" href="#module-nagare.admin.create_rules" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">create-rules</span></code> administrative command</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">create-rules</span></code> administrative command</p>
 <p>Generate the rewrite rules for the <a class="reference external" href="http://httpd.apache.org/">apache</a>,
 <a class="reference external" href="http://www.lighttpd.net/">lighttpd</a> or <a class="reference external" href="http://nginx.net/">nginx</a> http
 servers, to let them serve the static contents of the launched applications,
@@ -547,7 +547,7 @@ instead of the applications themselves.</p>
 <dl class="class">
 <dt id="nagare.admin.create_rules.CreateRules">
 <em class="property">class </em><code class="descclassname">nagare.admin.create_rules.</code><code class="descname">CreateRules</code><a class="headerlink" href="#nagare.admin.create_rules.CreateRules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.admin.create_rules.CreateRules.desc">
 <code class="descname">desc</code><em class="property"> = 'Create the rewrite rules'</em><a class="headerlink" href="#nagare.admin.create_rules.CreateRules.desc" title="Permalink to this definition">¶</a></dt>
@@ -555,25 +555,25 @@ instead of the applications themselves.</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.create_rules.CreateRules.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.create_rules.CreateRules.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.create_rules.CreateRules.run" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.create_rules.CreateRules.set_options">
-<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><em>optparser</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.create_rules.CreateRules.set_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.create_rules.CreateRules.set_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register the possible options</p>
 <p>They are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">-a</span></code> or <code class="docutils literal"><span class="pre">--apache</span></code> to generate the apache rules (default)</li>
-<li><code class="docutils literal"><span class="pre">-l</span></code> or <code class="docutils literal"><span class="pre">--lighttpd</span></code> to generate the lighttpd rules</li>
-<li><code class="docutils literal"><span class="pre">-n</span></code> or <code class="docutils literal"><span class="pre">--nginx</span></code> to generate the nginx rules</li>
+<li><code class="docutils literal notranslate"><span class="pre">-a</span></code> or <code class="docutils literal notranslate"><span class="pre">--apache</span></code> to generate the apache rules (default)</li>
+<li><code class="docutils literal notranslate"><span class="pre">-l</span></code> or <code class="docutils literal notranslate"><span class="pre">--lighttpd</span></code> to generate the lighttpd rules</li>
+<li><code class="docutils literal notranslate"><span class="pre">-n</span></code> or <code class="docutils literal notranslate"><span class="pre">--nginx</span></code> to generate the nginx rules</li>
 </ul>
 </div></blockquote>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">optparser</span></code> – the options parser</li>
+<li><code class="docutils literal notranslate"><span class="pre">optparser</span></code> – the options parser</li>
 </ul>
 </dd>
 </dl>
@@ -588,8 +588,8 @@ instead of the applications themselves.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app_names</span></code> – list of the applications, read from the command line</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">app_names</span></code> – list of the applications, read from the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -607,8 +607,8 @@ instead of the applications themselves.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app_names</span></code> – list of the applications, read from the command line</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">app_names</span></code> – list of the applications, read from the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -626,8 +626,8 @@ instead of the applications themselves.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app_names</span></code> – list of the applications, read from the command line</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">app_names</span></code> – list of the applications, read from the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -645,8 +645,8 @@ instead of the applications themselves.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app_names</span></code> – list of the applications, read from the command line</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">app_names</span></code> – list of the applications, read from the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -669,15 +669,15 @@ instead of the applications themselves.</p>
 <p>They are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">-a</span></code> or <code class="docutils literal"><span class="pre">--apache</span></code> to generate the apache rules (default)</li>
-<li><code class="docutils literal"><span class="pre">-l</span></code> or <code class="docutils literal"><span class="pre">--lighttpd</span></code> to generate the lighttpd rules</li>
-<li><code class="docutils literal"><span class="pre">-n</span></code> or <code class="docutils literal"><span class="pre">--nginx</span></code> to generate the nginx rules</li>
+<li><code class="docutils literal notranslate"><span class="pre">-a</span></code> or <code class="docutils literal notranslate"><span class="pre">--apache</span></code> to generate the apache rules (default)</li>
+<li><code class="docutils literal notranslate"><span class="pre">-l</span></code> or <code class="docutils literal notranslate"><span class="pre">--lighttpd</span></code> to generate the lighttpd rules</li>
+<li><code class="docutils literal notranslate"><span class="pre">-n</span></code> or <code class="docutils literal notranslate"><span class="pre">--nginx</span></code> to generate the nginx rules</li>
 </ul>
 </div></blockquote>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">optparser</span></code> – the options parser</li>
+<li><code class="docutils literal notranslate"><span class="pre">optparser</span></code> – the options parser</li>
 </ul>
 </dd>
 </dl>
@@ -686,12 +686,12 @@ instead of the applications themselves.</p>
 </div>
 <div class="section" id="module-nagare.admin.db">
 <span id="nagare-admin-db-module"></span><h2>nagare.admin.db module<a class="headerlink" href="#module-nagare.admin.db" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">create-db</span></code> and <code class="docutils literal"><span class="pre">drop-db</span></code> administrative commands</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">create-db</span></code> and <code class="docutils literal notranslate"><span class="pre">drop-db</span></code> administrative commands</p>
 <p>Create or delete the database tables of an application</p>
 <dl class="class">
 <dt id="nagare.admin.db.DBCreate">
 <em class="property">class </em><code class="descclassname">nagare.admin.db.</code><code class="descname">DBCreate</code><a class="headerlink" href="#nagare.admin.db.DBCreate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.admin.db.DBCreate.desc">
 <code class="descname">desc</code><em class="property"> = 'Create the database of an application'</em><a class="headerlink" href="#nagare.admin.db.DBCreate.desc" title="Permalink to this definition">¶</a></dt>
@@ -699,17 +699,17 @@ instead of the applications themselves.</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.db.DBCreate.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.DBCreate.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.DBCreate.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create the database tables of the application</p>
-<p>If the <code class="docutils literal"><span class="pre">--drop</span></code> option is on, delete the existing tables before to re-create them</p>
-<p>If the <code class="docutils literal"><span class="pre">--no-populate</span></code> option is off, call the populate function (if it exists)
+<p>If the <code class="docutils literal notranslate"><span class="pre">--drop</span></code> option is on, delete the existing tables before to re-create them</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">--no-populate</span></code> option is off, call the populate function (if it exists)
 after the creation of the tables</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines : application name</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines : application name</li>
 </ul>
 </dd>
 </dl>
@@ -717,7 +717,7 @@ after the creation of the tables</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.db.DBCreate.set_options">
-<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><em>optparser</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.DBCreate.set_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.DBCreate.set_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -725,7 +725,7 @@ after the creation of the tables</p>
 <dl class="class">
 <dt id="nagare.admin.db.DBDrop">
 <em class="property">class </em><code class="descclassname">nagare.admin.db.</code><code class="descname">DBDrop</code><a class="headerlink" href="#nagare.admin.db.DBDrop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.admin.db.DBDrop.desc">
 <code class="descname">desc</code><em class="property"> = 'Drop the database of an application'</em><a class="headerlink" href="#nagare.admin.db.DBDrop.desc" title="Permalink to this definition">¶</a></dt>
@@ -733,14 +733,14 @@ after the creation of the tables</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.db.DBDrop.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.DBDrop.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.DBDrop.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete the database tables of the application</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines : application name</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines : application name</li>
 </ul>
 </dd>
 </dl>
@@ -748,7 +748,7 @@ after the creation of the tables</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.db.DBDrop.set_options">
-<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><em>optparser</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.DBDrop.set_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.DBDrop.set_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -757,15 +757,15 @@ after the creation of the tables</p>
 <dt id="nagare.admin.db.create">
 <code class="descclassname">nagare.admin.db.</code><code class="descname">create</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.db.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create the database tables of the application</p>
-<p>If the <code class="docutils literal"><span class="pre">--drop</span></code> option is on, delete the existing tables before to re-create them</p>
-<p>If the <code class="docutils literal"><span class="pre">--no-populate</span></code> option is off, call the populate function (if it exists)
+<p>If the <code class="docutils literal notranslate"><span class="pre">--drop</span></code> option is on, delete the existing tables before to re-create them</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">--no-populate</span></code> option is off, call the populate function (if it exists)
 after the creation of the tables</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines : application name</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines : application name</li>
 </ul>
 </dd>
 </dl>
@@ -778,9 +778,9 @@ after the creation of the tables</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines : application name</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines : application name</li>
 </ul>
 </dd>
 </dl>
@@ -795,9 +795,9 @@ the [database] section.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">debug</span></code> – flag to display the generated SQL statements</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines: application to activate</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – flag to display the generated SQL statements</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines: application to activate</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -811,12 +811,12 @@ the [database] section.</p>
 </div>
 <div class="section" id="module-nagare.admin.info">
 <span id="nagare-admin-info-module"></span><h2>nagare.admin.info module<a class="headerlink" href="#module-nagare.admin.info" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">info</span></code> administrative command</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">info</span></code> administrative command</p>
 <p>Display informations about the framework environment</p>
 <dl class="class">
 <dt id="nagare.admin.info.Info">
 <em class="property">class </em><code class="descclassname">nagare.admin.info.</code><code class="descname">Info</code><a class="headerlink" href="#nagare.admin.info.Info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <p>Display informations about the framework environment</p>
 <dl class="attribute">
 <dt id="nagare.admin.info.Info.desc">
@@ -825,14 +825,14 @@ the [database] section.</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.info.Info.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.info.Info.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.info.Info.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display the informations</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the optparse.OptParser object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines</li>
 </ul>
 </dd>
 </dl>
@@ -847,16 +847,16 @@ the [database] section.</p>
 <p>The possible reference syntaxes are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">'python</span> <span class="pre">&lt;module&gt;:&lt;object&gt;'</span></code> – loads an object from a Python module
-(for example: <code class="docutils literal"><span class="pre">'python</span> <span class="pre">os.path:isfile'</span></code>)</li>
-<li><code class="docutils literal"><span class="pre">'&lt;module&gt;:&lt;object&gt;'</span></code>  – same as <code class="docutils literal"><span class="pre">'python</span> <span class="pre">&lt;module&gt;:&lt;object&gt;'</span></code></li>
-<li><code class="docutils literal"><span class="pre">'file</span> <span class="pre">&lt;file&gt;:&lt;object&gt;'</span></code> – loads an object from a file
-(for example: <code class="docutils literal"><span class="pre">'file</span> <span class="pre">/tmp/counter.py:Counter'</span></code>)</li>
-<li><code class="docutils literal"><span class="pre">'egg</span> <span class="pre">&lt;dist&gt;:&lt;app&gt;'</span></code> – loads the registered application <code class="docutils literal"><span class="pre">&lt;app&gt;</span></code>
-from the <code class="docutils literal"><span class="pre">&lt;dist&gt;</span></code> distribution
-(for example: <code class="docutils literal"><span class="pre">'egg</span> <span class="pre">nagare:admin'</span></code> or <code class="docutils literal"><span class="pre">'egg</span> <span class="pre">nagare.examples:wiki'</span></code>)</li>
-<li><code class="docutils literal"><span class="pre">'app</span> <span class="pre">&lt;app&gt;'</span></code> – load the registered application <code class="docutils literal"><span class="pre">&lt;app&gt;</span></code>
-(for example: <code class="docutils literal"><span class="pre">'app</span> <span class="pre">examples'</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">'python</span> <span class="pre">&lt;module&gt;:&lt;object&gt;'</span></code> – loads an object from a Python module
+(for example: <code class="docutils literal notranslate"><span class="pre">'python</span> <span class="pre">os.path:isfile'</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">'&lt;module&gt;:&lt;object&gt;'</span></code>  – same as <code class="docutils literal notranslate"><span class="pre">'python</span> <span class="pre">&lt;module&gt;:&lt;object&gt;'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">'file</span> <span class="pre">&lt;file&gt;:&lt;object&gt;'</span></code> – loads an object from a file
+(for example: <code class="docutils literal notranslate"><span class="pre">'file</span> <span class="pre">/tmp/counter.py:Counter'</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">'egg</span> <span class="pre">&lt;dist&gt;:&lt;app&gt;'</span></code> – loads the registered application <code class="docutils literal notranslate"><span class="pre">&lt;app&gt;</span></code>
+from the <code class="docutils literal notranslate"><span class="pre">&lt;dist&gt;</span></code> distribution
+(for example: <code class="docutils literal notranslate"><span class="pre">'egg</span> <span class="pre">nagare:admin'</span></code> or <code class="docutils literal notranslate"><span class="pre">'egg</span> <span class="pre">nagare.examples:wiki'</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">'app</span> <span class="pre">&lt;app&gt;'</span></code> – load the registered application <code class="docutils literal notranslate"><span class="pre">&lt;app&gt;</span></code>
+(for example: <code class="docutils literal notranslate"><span class="pre">'app</span> <span class="pre">examples'</span></code>)</li>
 </ul>
 </div></blockquote>
 <dl class="function">
@@ -866,8 +866,8 @@ from the <code class="docutils literal"><span class="pre">&lt;dist&gt;</span></c
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app</span></code> – name of the application</li>
-<li><code class="docutils literal"><span class="pre">_</span></code> – <em>unused*</em></li>
+<li><code class="docutils literal notranslate"><span class="pre">app</span></code> – name of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">_</span></code> – <em>unused*</em></li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -885,8 +885,8 @@ from the <code class="docutils literal"><span class="pre">&lt;dist&gt;</span></c
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">dist</span></code> – name of the distribution</li>
-<li><code class="docutils literal"><span class="pre">app</span></code> – name of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">dist</span></code> – name of the distribution</li>
+<li><code class="docutils literal notranslate"><span class="pre">app</span></code> – name of the application</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -904,8 +904,8 @@ from the <code class="docutils literal"><span class="pre">&lt;dist&gt;</span></c
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app</span></code> – name of the object</li>
-<li><code class="docutils literal"><span class="pre">entry_point</span></code> – name of the entry_point</li>
+<li><code class="docutils literal notranslate"><span class="pre">app</span></code> – name of the object</li>
+<li><code class="docutils literal notranslate"><span class="pre">entry_point</span></code> – name of the entry_point</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -923,8 +923,8 @@ from the <code class="docutils literal"><span class="pre">&lt;dist&gt;</span></c
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">filename</span></code> – name of the file</li>
-<li><code class="docutils literal"><span class="pre">app</span></code> – name of the object to load</li>
+<li><code class="docutils literal notranslate"><span class="pre">filename</span></code> – name of the file</li>
+<li><code class="docutils literal notranslate"><span class="pre">app</span></code> – name of the object to load</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -942,8 +942,8 @@ from the <code class="docutils literal"><span class="pre">&lt;dist&gt;</span></c
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">module</span></code> – name of the module</li>
-<li><code class="docutils literal"><span class="pre">app</span></code> – name of the object to load</li>
+<li><code class="docutils literal notranslate"><span class="pre">module</span></code> – name of the module</li>
+<li><code class="docutils literal notranslate"><span class="pre">app</span></code> – name of the object to load</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -961,12 +961,12 @@ from the <code class="docutils literal"><span class="pre">&lt;dist&gt;</span></c
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">reference</span></code> – reference as a string</li>
+<li><code class="docutils literal notranslate"><span class="pre">reference</span></code> – reference as a string</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>a tuple (object loaded, distribution where this object is located or <code class="docutils literal"><span class="pre">None</span></code>)</li>
+<li>a tuple (object loaded, distribution where this object is located or <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
 </ul>
 </dd>
 </dl>
@@ -982,7 +982,7 @@ importation errors into the modified file.</p>
 <dl class="class">
 <dt id="nagare.admin.reloader.Monitor">
 <em class="property">class </em><code class="descclassname">nagare.admin.reloader.</code><code class="descname">Monitor</code><span class="sig-paren">(</span><em>poll_interval</em>, <em>included_files</em>, <em>excluded_directories</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.reloader.Monitor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="nagare.admin.reloader.Monitor.check_modification">
 <code class="descname">check_modification</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.reloader.Monitor.check_modification" title="Permalink to this definition">¶</a></dt>
@@ -1018,12 +1018,12 @@ importation errors into the modified file.</p>
 </div>
 <div class="section" id="module-nagare.admin.serve">
 <span id="nagare-admin-serve-module"></span><h2>nagare.admin.serve module<a class="headerlink" href="#module-nagare.admin.serve" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">serve</span></code> administrative command</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">serve</span></code> administrative command</p>
 <p>Launch one or more applications.</p>
 <dl class="class">
 <dt id="nagare.admin.serve.Serve">
 <em class="property">class </em><code class="descclassname">nagare.admin.serve.</code><code class="descname">Serve</code><a class="headerlink" href="#nagare.admin.serve.Serve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.admin.serve.Serve.desc">
 <code class="descname">desc</code><em class="property"> = 'Launch applications'</em><a class="headerlink" href="#nagare.admin.serve.Serve.desc" title="Permalink to this definition">¶</a></dt>
@@ -1031,14 +1031,14 @@ importation errors into the modified file.</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.serve.Serve.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve.Serve.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve.Serve.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch one or more applications</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines</li>
 </ul>
 </dd>
 </dl>
@@ -1048,7 +1048,7 @@ or paths to application configuration files.</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.serve.Serve.set_options">
-<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><em>optparser</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve.Serve.set_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve.Serve.set_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1060,11 +1060,11 @@ or paths to application configuration files.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app</span></code> – the application</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command line</li>
-<li><code class="docutils literal"><span class="pre">config_filename</span></code> – the path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">config</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">app</span></code> – the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">config_filename</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">config</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1087,8 +1087,8 @@ or paths to application configuration files.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">package</span></code> – the setuptools package of a registered application</li>
-<li><code class="docutils literal"><span class="pre">path</span></code> – the url path of the wanted static content</li>
+<li><code class="docutils literal notranslate"><span class="pre">package</span></code> – the setuptools package of a registered application</li>
+<li><code class="docutils literal notranslate"><span class="pre">path</span></code> – the url path of the wanted static content</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1106,8 +1106,8 @@ or paths to application configuration files.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">root</span></code> – the path of the root</li>
-<li><code class="docutils literal"><span class="pre">path</span></code> – the url path of the wanted static content</li>
+<li><code class="docutils literal notranslate"><span class="pre">root</span></code> – the path of the root</li>
+<li><code class="docutils literal notranslate"><span class="pre">path</span></code> – the url path of the wanted static content</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1122,17 +1122,17 @@ or paths to application configuration files.</p>
 <dt id="nagare.admin.serve.read_publisher_options">
 <code class="descclassname">nagare.admin.serve.</code><code class="descname">read_publisher_options</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve.read_publisher_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read the configuration file for the publisher</p>
-<p>This configuration file is given with the <code class="docutils literal"><span class="pre">-c``or</span> <span class="pre">``--config</span></code> option</p>
+<p>This configuration file is given with the <code class="docutils literal notranslate"><span class="pre">-c``or</span> <span class="pre">``--config</span></code> option</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command line</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>a <code class="docutils literal"><span class="pre">ConfigObj</span></code> with the publisher parameters</li>
+<li>a <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> with the publisher parameters</li>
 </ul>
 </dd>
 </dl>
@@ -1145,9 +1145,9 @@ or paths to application configuration files.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines</li>
 </ul>
 </dd>
 </dl>
@@ -1163,10 +1163,10 @@ or paths to application configuration files.</p>
 </div>
 <div class="section" id="module-nagare.admin.serve_module">
 <span id="nagare-admin-serve-module-module"></span><h2>nagare.admin.serve_module module<a class="headerlink" href="#module-nagare.admin.serve_module" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">serve-module</span></code> administrative command</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">serve-module</span></code> administrative command</p>
 <p>Launch a standalone (without any database connection) application, in debug mode.</p>
 <p>No configuration file in read. The only possible parameters are given on the
-command line and are (run <code class="docutils literal"><span class="pre">nagare-admin</span> <span class="pre">serve-module</span></code> to see them):</p>
+command line and are (run <code class="docutils literal notranslate"><span class="pre">nagare-admin</span> <span class="pre">serve-module</span></code> to see them):</p>
 <blockquote>
 <div><ul class="simple">
 <li>the host</li>
@@ -1184,7 +1184,7 @@ Don’t run a production application with this command</p>
 <dl class="class">
 <dt id="nagare.admin.serve_module.Serve">
 <em class="property">class </em><code class="descclassname">nagare.admin.serve_module.</code><code class="descname">Serve</code><a class="headerlink" href="#nagare.admin.serve_module.Serve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.admin.serve_module.Serve.desc">
 <code class="descname">desc</code><em class="property"> = 'Launch a python module'</em><a class="headerlink" href="#nagare.admin.serve_module.Serve.desc" title="Permalink to this definition">¶</a></dt>
@@ -1192,25 +1192,25 @@ Don’t run a production application with this command</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.serve_module.Serve.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve_module.Serve.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve_module.Serve.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>launch an object</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines</li>
 </ul>
 </dd>
 </dl>
 <p>The unique argument is the path of the object to launch. The path syntax is described
-into the module <code class="docutils literal"><span class="pre">nagare.admin.reference</span></code>. For example, <code class="docutils literal"><span class="pre">/tmp/counter.py:Counter</span></code>
-is the path to the class <code class="docutils literal"><span class="pre">Counter</span></code> of the module <code class="docutils literal"><span class="pre">tmp.counter.py</span></code></p>
+into the module <code class="docutils literal notranslate"><span class="pre">nagare.admin.reference</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">/tmp/counter.py:Counter</span></code>
+is the path to the class <code class="docutils literal notranslate"><span class="pre">Counter</span></code> of the module <code class="docutils literal notranslate"><span class="pre">tmp.counter.py</span></code></p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.serve_module.Serve.set_options">
-<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><em>optparser</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve_module.Serve.set_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.serve_module.Serve.set_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1227,8 +1227,8 @@ is the path to the class <code class="docutils literal"><span class="pre">Counte
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">package</span></code> – the setuptools package of a registered application</li>
-<li><code class="docutils literal"><span class="pre">path</span></code> – the url path of the wanted static content</li>
+<li><code class="docutils literal notranslate"><span class="pre">package</span></code> – the setuptools package of a registered application</li>
+<li><code class="docutils literal notranslate"><span class="pre">path</span></code> – the url path of the wanted static content</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1246,15 +1246,15 @@ is the path to the class <code class="docutils literal"><span class="pre">Counte
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines</li>
 </ul>
 </dd>
 </dl>
 <p>The unique argument is the path of the object to launch. The path syntax is described
-into the module <code class="docutils literal"><span class="pre">nagare.admin.reference</span></code>. For example, <code class="docutils literal"><span class="pre">/tmp/counter.py:Counter</span></code>
-is the path to the class <code class="docutils literal"><span class="pre">Counter</span></code> of the module <code class="docutils literal"><span class="pre">tmp.counter.py</span></code></p>
+into the module <code class="docutils literal notranslate"><span class="pre">nagare.admin.reference</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">/tmp/counter.py:Counter</span></code>
+is the path to the class <code class="docutils literal notranslate"><span class="pre">Counter</span></code> of the module <code class="docutils literal notranslate"><span class="pre">tmp.counter.py</span></code></p>
 </dd></dl>
 
 <dl class="function">
@@ -1265,21 +1265,21 @@ is the path to the class <code class="docutils literal"><span class="pre">Counte
 </div>
 <div class="section" id="module-nagare.admin.shell">
 <span id="nagare-admin-shell-module"></span><h2>nagare.admin.shell module<a class="headerlink" href="#module-nagare.admin.shell" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">shell</span></code> and <code class="docutils literal"><span class="pre">batch</span></code> administrative commands</p>
-<p>The <code class="docutils literal"><span class="pre">shell</span></code> command launches an interactive Python shell.
-The <code class="docutils literal"><span class="pre">batch</span></code> command execute Python statements from a file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">shell</span></code> and <code class="docutils literal notranslate"><span class="pre">batch</span></code> administrative commands</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">shell</span></code> command launches an interactive Python shell.
+The <code class="docutils literal notranslate"><span class="pre">batch</span></code> command execute Python statements from a file.</p>
 <p>In both cases:</p>
 <blockquote>
 <div><ul class="simple">
-<li>the global variable <code class="docutils literal"><span class="pre">apps</span></code> is a dictionary of application name -&gt; application object</li>
-<li>the global variable <code class="docutils literal"><span class="pre">session</span></code> is the database session</li>
+<li>the global variable <code class="docutils literal notranslate"><span class="pre">apps</span></code> is a dictionary of application name -&gt; application object</li>
+<li>the global variable <code class="docutils literal notranslate"><span class="pre">session</span></code> is the database session</li>
 <li>the metadata of the applications are activated</li>
 </ul>
 </div></blockquote>
 <dl class="class">
 <dt id="nagare.admin.shell.Batch">
 <em class="property">class </em><code class="descclassname">nagare.admin.shell.</code><code class="descname">Batch</code><a class="headerlink" href="#nagare.admin.shell.Batch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.admin.shell.Batch.desc">
 <code class="descname">desc</code><em class="property"> = 'Execute Python statements from a file'</em><a class="headerlink" href="#nagare.admin.shell.Batch.desc" title="Permalink to this definition">¶</a></dt>
@@ -1287,14 +1287,14 @@ The <code class="docutils literal"><span class="pre">batch</span></code> command
 
 <dl class="staticmethod">
 <dt id="nagare.admin.shell.Batch.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.Batch.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.Batch.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute Python statements a file</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines</li>
 </ul>
 </dd>
 </dl>
@@ -1305,7 +1305,7 @@ execute</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.shell.Batch.set_options">
-<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><em>optparser</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.Batch.set_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.Batch.set_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1313,28 +1313,28 @@ execute</p>
 <dl class="class">
 <dt id="nagare.admin.shell.IPythonShellV1">
 <em class="property">class </em><code class="descclassname">nagare.admin.shell.</code><code class="descname">IPythonShellV1</code><span class="sig-paren">(</span><em>ipython</em>, <em>banner</em>, <em>app_names</em>, <em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.IPythonShellV1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A IPython &lt; 0.11 interpreter</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.admin.shell.IPythonShellV2">
 <em class="property">class </em><code class="descclassname">nagare.admin.shell.</code><code class="descname">IPythonShellV2</code><span class="sig-paren">(</span><em>ipython</em>, <em>banner</em>, <em>app_names</em>, <em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.IPythonShellV2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A IPython &gt;= 0.11 interpreter</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.admin.shell.IPythonShellV3">
 <em class="property">class </em><code class="descclassname">nagare.admin.shell.</code><code class="descname">IPythonShellV3</code><span class="sig-paren">(</span><em>ipython</em>, <em>banner</em>, <em>app_names</em>, <em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.IPythonShellV3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A IPython &gt;= 5.0 interpreter</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.admin.shell.PythonShell">
 <em class="property">class </em><code class="descclassname">nagare.admin.shell.</code><code class="descname">PythonShell</code><span class="sig-paren">(</span><em>banner</em>, <em>app_names</em>, <em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.PythonShell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">code.InteractiveConsole</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">code.InteractiveConsole</span></code></p>
 <p>A plain Python interpreter</p>
 <dl class="method">
 <dt id="nagare.admin.shell.PythonShell.raw_input">
@@ -1346,14 +1346,14 @@ execute</p>
 <dl class="class">
 <dt id="nagare.admin.shell.PythonShellWithHistory">
 <em class="property">class </em><code class="descclassname">nagare.admin.shell.</code><code class="descname">PythonShellWithHistory</code><span class="sig-paren">(</span><em>banner</em>, <em>app_names</em>, <em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.PythonShellWithHistory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.shell.PythonShell" title="nagare.admin.shell.PythonShell"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.shell.PythonShell</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.shell.PythonShell" title="nagare.admin.shell.PythonShell"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.shell.PythonShell</span></code></a></p>
 <p>A plain Python interpreter with a readline history</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nagare.admin.shell.Shell">
 <em class="property">class </em><code class="descclassname">nagare.admin.shell.</code><code class="descname">Shell</code><a class="headerlink" href="#nagare.admin.shell.Shell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal"><span class="pre">nagare.admin.command.Command</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#nagare.admin.command.Command" title="nagare.admin.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.admin.command.Command</span></code></a></p>
 <dl class="attribute">
 <dt id="nagare.admin.shell.Shell.desc">
 <code class="descname">desc</code><em class="property"> = 'Launch a shell'</em><a class="headerlink" href="#nagare.admin.shell.Shell.desc" title="Permalink to this definition">¶</a></dt>
@@ -1361,14 +1361,14 @@ execute</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.shell.Shell.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>parser</em>, <em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.Shell.run" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><em>options</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.Shell.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch an interactive shell</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command line</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command line</li>
 </ul>
 </dd>
 </dl>
@@ -1378,7 +1378,7 @@ or paths to applications configuration files.</p>
 
 <dl class="staticmethod">
 <dt id="nagare.admin.shell.Shell.set_options">
-<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><em>optparser</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.Shell.set_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">set_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.Shell.set_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1390,10 +1390,10 @@ or paths to applications configuration files.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">cfgfile</span></code> – path to an application configuration file or name of
+<li><code class="docutils literal notranslate"><span class="pre">cfgfile</span></code> – path to an application configuration file or name of
 a registered application</li>
-<li><code class="docutils literal"><span class="pre">debug</span></code> – enable the display of the generated SQL statements</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – enable the display of the generated SQL statements</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1413,10 +1413,10 @@ a registered application</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">cfgfile</span></code> – paths to application configuration files or names of
+<li><code class="docutils literal notranslate"><span class="pre">cfgfile</span></code> – paths to application configuration files or names of
 registered applications</li>
-<li><code class="docutils literal"><span class="pre">debug</span></code> – enable the display of the generated SQL statements</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – enable the display of the generated SQL statements</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1435,9 +1435,9 @@ registered applications</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command lines</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command lines</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command lines</li>
 </ul>
 </dd>
 </dl>
@@ -1453,15 +1453,15 @@ execute</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">cfgfile</span></code> – paths to application configuration files or names of
+<li><code class="docutils literal notranslate"><span class="pre">cfgfile</span></code> – paths to application configuration files or names of
 registered applications</li>
-<li><code class="docutils literal"><span class="pre">debug</span></code> – enable the display of the generated SQL statements</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – enable the display of the generated SQL statements</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>the namespace with the <code class="docutils literal"><span class="pre">apps</span></code> and <code class="docutils literal"><span class="pre">session</span></code> variables defined</li>
+<li>the namespace with the <code class="docutils literal notranslate"><span class="pre">apps</span></code> and <code class="docutils literal notranslate"><span class="pre">session</span></code> variables defined</li>
 </ul>
 </dd>
 </dl>
@@ -1471,14 +1471,14 @@ registered applications</li>
 <dt id="nagare.admin.shell.create_python_shell">
 <code class="descclassname">nagare.admin.shell.</code><code class="descname">create_python_shell</code><span class="sig-paren">(</span><em>ipython</em>, <em>banner</em>, <em>app_names</em>, <em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#nagare.admin.shell.create_python_shell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shell factory</p>
-<p>Create a shell according to the installed modules (<code class="docutils literal"><span class="pre">readline</span></code> and <code class="docutils literal"><span class="pre">ipython</span></code>)</p>
+<p>Create a shell according to the installed modules (<code class="docutils literal notranslate"><span class="pre">readline</span></code> and <code class="docutils literal notranslate"><span class="pre">ipython</span></code>)</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">ipython</span></code> – does the user want a IPython shell?</li>
-<li><code class="docutils literal"><span class="pre">banner</span></code> – banner to display</li>
-<li><code class="docutils literal"><span class="pre">app_names</span></code> – names of the activated applications</li>
-<li><code class="docutils literal"><span class="pre">ns</span></code> – the namespace with the <code class="docutils literal"><span class="pre">apps</span></code> and <code class="docutils literal"><span class="pre">session</span></code> variables defined</li>
+<li><code class="docutils literal notranslate"><span class="pre">ipython</span></code> – does the user want a IPython shell?</li>
+<li><code class="docutils literal notranslate"><span class="pre">banner</span></code> – banner to display</li>
+<li><code class="docutils literal notranslate"><span class="pre">app_names</span></code> – names of the activated applications</li>
+<li><code class="docutils literal notranslate"><span class="pre">ns</span></code> – the namespace with the <code class="docutils literal notranslate"><span class="pre">apps</span></code> and <code class="docutils literal notranslate"><span class="pre">session</span></code> variables defined</li>
 </ul>
 </dd>
 </dl>
@@ -1501,9 +1501,9 @@ registered applications</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">parser</span></code> – the <code class="docutils literal"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
-<li><code class="docutils literal"><span class="pre">options</span></code> – options in the command line</li>
-<li><code class="docutils literal"><span class="pre">args</span></code> – arguments in the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">parser</span></code> – the <code class="docutils literal notranslate"><span class="pre">optparse.OptParser</span></code> object used to parse the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> – options in the command line</li>
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code> – arguments in the command line</li>
 </ul>
 </dd>
 </dl>
@@ -1522,18 +1522,18 @@ or paths to applications configuration files.</p>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">app</span></code> – the WSGIApp application or the application root object factory</li>
-<li><code class="docutils literal"><span class="pre">cfgfile</span></code> – the path to the configuration file</li>
-<li><code class="docutils literal"><span class="pre">aconf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
-<li><code class="docutils literal"><span class="pre">project_name</span></code> – name of the distutils distribution where the app is located</li>
-<li><code class="docutils literal"><span class="pre">static_path</span></code> – the directory where the static contents of the application
+<li><code class="docutils literal notranslate"><span class="pre">app</span></code> – the WSGIApp application or the application root object factory</li>
+<li><code class="docutils literal notranslate"><span class="pre">cfgfile</span></code> – the path to the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">aconf</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">project_name</span></code> – name of the distutils distribution where the app is located</li>
+<li><code class="docutils literal notranslate"><span class="pre">static_path</span></code> – the directory where the static contents of the application
 are located</li>
-<li><code class="docutils literal"><span class="pre">static_url</span></code> – the url of the static contents of the application</li>
-<li><code class="docutils literal"><span class="pre">data_path</span></code> – the directory where the data of the application are located</li>
-<li><code class="docutils literal"><span class="pre">publisher</span></code> – the publisher of the application</li>
-<li><code class="docutils literal"><span class="pre">session_manager</span></code> – the sessions manager</li>
-<li><code class="docutils literal"><span class="pre">debug</span></code> – flag to display the generated SQL statements</li>
+<li><code class="docutils literal notranslate"><span class="pre">static_url</span></code> – the url of the static contents of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">data_path</span></code> – the directory where the data of the application are located</li>
+<li><code class="docutils literal notranslate"><span class="pre">publisher</span></code> – the publisher of the application</li>
+<li><code class="docutils literal notranslate"><span class="pre">session_manager</span></code> – the sessions manager</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – flag to display the generated SQL statements</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1541,7 +1541,7 @@ are located</li>
 <li><dl class="first docutils">
 <dt>a tuple:</dt>
 <dd><ul class="first last">
-<li>the <code class="docutils literal"><span class="pre">wsgi.WSGIApp</span></code> object</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">wsgi.WSGIApp</span></code> object</li>
 <li>tuples (application databases settings, application databases populate functions)</li>
 </ul>
 </dd>
@@ -1560,8 +1560,8 @@ are located</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">conf</span></code> – the <code class="docutils literal"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
-<li><code class="docutils literal"><span class="pre">debug</span></code> – debug mode for the database engine</li>
+<li><code class="docutils literal notranslate"><span class="pre">conf</span></code> – the <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> object, created from the configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code> – debug mode for the database engine</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1583,8 +1583,8 @@ are located</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">cfgfile</span></code> – name of a registered application or path to an application configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">cfgfile</span></code> – name of a registered application or path to an application configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
 </ul>
 </dd>
 <dt>Return:</dt>
@@ -1593,7 +1593,7 @@ are located</li>
 <li>name of the application configuration file</li>
 <li>the application object</li>
 <li>the distribution of the application</li>
-<li>a <code class="docutils literal"><span class="pre">ConfigObj</span></code> of the application parameters</li>
+<li>a <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> of the application parameters</li>
 </ul>
 </li>
 </ul>
@@ -1608,14 +1608,14 @@ are located</li>
 <dl class="docutils">
 <dt>In:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">cfgfile</span></code> – path to an application configuration file</li>
-<li><code class="docutils literal"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
-<li><code class="docutils literal"><span class="pre">default</span></code> – optional default values</li>
+<li><code class="docutils literal notranslate"><span class="pre">cfgfile</span></code> – path to an application configuration file</li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code> – the function to call in case of configuration errors</li>
+<li><code class="docutils literal notranslate"><span class="pre">default</span></code> – optional default values</li>
 </ul>
 </dd>
 <dt>Return:</dt>
 <dd><ul class="first last simple">
-<li>a <code class="docutils literal"><span class="pre">ConfigObj</span></code> of the application parameters</li>
+<li>a <code class="docutils literal notranslate"><span class="pre">ConfigObj</span></code> of the application parameters</li>
 </ul>
 </dd>
 </dl>
@@ -1660,7 +1660,7 @@ are located</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

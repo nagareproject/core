@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Renderer objects &mdash; Nagare 0.5.0 documentation</title>
+  <title>The Renderer objects &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Significative “RESTful” URLs" href="restful.html"/>
         <link rel="prev" title="Callbacks and forms" href="callbacks_forms.html"/> 
 
@@ -214,7 +214,7 @@
 <p>As described in <a class="reference internal" href="components.html"><span class="doc">The Nagare component model</span></a>, the views of a component receives
 a renderer. A renderer is a DOM objects factory that the developer uses to
 build the DOM tree of the <a class="reference internal" href="presentation.html"><span class="doc">view</span></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 
 <span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">pass</span>
@@ -226,11 +226,11 @@ build the DOM tree of the <a class="reference internal" href="presentation.html"
 </pre></div>
 </div>
 <p>By default, each view receives a new XHTML renderer
-(instance of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a>) suitable to build a
+(instance of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a>) suitable to build a
 synchronous (X)HTML DOM tree.</p>
 <p>A single view can also use a different renderer, for example to generate
 another XML dialect than XHTML:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 <span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xml</span>
 
 <span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -245,7 +245,7 @@ another XML dialect than XHTML:</p>
 </pre></div>
 </div>
 <p>or to generate an asynchronous view of a component:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">component</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span><span class="p">,</span> <span class="n">component</span>
 <span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
 <span class="kn">from</span> <span class="nn">MyBlog</span> <span class="kn">import</span> <span class="n">Blog</span>
 
@@ -267,9 +267,9 @@ to maintain a parent/child relationship between them.</p>
 </div>
 <p>Now, if all your views need to generate XML (or use any other renderer), it would be
 cumbersome to create a renderer in each view. Instead, you can tell Nagare to use
-another default renderer by setting the <code class="docutils literal"><span class="pre">renderer_factory</span></code> attribute of the
+another default renderer by setting the <code class="docutils literal notranslate"><span class="pre">renderer_factory</span></code> attribute of the
 <a class="reference internal" href="wsgiapp.html"><span class="doc">WSGIApp</span></a>, as shown in the example below:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">wsgi</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">wsgi</span>
 <span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xml</span>
 
 <span class="k">class</span> <span class="nc">WSGIApp</span><span class="p">(</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIApp</span><span class="p">):</span>
@@ -277,44 +277,44 @@ another default renderer by setting the <code class="docutils literal"><span cla
     <span class="n">renderer_factory</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">Renderer</span>
 </pre></div>
 </div>
-<p>Then, all the views will receive an instance of <code class="docutils literal"><span class="pre">xml.Renderer</span></code> as renderer. Note that
+<p>Then, all the views will receive an instance of <code class="docutils literal notranslate"><span class="pre">xml.Renderer</span></code> as renderer. Note that
 you can still create another renderer in the view as explained above.</p>
 </div>
 <div class="section" id="default-renderers">
 <h2>Default renderers<a class="headerlink" href="#default-renderers" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="xhtml-renderer">
 <h3>XHTML renderer<a class="headerlink" href="#xhtml-renderer" title="Permalink to this headline">¶</a></h3>
-<p>A XHTML renderer is an instance of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a>.</p>
+<p>A XHTML renderer is an instance of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml.Renderer" title="nagare.namespaces.xhtml.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml.Renderer</span></code></a>.</p>
 <p>A XHTML renderer is a factory for all the possible XHTML tags. It also has:</p>
 <ul class="simple">
-<li>a <code class="docutils literal"><span class="pre">request</span></code> and a <code class="docutils literal"><span class="pre">response</span></code> attributes which are WebOb
+<li>a <code class="docutils literal notranslate"><span class="pre">request</span></code> and a <code class="docutils literal notranslate"><span class="pre">response</span></code> attributes which are WebOb
 <a class="reference external" href="https://webob.readthedocs.io/en/stable/reference.html#request">request</a>
 and
 <a class="reference external" href="https://webob.readthedocs.io/en/stable/reference.html#response">response</a>
 objects.</li>
-<li>a <code class="docutils literal"><span class="pre">head</span></code> attribute which is a Head renderer instance, see below.</li>
+<li>a <code class="docutils literal notranslate"><span class="pre">head</span></code> attribute which is a Head renderer instance, see below.</li>
 <li>the following methods:<ul>
-<li><code class="docutils literal"><span class="pre">parse_html(self,</span> <span class="pre">source,</span> <span class="pre">fragment=False,</span> <span class="pre">no_leading_text=False,</span> <span class="pre">xhtml=False)</span></code> –
-to read HTML or XHTML (chosen with the <code class="docutils literal"><span class="pre">xhtml</span></code> parameter) from the
-<code class="docutils literal"><span class="pre">source</span></code> file to a DOM tree. If <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, the (X)HTML
+<li><code class="docutils literal notranslate"><span class="pre">parse_html(self,</span> <span class="pre">source,</span> <span class="pre">fragment=False,</span> <span class="pre">no_leading_text=False,</span> <span class="pre">xhtml=False)</span></code> –
+to read HTML or XHTML (chosen with the <code class="docutils literal notranslate"><span class="pre">xhtml</span></code> parameter) from the
+<code class="docutils literal notranslate"><span class="pre">source</span></code> file to a DOM tree. If <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the (X)HTML
 read can have multiple roots and the result will always be a list of DOM
-trees. Also, if <code class="docutils literal"><span class="pre">fragment</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, if <code class="docutils literal"><span class="pre">no_leading_text</span></code> is
-<code class="docutils literal"><span class="pre">True</span></code> and the (X)HTML begins by a text instead of a node, this text
+trees. Also, if <code class="docutils literal notranslate"><span class="pre">fragment</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, if <code class="docutils literal notranslate"><span class="pre">no_leading_text</span></code> is
+<code class="docutils literal notranslate"><span class="pre">True</span></code> and the (X)HTML begins by a text instead of a node, this text
 is removed.</li>
-<li><code class="docutils literal"><span class="pre">parse_htmlstring(self,</span> <span class="pre">text,</span> <span class="pre">fragment=False,</span> <span class="pre">no_leading_text=False,</span> <span class="pre">xhtml=False)</span></code> –
-as <code class="docutils literal"><span class="pre">parse_html()</span></code> but the (X)HTML is read from the <code class="docutils literal"><span class="pre">text</span></code> string.</li>
+<li><code class="docutils literal notranslate"><span class="pre">parse_htmlstring(self,</span> <span class="pre">text,</span> <span class="pre">fragment=False,</span> <span class="pre">no_leading_text=False,</span> <span class="pre">xhtml=False)</span></code> –
+as <code class="docutils literal notranslate"><span class="pre">parse_html()</span></code> but the (X)HTML is read from the <code class="docutils literal notranslate"><span class="pre">text</span></code> string.</li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="head-renderer">
 <h3>Head renderer<a class="headerlink" href="#head-renderer" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">head</span></code> attribute of a XHTML renderer is a Head renderer, an instance
-of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml.HeadRenderer" title="nagare.namespaces.xhtml.HeadRenderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml.HeadRenderer</span></code></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">head</span></code> attribute of a XHTML renderer is a Head renderer, an instance
+of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml.HeadRenderer" title="nagare.namespaces.xhtml.HeadRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml.HeadRenderer</span></code></a>.</p>
 <p>A head renderer is a factory for all the XHTML tags that can be embedded into
-the <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code> section: <code class="docutils literal"><span class="pre">base</span></code>, <code class="docutils literal"><span class="pre">head</span></code>, <code class="docutils literal"><span class="pre">link</span></code>, <code class="docutils literal"><span class="pre">meta</span></code>, <code class="docutils literal"><span class="pre">title</span></code>,
-<code class="docutils literal"><span class="pre">style</span></code> and <code class="docutils literal"><span class="pre">script</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+the <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code> section: <code class="docutils literal notranslate"><span class="pre">base</span></code>, <code class="docutils literal notranslate"><span class="pre">head</span></code>, <code class="docutils literal notranslate"><span class="pre">link</span></code>, <code class="docutils literal notranslate"><span class="pre">meta</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>,
+<code class="docutils literal notranslate"><span class="pre">style</span></code> and <code class="docutils literal notranslate"><span class="pre">script</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 
 <span class="k">class</span> <span class="nc">App</span><span class="p">:</span>
     <span class="k">pass</span>
@@ -329,10 +329,10 @@ the <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code> 
 </div>
 <p>A head renderer has also the following method:</p>
 <ul>
-<li><p class="first"><code class="docutils literal"><span class="pre">css(self,</span> <span class="pre">name,</span> <span class="pre">style)</span></code> – add a css style definition. The style must
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">css(self,</span> <span class="pre">name,</span> <span class="pre">style)</span></code> – add a css style definition. The style must
 be named so that, if added by several views, it will be included only
 once in the generated page.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="n">h</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;main_content&#39;</span><span class="p">,</span> <span class="s1">&#39;.main { border: 1px red solid }&#39;</span><span class="p">)</span>
 
@@ -340,9 +340,9 @@ once in the generated page.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">css_url(self,</span> <span class="pre">url)</span></code> – add a css url. If the url is relative, it’s
-relative to the <code class="docutils literal"><span class="pre">static</span></code> directory of the <a class="reference internal" href="configuration_file.html"><span class="doc">application</span></a>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">css_url(self,</span> <span class="pre">url)</span></code> – add a css url. If the url is relative, it’s
+relative to the <code class="docutils literal notranslate"><span class="pre">static</span></code> directory of the <a class="reference internal" href="configuration_file.html"><span class="doc">application</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="n">h</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">css_url</span><span class="p">(</span><span class="s1">&#39;http://www.nagare.org/site.css&#39;</span><span class="p">)</span> <span class="c1"># Absolute URL</span>
     <span class="n">h</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">css_url</span><span class="p">(</span><span class="s1">&#39;css/my_application.css&#39;</span><span class="p">)</span>         <span class="c1"># Relative URL</span>
@@ -351,10 +351,10 @@ relative to the <code class="docutils literal"><span class="pre">static</span></
 </pre></div>
 </div>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">javascript(self,</span> <span class="pre">name,</span> <span class="pre">script)</span></code> – add a javascript definition.
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">javascript(self,</span> <span class="pre">name,</span> <span class="pre">script)</span></code> – add a javascript definition.
 The javascript code must be named so that, if added by several views, it
 will be included only once in the generated page.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="n">h</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">javascript</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="s1">&#39;function debug(msg) { alert(msg) }&#39;</span><span class="p">)</span>
 
@@ -362,10 +362,10 @@ will be included only once in the generated page.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">javascript_url(self,</span> <span class="pre">url)</span></code> – add a javascript url. If the url is
-relative, it’s relative to the <code class="docutils literal"><span class="pre">static</span></code> directory of the
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">javascript_url(self,</span> <span class="pre">url)</span></code> – add a javascript url. If the url is
+relative, it’s relative to the <code class="docutils literal notranslate"><span class="pre">static</span></code> directory of the
 <a class="reference internal" href="configuration_file.html"><span class="doc">application</span></a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="n">h</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">javascript_url</span><span class="p">(</span><span class="s1">&#39;http://www.nagare.org/anim.js&#39;</span><span class="p">)</span> <span class="c1"># Absolute URL</span>
     <span class="n">h</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">javascript_url</span><span class="p">(</span><span class="s1">&#39;js/debug.js&#39;</span><span class="p">)</span>                   <span class="c1"># Relative URL</span>
@@ -375,19 +375,19 @@ relative, it’s relative to the <code class="docutils literal"><span class="pre
 </div>
 </li>
 </ul>
-<p>After the rendering phase, Nagare generates a <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code> section which is the
+<p>After the rendering phase, Nagare generates a <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code> section which is the
 concatenation of all the DOM objects the different views have put into the
 Head renderer.</p>
 </div>
 <div class="section" id="xhtml5-renderer">
 <h3>XHTML5 renderer<a class="headerlink" href="#xhtml5-renderer" title="Permalink to this headline">¶</a></h3>
-<p>A XHTML5 renderer is an instance of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml5.Renderer" title="nagare.namespaces.xhtml5.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xhtml5.Renderer</span></code></a>.</p>
+<p>A XHTML5 renderer is an instance of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xhtml5.Renderer" title="nagare.namespaces.xhtml5.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xhtml5.Renderer</span></code></a>.</p>
 <p>A XHTML5 renderer is a factory for all the possible HTML5 or XHTML5 tags from
 the <a class="reference external" href="http://www.w3.org/TR/html5/">HTML5 specification</a>.</p>
 <p>Since it’s extremely likely that you want to use this renderer in all the views
 of your application instead of the default (X)HTML renderer, you can install it
 like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">wsgi</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">wsgi</span>
 <span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml5</span>
 
 <span class="k">class</span> <span class="nc">WSGIApp</span><span class="p">(</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIApp</span><span class="p">):</span>
@@ -397,15 +397,15 @@ like this:</p>
 </div>
 <p>Then, all the views will receive a (X)HTML5 renderer by default.</p>
 <p>This renderer is like an XHTML renderer except that the set of available tags and
-attributes is a little different. For example, HTML5 offers <code class="docutils literal"><span class="pre">&lt;audio&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;video&gt;</span></code>
-and <code class="docutils literal"><span class="pre">&lt;canvas&gt;</span></code> tags and more structural markup such as <code class="docutils literal"><span class="pre">&lt;section&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;article&gt;</span></code>,
-<code class="docutils literal"><span class="pre">&lt;aside&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;nav&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;figure&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;header&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;footer&gt;</span></code> tags.</p>
+attributes is a little different. For example, HTML5 offers <code class="docutils literal notranslate"><span class="pre">&lt;audio&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code>
+and <code class="docutils literal notranslate"><span class="pre">&lt;canvas&gt;</span></code> tags and more structural markup such as <code class="docutils literal notranslate"><span class="pre">&lt;section&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;article&gt;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&lt;aside&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;nav&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;figure&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;header&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;footer&gt;</span></code> tags.</p>
 </div>
 <div class="section" id="xml-renderer">
 <h3>XML renderer<a class="headerlink" href="#xml-renderer" title="Permalink to this headline">¶</a></h3>
-<p>A XML renderer is an instance of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xml.Renderer" title="nagare.namespaces.xml.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xml.Renderer</span></code></a>.</p>
+<p>A XML renderer is an instance of <a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xml.Renderer" title="nagare.namespaces.xml.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xml.Renderer</span></code></a>.</p>
 <p>It’s a simple renderer which accepts any tag creation:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xml</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xml</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">contact</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s1">&#39;John Doe&#39;</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">age</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
@@ -418,26 +418,26 @@ and <code class="docutils literal"><span class="pre">&lt;canvas&gt;</span></code
 <div class="section" id="xsl-renderer">
 <h3>XSL renderer<a class="headerlink" href="#xsl-renderer" title="Permalink to this headline">¶</a></h3>
 <p>A <a class="reference external" href="http://www.w3.org/TR/xslt">XSL</a> renderer is an instance of
-<a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xsl.Renderer" title="nagare.namespaces.xsl.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.xsl.Renderer</span></code></a> and has a factory for
+<a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.xsl.Renderer" title="nagare.namespaces.xsl.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.xsl.Renderer</span></code></a> and has a factory for
 all the possible XSL tags.</p>
 </div>
 <div class="section" id="esi-renderer">
 <h3>ESI renderer<a class="headerlink" href="#esi-renderer" title="Permalink to this headline">¶</a></h3>
 <p>A <a class="reference external" href="http://www.w3.org/TR/esi-lang">ESI</a> renderer is an instance of
-<a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.esi.Renderer" title="nagare.namespaces.esi.Renderer"><code class="xref py py-class docutils literal"><span class="pre">nagare.namespaces.esi.Renderer</span></code></a> and has
-a factory for all the possible ESI tags :  <code class="docutils literal"><span class="pre">attempt</span></code>, <code class="docutils literal"><span class="pre">choose</span></code>, <code class="docutils literal"><span class="pre">comment</span></code>,
-<code class="docutils literal"><span class="pre">include</span></code>, <code class="docutils literal"><span class="pre">inline</span></code>, <code class="docutils literal"><span class="pre">otherwise</span></code>, <code class="docutils literal"><span class="pre">remove</span></code>, <code class="docutils literal"><span class="pre">try</span></code>, <code class="docutils literal"><span class="pre">vars</span></code>, <code class="docutils literal"><span class="pre">when</span></code>.</p>
+<a class="reference internal" href="source/nagare.namespaces.html#nagare.namespaces.esi.Renderer" title="nagare.namespaces.esi.Renderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.namespaces.esi.Renderer</span></code></a> and has
+a factory for all the possible ESI tags :  <code class="docutils literal notranslate"><span class="pre">attempt</span></code>, <code class="docutils literal notranslate"><span class="pre">choose</span></code>, <code class="docutils literal notranslate"><span class="pre">comment</span></code>,
+<code class="docutils literal notranslate"><span class="pre">include</span></code>, <code class="docutils literal notranslate"><span class="pre">inline</span></code>, <code class="docutils literal notranslate"><span class="pre">otherwise</span></code>, <code class="docutils literal notranslate"><span class="pre">remove</span></code>, <code class="docutils literal notranslate"><span class="pre">try</span></code>, <code class="docutils literal notranslate"><span class="pre">vars</span></code>, <code class="docutils literal notranslate"><span class="pre">when</span></code>.</p>
 </div>
 </div>
 <div class="section" id="namespaces-and-renderers-mixin">
 <h2>Namespaces and renderers mixin<a class="headerlink" href="#namespaces-and-renderers-mixin" title="Permalink to this headline">¶</a></h2>
 <p>A renderer can create DOM object in a specific
 <a class="reference external" href="http://www.w3.org/TR/REC-xml-names/">XML namespace</a>. First the
-namespace(s) must be declared to the renderer by setting its <code class="docutils literal"><span class="pre">namespaces</span></code>
+namespace(s) must be declared to the renderer by setting its <code class="docutils literal notranslate"><span class="pre">namespaces</span></code>
 attribute to a <em>namespace prefix</em> -&gt; <em>namespace uri</em> dictionary. Then, at any
-moment, the namespace to use is choosen by setting its <code class="docutils literal"><span class="pre">default_namespace</span></code>
+moment, the namespace to use is choosen by setting its <code class="docutils literal notranslate"><span class="pre">default_namespace</span></code>
 atttribut to the prefix of the namespace:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xsl</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xsl</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">xsl</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">namespaces</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;xsl&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.w3.org/1999/XSL/Transform&#39;</span> <span class="p">}</span>
@@ -462,7 +462,7 @@ atttribut to the prefix of the namespace:</p>
 </div>
 <p>Different renderers, with different namespaces, can be combined to build
 a DOM tree:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span><span class="p">,</span> <span class="n">esi</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span><span class="p">,</span> <span class="n">esi</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">xhtml</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
 
@@ -532,7 +532,7 @@ a DOM tree:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

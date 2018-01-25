@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Nagare component model &mdash; Nagare 0.5.0 documentation</title>
+  <title>The Nagare component model &mdash; Nagare 0.5.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Nagare 0.5.0 documentation" href="index.html"/>
+    <link rel="top" title="Nagare 0.5.1 documentation" href="index.html"/>
         <link rel="next" title="Database tier" href="database.html"/>
         <link rel="prev" title="Presentation tier" href="presentation.html"/> 
 
@@ -216,8 +216,8 @@
 <h1>The Nagare component model<a class="headerlink" href="#the-nagare-component-model" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="what-is-a-component">
 <h2>What is a component?<a class="headerlink" href="#what-is-a-component" title="Permalink to this headline">¶</a></h2>
-<p>A component is an object, instance of the <code class="docutils literal"><span class="pre">Component</span></code> class in
-<a class="reference internal" href="source/nagare.html#nagare.component.Component" title="nagare.component.Component"><code class="xref py py-class docutils literal"><span class="pre">nagare.component.Component</span></code></a>.</p>
+<p>A component is an object, instance of the <code class="docutils literal notranslate"><span class="pre">Component</span></code> class in
+<a class="reference internal" href="source/nagare.html#nagare.component.Component" title="nagare.component.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.component.Component</span></code></a>.</p>
 <p>A component has one or multiple rendering methods. They are used to generate
 a HTML, XHTML, XML or any other views on it.</p>
 <p>A component knows how to replace itself by an other component, either permanently
@@ -226,12 +226,12 @@ or temporarily.</p>
 <div class="section" id="how-to-create-a-component">
 <h2>How to create a component?<a class="headerlink" href="#how-to-create-a-component" title="Permalink to this headline">¶</a></h2>
 <p>With a lot of components based frameworks, you need to make your classes inherit
-from a <code class="docutils literal"><span class="pre">Component</span></code> class. Nagare is using composition instead of inheritance so
-you only need to wrap your python object into a <code class="docutils literal"><span class="pre">Component</span></code> instance to obtain
+from a <code class="docutils literal notranslate"><span class="pre">Component</span></code> class. Nagare is using composition instead of inheritance so
+you only need to wrap your python object into a <code class="docutils literal notranslate"><span class="pre">Component</span></code> instance to obtain
 a component. That means you can make a component from a “Plain Old Python
 Object” without changing its code.</p>
-<p>From example, starting with a pure Python <code class="docutils literal"><span class="pre">Counter</span></code> class :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<p>From example, starting with a pure Python <code class="docutils literal notranslate"><span class="pre">Counter</span></code> class :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -242,21 +242,21 @@ Object” without changing its code.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">-=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>to create a <code class="docutils literal"><span class="pre">Counter</span></code> component, you only need to do:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span>
+<p>to create a <code class="docutils literal notranslate"><span class="pre">Counter</span></code> component, you only need to do:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span>
 <span class="n">counter1</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="n">Component</span><span class="p">(</span><span class="n">Counter</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="how-to-associate-views-to-a-component">
 <h2>How to associate views to a component?<a class="headerlink" href="#how-to-associate-views-to-a-component" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">nagare.presentation</span></code> service of the framework keeps track of the views
+<p>The <code class="docutils literal notranslate"><span class="pre">nagare.presentation</span></code> service of the framework keeps track of the views
 associated to a class.</p>
 <p>The views are plain Python methods and multiple views can be registered on a
-class, each with a different <code class="docutils literal"><span class="pre">model</span></code> name.</p>
+class, each with a different <code class="docutils literal notranslate"><span class="pre">model</span></code> name.</p>
 <p>The views are associated to a class using the
-<code class="docutils literal"><span class="pre">presentation.render_for</span></code> decorator. Then when the presentation service is
-asked to render a component, with a given <code class="docutils literal"><span class="pre">model</span></code>, the view for this <code class="docutils literal"><span class="pre">model</span></code>
+<code class="docutils literal notranslate"><span class="pre">presentation.render_for</span></code> decorator. Then when the presentation service is
+asked to render a component, with a given <code class="docutils literal notranslate"><span class="pre">model</span></code>, the view for this <code class="docutils literal notranslate"><span class="pre">model</span></code>
 is called with :</p>
 <ol class="arabic simple">
 <li>the object (the inner object of the component)</li>
@@ -266,9 +266,9 @@ is called with :</p>
 </ol>
 <p>and the method will generally returns a tree of DOM objects, build by using
 the <a class="reference internal" href="renderer.html"><span class="doc">The Renderer objects</span></a> API.</p>
-<p>The following code associates a default view (the <code class="docutils literal"><span class="pre">view_by_default</span></code> method) and
-a view for the <em>edit</em> model (the <code class="docutils literal"><span class="pre">edit_view</span></code> method) to the class <code class="docutils literal"><span class="pre">AClass</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<p>The following code associates a default view (the <code class="docutils literal notranslate"><span class="pre">view_by_default</span></code> method) and
+a view for the <em>edit</em> model (the <code class="docutils literal notranslate"><span class="pre">edit_view</span></code> method) to the class <code class="docutils literal notranslate"><span class="pre">AClass</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 
 <span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">AClass</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">view_by_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -283,17 +283,17 @@ a view for the <em>edit</em> model (the <code class="docutils literal"><span cla
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>In general, we append <code class="docutils literal"><span class="pre">*args</span></code> to the signature of the view methods for
+<p>In general, we append <code class="docutils literal notranslate"><span class="pre">*args</span></code> to the signature of the view methods for
 compatibility with some future parameters addition. Furthermore if you’re
-not using, for example, the <code class="docutils literal"><span class="pre">comp</span></code> and the <code class="docutils literal"><span class="pre">model</span></code> parameters into
-your rendering process but only the <code class="docutils literal"><span class="pre">self</span></code> and <code class="docutils literal"><span class="pre">h</span></code> parameters, then you
-could defined your view method as a simpler <code class="docutils literal"><span class="pre">def</span> <span class="pre">render(self,</span> <span class="pre">h,</span> <span class="pre">*args)</span></code></p>
+not using, for example, the <code class="docutils literal notranslate"><span class="pre">comp</span></code> and the <code class="docutils literal notranslate"><span class="pre">model</span></code> parameters into
+your rendering process but only the <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code> parameters, then you
+could defined your view method as a simpler <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">render(self,</span> <span class="pre">h,</span> <span class="pre">*args)</span></code></p>
 <p class="last">The views for a class are defined and added externally to the class itself,
 even from an other file if you want. So again, views can be added without any
 modifications of the class.</p>
 </div>
-<p>For example, a default HTML view on our <code class="docutils literal"><span class="pre">Counter</span></code> objects could be:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
+<p>For example, a default HTML view on our <code class="docutils literal notranslate"><span class="pre">Counter</span></code> objects could be:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">presentation</span>
 
 <span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -306,8 +306,8 @@ modifications of the class.</p>
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">root</span>
 </pre></div>
 </div>
-<p>and an other simpler HTML view, called <code class="docutils literal"><span class="pre">static</span></code>, could be:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;static&#39;</span><span class="p">)</span>
+<p>and an other simpler HTML view, called <code class="docutils literal notranslate"><span class="pre">static</span></code>, could be:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">Counter</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;static&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </pre></div>
@@ -315,9 +315,9 @@ modifications of the class.</p>
 </div>
 <div class="section" id="how-to-render-a-component">
 <h2>How to render a component?<a class="headerlink" href="#how-to-render-a-component" title="Permalink to this headline">¶</a></h2>
-<p>To render a component, calls its <code class="docutils literal"><span class="pre">render()</span></code> method, with a renderer and an
-optional <code class="docutils literal"><span class="pre">model</span></code> parameter:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
+<p>To render a component, calls its <code class="docutils literal notranslate"><span class="pre">render()</span></code> method, with a renderer and an
+optional <code class="docutils literal notranslate"><span class="pre">model</span></code> parameter:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nagare.namespaces</span> <span class="kn">import</span> <span class="n">xhtml</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">counter1</span> <span class="o">=</span> <span class="n">Component</span><span class="p">(</span><span class="n">Counter</span><span class="p">())</span>
 
@@ -335,13 +335,13 @@ optional <code class="docutils literal"><span class="pre">model</span></code> pa
 <p>But it’s simpler to add the component as the child of a DOM object and let
 Nagare automatically create a new renderer and call the view of the component for you.</p>
 <p>So:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">counter1</span><span class="p">)</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">counter1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
 <span class="go">&#39;&lt;div&gt;&lt;div&gt;Value: 0&lt;br&gt;&lt;a&gt;--&lt;/a&gt; | &lt;a&gt;++&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&#39;</span>
 </pre></div>
 </div>
 <p>is a shortcut for explicitly calling the default view:</p>
-<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">counter1</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">counter1</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">write_htmlstring</span><span class="p">()</span>
 <span class="go">&#39;&lt;div&gt;&lt;div&gt;Value: 0&lt;br&gt;&lt;a&gt;--&lt;/a&gt; | &lt;a&gt;++&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&#39;</span>
 </pre></div>
@@ -351,9 +351,9 @@ Nagare automatically create a new renderer and call the view of the component fo
 <h2>How to build a compound component?<a class="headerlink" href="#how-to-build-a-compound-component" title="Permalink to this headline">¶</a></h2>
 <p>A component can be build from other existing components. The inner components
 are simply represented as normal Python attributes in the compound component.</p>
-<p>First let’s create a <code class="docutils literal"><span class="pre">ColorChooser</span></code> component, a component displaying four clickable
+<p>First let’s create a <code class="docutils literal notranslate"><span class="pre">ColorChooser</span></code> component, a component displaying four clickable
 cells with differents colors:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColorChooser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColorChooser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">pass</span>
 
 <span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ColorChooser</span><span class="p">)</span>
@@ -366,8 +366,8 @@ cells with differents colors:</p>
            <span class="p">)</span>
 </pre></div>
 </div>
-<p>then a <code class="docutils literal"><span class="pre">ColorText</span></code> component, a text displayed with a given background color:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColorText</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<p>then a <code class="docutils literal notranslate"><span class="pre">ColorText</span></code> component, a text displayed with a given background color:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColorText</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ffffff&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
@@ -383,7 +383,7 @@ cells with differents colors:</p>
 <h4>Views composition<a class="headerlink" href="#views-composition" title="Permalink to this headline">¶</a></h4>
 <p>The simplest method to build a compound component is to add a view that
 embeds the views of the inner components:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare.component</span> <span class="kn">import</span> <span class="n">Component</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare.component</span> <span class="kn">import</span> <span class="n">Component</span>
 
 <span class="c1"># ``App`` is the compound component</span>
 <span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -406,7 +406,7 @@ embeds the views of the inner components:</p>
 </pre></div>
 </div>
 <p>Launching the application with:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module color.py:App color
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;NAGARE_HOME&gt;/bin/nagare-admin serve-module color.py:App color
 </pre></div>
 </div>
 <p>and browsing to <a class="reference external" href="http://localhost:8080/color">http://localhost:8080/color</a>, gives you:</p>
@@ -425,11 +425,11 @@ embeds the views of the inner components:</p>
 <p>After creating the composite view of the application from the views of its inner
 components, we will now create the logic of the application by combining the logic
 of the inner components.</p>
-<p>First, the <code class="docutils literal"><span class="pre">ColorChooser</span></code>, on a click on a color, now returns the selected
+<p>First, the <code class="docutils literal notranslate"><span class="pre">ColorChooser</span></code>, on a click on a color, now returns the selected
 color. For this purpose, we register a callback (see <a class="reference internal" href="callbacks_forms.html"><span class="doc">Callbacks and forms</span></a>)
-on the link items, that calls the <code class="docutils literal"><span class="pre">answer()</span></code> method of the <code class="docutils literal"><span class="pre">ColorChooser</span></code>
+on the link items, that calls the <code class="docutils literal notranslate"><span class="pre">answer()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">ColorChooser</span></code>
 component, with the value to return:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ColorChooser</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">ColorChooser</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">(</span>
             <span class="n">h</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;background-color: #4B96FF&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="n">comp</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="s1">&#39;#4B96FF&#39;</span><span class="p">),</span>
@@ -442,7 +442,7 @@ component, with the value to return:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>Of course, this view could be written in a more compact Python code:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">:</span>
+<div class="last highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;#4B96FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FF8FDF&#39;</span><span class="p">,</span> <span class="s1">&#39;#9EFF5D&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffffff&#39;</span><span class="p">):</span>
         <span class="n">h</span> <span class="o">&lt;&lt;</span> <span class="n">h</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;background-color: &#39;</span> <span class="o">+</span> <span class="n">color</span><span class="p">)</span><span class="o">.</span><span class="n">action</span><span class="p">(</span><span class="n">comp</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
 
@@ -450,8 +450,8 @@ component, with the value to return:</p>
 </pre></div>
 </div>
 </div>
-<p>Second, we add a <code class="docutils literal"><span class="pre">set_color()</span></code> method to our <code class="docutils literal"><span class="pre">ColorText</span></code> object:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColorText</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<p>Second, we add a <code class="docutils literal notranslate"><span class="pre">set_color()</span></code> method to our <code class="docutils literal notranslate"><span class="pre">ColorText</span></code> object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColorText</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ffffff&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
@@ -460,10 +460,10 @@ component, with the value to return:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
 </pre></div>
 </div>
-<p>Finally, the <code class="docutils literal"><span class="pre">App</span></code> object binds the <code class="docutils literal"><span class="pre">answer()</span></code> method of the
-<code class="docutils literal"><span class="pre">ColorChooser</span></code> component to the <code class="docutils literal"><span class="pre">set_color()</span></code> method of the <code class="docutils literal"><span class="pre">ColorText</span></code>
-object, using the <code class="docutils literal"><span class="pre">on_answer()</span></code> method of the <code class="docutils literal"><span class="pre">ColorChooser</span></code> component:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<p>Finally, the <code class="docutils literal notranslate"><span class="pre">App</span></code> object binds the <code class="docutils literal notranslate"><span class="pre">answer()</span></code> method of the
+<code class="docutils literal notranslate"><span class="pre">ColorChooser</span></code> component to the <code class="docutils literal notranslate"><span class="pre">set_color()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">ColorText</span></code>
+object, using the <code class="docutils literal notranslate"><span class="pre">on_answer()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">ColorChooser</span></code> component:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color_chooser_comp</span> <span class="o">=</span> <span class="n">Component</span><span class="p">(</span><span class="n">ColorChooser</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">ColorText</span><span class="p">(</span><span class="s1">&#39;Hello world !&#39;</span><span class="p">)</span>
@@ -478,11 +478,11 @@ object, using the <code class="docutils literal"><span class="pre">on_answer()</
 <div class="section" id="permanently-replacing-a-component">
 <h3>Permanently replacing a component<a class="headerlink" href="#permanently-replacing-a-component" title="Permalink to this headline">¶</a></h3>
 <p>A component knows how to replace itself into the components graph with its
-<code class="docutils literal"><span class="pre">becomes()</span></code> method, which is called with the object or the component to be
+<code class="docutils literal notranslate"><span class="pre">becomes()</span></code> method, which is called with the object or the component to be
 replaced by.</p>
-<p>For example, our <code class="docutils literal"><span class="pre">App</span></code> component is now changed to only have one inner
-component, the <code class="docutils literal"><span class="pre">content</span></code> component:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<p>For example, our <code class="docutils literal notranslate"><span class="pre">App</span></code> component is now changed to only have one inner
+component, the <code class="docutils literal notranslate"><span class="pre">content</span></code> component:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color_chooser</span> <span class="o">=</span> <span class="n">ColorChooser</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">ColorText</span><span class="p">(</span><span class="s1">&#39;Hello world !&#39;</span><span class="p">)</span>
@@ -491,10 +491,10 @@ component, the <code class="docutils literal"><span class="pre">content</span></
         <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">on_answer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">set_color</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>and its default view displays a little menu to choose between the <code class="docutils literal"><span class="pre">ColorChooser</span></code>
-object or the <code class="docutils literal"><span class="pre">ColorText</span></code> to display. The actions on the link of this menu
-simply replace the <code class="docutils literal"><span class="pre">content</span></code> component:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">)</span>
+<p>and its default view displays a little menu to choose between the <code class="docutils literal notranslate"><span class="pre">ColorChooser</span></code>
+object or the <code class="docutils literal notranslate"><span class="pre">ColorText</span></code> to display. The actions on the link of this menu
+simply replace the <code class="docutils literal notranslate"><span class="pre">content</span></code> component:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@presentation.render_for</span><span class="p">(</span><span class="n">App</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="k">with</span> <span class="n">h</span><span class="o">.</span><span class="n">div</span><span class="p">:</span>
         <span class="c1"># On a click on this link, replace the ``content`` inner object</span>
@@ -516,8 +516,8 @@ simply replace the <code class="docutils literal"><span class="pre">content</spa
 </pre></div>
 </div>
 <p>So now a little menu of two items is displayed. Clicking on the items displays
-the <code class="docutils literal"><span class="pre">color_chooser</span></code> or the <code class="docutils literal"><span class="pre">text</span></code> object. And, clicking on a color in the
-<code class="docutils literal"><span class="pre">color_chooser</span></code> changes again the color of the <code class="docutils literal"><span class="pre">text</span></code> object:</p>
+the <code class="docutils literal notranslate"><span class="pre">color_chooser</span></code> or the <code class="docutils literal notranslate"><span class="pre">text</span></code> object. And, clicking on a color in the
+<code class="docutils literal notranslate"><span class="pre">color_chooser</span></code> changes again the color of the <code class="docutils literal notranslate"><span class="pre">text</span></code> object:</p>
 <div class="htmlscreen"><div>
     <a href="#">The Color chooser</a> | <a href="#">The text</a>
     <hr>
@@ -531,15 +531,15 @@ the <code class="docutils literal"><span class="pre">color_chooser</span></code>
 <p>Permanently replacing a component is like a “goto” in some programming
 languages. Temporary replacing a component is like a “call”: the component
 is replaced, but as soon as the replacing component calls its
-<code class="docutils literal"><span class="pre">answer(return_value)</span></code> method, the previous component comes back in the
+<code class="docutils literal notranslate"><span class="pre">answer(return_value)</span></code> method, the previous component comes back in the
 component graph and the caller receives the returned value.</p>
-<p>For example, our <code class="docutils literal"><span class="pre">App</span></code> component can be changed to first display the
-<code class="docutils literal"><span class="pre">text_comp</span></code> component and a link to choose its color. Once the link is
-clicked, the <code class="docutils literal"><span class="pre">App</span></code> component temporary replaces itself by the <code class="docutils literal"><span class="pre">color_chooser</span></code>
-object. Remember that, once a color is selected, the <code class="docutils literal"><span class="pre">color_chooser</span></code> component
-do an <code class="docutils literal"><span class="pre">answer(color)</span></code>. So the <code class="docutils literal"><span class="pre">App</span></code> component is restored, receives the
+<p>For example, our <code class="docutils literal notranslate"><span class="pre">App</span></code> component can be changed to first display the
+<code class="docutils literal notranslate"><span class="pre">text_comp</span></code> component and a link to choose its color. Once the link is
+clicked, the <code class="docutils literal notranslate"><span class="pre">App</span></code> component temporary replaces itself by the <code class="docutils literal notranslate"><span class="pre">color_chooser</span></code>
+object. Remember that, once a color is selected, the <code class="docutils literal notranslate"><span class="pre">color_chooser</span></code> component
+do an <code class="docutils literal notranslate"><span class="pre">answer(color)</span></code>. So the <code class="docutils literal notranslate"><span class="pre">App</span></code> component is restored, receives the
 selected color and change the color of the text:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color_chooser</span> <span class="o">=</span> <span class="n">ColorChooser</span><span class="p">()</span>
 
@@ -572,18 +572,18 @@ selected color and change the color of the text:</p>
 </div>
 <div class="section" id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h2>
-<p>Nagare also provides a <code class="docutils literal"><span class="pre">Task</span></code> concept in <a class="reference internal" href="source/nagare.html#nagare.component.Task" title="nagare.component.Task"><code class="xref py py-class docutils literal"><span class="pre">nagare.component.Task</span></code></a>. A <code class="docutils literal"><span class="pre">Task</span></code> is
+<p>Nagare also provides a <code class="docutils literal notranslate"><span class="pre">Task</span></code> concept in <a class="reference internal" href="source/nagare.html#nagare.component.Task" title="nagare.component.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">nagare.component.Task</span></code></a>. A <code class="docutils literal notranslate"><span class="pre">Task</span></code> is
 useful when implementing user-interaction logic, such as as a business process workflow or
 game logic. It’s a good way to handle a sequence of Web “screens” (that are represented by
 either simple or compound components) appearing under some conditions depending on the choices
 of the user.</p>
-<p>Intuitively, a <code class="docutils literal"><span class="pre">Task</span></code> can be seen as a component without a view, just replacing itself with
-other components thanks to the <code class="docutils literal"><span class="pre">call</span></code> method. The <code class="docutils literal"><span class="pre">call</span></code> method is a way to stop the execution
-of the presentation logic defined in the <code class="docutils literal"><span class="pre">Task</span></code>, waiting for user-interaction (showing the called
-component and waiting for it to <code class="docutils literal"><span class="pre">answer</span></code>), then resuming the execution from where it stopped.</p>
+<p>Intuitively, a <code class="docutils literal notranslate"><span class="pre">Task</span></code> can be seen as a component without a view, just replacing itself with
+other components thanks to the <code class="docutils literal notranslate"><span class="pre">call</span></code> method. The <code class="docutils literal notranslate"><span class="pre">call</span></code> method is a way to stop the execution
+of the presentation logic defined in the <code class="docutils literal notranslate"><span class="pre">Task</span></code>, waiting for user-interaction (showing the called
+component and waiting for it to <code class="docutils literal notranslate"><span class="pre">answer</span></code>), then resuming the execution from where it stopped.</p>
 <p>For example, the Tic-tac-toe game logic found in the
 <a class="reference external" href="https://github.com/nagareproject/examples/blob/master/nagare/examples/tictactoe.py#L94">tictactoe.py</a>
-example is implemented as a <code class="docutils literal"><span class="pre">Task</span></code> performing the following steps:</p>
+example is implemented as a <code class="docutils literal notranslate"><span class="pre">Task</span></code> performing the following steps:</p>
 <ol class="arabic simple">
 <li>Ask the first player’s name</li>
 <li>Ask the second player’s name</li>
@@ -591,9 +591,9 @@ example is implemented as a <code class="docutils literal"><span class="pre">Tas
 empty cell left.</li>
 <li>Show a message that congratulates the winner, if any</li>
 </ol>
-<p>In this example, each step is delegated to other components via some calls to the <code class="docutils literal"><span class="pre">call</span></code> method
-from the <code class="docutils literal"><span class="pre">Task</span></code> component:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span>
+<p>In this example, each step is delegated to other components via some calls to the <code class="docutils literal notranslate"><span class="pre">call</span></code> method
+from the <code class="docutils literal notranslate"><span class="pre">Task</span></code> component:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nagare</span> <span class="kn">import</span> <span class="n">component</span>
 
 <span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">Task</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">go</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comp</span><span class="p">):</span>
@@ -625,19 +625,19 @@ from the <code class="docutils literal"><span class="pre">Task</span></code> com
 <span class="hll">            <span class="n">comp</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">util</span><span class="o">.</span><span class="n">Confirm</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
 </span></pre></div>
 </div>
-<p>As you see, in order to create a task, you must create a class that inherit from <code class="docutils literal"><span class="pre">Task</span></code>
-and override the <code class="docutils literal"><span class="pre">go()</span></code> method which receives the <code class="docutils literal"><span class="pre">Component</span></code> object that wraps the task object
-as input parameter. In other words, a <code class="docutils literal"><span class="pre">Task</span></code> object should be wrapped into a <code class="docutils literal"><span class="pre">Component</span></code> object
+<p>As you see, in order to create a task, you must create a class that inherit from <code class="docutils literal notranslate"><span class="pre">Task</span></code>
+and override the <code class="docutils literal notranslate"><span class="pre">go()</span></code> method which receives the <code class="docutils literal notranslate"><span class="pre">Component</span></code> object that wraps the task object
+as input parameter. In other words, a <code class="docutils literal notranslate"><span class="pre">Task</span></code> object should be wrapped into a <code class="docutils literal notranslate"><span class="pre">Component</span></code> object
 to be used, like classical components.</p>
-<p>In the <code class="docutils literal"><span class="pre">go</span></code> method, you can <code class="docutils literal"><span class="pre">call</span></code> any component to show and ask something to the user, and thus
+<p>In the <code class="docutils literal notranslate"><span class="pre">go</span></code> method, you can <code class="docutils literal notranslate"><span class="pre">call</span></code> any component to show and ask something to the user, and thus
 temporarily suspend the execution of the task that will resume when the called component answers.</p>
-<p>Also, the steps are wrapped in a endless <code class="docutils literal"><span class="pre">while</span></code> loop since we want the game to start again
+<p>Also, the steps are wrapped in a endless <code class="docutils literal notranslate"><span class="pre">while</span></code> loop since we want the game to start again
 after the end of the previous game.</p>
-<p>A <code class="docutils literal"><span class="pre">Task</span></code> component, like a classical component, can <code class="docutils literal"><span class="pre">answer</span></code> and can be used as an inner component
-of compound components. So, if a <code class="docutils literal"><span class="pre">Task</span></code> is used as the root component of an application and answers,
+<p>A <code class="docutils literal notranslate"><span class="pre">Task</span></code> component, like a classical component, can <code class="docutils literal notranslate"><span class="pre">answer</span></code> and can be used as an inner component
+of compound components. So, if a <code class="docutils literal notranslate"><span class="pre">Task</span></code> is used as the root component of an application and answers,
 Nagare just starts the task again, thus looping the task endlessly since there’s no parent component to
 which it can pass the answer.</p>
-<p><code class="docutils literal"><span class="pre">Task</span></code> objects and more specifically the <code class="docutils literal"><span class="pre">call</span></code> method of components are useful tools that allow us
+<p><code class="docutils literal notranslate"><span class="pre">Task</span></code> objects and more specifically the <code class="docutils literal notranslate"><span class="pre">call</span></code> method of components are useful tools that allow us
 to program complex user-interface interactions in direct style (i.e. sequentially), without being
 disrupted by the control flow break due to the response/request cycle, as described in this <a class="reference external" href="https://pages.lip6.fr/Christian.Queinnec/PDF/www.pdf">enlightening
 paper from Christian Queinnec</a>. Nagare automatically takes care of saving the current state of the
@@ -695,7 +695,7 @@ is activating callbacks that permanently or temporarily modify this graph.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.5.0',
+            VERSION:'0.5.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
