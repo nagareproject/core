@@ -1,5 +1,5 @@
 //--
-// Copyright (c) 2008-2012, Net-ng.
+// Copyright (c) 2008-2018, Net-ng.
 // All rights reserved.
 //
 // This software is licensed under the BSD License, as described in

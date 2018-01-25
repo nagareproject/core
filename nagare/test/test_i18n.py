@@ -1,7 +1,7 @@
 # Encoding: utf-8
 
 # --
-# Copyright (c) 2008-2017 Net-ng.
+# Copyright (c) 2008-2018 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
