@@ -130,7 +130,7 @@ optional ``model`` parameter:
 
 .. code-block:: pycon
 
-    >>> from nagare.namespaces import xhtml
+    >>> from nagare.renderers import xhtml
 
     >>> counter1 = Component(Counter())
 
@@ -141,7 +141,7 @@ optional ``model`` parameter:
 
     >>> h = xhtml.Renderer()
     >>> tree = counter1.render(h, model='static')
-    >>> tree.write_htmlstring()
+    >>> tree.tostring()
     '<b>0</b>'
 
 But it's simpler to add the component as the child of a DOM object and let

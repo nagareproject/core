@@ -1,5 +1,3 @@
 prune test
 graft nagare/static
 graft nagare/data
-graft nagare/conf
-

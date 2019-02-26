@@ -195,8 +195,8 @@ configuration, which can be overridden:
 
 .. code-block:: ini
 
-    [[logging]]
-    [loggers]
+    [logging]
+    [[loggers]]
     keys=ui   # Declare the new logger
 
     [[logger_ui]]

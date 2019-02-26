@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2017 Net-ng.
+# Copyright (c) 2008-2019 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -15,10 +15,10 @@ Suitable to be the validating functions of ``editor.property`` objects
 import re
 import functools
 
-from nagare import i18n, partial
+from nagare import i18n
 
 
-_L = partial.Partial(i18n._L, domain='nagare')
+_L = functools.partial(i18n._L, domain='nagare')
 
 
 class DualCallable(type):
@@ -44,7 +44,7 @@ class DualCallable(type):
         Return:
           - a new class
         """
-        for method_name, method in ns.iteritems():
+        for method_name, method in ns.items():
             if callable(method) and (method_name == '__init__' or not method_name.startswith('_')):
 
                 def _(m):
@@ -144,7 +144,7 @@ class Validator(ValidatorBase):
           - ``lstrip`` -- remove the characters at the beginning
           - ``chars`` -- list of characters to removed, spaces by default
         """
-        if not isinstance(v, basestring):
+        if not isinstance(v, (str, type(u''))):
             raise ValueError('Input must be a string')
 
         if strip:

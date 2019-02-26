@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2017 Net-ng.
+# Copyright (c) 2008-2019 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -78,16 +78,21 @@ except ImportError:
             stackless.tasklet(f)(*args, **kw).run()
 
         class Channel(stackless.channel):
-            def switch(self, value=None):
-                """Permute this execution context with the current one
 
-                In:
-                  - ``value`` - value returned to the captured execution context
-                """
+            def switch(self, value=None):
+                # Permute this execution context with the current one
+
+                # In:
+                #   - ``value`` - value returned to the captured execution context
+                #
+                # .. note:
+                #   - the code of this function will be serialized.
+                #     Keep it to a minimal (no docstring ...)
                 if self.balance:
                     self.send(value)
                 else:
                     return self.receive()
+
 else:
     # PyPy
     # ----

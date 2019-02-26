@@ -1,7 +1,7 @@
 #!/bin/env python
 
 # --
-# Copyright (c) 2008-2017 Net-ng.
+# Copyright (c) 2008-2019 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -9,36 +9,27 @@
 # this distribution.
 # --
 
-import sys
 import os
 import textwrap
 
 from setuptools import setup, find_packages
 
-VERSION = '0.5.0'
-
-
-# -----------------------------------------------------------------------------
 
 try:
     import stackless  # noqa: F401
 except ImportError:
-    print "Warning: you are installing Nagare on CPython instead of Stackless Python (http://www.stackless.com) or PyPy (http://pypy.org)."
-    print "         Without 'continuation', the 'Component.call()' method will not be available."
-
-if sys.version_info < (2, 7, 0):
-    print 'The Python version must be 2.7'
-    sys.exit(-2)
+    print("Warning: you are installing Nagare on CPython instead of Stackless Python (http://www.stackless.com) or PyPy (http://pypy.org).")
+    print("         Without 'continuation', the 'Component.call()' method will not be available.")
 
 # -----------------------------------------------------------------------------
 
-f = open(os.path.join(os.path.dirname(__file__), 'README.rst'))
-long_description = f.read()
-f.close()
+
+with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
+    LONG_DESCRIPTION = f.read()
+
 
 setup(
     name='nagare',
-    version=VERSION,
     author='Alain Poirier',
     author_email='alain.poirier@net-ng.com',
     description='Nagare Python web framework',
@@ -56,70 +47,43 @@ setup(
     Read `framework installation <http://www.nagare.org/doc/framework_installation>`_ to run the
     latest development version from the `Github repository <https://github.com/nagareproject/core>`_
     or to create a Nagare developer installation.
-    """) % long_description,
+    """) % LONG_DESCRIPTION,
     license='BSD',
-    keywords='web wsgi framework sqlalchemy elixir seaside continuation ajax stackless',
+    keywords='web wsgi framework sqlalchemy seaside continuation ajax stackless',
     url='http://www.nagare.org',
     download_url='http://www.nagare.org/download',
     packages=find_packages(),
     include_package_data=True,
-    namespace_packages=('nagare',),
     zip_safe=False,
-    install_requires=(
-        'nagare-peak-rules', 'ConfigObj', 'lxml', 'WebOb',
-        'Paste', 'flup==1.0.3.dev-20110405', 'python-memcached'
-    ),
+    setup_requires=['setuptools_scm'],
+    use_scm_version=True,
+    install_requires=[
+        'WebOb', 'cryptography',
+        'nagare-server-mvc', 'nagare-renderers-html'
+    ],
     message_extractors={'nagare': [('**.py', 'python', None)]},
     extras_require={
-        'debug': ('WebError',),
-        'database': ('SQLAlchemy>0.5.8', 'Elixir'),
-        'doc': ('sphinx', 'sphinx_rtd_theme<0.3'),
-        'test': ('pytest',),
-        'i18n': ('Babel>=2.5.0', 'pytz'),
-        'full': (
-            'WebError',
-            'SQLAlchemy>0.5.8', 'Elixir',
-            'sphinx', 'sphinx_rtd_theme<0.3',
-            'pytest',
-            'Babel>=2.5.0', 'pytz'
-        ),
+        'doc': ['sphinx', 'sphinx_rtd_theme<0.3']
     },
-    setup_requires=('pytest-runner',),
-    tests_require=('nagare[test,i18n]'),
     entry_points='''
-        [console_scripts]
-        nagare-admin = nagare.admin.command:run
-
         [nagare.commands]
-        info = nagare.admin.info:Info
-        serve = nagare.admin.serve:Serve
-        create-app = nagare.admin.create:Create
-        create-db = nagare.admin.db:DBCreate
-        drop-db = nagare.admin.db:DBDrop
-        shell = nagare.admin.shell:Shell
-        batch = nagare.admin.shell:Batch
-        create-rules = nagare.admin.create_rules:CreateRules
-
-        [nagare.publishers]
-        standalone = nagare.publishers.standalone_publisher:Publisher
-        threaded = nagare.publishers.standalone_publisher:Publisher
-        fastcgi = nagare.publishers.fcgi_publisher:Publisher
-        fapws3 = nagare.publishers.fapws_publisher:Publisher
-        eventlet = nagare.publishers.eventlet_publisher:Publisher
-
-        [nagare.sessions]
-        standalone = nagare.sessions.memory_sessions:SessionsWithPickledStates
-        pickle = nagare.sessions.memory_sessions:SessionsWithPickledStates
-        memcache = nagare.sessions.memcached_sessions:Sessions
+        #create-rules = nagare.admin.create_rules:CreateRules
 
         [nagare.applications]
-        admin = nagare.admin.admin_app:app
+        #admin = nagare.admin.admin_app:app
 
-        [nagare.admin]
-        info = nagare.admin.interface.info:Admin
-        apps = nagare.admin.interface.applications:Admin
+        #[nagare.admin]
+        #info = nagare.admin.interface.info:Admin
+        #apps = nagare.admin.interface.applications:Admin
+
+        [nagare.services]
+        exceptions = nagare.services.core_exceptions:ExceptionsService
+        state = nagare.services.state:StateService
+        redirect_after_post = nagare.services.prg:PRGService
+        callbacks = nagare.services.callbacks:CallbacksService
+        ajax = nagare.services.ajax:AjaxService
         ''',
-    classifiers=(
+    classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: BSD License',
         'Intended Audience :: Developers',
@@ -130,5 +94,5 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    )
+    ]
 )

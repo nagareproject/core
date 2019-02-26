@@ -1,0 +1,135 @@
+@font-face {
+    font-family: 'DistrictThinRegular';
+    src: url('../font/distth___-webfont.eot');
+    src: url('../font/distth___-webfont.eot?iefix') format('eot'),
+         url('../font/distth___-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: white url(../img/bg.png) repeat-x top left;
+    color: #3a3a3a;
+    margin: 0;
+    padding: 0;
+}
+
+body, th, tr {
+    font-family: arial, verdana, sans, geneva;
+    font-size: 20px;
+}
+
+:link, :visited { border: 0 }
+
+#body {
+    width: 850px;
+    margin: 0 auto;
+}
+
+#logo { float: left }
+#logo img { border: 0 }
+
+#content { margin-left: 140px; }
+
+#title {
+    color: #3a3a3a;
+    font: italic 40px "DistrictThinRegular";
+    padding: 25px 40px 0 0;
+    text-align: right;
+}
+
+#main { margin-top: 60px }
+
+.note {
+    margin: 0 0 5px 30px;
+    padding: 14px 0 14px 49px;
+    background: #f8f8f8 url(../img/note.gif) no-repeat 9px 8px;
+    border: 0;
+    border-left: 2px solid #3F7516;
+}
+
+a { text-decoration: none; color: #3f7516 }
+
+pre { font-size: 13px }
+
+blockquote { margin: 0 0 15px 0 !important }
+#main blockquote ul, #main blockquote ol { padding-bottom: 0 }
+
+body h1 {
+    margin: 25px 0 15px 0 !important;
+    color: #3f7516;
+    border-bottom: 1px solid #9f9f9f;
+    font-size: 26px;
+    font-weight: normal;
+}
+
+h2 {
+    margin: 20px 0 15px 0 !important;
+    font-size: 23px;
+}
+
+h3 {
+    margin: 20px 0 15px 0 !important;
+    font-style: italic;
+    font-size: 20px;
+}
+
+h3 a, h2 a, h1 a { border: 0 !important }
+
+input, button, textarea, select, option { font-size: 13px !important }
+
+#main ul { padding: 0 0 15px 40px }
+#main ul li { list-style-type: square }
+#main ul ul { padding: 0 0 0 40px }
+#main ul ol { padding: 0 0 0 40px }
+#main ul ul li { list-style-type: disc; }
+
+#main ol { padding: 0 0 15px 40px }
+#main ol ul { padding: 0 0 0 40px }
+#main ol ol { padding: 0 0 0 40px }
+#main ol.arabic li { list-style-type: decimal }
+#main ol.arabic ul li { list-style-type: disc }
+
+#footer {
+    padding: 20px 0;
+    width: 100%;
+    background: #9c9c9c;
+    clear:both;
+    font-size: 15px;
+    text-shadow: 1px 1px 0 #5f5f5f;
+    white-space: nowrap;
+}
+#footer table {
+    margin: 0 auto;
+    text-align: left;
+    border: 0;
+    border-collapse: collapse;
+    vertical-align: top;
+}
+#footer th {
+    margin: 0;
+    padding: 0 0 10px 0;
+    font-weight: normal;
+    font-size: 20px;
+    color: white;
+}
+#footer th, #footer td {
+    padding-right: 20px;
+    padding-left: 20px;
+    vertical-align: top;
+    background: url(../img/footer_separator.gif) repeat-y top right;
+}
+#footer tr { font-size: 15px }
+#footer .last { background: none }
+#footer ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+#footer ul li { padding: 0 0 3px 0 }
+#footer a {
+    text-decoration: none;
+    color: white;
+    font-weight: normal;
+}
+#footer a:hover { text-shadow: none }

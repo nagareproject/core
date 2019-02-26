@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2017 Net-ng.
+# Copyright (c) 2008-2019 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -12,53 +12,57 @@
 import sys
 import types
 import pickle
-import copy_reg
-from functools import partial
 
 try:
-    import stackless  # noqa: F401
+    import copy_reg
+
+    try:
+        import stackless  # noqa: F401
+    except ImportError:
+
+        def pickle_method(m):
+            """Serialize a method
+
+            In:
+            - ``m`` -- method to pickle
+
+            Return:
+            - tuple to pickle (class of the method, name of the method, self)
+            """
+            return unpickle_method, (m.im_class, m.__name__, m.im_self)
+
+        def unpickle_method(cls, name, o):
+            """Deserialize a method
+
+            In:
+            - ``cls`` -- class of the method
+            - ``name`` -- name of the method
+            - ``o`` -- self
+
+            Return:
+            - the method, bound to ``o``
+            """
+            return getattr(o if isinstance(o, type) else cls, name).__get__(o, cls)
+
+        copy_reg.pickle(types.MethodType, pickle_method)
+
+        def pickle_function(f):
+            """Serialize a function
+
+            Only called when a lambda must be serialized
+
+            In:
+            - ``f`` -- function to pickle
+            """
+            msg = "Can't pickle %r, file \"%s\", line %d" % (f, f.func_code.co_filename, f.func_code.co_firstlineno)
+            raise pickle.PicklingError(msg)
+
+        copy_reg.pickle(types.FunctionType, pickle_function)
 except ImportError:
-    def pickle_method(m):
-        """Serialize a method
-
-        In:
-          - ``m`` -- method to pickle
-
-        Return:
-          - tuple to pickle (class of the method, name of the method, self)
-        """
-        return unpickle_method, (m.im_class, m.__name__, m.im_self)
-
-    def unpickle_method(cls, name, o):
-        """Deserialize a method
-
-        In:
-          - ``cls`` -- class of the method
-          - ``name`` -- name of the method
-          - ``o`` -- self
-
-        Return:
-          - the method, bound to ``o``
-        """
-        return getattr(o if isinstance(o, type) else cls, name).__get__(o, cls)
-
-    copy_reg.pickle(types.MethodType, pickle_method)
-
-    def pickle_function(f):
-        """Serialize a function
-
-        Only called when a lambda must be serialized
-
-        In:
-          - ``f`` -- function to pickle
-        """
-        msg = "Can't pickle %r, file \"%s\", line %d" % (f, f.func_code.co_filename, f.func_code.co_firstlineno)
-        raise pickle.PicklingError(msg)
-
-    copy_reg.pickle(types.FunctionType, pickle_function)
-
+    import copyreg as copy_reg
 
 # -----------------------------------------------------------------------------
+
 
 def max_number_of_args(nb):
     """Limit the number of positional parameters
@@ -71,15 +75,46 @@ def max_number_of_args(nb):
         return lambda *args, **kw: f(*args[:nb], args=args[nb:], **kw)
     return _
 
-
 # -----------------------------------------------------------------------------
+
+
+class _Partial(object):
+    def __init__(self, _f, *args, **kw):
+        """Callable with predefined parameters
+        A partial object when called will behave like ``_f`` called with the
+        positional arguments ``args`` and keyword arguments ``kw``
+        Like the standard ``functools.partial()`` but Serializable.
+
+        In:
+          - ``_f`` -- function to wrap
+          - ``args``, ``kw`` -- ``_f`` parameters
+        """
+        self.f = _f
+        self.args = args
+        self.kw = kw
+
+    def __call__(self, *args, **kw):
+        """Call the wrapper function
+
+        In:
+          - ``args`` -- parameters added _after_ ``self.args``
+          - ``kw`` -- parameters that can override ``self.kw``
+
+         Return:
+           - return of the wrapper function
+        """
+        args = self.args + args
+        kw = dict(self.kw, **kw)
+
+        return self.f(*args, **kw)
+
 
 def Partial(__f, *args, **kw):
-    """Don't double wrap a ``partial()`` object if not needed"""
-    return partial(__f, *args, **kw) if (not isinstance(__f, partial) or args or kw) else __f
-
+    """Don't double wrap a ``_Partial()`` object if not needed"""
+    return _Partial(__f, *args, **kw) if (not isinstance(__f, _Partial) or args or kw) else __f
 
 # -----------------------------------------------------------------------------
+
 
 class Decorator(object):
     """Use a ``partial()`` to decorate a function
@@ -107,7 +142,7 @@ class Decorator(object):
         self.kw = kw
 
     def create_partial(self, o=None):
-        """Create a ``_Partial()`` to call ``new_f``
+        """Create a ``Partial()`` to call ``new_f``
 
         ``new_f`` will be called with the parameters:
 

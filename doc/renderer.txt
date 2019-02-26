@@ -20,17 +20,17 @@ build the DOM tree of the :doc:`view <presentation>`:
          # the `h` parameter is the renderer, used to generate a DOM tree
          return h.div(h.h1('Hello world!'))
 
-By default, each view receives a new XHTML renderer
-(instance of :class:`nagare.namespaces.xhtml.Renderer`) suitable to build a
-synchronous (X)HTML DOM tree.
+By default, each view receives a new HTML renderer
+(instance of :class:`nagare.renderers.html.Renderer`) suitable to build a
+synchronous HTML DOM tree.
 
 A single view can also use a different renderer, for example to generate
-another XML dialect than XHTML:
+another XML dialect than HTML:
 
 .. code-block:: python
 
      from nagare import presentation
-     from nagare.namespaces import xml
+     from nagare.renderers import xml
 
      class App(object):
          pass
@@ -47,7 +47,7 @@ or to generate an asynchronous view of a component:
 .. code-block:: python
 
      from nagare import presentation, component
-     from nagare.namespaces import xhtml
+     from nagare.renderers import xhtml
      from MyBlog import Blog
 
      class App:
@@ -73,7 +73,7 @@ another default renderer by setting the ``renderer_factory`` attribute of the
 .. code-block:: python
 
     from nagare import wsgi
-    from nagare.namespaces import xml
+    from nagare.renderers import xml
 
     class WSGIApp(wsgi.WSGIApp):
         # use the XML renderer by default
@@ -86,12 +86,12 @@ you can still create another renderer in the view as explained above.
 Default renderers
 -----------------
 
-XHTML renderer
-~~~~~~~~~~~~~~
+HTML renderer
+~~~~~~~~~~~~~
 
-A XHTML renderer is an instance of :class:`nagare.namespaces.xhtml.Renderer`.
+A HTML renderer is an instance of :class:`nagare.renderers.html.Renderer`.
 
-A XHTML renderer is a factory for all the possible XHTML tags. It also has:
+A HTML renderer is a factory for all the possible HTML tags. It also has:
 
 - a ``request`` and a ``response`` attributes which are WebOb
   `request <https://webob.readthedocs.io/en/stable/reference.html#request>`_
@@ -108,19 +108,19 @@ A XHTML renderer is a factory for all the possible XHTML tags. It also has:
     ``source`` file to a DOM tree. If ``fragment`` is ``True``, the (X)HTML
     read can have multiple roots and the result will always be a list of DOM
     trees. Also, if ``fragment`` is ``True``, if ``no_leading_text`` is
-    ``True`` and the (X)HTML begins by a text instead of a node, this text
+    ``True`` and the HTML begins by a text instead of a node, this text
     is removed.
 
   - ``parse_htmlstring(self, text, fragment=False, no_leading_text=False, xhtml=False)`` --
-    as ``parse_html()`` but the (X)HTML is read from the ``text`` string.
+    as ``parse_html()`` but the HTML is read from the ``text`` string.
 
 Head renderer
 ~~~~~~~~~~~~~
 
-The ``head`` attribute of a XHTML renderer is a Head renderer, an instance
-of :class:`nagare.namespaces.xhtml.HeadRenderer`.
+The ``head`` attribute of a HTML renderer is a Head renderer, an instance
+of :class:`nagare.renderers.html.HeadRenderer`.
 
-A head renderer is a factory for all the XHTML tags that can be embedded into
+A head renderer is a factory for all the HTML tags that can be embedded into
 the ``<head>`` section: ``base``, ``head``, ``link``, ``meta``, ``title``,
 ``style`` and ``script``:
 
@@ -193,30 +193,29 @@ After the rendering phase, Nagare generates a ``<head>`` section which is the
 concatenation of all the DOM objects the different views have put into the
 Head renderer.
 
-XHTML5 renderer
-~~~~~~~~~~~~~~~
+HTML5 renderer
+~~~~~~~~~~~~~~
 
-A XHTML5 renderer is an instance of :class:`nagare.namespaces.xhtml5.Renderer`.
+A HTML5 renderer is an instance of :class:`nagare.renderers.html5.Renderer`.
 
-A XHTML5 renderer is a factory for all the possible HTML5 or XHTML5 tags from
-the `HTML5 specification`_.
+A HTML5 renderer is a factory for all the possible HTML5 from the `HTML5 specification`_.
 
 Since it's extremely likely that you want to use this renderer in all the views
-of your application instead of the default (X)HTML renderer, you can install it
+of your application instead of the default HTML renderer, you can install it
 like this:
 
 .. code-block:: python
 
     from nagare import wsgi
-    from nagare.namespaces import xhtml5
+    from nagare.renderers import xhtml5
 
     class WSGIApp(wsgi.WSGIApp):
-        # use the (X)HTML5 renderer by default
+        # use the HTML5 renderer by default
         renderer_factory = xhtml5.Renderer
 
-Then, all the views will receive a (X)HTML5 renderer by default.
+Then, all the views will receive a HTML5 renderer by default.
 
-This renderer is like an XHTML renderer except that the set of available tags and
+This renderer is like an HTML renderer except that the set of available tags and
 attributes is a little different. For example, HTML5 offers ``<audio>``, ``<video>``
 and ``<canvas>`` tags and more structural markup such as ``<section>``, ``<article>``,
 ``<aside>``, ``<nav>``, ``<figure>``, ``<header>`` and ``<footer>`` tags.
@@ -226,32 +225,32 @@ and ``<canvas>`` tags and more structural markup such as ``<section>``, ``<artic
 XML renderer
 ~~~~~~~~~~~~
 
-A XML renderer is an instance of :class:`nagare.namespaces.xml.Renderer`.
+A XML renderer is an instance of :class:`nagare.renderers.xml.Renderer`.
 
 It's a simple renderer which accepts any tag creation:
 
 .. code-block:: pycon
 
-     >>> from nagare.namespaces import xml
+     >>> from nagare.renderers import xml
 
      >>> x = xml.Renderer()
      >>> tree = x.contact(x.name('John Doe'), x.age(20))
 
-     >>> tree.write_xmlstring()
+     >>> tree.tostring()
      '<contact><name>John Doe</name><age>20</age></contact>'
 
 XSL renderer
 ~~~~~~~~~~~~
 
 A `XSL <http://www.w3.org/TR/xslt>`_ renderer is an instance of
-:class:`nagare.namespaces.xsl.Renderer` and has a factory for
+:class:`nagare.renderers.xsl.Renderer` and has a factory for
 all the possible XSL tags.
 
 ESI renderer
 ~~~~~~~~~~~~
 
 A `ESI <http://www.w3.org/TR/esi-lang>`_ renderer is an instance of
-:class:`nagare.namespaces.esi.Renderer` and has
+:class:`nagare.renderers.esi.Renderer` and has
 a factory for all the possible ESI tags :  ``attempt``, ``choose``, ``comment``,
 ``include``, ``inline``, ``otherwise``, ``remove``, ``try``, ``vars``, ``when``.
 
@@ -263,11 +262,11 @@ A renderer can create DOM object in a specific
 namespace(s) must be declared to the renderer by setting its ``namespaces``
 attribute to a *namespace prefix* -> *namespace uri* dictionary. Then, at any
 moment, the namespace to use is choosen by setting its ``default_namespace``
-atttribut to the prefix of the namespace:
+atttribute to the prefix of the namespace:
 
 .. code-block:: pycon
 
-   >>> from nagare.namespaces import xsl
+   >>> from nagare.renderers import xsl
 
    >>> x = xsl.Renderer()
    >>> x.namespaces = {'xsl': 'http://www.w3.org/1999/XSL/Transform' }
@@ -281,7 +280,7 @@ atttribut to the prefix of the namespace:
    ...           )
    ...       )
 
-   >>> print xsl.write_xmlstring(pretty_print=True)
+   >>> print(xsl.tostring(pretty_print=True))
    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
      <xsl:output encoding="utf-8"/>
      <xsl:template match="/">
@@ -294,7 +293,7 @@ a DOM tree:
 
 .. code-block:: pycon
 
-   >>> from nagare.namespaces import xhtml, esi
+   >>> from nagare.renderers import xhtml, esi
 
    >>> h = xhtml.Renderer()
 
@@ -309,7 +308,7 @@ a DOM tree:
    ...                h.p('world')
    ...            )
    ...        )
-   >>> print tree.write_xmlstring(pretty_print=True)
+   >>> print(tree.tostring(pretty_print=True))
    <html>
      <body>
        <h1>Hello</h1>

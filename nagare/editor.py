@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2017 Net-ng.
+# Copyright (c) 2008-2019 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -82,8 +82,8 @@ class Property(var.Var):
             if callable(self.value):
                 self.value = self.value()
             self.error = None
-        except ValueError, data:
-            self.error = data[0]
+        except ValueError as data:
+            self.error = data.args[0]
 
     def commit(self, o, name):
         """Set the attribute ``name`` of the object ``o`` with the valid value
@@ -103,7 +103,7 @@ class Editor(object):
     validating function, and will modified the target object only if all
     the validating functions are passed ok.
     """
-    def __init__(self, target, properties_to_create=()):
+    def __init__(self, target, properties_to_create=(), f=getattr, g=setattr):
         """Initialisation
 
         Create the set of properties from some attributes of the target object
@@ -114,11 +114,13 @@ class Editor(object):
             target object, then to write into
         """
         self.target = target
+        self.f = f
+        self.g = g
 
         for name in properties_to_create:
             # Create a property with the same name and value than the attribute
             # of the target object
-            setattr(self, name, Property(getattr(target, name)))
+            self.g(self, name, Property(self.f(target, name)))
 
     def is_validated(self, properties_to_validate):
         """Check the validity of a set of properties
@@ -129,7 +131,7 @@ class Editor(object):
         Return
           - a boolean
         """
-        return all([getattr(self, name).error is None for name in properties_to_validate])
+        return all(getattr(self, name).error is None for name in properties_to_validate)
 
     def commit(self, properties_to_commit=(), properties_to_validate=()):
         """Write back the value of the property to the target object, only if

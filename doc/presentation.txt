@@ -29,12 +29,12 @@ DOM element creation
 --------------------
 
 A ``Renderer`` is a DOM element factory. For example, the XHTML renderer
-:class:`nagare.namespaces.xhtml.Renderer` has an attribute, for
+:class:`nagare.renderers.xhtml.Renderer` has an attribute, for
 each XHTML tag, that create a DOM element:
 
 .. code-block:: pycon
 
-    >>> from nagare.namespaces import xhtml
+    >>> from nagare.renderers import xhtml
     >>> h = xhtml.Renderer()
     >>> h.div
     <Element div at 8410b6c>
@@ -45,13 +45,13 @@ DOM elements API
 ElementTree API
 ~~~~~~~~~~~~~~~
 
-A DOM element is an instance of the class :class:`nagare.namespaces.xml._Tag`.
+A DOM element is an instance of the class :class:`nagare.renderers.xml._Tag`.
 As this class inherits from ``lxml.etree.Element``, the DOM element offers an
 `ElementTree API. <https://docs.python.org/2.7/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element>`_:
 
 .. code-block:: pycon
 
-    >>> from nagare.namespaces import xhtml
+    >>> from nagare.renderers import xhtml
     >>> h = xhtml.Renderer()
 
     >>> root = h.div
@@ -105,7 +105,7 @@ calls to the created DOM element, a DOM tree can be built in a functional way:
 
 .. code-block:: python
 
-     >>> from nagare.namespaces import xhtml
+     >>> from nagare.renderers import xhtml
      >>> h = xhtml.Renderer()
 
      >>> root = h.div(h.h1('Hello world'), id='content')
@@ -125,7 +125,7 @@ finally retrieved from the attribute ``root`` of the renderer:
 
 .. code-block:: python
 
-   >>> from nagare.namespaces import xhtml
+   >>> from nagare.renderers import xhtml
    >>> h = xhtml.Renderer()
 
    >>> with h.div:
@@ -146,7 +146,7 @@ so the example above can be rewrote as:
 
 .. code-block:: python
 
-   >>> from nagare.namespaces import xhtml
+   >>> from nagare.renderers import xhtml
    >>> h = xhtml.Renderer()
 
    >>> with h.div(id='content'):
@@ -202,7 +202,7 @@ attribute to a DOM element:
 
 .. code-block:: pycon
 
-   >>> from nagare.namespaces import xhtml
+   >>> from nagare.renderers import xhtml
    >>> h = xhtml.Renderer()
 
    >>> tree = h.html(
@@ -225,7 +225,7 @@ template:
 
 .. code-block:: pycon
 
-   >>> from nagare.namespaces import xhtml
+   >>> from nagare.renderers import xhtml
    >>> h = xhtml.Renderer()
 
    >>> root = h.parse_html('/tmp/template.xml', xhtml=True)
@@ -244,7 +244,7 @@ Use the ``findmeld()`` method of the DOM elements to retreive the marked nodes:
 
 .. code-block:: pycon
 
-   >>> from nagare.namespaces import xhtml
+   >>> from nagare.renderers import xhtml
    >>> h = xhtml.Renderer()
 
    >>> root = h.parse_html('/tmp/template.xml', xhtml=True)
@@ -260,7 +260,7 @@ Lxml, functional or imperative API:
 
 .. code-block:: pycon
 
-   >>> from nagare.namespaces import xhtml
+   >>> from nagare.renderers import xhtml
    >>> h = xhtml.Renderer()
 
    >>> root = h.parse_html('/tmp/template.xml', xhtml=True)
@@ -284,7 +284,7 @@ These three methods of the DOM elements are helpers to work with templates:
 
   .. code-block:: python
 
-       >>> from nagare.namespaces import xhtml
+       >>> from nagare.renderers import xhtml
        >>> h = xhtml.Renderer()
 
        >>> root = h.div(h.h1('Hello world'), id='content')
@@ -300,7 +300,7 @@ These three methods of the DOM elements are helpers to work with templates:
 
   .. code-block:: python
 
-       >>> from nagare.namespaces import xhtml
+       >>> from nagare.renderers import xhtml
        >>> h = xhtml.Renderer()
 
        >>> root = h.div(h.h1('Hello world'), id='content')
@@ -331,7 +331,7 @@ These three methods of the DOM elements are helpers to work with templates:
 
   .. code-block:: pycon
 
-        >>> from nagare.namespaces import xhtml
+        >>> from nagare.renderers import xhtml
         >>> h = xhtml.Renderer()
 
         >>> root = h.parse_xmlstring('''<ul xmlns:meld="http://www.plope.com/software/meld3">

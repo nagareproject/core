@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2017 Net-ng.
+# Copyright (c) 2008-2019 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -19,10 +19,12 @@ For example:
 Handy into the lambda expressions
 """
 
+from nagare.renderers import xml
+
 _marker = object()
 
 
-class Var(object):
+class Var(xml.Component):
     """Functional variables
     """
     def __init__(self, v=None):
@@ -74,5 +76,8 @@ class Var(object):
         """
         return self.get()
 
+    def __str__(self):
+        return str(self.get())
+
     def __unicode__(self):
-        return unicode(self.get())
+        return str(self.get())

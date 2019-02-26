@@ -3,6 +3,36 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. mermaid::
+
+   graph TD
+   rabbitmq --> channel[rabbitmq channel]
+   channel -->|rabbitmq publisher| publisher(publisher)
+   publisher -->|dispatch| statics(statics)
+   transaction -->|return or raise| base_exceptions(base_exceptions)
+   base_exceptions -->|overwrite| wsgi_exceptions(wsg_exceptions)
+   wsgi_exceptions -->|overwrite| exceptions(exceptions)
+   exceptions --> |raise| application{application}
+   i18n -->|locale creation| i18nlocale(i18nlocale)
+   statics -->|early| local(local)
+   local --> transaction(transaction)
+   exceptions -->|get/set_locale| i18n
+   i18nlocale --> sessions
+   publisher -->|check concurrence| sessions
+   sessions --> callbacks
+   local -->|lock creation| sessions
+   sessions -->|get state| state(state)
+   state --> callbacks(callbacks)
+   callbacks --> redirect_after_post(redirect_after_post)
+   redirect_after_post --> presentation(presentation)
+   presentation --> top(top)
+   top --> serializer(serializer)
+   serializer --> application(application)
+   subgraph services
+   database
+   logging
+   end
+
 Nagare documentation
 ====================
 

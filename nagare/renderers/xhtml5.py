@@ -7,6 +7,7 @@
 # this distribution.
 # --
 
-import pkgutil
+"""Legacy module name
+"""
 
-__path__ = pkgutil.extend_path(__path__, __name__)
+from .html5 import *  # noqa: F403, F401

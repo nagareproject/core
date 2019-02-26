@@ -17,19 +17,18 @@ this link is clicked:
 .. code-block:: python
 
    from nagare import presentation
-   from nagare.namespaces import xhtml
 
    class ClickCounter(object):
        def __init__(self):
            self.nb = 0
 
-       def clic(self):
+       def click(self):
            self.nb += 1
 
    @presentation.render_for(ClickCounter)
    def render(self, h, *args):
        return h.p(
-                   'You have ', h.a('clicked').action(self.clic),
+                   'You have ', h.a('clicked').action(self.click),
                    ' ', self.nb, ' times.'
                  )
 
@@ -45,7 +44,6 @@ that append the new messages to the list of the existing ones:
 .. code-block:: python
 
    from nagare import presentation, var
-   from nagare.namespaces import xhtml
 
    class GuestBook(object):
        def __init__(self):
@@ -218,7 +216,6 @@ For example, the first snippet can be rewrote as:
 .. code-block:: python
 
    from nagare import presentation, var
-   from nagare.namespaces import xhtml
 
    class ClickCounter:
        def __init__(self):
@@ -243,7 +240,7 @@ if ``msg`` is not ``None``:
 
 .. code-block:: pycon
 
-   >>> from nagare.namespaces import xhtml
+   >>> from nagare.renderers import xhtml
    >>> h = xhtml.Renderer()
 
    >>> tree = h.input
