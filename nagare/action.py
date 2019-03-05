@@ -258,7 +258,7 @@ class Update(Action):
         html = render(renderer, *view)
         html.set('id', html.get('id', component_to_update))
 
-        return b"nagare_replaceNode('%b', %b)" % (
+        return b"nagare_replaceNode('%s', %s)" % (
             component_to_update.encode('ascii'),
             json.dumps(html.tostring().decode('utf-8')).encode('utf-8')
         )
