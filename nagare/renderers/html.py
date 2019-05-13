@@ -673,7 +673,7 @@ class _SyncRenderer(object):
         )
 
     def include_ajax(self):
-        self.head.javascript_url('nagare/js/ajax.js')
+        self.head.javascript_url('/static/nagare/js/ajax.js')
 
 
 class _AsyncRenderer(_SyncRenderer):

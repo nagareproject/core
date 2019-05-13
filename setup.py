@@ -59,7 +59,9 @@ setup(
     use_scm_version=True,
     install_requires=[
         'WebOb', 'cryptography',
-        'nagare-server-mvc', 'nagare-renderers-html'
+        'nagare-server-mvc',
+        'nagare-renderers-html',
+        'nagare-services-i18n'
     ],
     message_extractors={'nagare': [('**.py', 'python', None)]},
     extras_require={
