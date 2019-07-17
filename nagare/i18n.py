@@ -386,7 +386,7 @@ class Locale(CoreLocale):
 
         domain = domain or self.domain
         dirname = self.get_translation_directory(domain) or self.get_translation_directory(None)
-        args = (dirname, self.language, domain)
+        args = (dirname, str(self), domain)
 
         translation = _translations_cache.get(args)
         if translation is None:
