@@ -107,7 +107,7 @@ class Component(xml.Component):
 
         return super(Component, self).__reduce__()
 
-    def render(self, renderer, view=0):
+    def render(self, renderer, view=0, *args, **kw):
         """Rendering method of a component
 
         Forward the call to the generic method of the ``presentation`` service
@@ -116,7 +116,7 @@ class Component(xml.Component):
         renderer = renderer.new(parent=renderer, component=self, view=view)
         renderer.start_rendering()
 
-        output = presentation.render(self.o, renderer, self, self.view if view == 0 else view)
+        output = presentation.render(self.o, renderer, self, self.view if view == 0 else view, *args, **kw)
         return renderer.end_rendering(output)
 
     def _becomes(self, o, view, url):
