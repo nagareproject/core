@@ -19,7 +19,12 @@ def render(o, renderer, comp, view_name):
         msg = ('No named view "%s"' % view_name) if view_name else 'No default view'
         raise ViewError(msg + ' for ' + repr(o))
 
-    return view(renderer, comp, view_name)
+    rendering = view(renderer, comp, view_name)
+    if rendering is None:
+        msg = ('View "%s"' % view_name) if view_name else 'Default view'
+        raise ViewError(msg + ' for ' + repr(o) + ' returns nothing')
+
+    return rendering
 
 
 def render_for(cls, view=None, model=None):
