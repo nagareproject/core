@@ -65,6 +65,7 @@ setup(
     ],
     message_extractors={'nagare': [('**.py', 'python', None)]},
     extras_require={
+        'dev': ['nagare-services-webassets'],
         'doc': ['sphinx', 'sphinx_rtd_theme<0.3']
     },
     entry_points='''

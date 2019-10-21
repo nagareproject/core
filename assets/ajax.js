@@ -129,7 +129,7 @@ var nagare_callRemote = (function () {
     */
 
     function createAjaxRequest(url, options, params) {
-        if(params && Object.keys(params).length) url += "&_params=" + JSON.stringify(params);
+        if(params && params.length) url += "&_params=" + JSON.stringify(params);
 
         options.cache = "no-cache";
         options.headers = {"X-REQUESTED-WITH": "XMLHttpRequest"};
@@ -137,8 +137,8 @@ var nagare_callRemote = (function () {
         return fetch(url, options);
     }
 
-    function callRemote(url, params) {
-        return new Promise(function (resolve, reject) {
+    function callRemote(url) {
+        return (...params) => new Promise(function (resolve, reject) {
             createAjaxRequest(url, {method: "GET"}, params)
             .then((response) => response.json())
             .catch(reject)
