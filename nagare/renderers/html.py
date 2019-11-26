@@ -16,8 +16,8 @@ import json
 import imghdr
 
 import webob
+import pkg_resources
 
-# from nagare import security
 from nagare import partial
 from nagare.action import ActionBase, Action, Remote, Update
 
@@ -25,33 +25,13 @@ from nagare.renderers.xml import TagProp
 from nagare.renderers import xml, html_base
 
 
+NAGARE_VERSION = pkg_resources.get_distribution('nagare').version
+
+
 class _HTMLActionTag(html_base.Tag):
     """Base class of all the tags with a ``.action()`` method
     """
     ACTION_ATTR = 'name'
-
-    @partial.max_number_of_args(2)
-    def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
-        """Register an action
-
-        In:
-          - ``action`` -- action
-          - ``args``, ``kw`` -- ``action`` parameters
-          - ``with_request`` -- will the request and response objects be passed to the action?
-          - ``permissions`` -- permissions needed to execute the action
-          - ``subject`` -- subject to test the permissions on
-
-        Return:
-          - ``self``
-        """
-        # Wrap the ``action`` into a wrapper that will check the user permissions
-        # Todo: reactivate
-        # action = security.wrapper(action, permissions, subject or self.renderer.component())
-        self.set_action(self.renderer, self.ACTION_PRIORITY, action, with_request, *args, **kw)
-        return self
-
-    def set_action(self, renderer, action_type, action, with_request, *args, **kw):
-        renderer.register_callback(self, action_type, action, with_request, *args, **kw)
 
     def set_sync_action(self, action_id, params):
         self.set(
@@ -61,6 +41,21 @@ class _HTMLActionTag(html_base.Tag):
 
     def set_async_action(self, action_id, params):
         self.set_sync_action(action_id, params)
+
+    @partial.max_number_of_args(2)
+    def action(self, action, args, with_request=False, **kw):
+        """Register an action
+
+        In:
+          - ``action`` -- action
+          - ``args``, ``kw`` -- ``action`` parameters
+          - ``with_request`` -- will the request and response objects be passed to the action?
+
+        Return:
+          - ``self``
+        """
+        self.renderer.register_callback(self, self.ACTION_PRIORITY, action, with_request, *args, **kw)
+        return self
 
 
 class A(html_base.HrefAttribute, _HTMLActionTag):
@@ -90,7 +85,7 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
 
     def set_async_action(self, action_id, params):
         super(A, self).set_async_action(action_id, params)
-        self.set('data-nagare', str(self.ACTION_PRIORITY))
+        self(data_nagare=self.ACTION_PRIORITY)
 
 
 class Img(html_base.Img, _HTMLActionTag):
@@ -98,6 +93,15 @@ class Img(html_base.Img, _HTMLActionTag):
     """
     ACTION_ATTR = 'src'
     ACTION_PRIORITY = 2
+
+    def set_sync_action(self, action_id, params):
+        params = {'_p': params} if params else {}
+        params[action_id] = ''
+
+        href = self.get('src', '')
+        href = self.renderer.add_sessionid_in_url(href, params)
+
+        super(Img, self).set_sync_action(href, {})
 
     @classmethod
     def generate(cls, request, response, action, with_request, **kw):
@@ -122,29 +126,10 @@ class Img(html_base.Img, _HTMLActionTag):
 
         raise e
 
-    def set_action(self, renderer, priority, action, with_request, **kw):
-        """Register a synchronous action
-
-        The action will have to return the image data
-
-        In:
-          - ``renderer`` -- the current renderer
-          - ``action`` -- action
-          - ``with_request`` -- will the request and response objects be passed to the action?
-          - ``permissions`` -- permissions needed to execute the action
-          - ``subject`` -- subject to test the permissions on
-        """
+    @partial.max_number_of_args(2)
+    def action(self, action, args, with_request=False, **kw):
         f = partial.Partial(self.generate, action=action, with_request=with_request, **kw)
-        super(Img, self).set_action(renderer, priority, f, with_request=True)
-
-    def set_sync_action(self, action_id, params):
-        params = {'_p': params} if params else {}
-        params[action_id] = ''
-
-        href = self.get('src', '')
-        href = self.renderer.add_sessionid_in_url(href, params)
-
-        super(Img, self).set_sync_action(href, {})
+        return super(Img, self).action(f, with_request=True, *args, **kw)
 
 
 class Form(_HTMLActionTag):
@@ -185,7 +170,7 @@ class Form(_HTMLActionTag):
                 e.getparent().remove(e)
 
     @partial.max_number_of_args(2)
-    def pre_action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
+    def pre_action(self, action, args, with_request=False, **kw):
         """Register an action that will be executed **before** the actions of the
         form elements
 
@@ -193,17 +178,15 @@ class Form(_HTMLActionTag):
           - ``action`` -- action
           - ``args``, ``kw`` -- ``action`` parameters
           - ``with_request`` -- will the request and response objects be passed to the action?
-          - ``permissions`` -- permissions needed to execute the action
-          - ``subject`` -- subject to test the permissions on
 
         Return:
           - ``self``
         """
-        self.set_action(self.renderer, self.PRE_ACTION_PRIORITY, action, with_request, *args, **kw)
+        self.renderer.register_callback(self, self.PRE_ACTION_PRIORITY, action, with_request, *args, **kw)
         return self
 
     @partial.max_number_of_args(2)
-    def post_action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
+    def post_action(self, action, args, with_request=False, **kw):
         """Register an action that will be executed **after** the actions of the
         form elements
 
@@ -211,18 +194,16 @@ class Form(_HTMLActionTag):
           - ``action`` -- action
           - ``args``, ``kw`` -- ``action`` parameters
           - ``with_request`` -- will the request and response object be passed to the action?
-          - ``permissions`` -- permissions needed to execute the action
-          - ``subject`` -- subject to test the permissions on
 
         Return:
           - ``self``
         """
-        self.set_action(self.renderer, self.POST_ACTION_PRIORITY, action, with_request, *args, **kw)
+        self.renderer.register_callback(self, self.POST_ACTION_PRIORITY, action, with_request, *args, **kw)
         return self
 
     def set_sync_action(self, action_id, params):
-        input = self.renderer.input(type='hidden', name=action_id, class_='nagare-generated nagare-session-data')
-        self.append(input)
+        input_ = self.renderer.input(type='hidden', name=action_id, class_='nagare-generated nagare-session-data')
+        self.append(input_)
 
 
 class TextArea(_HTMLActionTag):
@@ -239,7 +220,7 @@ class TextArea(_HTMLActionTag):
         return cls.clean_input(action, (request, response) + args, v, **kw)
 
     @partial.max_number_of_args(2)
-    def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
+    def action(self, action, args, with_request=False, **kw):
         """Register an action
 
 
@@ -247,8 +228,6 @@ class TextArea(_HTMLActionTag):
           - ``action`` -- action
           - ``args``, ``kw`` -- ``action`` parameters
           - ``with_request`` -- will the request and response object be passed to the action?
-          - ``permissions`` -- permissions needed to execute the action
-          - ``subject`` -- subject to test the permissions on
 
         Return:
           - ``self``
@@ -259,11 +238,7 @@ class TextArea(_HTMLActionTag):
             action = partial.Partial(f, action, args)
             args = ()
 
-        return super(TextArea, self).action(
-            action, with_request=with_request,
-            permissions=permissions, subject=subject,
-            *args, **kw
-        )
+        return super(TextArea, self).action(action, with_request=with_request, *args, **kw)
 
 # ----------------------------------------------------------------------------------
 
@@ -417,15 +392,13 @@ class Select(_HTMLActionTag):
         return cls.normalize_input(action, (request, response) + args, v, **kw)
 
     @partial.max_number_of_args(2)
-    def action(self, action, args, with_request=False, permissions=None, subject=None, **kw):
+    def action(self, action, args, with_request=False, **kw):
         """Register an action
 
         In:
           - ``action`` -- action
           - ``args``, ``kw`` -- ``action`` parameters
           - ``with_request`` -- will the request and response object be passed to the action?
-          - ``permissions`` -- permissions needed to execute the action
-          - ``subject`` -- subject to test the permissions on
 
         Return:
           - ``self``
@@ -437,7 +410,7 @@ class Select(_HTMLActionTag):
             action = partial.Partial(f, action, args)
             args = ()
 
-        return super(Select, self).action(action, with_request=with_request, permissions=permissions, subject=subject, *args, **kw)
+        return super(Select, self).action(action, with_request=with_request, *args, **kw)
 
 
 class Label(html_base.Tag):
@@ -459,7 +432,7 @@ class Label(html_base.Tag):
 class Script(html_base.Script):
     def add_children(self, children, attrib=None):
         children = [
-            self.renderer.register_callback(self, 4, child) if isinstance(child, Remote) else child
+            child.render(self.renderer) if isinstance(child, Remote) else child
             for child in children
         ]
 
@@ -499,10 +472,18 @@ class _SyncRenderer(object):
     # Redefinition of the he HTML tags with actions
     # ---------------------------------------------
 
-    a = TagProp('a', html_base.allattrs | html_base.focusattrs | {'charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu'}, A)
-    area = TagProp('area', html_base.allattrs | html_base.focusattrs | {'shape', 'coords', 'href', 'nohref', 'alt', 'target'}, A)
-    button = TagProp('button', html_base.allattrs | html_base.focusattrs | {'name', 'value', 'type', 'disabled'}, SubmitInput)
-    form = TagProp('form', html_base.allattrs | {'action', 'method', 'name', 'enctype', 'onsubmit', 'onreset', 'accept_charset', 'target'}, Form)
+    a = TagProp('a', html_base.allattrs | html_base.focusattrs | {
+        'charset', 'type', 'name', 'href', 'hreflang', 'rel', 'rev', 'shape', 'coords', 'target', 'oncontextmenu'
+    }, A)
+    area = TagProp('area', html_base.allattrs | html_base.focusattrs | {
+        'shape', 'coords', 'href', 'nohref', 'alt', 'target'
+    }, A)
+    button = TagProp('button', html_base.allattrs | html_base.focusattrs | {
+        'name', 'value', 'type', 'disabled'
+    }, SubmitInput)
+    form = TagProp('form', html_base.allattrs | {
+        'action', 'method', 'name', 'enctype', 'onsubmit', 'onreset', 'accept_charset', 'target'
+    }, Form)
     img = TagProp('img', html_base.allattrs | {
         'src', 'alt', 'name', 'longdesc', 'width', 'height', 'usemap', 'ismap'
         'align', 'border', 'hspace', 'vspace', 'lowsrc'
@@ -513,8 +494,12 @@ class _SyncRenderer(object):
     }, TextInput)
     label = TagProp('label', html_base.allattrs | {'for', 'accesskey', 'onfocus', 'onblur'}, Label)
     option = TagProp('option', html_base.allattrs | {'selected', 'disabled', 'label', 'value'}, Option)
-    select = TagProp('select', html_base.allattrs | {'name', 'size', 'multiple', 'disabled', 'tabindex', 'onfocus', 'onblur', 'onchange', 'rows'}, Select)
-    textarea = TagProp('textarea', html_base.allattrs | html_base.focusattrs | {'name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap'}, TextArea)
+    select = TagProp('select', html_base.allattrs | {
+        'name', 'size', 'multiple', 'disabled', 'tabindex', 'onfocus', 'onblur', 'onchange', 'rows'
+    }, Select)
+    textarea = TagProp('textarea', html_base.allattrs | html_base.focusattrs | {
+        'name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap'
+    }, TextArea)
     script = TagProp('script', {'id', 'charset', 'type', 'language', 'src', 'defer'}, Script)
 
     _async_root = None
@@ -673,7 +658,7 @@ class _SyncRenderer(object):
         )
 
     def include_ajax(self):
-        self.head.javascript_url('/static/nagare/js/ajax.js')
+        self.head.javascript_url('/static/nagare/js/nagare.js?ver={}'.format(NAGARE_VERSION))
 
 
 class _AsyncRenderer(_SyncRenderer):

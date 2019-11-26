@@ -7,8 +7,8 @@
 # this distribution.
 # --
 
-"""If the ``redirect_after_post`` parameter of the ``[application]``
-section is `True`` (the default), conform to the PRG__ pattern
+"""If the ``activated`` parameter of the ``[redirect_after_post]``
+section is `on`` (the default), conform to the PRG__ pattern
 
  __ http://en.wikipedia.org/wiki/Post/Redirect/GetPRG
 """

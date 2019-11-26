@@ -91,7 +91,10 @@ class _Partial(object):
         """
         self.f = _f
         self.args = args
-        self.kw = kw
+        self.kw = tuple(kw.items())
+
+    def __hash__(self):
+        return hash((self.f, self.args, self.kw))
 
     def __call__(self, *args, **kw):
         """Call the wrapper function

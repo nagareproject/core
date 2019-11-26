@@ -130,7 +130,7 @@ class Component(xml.Component):
         Return:
           - ``self``
         """
-        o = self if o.__class__ is object else o
+        o = self if type(o) is object else o
         if isinstance(o, Component):
             o = o()
 

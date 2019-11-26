@@ -47,7 +47,7 @@ class App(mvc_application.App):
           - ``request`` -- the web request object
           - ``response`` -- the web response object
         """
-        renderer = super(App, self).create_renderer(
+        renderer = self.renderer_factory(
             None,
             session_id, state_id,
             request, response,
