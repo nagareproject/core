@@ -13,6 +13,8 @@ from nagare.component import Component
 from nagare.continuation import Tasklet
 from nagare.services.http_session import SessionService
 
+from webob import exc
+
 
 PY2 = (sys.version_info.major == 2)
 
@@ -49,8 +51,11 @@ def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
     return r
 
 
-class EmptyResponse(object):
-    def __init__(self, use_same_state):
+class EmptyResponse(exc.HTTPOk):
+    def __init__(self, delete_session, use_same_state):
+        super(EmptyResponse, self).__init__()
+
+        self.delete_session = delete_session
         self.use_same_state = use_same_state
 
     def __call__(self, environ, start_response):
@@ -95,4 +100,7 @@ class StateService(SessionService):
         start_response(response.status, response.headerlist)(response.body)
         session['nagare.root'] = root  # session.store(root, use_same_state)
 
-        return EmptyResponse(getattr(response, 'use_same_state', False))
+        return EmptyResponse(
+            getattr(response, 'delete_session', False),
+            getattr(response, 'use_same_state', False)
+        )
