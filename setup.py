@@ -60,6 +60,7 @@ setup(
     install_requires=[
         'WebOb', 'cryptography',
         'nagare-server-mvc',
+        'nagare-services-sessions',
         'nagare-renderers-html',
         'nagare-services-i18n'
     ],

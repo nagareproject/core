@@ -14,8 +14,7 @@ from nagare.services import http_exceptions
 from nagare.services.callbacks import CallbackLookupError
 
 
-def default_handler(exception, exceptions_service, request, response, **params):
-
+def default_exception_handler(exception, exceptions_service, services_service, request, **context):
     if isinstance(exception, CallbackLookupError):
         # As the XHR requests use the same continuation, a callback
         # can be not found (i.e deleted by a previous XHR)
@@ -23,16 +22,24 @@ def default_handler(exception, exceptions_service, request, response, **params):
         exceptions_service.log_exception('nagare.callbacks')
         exception = exc.HTTPOk() if request.is_xhr else exc.HTTPInternalServerError()
 
-    elif not isinstance(exception, exc.HTTPException):
+    if isinstance(exception, exc.HTTPOk):
+        return exception
+
+    if not isinstance(exception, exc.HTTPException):
         exceptions_service.log_exception()
         exception = exc.HTTPInternalServerError()
 
-    return exception
+    exception = services_service(exceptions_service.http_exception_handler, exception, **context)
+
+    if getattr(exception, 'commit_transaction', False):
+        return exception
+    else:
+        raise exception
 
 
-class ExceptionsService(http_exceptions.ExceptionService):
-    LOAD_PRIORITY = http_exceptions.ExceptionService.LOAD_PRIORITY + 2
+class ExceptionsService(http_exceptions.ExceptionsService):
+    LOAD_PRIORITY = http_exceptions.ExceptionsService.LOAD_PRIORITY + 2
     CONFIG_SPEC = dict(
-        http_exceptions.ExceptionService.CONFIG_SPEC,
-        handler='string(default="nagare.services.core_exceptions:default_handler")'
+        http_exceptions.ExceptionsService.CONFIG_SPEC,
+        exception_handler='string(default="nagare.services.core_exceptions:default_exception_handler")'
     )
