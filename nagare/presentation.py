@@ -28,4 +28,8 @@ def render(o, renderer, comp, view_name, *args, **kw):
 
 
 def render_for(cls, view=None, model=None):
-    return lambda f: setattr(cls, 'render_' + (view or model or ''), f)
+    def _(f):
+        setattr(cls, 'render_' + (view or model or ''), f)
+        return f
+
+    return _
