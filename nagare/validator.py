@@ -21,6 +21,19 @@ from nagare import i18n
 _L = functools.partial(i18n._L, domain='nagare')
 
 
+def with_metaclass(meta):
+
+    class metaclass(type):
+        def __new__(cls, name, bases, d):
+            return meta(name, (object,), d)
+
+        @classmethod
+        def __prepare__(cls, name, bases):
+            return meta.__prepare__(name, (object,))
+
+    return type.__new__(metaclass, 'temporary_class', (), {})
+
+
 class DualCallable(type):
     """"A hackish metaclass to allow both direct and deferred calls of methods
 
@@ -58,7 +71,7 @@ class DualCallable(type):
         return super(DualCallable, cls).__new__(cls, name, bases, ns)
 
 
-class ValidatorBase(object):
+class ValidatorBase(with_metaclass(DualCallable)):
     """"A hackish base class to allow both direct and deferred calls of methods
 
     For compatibility with the old and new way to built a validation chain.
@@ -68,8 +81,6 @@ class ValidatorBase(object):
       - Old validation with direct calls: valid = lambda v: IntValidator(v).greater_than(10)
       - New validation with lazy calls: valid = IntValidator().greater_than(10)
     """
-
-    __metaclass__ = DualCallable
 
     def __new__(cls, v=None, *args, **kw):
         """Method called before ``__init__``
