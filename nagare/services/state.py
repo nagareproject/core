@@ -79,26 +79,10 @@ class StateService(SessionService):
     def set_dispatch_table(self, clean_callbacks, callbacks):
         return {Component: lambda comp: comp.reduce(clean_callbacks, callbacks)}
 
-    def create_root(self, app, **params):
-        root = app.create_root()
-
-        # Initialize the objects graph from the URL
-        args = app.create_dispatch_args(root=root, **params)
-        app.route(args)
-
-        return root
-
-    def _handle_request(self, chain, session, start_response, response, **params):
-        root = session['nagare.root'] if session else self.create_root(response=response, **params)
-
-        response = chain.next(
-            session=session, root=root,
-            start_response=start_response, response=response,
-            **params
-        )
+    def _handle_request(self, chain, start_response, response, **params):
+        response = chain.next(start_response=start_response, response=response, **params)
 
         start_response(response.status, response.headerlist)(response.body)
-        session['nagare.root'] = root  # session.store(root, use_same_state)
 
         return EmptyResponse(
             getattr(response, 'delete_session', False),
