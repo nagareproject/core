@@ -62,7 +62,7 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
     """ ``<a>`` tags
     """
     ACTION_ATTR = 'href'
-    ACTION_PRIORITY = 4
+    ACTION_PRIORITY = 5
 
     def absolute_url(self, url):
         return self.renderer.absolute_url(url)
@@ -136,7 +136,7 @@ class Form(_HTMLActionTag):
     """ The ``<form>`` tag
     """
     PRE_ACTION_PRIORITY = 0
-    ACTION_PRIORITY = POST_ACTION_PRIORITY = 3
+    ACTION_PRIORITY = POST_ACTION_PRIORITY = 4
     DEFAULT_ATTRS = {
         'enctype': 'multipart/form-data',
         'method': 'post',
@@ -381,36 +381,13 @@ class Option(html_base.Tag):
 class Select(_HTMLActionTag):
     """ ``<select>`` tags
     """
-    ACTION_PRIORITY = 1
+    @property
+    def ACTION_PRIORITY(self):
+        return 3 if self.get('multiple') else 1
 
     @classmethod
     def normalize_input(cls, action, args, v, **kw):
         return action(*(args + (v if isinstance(v, (list, tuple)) else (v,),)), **kw)
-
-    @classmethod
-    def normalize_input_with_request(cls, action, args, request, response, v, **kw):
-        return cls.normalize_input(action, (request, response) + args, v, **kw)
-
-    @partial.max_number_of_args(2)
-    def action(self, action, args, with_request=False, **kw):
-        """Register an action
-
-        In:
-          - ``action`` -- action
-          - ``args``, ``kw`` -- ``action`` parameters
-          - ``with_request`` -- will the request and response object be passed to the action?
-
-        Return:
-          - ``self``
-        """
-        if (self.get('multiple') is not None) and not isinstance(action, ActionBase):
-            # If this is a multiple select, the value sent to the action will
-            # always be a list, even if only 1 item was selected
-            f = self.normalize_input_with_request if with_request else self.normalize_input
-            action = partial.Partial(f, action, args)
-            args = ()
-
-        return super(Select, self).action(action, with_request=with_request, *args, **kw)
 
 
 class Label(html_base.Tag):

@@ -216,6 +216,7 @@ var nagare_callRemote = (function () {
         }
 
         event.preventDefault();
+        return false;
     }
 
     document.addEventListener('click', process_click_event, true);
