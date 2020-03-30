@@ -52,11 +52,6 @@ def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
 
 
 class EmptyResponse(exc.HTTPOk):
-    def __init__(self, delete_session, use_same_state):
-        super(EmptyResponse, self).__init__()
-
-        self.delete_session = delete_session
-        self.use_same_state = use_same_state
 
     def __call__(self, environ, start_response):
         return []
@@ -79,12 +74,8 @@ class StateService(SessionService):
     def set_dispatch_table(self, clean_callbacks, callbacks):
         return {Component: lambda comp: comp.reduce(clean_callbacks, callbacks)}
 
-    def _handle_request(self, chain, start_response, response, **params):
-        response = chain.next(start_response=start_response, response=response, **params)
-
+    @staticmethod
+    def _handle_request(request, start_response, response, **params):
         start_response(response.status, response.headerlist)(response.body)
 
-        return EmptyResponse(
-            getattr(response, 'delete_session', False),
-            getattr(response, 'use_same_state', False)
-        )
+        return EmptyResponse()
