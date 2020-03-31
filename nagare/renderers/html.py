@@ -433,10 +433,26 @@ class HeadRenderer(html_base.HeadRenderer):
             return ''
 
         return "nagare_loadAll(%s, %s, %s, %s)" % (
-            json.dumps([(name, css, attrs) for name, (css, attrs) in self._named_css.items()]),
-            json.dumps([(self.absolute_asset_url(url), attrs) for url, attrs in self._css_url.items()]),
-            json.dumps([(name, js) for name, (js, attrs) in self._named_javascript.items()]),
-            json.dumps([(self.absolute_asset_url(url), attrs) for url, attrs in self._javascript_url.items()])
+            json.dumps([
+                (name, css, attrs)
+                for name, (css, attrs, _)
+                in sorted(self._named_css.items(), key=lambda e: e[1][2])
+            ]),
+            json.dumps([
+                (self.absolute_asset_url(url), attrs)
+                for url, (attrs, _)
+                in sorted(self._css_url.items(), key=lambda e: e[1][1])
+            ]),
+            json.dumps([
+                (name, js, attrs)
+                for name, (js, attrs, _)
+                in sorted(self._named_javascript.items(), key=lambda e: e[1][2])
+            ]),
+            json.dumps([
+                (self.absolute_asset_url(url), attrs)
+                for url, (attrs, _)
+                in sorted(self._javascript_url.items(), key=lambda e: e[1][1])
+            ])
         )
 
 
