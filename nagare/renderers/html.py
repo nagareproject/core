@@ -291,7 +291,7 @@ class CheckboxInput(_HTMLActionTag):
 class SubmitInput(_HTMLActionTag):
     """ ``<input>`` tags with ``type=submit`` attributes
     """
-    ACTION_PRIORITY = 5
+    ACTION_PRIORITY = 6
 
     def set_async_action(self, action_id, params):
         super(SubmitInput, self).set_async_action(action_id, params)

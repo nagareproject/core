@@ -75,8 +75,9 @@ class CallbacksService(plugin.Plugin):
             # 2 : action without value (radio button, checkbox ..)
             # 3 : action with multiple values (multiple select)
             # 4 : <form>.post_action
-            # 5 : action with continuation and without value (<a> and submit button)
-            # 6 : action with continuation and with value (special case for <input type='image'>)
+            # 5 : action with continuation and without value (<a>)
+            # 6 : action with continuation and without value (submit button)
+            # 7 : action with continuation and with value (special case for <input type='image'>)
 
             if with_request:
                 f = partial.Partial(f, request, response)
@@ -85,15 +86,15 @@ class CallbacksService(plugin.Plugin):
                 f(*(args + (tuple(values),)), **kw)
             else:
                 for value in values:
-                    if callback_type == '1':
+                    if callback_type in ('0', '2'):
+                        f(*args, **kw)
+                    elif callback_type == '1':
                         f(*(args + (value,)), **kw)
-                    elif (callback_type == '4') or (callback_type == '5'):
+                    elif callback_type in ('4', '5', '6'):
                         Continuation(f, *args, **kw)
-                    elif (callback_type == '6') and param:
+                    elif (callback_type == '7') and param:
                         args += (param == '.y', int(values[0]))
                         Continuation(f, *args, **kw)
-                    elif callback_type in ('0', '2'):
-                        f(*args, **kw)
 
         return chain.next(
             callbacks=callbacks,

@@ -19,7 +19,7 @@ class AjaxService(plugin.Plugin):
     CONFIG_SPEC = {'directory': 'string(default=None)'}
 
     def __init__(self, name, dist, directory, statics_service):
-        super(AjaxService, self).__init__(name, dist)
+        super(AjaxService, self).__init__(name, dist, directory=directory)
 
         location = directory or os.path.join(dist.location, 'nagare', 'static')
         statics_service.register_dir(AJAX_PREFIX, location)
