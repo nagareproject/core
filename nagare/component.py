@@ -102,8 +102,9 @@ class Component(xml.Component):
 
         return self._actions
 
-    def reduce(self, clean_callbacks, callbacks):
-        callbacks.update(self.serialize_actions(clean_callbacks))
+    def reduce(self, clean_callbacks, result):
+        result.callbacks.update(self.serialize_actions(clean_callbacks))
+        result.components += 1
 
         return super(Component, self).__reduce__()
 

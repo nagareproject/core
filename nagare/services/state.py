@@ -19,7 +19,7 @@ from webob import exc
 PY2 = (sys.version_info.major == 2)
 
 
-def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
+def persistent_id(o, clean_callbacks, result):
     """An object with a ``_persistent_id`` attribute is stored into the session
     not into the state snapshot
 
@@ -28,9 +28,10 @@ def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
     - ``clean_callbacks`` -- do we have to forget the old callbacks?
 
     Out:
-    - ``callbacks`` -- merge of the callbacks from all the components
-    - ``session_data`` -- dict persistent_id -> object of the objects to store into the session
-    - ``tasklets`` -- set of the serialized tasklets
+    - ``result`` -- object with attributes:
+      - ``callbacks`` -- merge of the callbacks from all the components
+      - ``session_data`` -- dict persistent_id -> object of the objects to store into the session
+      - ``tasklets`` -- set of the serialized tasklets
 
     Return:
     - the persistent id or ``None``
@@ -39,14 +40,15 @@ def persistent_id(o, clean_callbacks, callbacks, session_data, tasklets):
 
     id_ = getattr(o, '_persistent_id', None)
     if id_ is not None:
-        session_data[id_] = o
+        result.session_data[id_] = o
         r = str(id_)
 
     elif (Tasklet is not None) and (type(o) is Tasklet):
-        tasklets.add(o)
+        result.tasklets.add(o)
 
     elif PY2 and isinstance(o, Component):
-        callbacks.update(o.serialize_actions(clean_callbacks))
+        result.callbacks.update(o.serialize_actions(clean_callbacks))
+        result.components += 1
 
     return r
 
@@ -71,8 +73,8 @@ class StateService(SessionService):
         session_service.set_persistent_id(persistent_id)
         session_service.set_dispatch_table(self.set_dispatch_table)
 
-    def set_dispatch_table(self, clean_callbacks, callbacks):
-        return {Component: lambda comp: comp.reduce(clean_callbacks, callbacks)}
+    def set_dispatch_table(self, clean_callbacks, result):
+        return {Component: lambda comp: comp.reduce(clean_callbacks, result)}
 
     @staticmethod
     def _handle_request(request, start_response, response, **params):
