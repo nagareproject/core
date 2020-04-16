@@ -51,7 +51,7 @@ class Component(xml.Component):
         """
         return self.o
 
-    def register_action(self, action_id, view, action, with_request, render, args, kw):
+    def register_action(self, view, action, with_request, render, args, kw):
         """Register a action for this component
 
         In:
@@ -62,7 +62,16 @@ class Component(xml.Component):
           - ``render`` -- the render function or method
           - ``actions`` -- the actions manager
         """
-        return self._new_actions.setdefault(action_id, (view, action, with_request, render, args, kw))[1]
+        k = (view, action, with_request, args, tuple(kw.items()))
+
+        try:
+            action_id = abs(hash(k))
+        except TypeError:
+            action_id = random.randint(10000000, 99999999)
+
+        self._new_actions[action_id] = (view, action, with_request, render, args, kw)
+
+        return action_id
 
     def serialize_actions(self, clear_actions):
         """Return the actions to serialize
