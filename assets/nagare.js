@@ -1,5 +1,5 @@
 //--
-// Copyright (c) 2008-2019, Net-ng.
+// Copyright (c) 2008-2020, Net-ng.
 // All rights reserved.
 //
 // This software is licensed under the BSD License, as described in
@@ -129,33 +129,34 @@ var nagare_callRemote = (function () {
     */
 
     function createAjaxRequest(url, options, params) {
-        if(params && params.length) url += "&_params=" + JSON.stringify(params);
+        if(params && params.length) url += "&_params=" + encodeURIComponent(JSON.stringify(params));
 
         options.cache = "no-cache";
         options.headers = {"X-REQUESTED-WITH": "XMLHttpRequest"};
 
-        return fetch(url, options);
+        return fetch(url, options)
+            .catch(function () { throw new Error("Network error") })
+            .then(function (response) {
+                if(!response.ok) throw new Error("Server error");
+
+                return response;
+            })
+            .catch(function (exc) { throw exc });
     }
 
     function callRemote(url) {
-        return (...params) => new Promise(function (resolve, reject) {
-            createAjaxRequest(url, {method: "GET"}, params)
-            .then((response) => response.json())
-            .catch(reject)
-            .then(resolve)
-        })
+        return (...params) => createAjaxRequest(url, {method: "GET"}, params).then(response => response.json());
     }
 
     function sendAndEval(url, options) {
-        createAjaxRequest(url, options)
-        .then((response) => response.text())
-        .catch(function (response) { console.log("BOOM!") })
-        .then(function(js) {
-            var nagare_replaceNode = replaceNode;
-            var nagare_loadAll = loadAll;
+        return createAjaxRequest(url, options)
+            .then(response => response.text())
+            .then(function(js) {
+                var nagare_replaceNode = replaceNode;
+                var nagare_loadAll = loadAll;
 
-            eval(js)
-        })
+                eval(js);
+            })
     }
 
     function getAndEval(url) { sendAndEval(url, {method: "GET"}) }
@@ -166,7 +167,7 @@ var nagare_callRemote = (function () {
         if(action1) data.append(action1[0], action1[1]);
         if(action2) data.append(action2[0], action2[1]);
 
-        sendAndEval("?" , {method: "POST", body: data});
+        return sendAndEval("?" , {method: "POST", body: data});
     }
 
     function process_click_event(event) {
@@ -185,12 +186,12 @@ var nagare_callRemote = (function () {
             //     break;
 
             // case "2":
-            case "4":
+            case "5":
                 var action = target.getAttribute("href");
                 getAndEval(action);
                 break;
 
-            case "5":
+            case "6":
                 var action = target.getAttribute("name");
                 postAndEval(event.target.form, [action, ""]);
                 /*
@@ -202,7 +203,7 @@ var nagare_callRemote = (function () {
                 */
                 break;
 
-            case "6":
+            case "7":
                 var action = target.getAttribute("name");
 
                 var offset = target.getBoundingClientRect();

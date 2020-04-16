@@ -11,8 +11,11 @@
 
 import os
 import textwrap
+import subprocess
 
-from setuptools import setup, find_packages
+
+from setuptools.command.sdist import sdist
+from setuptools import setup, find_packages, Command
 
 
 try:
@@ -22,6 +25,27 @@ except ImportError:
     print("         Without 'continuation', the 'Component.call()' method will not be available.")
 
 # -----------------------------------------------------------------------------
+
+
+class BuildAssets(Command):
+    description = 'build Nagare assets'
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        command = ['webassets', '-c', 'conf/assets.yaml', 'build']
+        subprocess.check_call(command)
+
+
+class SDist(sdist):
+    def run(self):
+        self.run_command('build_assets')
+        super(SDist, self).run()
 
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
@@ -55,7 +79,8 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    setup_requires=['setuptools_scm'],
+    cmdclass={'sdist': SDist, 'build_assets': BuildAssets},
+    setup_requires=['setuptools_scm', 'webassets'],
     use_scm_version=True,
     install_requires=[
         'WebOb', 'cryptography',

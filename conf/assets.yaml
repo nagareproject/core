@@ -1,0 +1,7 @@
+directory: ..
+bundles:
+    nagare_js:
+        filters: rjsmin
+        output: nagare/static/nagare.js
+        contents:
+            - assets/nagare.js
