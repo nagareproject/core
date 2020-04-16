@@ -12,6 +12,7 @@
 This model is inspired by the Seaside one. With the possibility to embed,
 replace and call a component. It's described in `ComponentModel`
 """
+import random
 
 from nagare.renderers import xml
 from nagare.services import router
@@ -42,7 +43,6 @@ class Component(xml.Component):
         self._becomes(o, view, url)
 
         self._cont = None
-        self._on_answer = None
         self._actions = {}
         self._new_actions = {}
 
@@ -73,23 +73,6 @@ class Component(xml.Component):
         Return:
           - the actions of this component
         """
-        '''
-        old = self._actions
-        new = self._new_actions.copy()
-        self._new_actions.clear()
-
-        if not clear_actions:
-            views = {action[0] for action in new.values()}
-
-            # Keep only the old actions of a view if no new actions were registered
-            old = {k: v for k, v in old.items() if v[0] not in views}
-
-            new.update(old)
-
-        self._actions = new
-
-        return new
-        '''
         old, self._actions, self._new_actions = self._actions, self._new_actions, {}
 
         if not clear_actions:
@@ -132,10 +115,7 @@ class Component(xml.Component):
           - ``self``
         """
         o = self if type(o) is object else o
-        if isinstance(o, Component):
-            o = o()
-
-        self.o = o
+        self.o = o() if isinstance(o, Component) else o
 
         self.view = view
         self.url = url
@@ -166,10 +146,10 @@ class Component(xml.Component):
         previous_view = self.view
         previous_url = self.url
         previous_cont = self._cont
-        previous_on_answer = self._on_answer
+        previous_answer = self.answer
 
         # Set the new configuration
-        self._on_answer = None
+        self.__dict__.pop('anwser', None)
 
         # Replace me by the object and wait its answer
         self.becomes(o, view, url)
@@ -181,7 +161,7 @@ class Component(xml.Component):
             previous_view,
             previous_url,
             previous_cont,
-            previous_on_answer
+            previous_answer
         )
 
     def _call2(self, previous_o, previous_view, previous_url, previous_cont, previous_on_answer):
@@ -221,11 +201,13 @@ class Component(xml.Component):
         In:
           - the value to answer
         """
+        '''
         # If a function is listening to my answer, calls it
         if self._on_answer is not None:
             return self._on_answer(r)
+        '''
 
-        # Else, check if I was called by a component
+        # Check if I was called by a component
         if self._cont is None:
             raise AnswerWithoutCall(self)
 
@@ -240,7 +222,7 @@ class Component(xml.Component):
           - ``f`` -- function to call with my answer
           - ``args``, ``kw`` -- ``f`` parameters
         """
-        self._on_answer = Partial(f, *args, **kw) if args or kw else f
+        self.answer = Partial(f, *args, **kw) if args or kw else f
         return self
 
     def __repr__(self):
