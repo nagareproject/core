@@ -566,12 +566,16 @@ class _SyncRenderer(object):
         return self.async_renderer_factory(*args, **kw)
 
     @property
-    def async_root(self):
-        async_root = self.parent._async_root
-        if async_root is None:
-            return None
+    def is_async_root(self):
+        return self.parent._async_root
 
-        return self if async_root else self.parent.async_root
+    @property
+    def async_root(self):
+        async_root = self.is_async_root
+        if async_root is None:
+            return None, (None, None)
+
+        return (self, async_root) if async_root else self.parent.async_root
 
     def absolute_url(self, url, url_prefix=None, always_relative=False, **params):
         return super(_SyncRenderer, self).absolute_url(
@@ -628,7 +632,7 @@ class _SyncRenderer(object):
 
             return action.register(self, component, tag, action_type, self.view or None, with_request, args, kw)
 
-    def start_rendering(self):
+    def start_rendering(self, args, kw):
         pass
 
     def end_rendering(self, output):
@@ -650,7 +654,7 @@ class _SyncRenderer(object):
             class_='nagare-generated nagare-error-field'
         )
 
-    def include_ajax(self):
+    def include_nagare_js(self):
         self.head.javascript_url('/static/nagare/nagare.js?ver={}'.format(NAGARE_VERSION))
 
 
@@ -687,8 +691,11 @@ class _AsyncRenderer(_SyncRenderer):
 
         return self.__class__(*args, **kw)
 
-    def start_rendering(self):
-        super(_AsyncRenderer, self).start_rendering()
+    def start_rendering(self, args, kw):
+        if self.is_async_root:
+            self.parent._async_root = args, kw
+
+        super(_AsyncRenderer, self).start_rendering(args, kw)
         self._async_root = False
 
     def end_rendering(self, output):
@@ -700,7 +707,7 @@ class _AsyncRenderer(_SyncRenderer):
         Out:
           - rendered tree
         """
-        if self.async_root is self:
+        if self.is_async_root:
             if not isinstance(output, xml.Tag):
                 output = self.div(output, class_='nagare-generated nagare-async-view')
 

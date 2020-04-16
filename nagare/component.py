@@ -107,7 +107,7 @@ class Component(xml.Component):
         """
         # Create a new renderer of the same class than the current renderer
         renderer = renderer.new(parent=renderer, component=self, view=view)
-        renderer.start_rendering()
+        renderer.start_rendering(args, kw)
 
         output = presentation.render(self.o, renderer, self, self.view if view == 0 else view, *args, **kw)
         return renderer.end_rendering(output)
