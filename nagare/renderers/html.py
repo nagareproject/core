@@ -655,7 +655,7 @@ class _SyncRenderer(object):
         )
 
     def include_nagare_js(self):
-        self.head.javascript_url('/static/nagare/nagare.js?ver={}'.format(NAGARE_VERSION))
+        self.head.javascript_url('/static/nagare/nagare.js.gz?ver={}'.format(NAGARE_VERSION))
 
 
 class _AsyncRenderer(_SyncRenderer):

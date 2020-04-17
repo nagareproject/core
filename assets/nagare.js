@@ -7,7 +7,7 @@
 // this distribution.
 //--
 
-var nagare_callRemote = (function () {
+var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
     "use strict;"
     var nagare_loaded_named_js = {};
 
@@ -151,12 +151,7 @@ var nagare_callRemote = (function () {
     function sendAndEval(url, options) {
         return createAjaxRequest(url, options)
             .then(response => response.text())
-            .then(function(js) {
-                var nagare_replaceNode = replaceNode;
-                var nagare_loadAll = loadAll;
-
-                eval(js);
-            })
+            .then(eval)
     }
 
     function getAndEval(url) { sendAndEval(url, {method: "GET"}) }
@@ -223,5 +218,5 @@ var nagare_callRemote = (function () {
     document.addEventListener('click', process_click_event, true);
     // document.addEventListener('change', process_event, true);
 
-    return callRemote;
+    return [callRemote, replaceNode, loadAll];
 }());

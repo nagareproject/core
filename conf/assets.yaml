@@ -1,7 +1,9 @@
 directory: ..
 bundles:
     nagare_js:
-        filters: rjsmin
-        output: nagare/static/nagare.js
+        filters: closure_js
+        config:
+            CLOSURE_COMPRESSOR_OPTIMIZATION: SIMPLE_OPTIMIZATIONS
         contents:
             - assets/nagare.js
+        output: /tmp/nagare.js

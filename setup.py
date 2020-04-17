@@ -10,6 +10,7 @@
 # --
 
 import os
+import gzip
 import textwrap
 import subprocess
 
@@ -38,8 +39,12 @@ class BuildAssets(Command):
         pass
 
     def run(self):
-        command = ['webassets', '-c', 'conf/assets.yaml', 'build']
-        subprocess.check_call(command)
+        status = subprocess.call(['webassets', '-c', 'conf/assets.yaml', 'build', '--no-cache'])
+        if status == 0:
+            with open('/tmp/nagare.js', 'rb') as f, gzip.open('nagare/static/nagare.js.gz', 'wb') as g:
+                g.write(f.read())
+
+        return status
 
 
 class SDist(sdist):
@@ -80,7 +85,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     cmdclass={'sdist': SDist, 'build_assets': BuildAssets},
-    setup_requires=['setuptools_scm', 'webassets'],
+    setup_requires=['setuptools_scm', 'closure', 'webassets'],
     use_scm_version=True,
     install_requires=[
         'WebOb', 'cryptography',

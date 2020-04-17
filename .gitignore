@@ -21,5 +21,6 @@ build
 .eggs
 doc/_build
 doc/source
+.webassets-cache
 
-nagare/static/nagare.js
+nagare/static/nagare.js.gz
