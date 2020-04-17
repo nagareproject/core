@@ -630,7 +630,7 @@ class _SyncRenderer(object):
             if not isinstance(action, ActionBase):
                 action = self.default_action(action)
 
-            return action.register(self, component, tag, action_type, self.view or None, with_request, args, kw)
+            action.register(self, component, tag, action_type, self.view or None, with_request, args, kw)
 
     def start_rendering(self, args, kw):
         pass
