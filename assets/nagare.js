@@ -7,11 +7,17 @@
 // this distribution.
 //--
 
-var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
-    "use strict;"
-    var nagare_loaded_named_js = {};
+"use strict;"
 
-    function evalCSS(name, css, attrs) {
+class Nagare {
+    constructor (error) {
+        document.addEventListener('click', evt => this.processClick(evt), true);
+        this.nagare_loaded_named_js = {};
+
+        if(error) this.error = error;
+    }
+
+    evalCSS(name, css, attrs) {
         if(css.length) {
             var style = document.createElement("style");
 
@@ -26,12 +32,12 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
         }
     }
 
-    function evalJS(name, js, attrs) {
-        if(!nagare_loaded_named_js[name]) setTimeout(js, 0);
-        nagare_loaded_named_js[name] = true;
+    evalJS(name, js, attrs) {
+        if(!this.nagare_loaded_named_js[name]) setTimeout(js, 0);
+        this.nagare_loaded_named_js[name] = true;
     }
 
-    function fetchCSS(url, attrs) {
+    fetchCSS(url, attrs) {
         var link = document.createElement("link");
 
         link.setAttribute("rel", "stylesheet");
@@ -42,7 +48,7 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
         document.head.appendChild(link);
     }
 
-    function fetchJS(url, attrs) {
+    fetchJS(url, attrs) {
         var script = document.createElement("script");
 
         script.setAttribute("type", "text/javascript");
@@ -52,18 +58,17 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
         document.head.appendChild(script);
     }
 
-    function loadAll(named_css, css, named_js, js) {
+    loadAll(named_css, css, named_js, js) {
         for(var i=0; i<named_css.length; i++) {
             var name = named_css[i][0];
             var selector = "[data-nagare-css='" + name + "']";
-            if(!document.head.querySelector(selector)) evalCSS(name, named_css[i][1], named_css[i][2]);
+            if(!document.head.querySelector(selector)) this.evalCSS(name, named_css[i][1], named_css[i][2]);
         }
 
         for(var i=0; i<named_js.length; i++) {
             var name = named_js[i][0];
             var selector = "[data-nagare-js='" + name + "']";
-            if(!document.head.querySelector(selector)) evalJS(name, named_js[i][1], named_js[i][2]);
-            nagare_loaded_named_js[name] = true;
+            if(!document.head.querySelector(selector)) this.evalJS(name, named_js[i][1], named_js[i][2]);
         }
 
         for(var i=0; i<css.length; i++) {
@@ -74,17 +79,17 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
                 a.href = links[j].href;
                 found = (a.host == window.location.host) && (a.pathname == url);
             }
-            if(!found) fetchCSS(url, css[i[1]]);
+            if(!found) this.fetchCSS(url, css[i[1]]);
         }
 
         for(var i=0; i<js.length; i++) {
             var url = js[i][0];
             var selector = "script[src='" + url + "']";
-            if(!document.head.querySelector(selector)) fetchJS(url, css[i[1]]);
+            if(!document.head.querySelector(selector)) this.fetchJS(url, css[i[1]]);
         }
     }
 
-    function replaceNode(id, html) {
+    replaceNode(id, html) {
         var node = document.getElementById(id);
         var parent = node.parentNode;
         var index = Array.prototype.indexOf.call(parent.children, node);
@@ -104,7 +109,13 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
         }
     }
 
-    function sendRequest(url, options, params) {
+    error(status, text) {
+        document.open()
+        document.write(text);
+        document.close()
+    }
+
+    sendRequest(url, options, params) {
         if(params && params.length) url += "&_params=" + encodeURIComponent(JSON.stringify(params));
 
         options.cache = "no-cache";
@@ -112,49 +123,47 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
 
         return fetch(url, options)
             .catch(function () { throw new Error("Network error") })
-            .then(function (response) {
+            .then(function(response) {
+                var status = response.status;
+
                 if(!response.ok) {
-                    if(response.status == 503 && response.headers.get('location')) {
+                    if(status == 503 && response.headers.get('location')) {
                         window.document.location = response.headers.get('location');
                     } else {
-                        response.text().then(function(text) {
-                            document.open()
-                            document.write(text);
-                            document.close()
-                        })
+                        response.text().then(text => this.error(status, text));
                     }
 
                     response = Promise.reject('Server error');
                 }
 
                 return response;
-            })
+            }.bind(this))
     }
 
-    function callRemote(url) {
-        return (...params) => sendRequest(url, {method: "GET"}, params).then(response => response.json());
+    callRemote(url) {
+        return (...params) => this.sendRequest(url, {method: "GET"}, params).then(response => response.json());
     }
 
-    function sendAndEval(url, options) {
-        return sendRequest(url, options)
+    sendAndEval(url, options) {
+        return this.sendRequest(url, options)
             .catch(Promise.reject)
             .then(response => response.text())
             .then(eval)
             .catch(x => undefined)
     }
 
-    function getAndEval(url) { sendAndEval(url, {method: "GET"}) }
+    getAndEval(url) { this.sendAndEval(url, {method: "GET"}) }
 
-    function postAndEval(form, action1, action2) {
+    postAndEval(form, action1, action2) {
         var data = new FormData(form);
 
         if(action1) data.append(action1[0], action1[1]);
         if(action2) data.append(action2[0], action2[1]);
 
-        return sendAndEval("?" , {method: "POST", body: data});
+        return this.sendAndEval("?" , {method: "POST", body: data});
     }
 
-    function process_click_event(event) {
+    processClick(event) {
         var target = event.target;
         if(!('nagare' in target.dataset)) {
             target = target.closest("a");
@@ -162,29 +171,14 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
         }
 
         switch(target.dataset['nagare']) {
-            // case "1":
-            //     if(event.type !== "change") { return }
-
-            //     var value = (target.attr("type") === "checkbox") && !target.prop("checked") ? "" : target.val();
-            //     getAndEval(action + "=" + encodeURIComponent(value));
-            //     break;
-
-            // case "2":
             case "5":
                 var action = target.getAttribute("href");
-                getAndEval(action);
+                this.getAndEval(action);
                 break;
 
             case "6":
                 var action = target.getAttribute("name");
-                postAndEval(event.target.form, [action, ""]);
-                /*
-                if(event.target.form) {
-                    postAndEval(event.target.form, action);
-                } else {
-                    getAndEval(action);
-                }
-                */
+                this.postAndEval(event.target.form, [action, ""]);
                 break;
 
             case "7":
@@ -194,18 +188,13 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
                 var x = Math.round(event.clientX - offset.left);
                 var y = Math.round(event.clientY - offset.top);
 
-                postAndEval(event.target.form, [action + ".x", x], [action + ".y", y]);
-
-                // getAndEval(action + ".x=" + x + ";" + action + ".y=" + y);
+                this.postAndEval(event.target.form, [action + ".x", x], [action + ".y", y]);
                 break;
         }
 
         event.preventDefault();
         return false;
     }
+}
 
-    document.addEventListener('click', process_click_event, true);
-    // document.addEventListener('change', process_event, true);
-
-    return [callRemote, replaceNode, loadAll];
-}());
+var nagare = new Nagare();

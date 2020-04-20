@@ -144,7 +144,7 @@ class Update(Action):
         html = render(renderer, *view, **params)
         html.set('id', html.get('id', component_to_update))
 
-        return b"nagare_replaceNode('%s', %s)" % (
+        return b"nagare.replaceNode('%s', %s)" % (
             component_to_update.encode('ascii'),
             json.dumps(html.tostring().decode('utf-8')).encode('utf-8')
         )

@@ -13,9 +13,6 @@ from nagare.component import Component
 from nagare.continuation import Tasklet
 from nagare.services.http_session import SessionService
 
-from webob import exc
-
-
 PY2 = (sys.version_info.major == 2)
 
 
