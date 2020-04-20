@@ -104,31 +104,7 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
         }
     }
 
-    /*
-    function createAjaxRequest(httpMethod, url, onSuccess, onFailure) {
-        var ajax = new XMLHttpRequest();
-
-        ajax.onreadystatechange = function(event) {
-            if(this.readyState === XMLHttpRequest.DONE) {
-                if(this.status === 200) {
-                    onSuccess(this);
-                }
-                if(this.status === 503 && this.getResponseHeader('location')) {
-                    window.document.location = this.getResponseHeader('location');
-                } else {
-                    onFailure(this);
-                }
-            }
-        };
-
-        ajax.open(httpMethod, url);
-        ajax.setRequestHeader("X-REQUESTED-WITH", "XMLHttpRequest")
-
-        return ajax;
-    }
-    */
-
-    function createAjaxRequest(url, options, params) {
+    function sendRequest(url, options, params) {
         if(params && params.length) url += "&_params=" + encodeURIComponent(JSON.stringify(params));
 
         options.cache = "no-cache";
@@ -137,21 +113,34 @@ var [nagare_callRemote, nagare_replaceNode, nagare_loadAll] = (function () {
         return fetch(url, options)
             .catch(function () { throw new Error("Network error") })
             .then(function (response) {
-                if(!response.ok) throw new Error("Server error");
+                if(!response.ok) {
+                    if(response.status == 503 && response.headers.get('location')) {
+                        window.document.location = response.headers.get('location');
+                    } else {
+                        response.text().then(function(text) {
+                            document.open()
+                            document.write(text);
+                            document.close()
+                        })
+                    }
+
+                    response = Promise.reject('Server error');
+                }
 
                 return response;
             })
-            .catch(function (exc) { throw exc });
     }
 
     function callRemote(url) {
-        return (...params) => createAjaxRequest(url, {method: "GET"}, params).then(response => response.json());
+        return (...params) => sendRequest(url, {method: "GET"}, params).then(response => response.json());
     }
 
     function sendAndEval(url, options) {
-        return createAjaxRequest(url, options)
+        return sendRequest(url, options)
+            .catch(Promise.reject)
             .then(response => response.text())
             .then(eval)
+            .catch(x => undefined)
     }
 
     function getAndEval(url) { sendAndEval(url, {method: "GET"}) }

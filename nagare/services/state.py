@@ -53,12 +53,6 @@ def persistent_id(o, clean_callbacks, result):
     return r
 
 
-class EmptyResponse(exc.HTTPOk):
-
-    def __call__(self, environ, start_response):
-        return []
-
-
 class StateService(SessionService):
     LOAD_PRIORITY = SessionService.LOAD_PRIORITY + 1
     CONFIG_SPEC = dict(
@@ -80,4 +74,4 @@ class StateService(SessionService):
     def _handle_request(request, start_response, response, **params):
         start_response(response.status, response.headerlist)(response.body)
 
-        return EmptyResponse()
+        return lambda environ, start_response: []
