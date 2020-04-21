@@ -348,6 +348,20 @@ class TextInput(_HTMLActionTag):
 
         return element(*children, **dict(self.attrib, **attrib))
 
+
+class AsyncSubmitInput(SubmitInput):
+    """ ``<input>`` tags with ``type=submit`` attributes
+    """
+    def init(self, renderer):
+        super(AsyncSubmitInput, self).init(renderer)
+        self.action(lambda: None)
+
+
+class AsyncTextInput(TextInput):
+    """Dispatcher class for all the ``<input>`` tags
+    """
+    TYPES = dict(TextInput.TYPES, submit=AsyncSubmitInput)
+
 # ----------------------------------------------------------------------------------
 
 
@@ -664,6 +678,11 @@ class _AsyncRenderer(_SyncRenderer):
     sync_renderer_factory = None
     default_action = Update
     _async_root = True
+
+    input = TagProp('input', html_base.allattrs | html_base.focusattrs | {
+        'type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength', 'src'
+        'alt', 'usemap', 'onselect', 'onchange', 'accept', 'align', 'border'
+    }, AsyncTextInput)
 
     def SyncRenderer(self, *args, **kw):
         """Create an associated synchronous HTML renderer
