@@ -155,10 +155,7 @@ class Component(xml.Component):
         previous_view = self.view
         previous_url = self.url
         previous_cont = self._cont
-        previous_answer = self.answer
-
-        # Set the new configuration
-        self.__dict__.pop('anwser', None)
+        previous_answer = self.__dict__.pop('answer', None)
 
         # Replace me by the object and wait its answer
         self.becomes(o, view, url)
@@ -173,8 +170,12 @@ class Component(xml.Component):
             previous_answer
         )
 
-    def _call2(self, previous_o, previous_view, previous_url, previous_cont, previous_on_answer):
-        self._on_answer = previous_on_answer
+    def _call2(self, previous_o, previous_view, previous_url, previous_cont, previous_answer):
+        if previous_answer:
+            self.answer = previous_answer
+        else:
+            self.__dict__.pop('answer', None)
+
         self._cont = previous_cont
 
         self._becomes(previous_o, previous_view, previous_url)
@@ -210,12 +211,6 @@ class Component(xml.Component):
         In:
           - the value to answer
         """
-        '''
-        # If a function is listening to my answer, calls it
-        if self._on_answer is not None:
-            return self._on_answer(r)
-        '''
-
         # Check if I was called by a component
         if self._cont is None:
             raise AnswerWithoutCall(self)
@@ -270,7 +265,7 @@ class Task(object):
     def _go(self, comp):
         # If I was not called by an other component and nobody is listening to
         # my answer,  I'm the root component. So I call my ``go()`` method forever
-        if comp._cont is comp._on_answer is None:
+        if comp._cont is comp.__dict__.get('answer') is None:
             while True:
                 self.go(comp)
 
@@ -280,7 +275,9 @@ class Task(object):
     def go(self, comp):
         raise NotImplementedError()
 
-    def render_(self, renderer, comp, view):
-        continuation.Continuation(self._go, comp)
 
-        return comp.render(renderer.parent)
+@presentation.render_for(Task)
+def render_task(self, renderer, comp, view):
+    continuation.Continuation(self._go, comp)
+
+    return comp.render(renderer.parent)
