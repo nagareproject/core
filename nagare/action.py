@@ -19,10 +19,13 @@ def no_action(*args, **kw):
     return b''
 
 
-class ActionBase(object):
+class Action(object):
+
+    def __init__(self, action=no_action):
+        self.action = action
 
     @staticmethod
-    def register(component, action_type, view, with_request, args, kw, action, render):
+    def _register(component, action_type, view, with_request, args, kw, action, render):
         client_params = {k[:-2]: kw.pop(k) for k in list(kw) if k.endswith('_c')}
         client_params = callbacks_service.encode_client_params(client_params)
 
@@ -30,13 +33,6 @@ class ActionBase(object):
         action_id = '_action%d%08d' % (action_type, action_id)
 
         return action_id, client_params
-
-
-class Action(ActionBase):
-
-    def __init__(self, action=no_action):
-        super(Action, self).__init__()
-        self.action = action
 
     @staticmethod
     def generate_render(renderer):
@@ -47,7 +43,7 @@ class Action(ActionBase):
         tag.set_sync_action(action_id, params)
 
     def register(self, renderer, component, tag, action_type, view, with_request, args, kw, action=None):
-        action_id, client_params = super(Action, self).register(
+        action_id, client_params = self._register(
             component,
             action_type,
             view,
@@ -93,7 +89,7 @@ class Update(Action):
           - ``subject`` -- subject to test the permissions on
         """
         super(Update, self).__init__(action)
-        self.render = render
+        self._render = render
 
         if isinstance(component_to_update, xml.Tag):
             self.component_to_update = component_to_update.get('id') or ('update_%s' % random.randint(10000000, 99999999))
@@ -116,7 +112,7 @@ class Update(Action):
         """
         renderer.include_nagare_js()
 
-        render = self.render
+        render = self._render
         if render is None:
             return no_action
 
@@ -198,3 +194,62 @@ class Updates(Update):
         head = cls.generate_response_head(renderer.head, renderer.response)
 
         return body + b'; ' + head
+
+
+def remote_call(action, with_request, renderer):
+    request = renderer.request
+    response = renderer.response
+
+    response.content_type = 'application/json'
+
+    params = json.loads(request.params.get('_params', '[]'))
+    if with_request:
+        action = partial.Partial(action, request, response)
+
+    return json.dumps(action(*params))
+
+
+class Remote(Update, xml.Component):
+
+    def __init__(self, action, with_request=False):
+        super(Remote, self).__init__(action, None)
+        self.with_request = with_request
+
+    def generate_javascript(self, renderer, action_id):
+        return 'nagare.callRemote("{}")'.format(renderer.add_sessionid_in_url('', {action_id: ''}))
+
+    def render(self, renderer, name=None):
+        renderer.include_nagare_js()
+
+        action_id, _ = self._register(
+            renderer.component, 2, None, False, (), {},
+            no_action, partial.Partial(remote_call, self.action, self.with_request)
+        )
+
+        js = self.generate_javascript(renderer, action_id)
+        if name:
+            renderer.head.javascript('nagare-js-' + name, 'var {} = {};'.format(name, js))
+            js = ''
+
+        return js
+
+
+class Delay(Remote):
+    JS = 'delay'
+
+    def __init__(self, action, delay, with_request=False, *args):
+        super(Delay, self).__init__(action, with_request)
+        self.delay = delay
+        self.args = args
+
+    def generate_javascript(self, renderer, action_id):
+        return 'nagare.{}({}, "{}", {})'.format(
+            self.JS,
+            self.delay,
+            renderer.add_sessionid_in_url('', {action_id: ''}),
+            ', '.join(json.dumps(arg) for arg in self.args)
+        )
+
+
+class Repeat(Delay):
+    JS = 'repeat'

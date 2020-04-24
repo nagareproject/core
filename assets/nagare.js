@@ -110,9 +110,9 @@ class Nagare {
     }
 
     error(status, text) {
-        document.open()
+        document.open();
         document.write(text);
-        document.close()
+        document.close();
     }
 
     sendRequest(url, options, params) {
@@ -142,6 +142,34 @@ class Nagare {
 
     callRemote(url) {
         return (...params) => this.sendRequest(url, {method: "GET"}, params).then(response => response.json());
+    }
+
+    delay(t, url, ...args) {
+        return new Promise(resolve => setTimeout(resolve, t, args)).then(args => this.callRemote(url)(...args));
+    }
+
+    repeat(t, url, ...args) {
+        class _repeat {
+            constructor (t, url, args) {
+                var interval = setInterval(
+                    function() {
+                        var p = nagare.callRemote(url)(...args).catch(function(e) {
+                            clearInterval(interval);
+                            throw e;
+                        });
+
+                        if (this.then) p.then(this.then)
+                        if (this.catch) p.catch(this.catch)
+                    }.bind(this),
+                    t
+                )
+            }
+
+            then(f) { this.then = f; return this }
+            catch(f) { this.catch = f; return this }
+        }
+
+        return new _repeat(t, url, args);
     }
 
     sendAndEval(url, options) {

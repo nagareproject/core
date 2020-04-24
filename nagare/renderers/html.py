@@ -19,7 +19,7 @@ import webob
 import pkg_resources
 
 from nagare import partial
-from nagare.action import ActionBase, Action, Remote, Update
+from nagare.action import Action, Update
 
 from nagare.renderers.xml import TagProp
 from nagare.renderers import xml, html_base
@@ -233,7 +233,7 @@ class TextArea(_HTMLActionTag):
           - ``self``
         """
         # The content sent to the action will have the '\r' characters deleted
-        if not isinstance(action, ActionBase):
+        if not isinstance(action, Action):
             f = self.clean_input_with_request if with_request else self.clean_input
             action = partial.Partial(f, action, args)
             args = ()
@@ -419,16 +419,6 @@ class Label(html_base.Tag):
         super(Label, self).init(renderer)
         self.set('for', renderer.generate_id('id'))  # Generate a unique value for the ``for`` attribute
 
-
-class Script(html_base.Script):
-    def add_children(self, children, attrib=None):
-        children = [
-            child.render(self.renderer) if isinstance(child, Remote) else child
-            for child in children
-        ]
-
-        super(Script, self).add_children(children, attrib)
-
 # ----------------------------------------------------------------------------------
 
 
@@ -507,7 +497,6 @@ class _SyncRenderer(object):
     textarea = TagProp('textarea', html_base.allattrs | html_base.focusattrs | {
         'name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap'
     }, TextArea)
-    script = TagProp('script', {'id', 'charset', 'type', 'language', 'src', 'defer'}, Script)
 
     _async_root = None
 
@@ -641,7 +630,7 @@ class _SyncRenderer(object):
         """
         component = self.component
         if component is not None:
-            if not isinstance(action, ActionBase):
+            if not isinstance(action, Action):
                 action = self.default_action(action)
 
             action.register(self, component, tag, action_type, self.view or None, with_request, args, kw)
@@ -669,7 +658,8 @@ class _SyncRenderer(object):
         )
 
     def include_nagare_js(self):
-        self.head.javascript_url('/static/nagare/nagare.js.gz?ver={}'.format(NAGARE_VERSION))
+        if not self.request.is_xhr:
+            self.head.javascript_url('/static/nagare/nagare.js.gz?ver={}'.format(NAGARE_VERSION))
 
 
 class _AsyncRenderer(_SyncRenderer):
