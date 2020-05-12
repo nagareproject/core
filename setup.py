@@ -85,7 +85,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     cmdclass={'sdist': SDist, 'build_assets': BuildAssets},
-    setup_requires=['setuptools_scm', 'closure', 'webassets'],
+    setup_requires=['setuptools_scm', 'closure', 'webassets', 'PyYAML'],
     use_scm_version=True,
     install_requires=[
         'WebOb', 'cryptography',
@@ -96,7 +96,7 @@ setup(
     ],
     message_extractors={'nagare': [('**.py', 'python', None)]},
     extras_require={
-        'dev': ['nagare-services-webassets'],
+        'dev': ['nagare-services-webassets', 'closure', 'PyYAML'],
         'doc': ['sphinx', 'sphinx_rtd_theme<0.3']
     },
     entry_points='''
