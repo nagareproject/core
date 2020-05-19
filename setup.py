@@ -85,10 +85,11 @@ setup(
     include_package_data=True,
     zip_safe=False,
     cmdclass={'sdist': SDist, 'build_assets': BuildAssets},
-    setup_requires=['setuptools_scm', 'closure', 'webassets', 'PyYAML'],
+    #setup_requires=['setuptools_scm', 'closure', 'webassets', 'PyYAML'],
     use_scm_version=True,
     install_requires=[
         'WebOb', 'cryptography',
+        'nagare-editor',
         'nagare-server-mvc',
         'nagare-services-sessions',
         'nagare-renderers-html',

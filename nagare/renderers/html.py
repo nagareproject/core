@@ -18,7 +18,7 @@ import imghdr
 import webob
 import pkg_resources
 
-from nagare import partial
+from nagare import partial, var
 from nagare.action import Action, Update
 
 from nagare.renderers.xml import TagProp
@@ -542,6 +542,8 @@ class _SyncRenderer(object):
         if (component is not None) and component.url:
             self.url = self.url.rstrip('/') + '/' + component.url
 
+        self.id = var.Var(self.id)
+
     def SyncRenderer(self, *args, **kw):
         """Create an associated synchronous HTML renderer
 
@@ -720,8 +722,10 @@ class _AsyncRenderer(_SyncRenderer):
             if not isinstance(output, xml.Tag):
                 output = self.div(output, class_='nagare-generated nagare-async-view')
 
-            id_ = output.get('id', self.id)
+            id_ = output.get('id', self.id())
             output.set('id', id_)
+
+            self.id(id_)
 
         return super(_AsyncRenderer, self).end_rendering(output)
 

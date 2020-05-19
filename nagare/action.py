@@ -153,6 +153,9 @@ class Update(Action):
 
     @classmethod
     def generate_response(cls, render, view, component_to_update, params, renderer):
+        if callable(component_to_update):
+            component_to_update = component_to_update()
+
         body = cls.generate_response_body(render, view, component_to_update, params, renderer)
         head = cls.generate_response_head(renderer.head, renderer.response)
 
