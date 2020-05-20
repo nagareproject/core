@@ -48,9 +48,9 @@ class CallbacksService(plugin.Plugin):
         callbacks_service = self
 
     @staticmethod
-    def pad(buf, l, padding):
-        nb = len(buf) % l
-        return buf + padding * (nb and (l - nb))
+    def pad(buf, length, padding):
+        nb = len(buf) % length
+        return buf + padding * (nb and (length - nb))
 
     def encode_client_params(self, client_params):
         if not client_params:

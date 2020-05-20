@@ -52,7 +52,7 @@ class Component(xml.Component):
         return self.o
 
     def register_action(self, view, action, with_request, render, args, kw):
-        """Register a action for this component
+        """Register an action for this component
 
         In:
           - ``view`` -- name of the view which registers this action (``None`` for the default view)
