@@ -6,4 +6,4 @@ bundles:
             CLOSURE_COMPRESSOR_OPTIMIZATION: SIMPLE_OPTIMIZATIONS
         contents:
             - assets/nagare.js
-        output: /tmp/nagare.js
+        output: nagare/static/js/nagare.js

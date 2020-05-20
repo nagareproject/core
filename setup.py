@@ -41,7 +41,7 @@ class BuildAssets(Command):
     def run(self):
         status = subprocess.call(['webassets', '-c', 'conf/assets.yaml', 'build', '--no-cache'])
         if status == 0:
-            with open('/tmp/nagare.js', 'rb') as f, gzip.open('nagare/static/nagare.js.gz', 'wb') as g:
+            with open('nagare/static/js/nagare.js', 'rb') as f, gzip.open('nagare/static/js/nagare.js.gz', 'wb') as g:
                 g.write(f.read())
 
         return status
