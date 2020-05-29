@@ -117,7 +117,7 @@ setup(
         create_root = nagare.services.create_root:RootService
         redirect_after_post = nagare.services.prg:PRGService
         callbacks = nagare.services.callbacks:CallbacksService
-        ajax = nagare.services.ajax:AjaxService
+        core_static = nagare.services.core_static:CoreStaticService
         ''',
     classifiers=[
         'Development Status :: 4 - Beta',
