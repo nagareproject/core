@@ -52,7 +52,7 @@ class App(mvc_application.App):
             session_id, state_id,
             request, response,
             self.static_url, self.static_path,
-            '/' + self.url
+            self.url
         )
 
         if request.is_xhr:
@@ -61,7 +61,7 @@ class App(mvc_application.App):
                 session_id, state_id,
                 request, response,
                 self.static_url, self.static_path,
-                '/' + self.url
+                self.url
             )
 
         return renderer

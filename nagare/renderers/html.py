@@ -661,7 +661,7 @@ class _SyncRenderer(object):
 
     def include_nagare_js(self):
         if not self.request.is_xhr:
-            self.head.javascript_url('/static/nagare/js/nagare.js?ver={}'.format(NAGARE_VERSION))
+            self.head.javascript_url('nagare/js/nagare.js?ver={}'.format(NAGARE_VERSION))
 
 
 class _AsyncRenderer(_SyncRenderer):

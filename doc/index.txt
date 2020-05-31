@@ -8,15 +8,15 @@
    graph TD
    rabbitmq --> channel[rabbitmq channel]
    channel -->|rabbitmq publisher| publisher(publisher)
-   publisher -->|dispatch| statics(statics)
+   publisher --> transaction(transaction)
    transaction -->|return or raise| base_exceptions(base_exceptions)
-   base_exceptions -->|overwrite| wsgi_exceptions(wsg_exceptions)
-   wsgi_exceptions -->|overwrite| exceptions(exceptions)
+   base_exceptions -->|overwrite| http_exceptions(http_exceptions)
+   http_exceptions -->|overwrite| exceptions(exceptions)
+   exceptions --> |404 page|statics(statics)
    exceptions --> |raise| application{application}
    i18n -->|locale creation| i18nlocale(i18nlocale)
    statics -->|early| local(local)
-   local --> transaction(transaction)
-   exceptions -->|get/set_locale| i18n
+   local --> i18n(i18n)
    i18nlocale --> sessions
    publisher -->|check concurrence| sessions
    sessions --> callbacks

@@ -23,4 +23,4 @@ doc/_build
 doc/source
 .webassets-cache
 
-nagare/static/nagare.js.gz
+nagare/static/js

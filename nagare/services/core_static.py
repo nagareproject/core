@@ -11,15 +11,14 @@ import os
 
 from nagare.services import plugin
 
-AJAX_PREFIX = '/static/nagare'
 
-
-class AjaxService(plugin.Plugin):
+class CoreStaticService(plugin.Plugin):
     LOAD_PRIORITY = 120
     CONFIG_SPEC = {'directory': 'string(default=None)'}
 
     def __init__(self, name, dist, directory, statics_service):
-        super(AjaxService, self).__init__(name, dist, directory=directory)
+        super(CoreStaticService, self).__init__(name, dist, directory=directory)
+        self.directory = directory or os.path.join(dist.location, 'nagare', 'static')
 
-        location = directory or os.path.join(dist.location, 'nagare', 'static')
-        statics_service.register_dir(AJAX_PREFIX, location)
+    def handle_start(self, app, statics_service):
+        statics_service.register_dir(app.static_url + '/nagare', self.directory, gzip=True)
