@@ -12,7 +12,7 @@ import random
 
 from nagare import partial
 from nagare.renderers import xml
-from nagare.services.callbacks import callbacks_service
+from nagare.services import callbacks
 
 
 def no_action(*args, **kw):
@@ -27,7 +27,7 @@ class Action(object):
     @staticmethod
     def _register(component, action_type, view, with_request, args, kw, action, render):
         client_params = {k[:-2]: kw.pop(k) for k in list(kw) if k.endswith('_c')}
-        client_params = callbacks_service.encode_client_params(client_params)
+        client_params = callbacks.callbacks_service.encode_client_params(client_params)
 
         action_id = component.register_action(view, action, with_request, render, args, kw)
         action_id = '_action%d%08d' % (action_type, action_id)
