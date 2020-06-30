@@ -506,7 +506,7 @@ class _SyncRenderer(object):
             session_id=None, state_id=None,
             request=None, response=None,
             static_url='', static_path='',
-            url='', component=None, view=0,
+            url='', component=None
     ):
         """Renderer initialisation
 
@@ -528,7 +528,6 @@ class _SyncRenderer(object):
             self.static_path = static_path
             self.url = url
             self.component = component
-            self.view = view
         else:
             self.session_id = parent.session_id
             self.state_id = parent.state_id
@@ -537,7 +536,6 @@ class _SyncRenderer(object):
             self.static_path = parent.static_path
             self.url = parent.url
             self.component = component or parent.component
-            self.view = view or parent.view
 
         if (component is not None) and component.url:
             self.url = self.url.rstrip('/') + '/' + component.url
@@ -572,15 +570,11 @@ class _SyncRenderer(object):
 
     @property
     def is_async_root(self):
-        return self.parent._async_root
+        return None
 
     @property
     def async_root(self):
-        async_root = self.is_async_root
-        if async_root is None:
-            return None, (None, None)
-
-        return (self, async_root) if async_root else self.parent.async_root
+        return None, (None, None)
 
     def absolute_url(self, url, url_prefix=None, always_relative=False, **params):
         return super(_SyncRenderer, self).absolute_url(
@@ -635,9 +629,9 @@ class _SyncRenderer(object):
             if not isinstance(action, Action):
                 action = self.default_action(action)
 
-            action.register(self, component, tag, action_type, self.view or None, with_request, args, kw)
+            action.register(self, component, tag, action_type, with_request, args, kw)
 
-    def start_rendering(self, args, kw):
+    def start_rendering(self, view, args, kw):
         pass
 
     def end_rendering(self, output):
@@ -669,7 +663,7 @@ class _AsyncRenderer(_SyncRenderer):
     """
     sync_renderer_factory = None
     default_action = Update
-    _async_root = True
+    _async_root = (None, (), {})
 
     input = TagProp('input', html_base.allattrs | html_base.focusattrs | {
         'type', 'name', 'value', 'checked', 'disabled', 'readonly', 'size', 'maxlength', 'src'
@@ -702,11 +696,23 @@ class _AsyncRenderer(_SyncRenderer):
 
         return self.__class__(*args, **kw)
 
-    def start_rendering(self, args, kw):
-        if self.is_async_root:
-            self.parent._async_root = args, kw
+    @property
+    def is_async_root(self):
+        return self.parent._async_root if self.parent is not None else None
 
-        super(_AsyncRenderer, self).start_rendering(args, kw)
+    @property
+    def async_root(self):
+        async_root = self.is_async_root
+        if async_root is None:
+            return None, (None, None, None)
+
+        return (self, async_root) if async_root else self.parent.async_root
+
+    def start_rendering(self, view, args, kw):
+        if self.is_async_root:
+            self.parent._async_root = view or None, args, kw
+
+        super(_AsyncRenderer, self).start_rendering(view, args, kw)
         self._async_root = False
 
     def end_rendering(self, output):

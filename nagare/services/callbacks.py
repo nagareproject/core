@@ -108,7 +108,7 @@ class CallbacksService(plugin.Plugin):
 
         for (callback_type, callback_id, complement, client_params), values in sorted(actions.items()):
             try:
-                _, f, with_request, render, callback_args, kw = callbacks[int(callback_id)]
+                f, with_request, render, callback_args, kw = callbacks[int(callback_id)]
             except KeyError:
                 raise CallbackLookupError(callback_id)
 

@@ -51,7 +51,7 @@ class Component(xml.Component):
         """
         return self.o
 
-    def register_action(self, view, action, with_request, render, args, kw):
+    def register_action(self, action, with_request, render, args, kw):
         """Register an action for this component
 
         In:
@@ -62,14 +62,14 @@ class Component(xml.Component):
           - ``render`` -- the render function or method
           - ``actions`` -- the actions manager
         """
-        k = (view, action, with_request, args, tuple(kw.items()))
+        k = (action, with_request, args, tuple(kw.items()))
 
         try:
             action_id = abs(hash(k))
         except TypeError:
             action_id = random.randint(10000000, 99999999)
 
-        self._new_actions[action_id] = (view, action, with_request, render, args, kw)
+        self._new_actions[action_id] = (action, with_request, render, args, kw)
 
         return action_id
 
@@ -105,11 +105,14 @@ class Component(xml.Component):
 
         Forward the call to the generic method of the ``presentation`` service
         """
-        # Create a new renderer of the same class than the current renderer
-        renderer = renderer.new(parent=renderer, component=self, view=view)
-        renderer.start_rendering(args, kw)
+        if view == 0:
+            view = self.view
 
-        output = presentation.render(self.o, renderer, self, self.view if view == 0 else view, *args, **kw)
+        # Create a new renderer of the same class than the current renderer
+        renderer = renderer.new(parent=renderer, component=self)
+        renderer.start_rendering(view, args, kw)
+
+        output = presentation.render(self.o, renderer, self, view, *args, **kw)
         return renderer.end_rendering(output)
 
     def _becomes(self, o, view, url):

@@ -25,11 +25,11 @@ class Action(object):
         self.action = action
 
     @staticmethod
-    def _register(component, action_type, view, with_request, args, kw, action, render):
+    def _register(component, action_type, with_request, args, kw, action, render):
         client_params = {k[:-2]: kw.pop(k) for k in list(kw) if k.endswith('_c')}
         client_params = callbacks.callbacks_service.encode_client_params(client_params)
 
-        action_id = component.register_action(view, action, with_request, render, args, kw)
+        action_id = component.register_action(action, with_request, render, args, kw)
         action_id = '_action%d%08d' % (action_type, action_id)
 
         return action_id, client_params
@@ -42,11 +42,10 @@ class Action(object):
     def set_action(tag, action_id, params):
         tag.set_sync_action(action_id, params)
 
-    def register(self, renderer, component, tag, action_type, view, with_request, args, kw, action=None):
+    def register(self, renderer, component, tag, action_type, with_request, args, kw, action=None):
         action_id, client_params = self._register(
             component,
             action_type,
-            view,
             with_request,
             args, kw,
             action or self.action, self.generate_render(renderer)
@@ -116,7 +115,7 @@ class Update(Action):
         if render is None:
             return no_action
 
-        async_root, (args, kw) = renderer.async_root
+        async_root, (view, args, kw) = renderer.async_root
         if not self.component_to_update and (async_root is None):
             raise ValueError('no async root found and no `component_to_update` defined')
 
@@ -124,7 +123,7 @@ class Update(Action):
             view = ()
             params = {}
         else:
-            view = (render if render != '' else async_root.view,) + args
+            view = (render if render != '' else view,) + args
             render = async_root.component.render
             params = kw
 
