@@ -62,7 +62,7 @@ class Component(xml.Component):
           - ``render`` -- the render function or method
           - ``actions`` -- the actions manager
         """
-        k = (action, with_request, args, tuple(kw.items()))
+        k = (action, with_request, render, args, tuple(kw.items()))
 
         try:
             action_id = abs(hash(k))

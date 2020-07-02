@@ -133,12 +133,12 @@ class Update(Action):
             self.generate_response if with_header else self.generate_response_body,
             render, view,
             self.component_to_update or async_root.id,
-            params
+            tuple(params.items())
         )
 
     @staticmethod
     def generate_response_body(render, view, component_to_update, params, renderer):
-        html = render(renderer, *view, **params)
+        html = render(renderer, *view, **dict(params))
         html.set('id', html.get('id', component_to_update))
 
         return b"nagare.replaceNode('%s', %s)" % (
@@ -162,13 +162,13 @@ class Update(Action):
 
         return body + b'; ' + head
 
-    def url(self, renderer):
+    def url(self, renderer, *args, **kw):
         renderer.include_nagare_js()
 
-        return renderer.a.action(self).get('href')
+        return renderer.a.action(self, *args, **kw).get('href')
 
-    def javascript(self, renderer):
-        return '{}("{}")'.format(self.JS_CALL, self.url(renderer))
+    def javascript(self, renderer, *args, **kw):
+        return '{}("{}")'.format(self.JS_CALL, self.url(renderer, *args, **kw))
 
 
 class Updates(Update):
@@ -184,21 +184,31 @@ class Updates(Update):
         super(Updates, self).__init__(action)
         self.updates = args
 
+    @staticmethod
+    def execute_actions(request, response, actions, with_request, *args, **kw):
+        for action in actions:
+            if with_request:
+                action(request, response, *args, **kw)
+            else:
+                action(*args, **kw)
+
     def register(self, renderer, component, tag, action_type, with_request, args, kw):
         actions = [self.action] + [update.action for update in self.updates]
 
-        def action(request, response, *args, **kw):
-            for action in actions:
-                if with_request:
-                    action(request, response, *args, **kw)
-                else:
-                    action(*args, **kw)
-
-        return super(Updates, self).register(renderer, component, tag, action_type, True, args, kw, action)
+        return super(Updates, self).register(
+            renderer,
+            component,
+            tag,
+            action_type,
+            True,
+            (tuple(actions), with_request) + args,
+            kw,
+            self.execute_actions
+        )
 
     def generate_render(self, renderer):
         renders = [update.generate_render(renderer, False) for update in self.updates]
-        return partial.Partial(self.generate_response, renders)
+        return partial.Partial(self.generate_response, tuple(renders))
 
     @classmethod
     def generate_response(cls, renders, renderer):
@@ -234,7 +244,7 @@ class Remote(Update, xml.Component):
         renderer.include_nagare_js()
 
         action_id, _ = self._register(
-            renderer.component, 2, None, False, (), {},
+            renderer.component, 2, False, (), {},
             no_action, partial.Partial(remote_call, self.action, self.with_request)
         )
 
