@@ -62,6 +62,8 @@ class Update(Action):
     Send a XHR request that can do an action, render a component and finally
     update the HTML with the rendered view
     """
+    JS_CALL = 'nagare.getAndEval'
+
     def __init__(self, action=no_action, render='', component_to_update=None):
         """Initialisation
 
@@ -160,6 +162,14 @@ class Update(Action):
 
         return body + b'; ' + head
 
+    def url(self, renderer):
+        renderer.include_nagare_js()
+
+        return renderer.a.action(self).get('href')
+
+    def javascript(self, renderer):
+        return '{}("{}")'.format(self.JS_CALL, self.url(renderer))
+
 
 class Updates(Update):
 
@@ -174,7 +184,7 @@ class Updates(Update):
         super(Updates, self).__init__(action)
         self.updates = args
 
-    def register(self, renderer, component, tag, action_type, view, with_request, args, kw):
+    def register(self, renderer, component, tag, action_type, with_request, args, kw):
         actions = [self.action] + [update.action for update in self.updates]
 
         def action(request, response, *args, **kw):
@@ -184,7 +194,7 @@ class Updates(Update):
                 else:
                     action(*args, **kw)
 
-        return super(Updates, self).register(renderer, component, tag, action_type, view, True, args, kw, action)
+        return super(Updates, self).register(renderer, component, tag, action_type, True, args, kw, action)
 
     def generate_render(self, renderer):
         renders = [update.generate_render(renderer, False) for update in self.updates]
@@ -237,7 +247,7 @@ class Remote(Update, xml.Component):
 
 
 class Delay(Remote):
-    JS = 'delay'
+    JS_CALL = 'delay'
 
     def __init__(self, action, delay, with_request=False, *args):
         super(Delay, self).__init__(action, with_request)
@@ -246,7 +256,7 @@ class Delay(Remote):
 
     def generate_javascript(self, renderer, action_id):
         return 'nagare.{}({}, "{}", {})'.format(
-            self.JS,
+            self.JS_CALL,
             self.delay,
             renderer.add_sessionid_in_url('', {action_id: ''}),
             ', '.join(json.dumps(arg) for arg in self.args)
@@ -254,4 +264,4 @@ class Delay(Remote):
 
 
 class Repeat(Delay):
-    JS = 'repeat'
+    JS_CALL = 'repeat'

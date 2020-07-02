@@ -574,7 +574,7 @@ class _SyncRenderer(object):
 
     @property
     def async_root(self):
-        return None, (None, None)
+        return None, (None, None, None)
 
     def absolute_url(self, url, url_prefix=None, always_relative=False, **params):
         return super(_SyncRenderer, self).absolute_url(
