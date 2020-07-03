@@ -167,8 +167,10 @@ class Update(Action):
 
         return renderer.a.action(self, *args, **kw).get('href')
 
-    def javascript(self, renderer, *args, **kw):
+    def render(self, renderer, *args, **kw):
         return '{}("{}")'.format(self.JS_CALL, self.url(renderer, *args, **kw))
+
+    javascript = render
 
 
 class Updates(Update):
@@ -188,9 +190,9 @@ class Updates(Update):
     def execute_actions(request, response, actions, with_request, *args, **kw):
         for action in actions:
             if with_request:
-                action(request, response, *args, **kw)
-            else:
-                action(*args, **kw)
+                action = partial.Partial(action, request, response)
+
+            action(*args, **kw)
 
     def register(self, renderer, component, tag, action_type, with_request, args, kw):
         actions = [self.action] + [update.action for update in self.updates]
@@ -218,37 +220,34 @@ class Updates(Update):
         return body + b'; ' + head
 
 
-def remote_call(action, with_request, renderer):
-    request = renderer.request
-    response = renderer.response
-
-    response.content_type = 'application/json'
-
-    params = json.loads(request.params.get('_params', '[]'))
-    if with_request:
-        action = partial.Partial(action, request, response)
-
-    return json.dumps(action(*params))
-
-
 class Remote(Update, xml.Component):
+    JS_CALL = 'nagare.callRemote'
 
     def __init__(self, action, with_request=False):
         super(Remote, self).__init__(action, None)
         self.with_request = with_request
 
-    def generate_javascript(self, renderer, action_id):
-        return 'nagare.callRemote("{}")'.format(renderer.add_sessionid_in_url('', {action_id: ''}))
+    @staticmethod
+    def remote_call(action, with_request, renderer):
+        request = renderer.request
+        response = renderer.response
 
-    def render(self, renderer, name=None):
-        renderer.include_nagare_js()
+        response.content_type = 'application/json'
 
-        action_id, _ = self._register(
-            renderer.component, 2, False, (), {},
-            no_action, partial.Partial(remote_call, self.action, self.with_request)
-        )
+        params = json.loads(request.params.get('_params', '[]'))
+        if with_request:
+            action = partial.Partial(action, request, response)
 
-        js = self.generate_javascript(renderer, action_id)
+        return json.dumps(action(*params))
+
+    def register(self, renderer, component, tag, action_type, with_request, args, kw):
+        return super(Remote, self).register(renderer, component, tag, action_type, False, (), {}, no_action)
+
+    def generate_render(self, renderer):
+        return partial.Partial(self.remote_call, self.action, self.with_request)
+
+    def javascript(self, renderer, name=None):
+        js = self.render(renderer)
         if name:
             renderer.head.javascript('nagare-js-' + name, 'var {} = {};'.format(name, js))
             js = ''
@@ -257,21 +256,12 @@ class Remote(Update, xml.Component):
 
 
 class Delay(Remote):
-    JS_CALL = 'delay'
+    JS_CALL = 'nagare.delay'
 
-    def __init__(self, action, delay, with_request=False, *args):
-        super(Delay, self).__init__(action, with_request)
-        self.delay = delay
-        self.args = args
-
-    def generate_javascript(self, renderer, action_id):
-        return 'nagare.{}({}, "{}", {})'.format(
-            self.JS_CALL,
-            self.delay,
-            renderer.add_sessionid_in_url('', {action_id: ''}),
-            ', '.join(json.dumps(arg) for arg in self.args)
-        )
+    def __call__(self, renderer, delay, *args):
+        params = ', '.join(json.dumps(arg) for arg in args)
+        return self.javascript(renderer) + '({}{})'.format(delay, (', ' + params) if params else '')
 
 
 class Repeat(Delay):
-    JS_CALL = 'repeat'
+    JS_CALL = 'nagare.repeat'

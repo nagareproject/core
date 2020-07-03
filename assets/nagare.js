@@ -144,11 +144,11 @@ class Nagare {
         return (...params) => this.sendRequest(url, {method: "GET"}, params).then(response => response.json());
     }
 
-    delay(t, url, ...args) {
-        return new Promise(resolve => setTimeout(resolve, t, args)).then(args => this.callRemote(url)(...args));
+    delay(url) {
+        return (t, ...params) => new Promise(resolve => setTimeout(resolve, t, params)).then(args => this.callRemote(url)(...args));
     }
 
-    repeat(t, url, ...args) {
+    repeat(url) {
         class _repeat {
             constructor (t, url, args) {
                 var interval = setInterval(
@@ -169,7 +169,7 @@ class Nagare {
             catch(f) { this.catch = f; return this }
         }
 
-        return new _repeat(t, url, args);
+        return (t, ...params) => new _repeat(t, url, params);
     }
 
     sendAndEval(url, options) {
