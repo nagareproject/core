@@ -506,7 +506,8 @@ class _SyncRenderer(object):
             session_id=None, state_id=None,
             request=None, response=None,
             static_url='', static_path='',
-            url='', component=None
+            url='', component=None,
+            assets_version=None
     ):
         """Renderer initialisation
 
@@ -518,7 +519,7 @@ class _SyncRenderer(object):
           - ``static_path`` -- path of the static contents of the application
           - ``url`` -- url prefix of the application
         """
-        super(_SyncRenderer, self).__init__(parent, static_url=static_url)
+        super(_SyncRenderer, self).__init__(parent, static_url=static_url, assets_version=assets_version)
 
         if parent is None:
             self.session_id = session_id

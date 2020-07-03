@@ -40,7 +40,7 @@ class App(mvc_application.App):
         """
         return Request(environ, charset='utf-8', *args, **kw)
 
-    def create_renderer(self, session_id, state_id, request, response, **params):
+    def create_renderer(self, session_id, state_id, request, response, assets_version=None, **params):
         """Create the initial renderer (the root of all the used renderers)
 
         In:
@@ -52,7 +52,8 @@ class App(mvc_application.App):
             session_id, state_id,
             request, response,
             self.static_url, self.static_path,
-            self.url
+            self.url,
+            assets_version=assets_version
         )
 
         if request.is_xhr:
@@ -61,7 +62,8 @@ class App(mvc_application.App):
                 session_id, state_id,
                 request, response,
                 self.static_url, self.static_path,
-                self.url
+                self.url,
+                assets_version=assets_version
             )
 
         return renderer
