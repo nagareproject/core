@@ -4,6 +4,8 @@ bundles:
         filters: closure_js
         config:
             CLOSURE_COMPRESSOR_OPTIMIZATION: SIMPLE_OPTIMIZATIONS
+            CLOSURE_EXTRA_ARGS:
+                - --browser_featureset_year=2019
         contents:
             - assets/nagare.js
         output: nagare/static/js/nagare.js

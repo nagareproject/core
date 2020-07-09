@@ -7,7 +7,7 @@
 // this distribution.
 //--
 
-"use strict;"
+"use strict"
 
 class Nagare {
     constructor (error) {
@@ -194,8 +194,13 @@ class Nagare {
     processClick(event) {
         var target = event.target;
         if(!('nagare' in target.dataset)) {
-            target = target.closest("a");
-            if(!target || !('nagare' in target.dataset)) { return true }
+            target = event.target.closest("a");
+            if(target) {
+                if(!('nagare' in target.dataset)) { return true }
+            } else {
+                target = event.target.closest("button");
+                if(!target || !('nagare' in target.dataset)) { return true }
+            }
         }
 
         switch(target.dataset['nagare']) {
@@ -206,7 +211,7 @@ class Nagare {
 
             case "6":
                 var action = target.getAttribute("name");
-                this.postAndEval(event.target.form, [action, ""]);
+                this.postAndEval(target.form, [action, ""]);
                 break;
 
             case "7":
@@ -216,7 +221,7 @@ class Nagare {
                 var x = Math.round(event.clientX - offset.left);
                 var y = Math.round(event.clientY - offset.top);
 
-                this.postAndEval(event.target.form, [action + ".x", x], [action + ".y", y]);
+                this.postAndEval(target.form, [action + ".x", x], [action + ".y", y]);
                 break;
         }
 
