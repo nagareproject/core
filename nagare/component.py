@@ -232,6 +232,10 @@ class Component(xml.Component):
         self.answer = Partial(f, *args, **kw) if args or kw else f
         return self
 
+    def __bool__(self):
+        return bool(self.o)
+    __nonzero__ = __bool__
+
     def __repr__(self):
         return '<%s with %s at 0x%x on object %r>' % (
             self.__class__.__name__.lower(),

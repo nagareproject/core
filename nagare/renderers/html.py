@@ -104,7 +104,7 @@ class Img(html_base.Img, _HTMLActionTag):
         super(Img, self).set_sync_action(href, {})
 
     @classmethod
-    def generate(cls, request, response, action, with_request, **kw):
+    def generate(cls, action, with_request, request, response, *args, **kw):
         """Generate the image and guess its format
 
         In:
@@ -117,7 +117,7 @@ class Img(html_base.Img, _HTMLActionTag):
           - new response object raised
         """
         e = webob.exc.HTTPOk(headerlist=[('Content-Type', '')])
-        img = action(request, e, **kw) if with_request else action(**kw)
+        img = action(request, e, *args, **kw) if with_request else action(*args, **kw)
 
         # If no ``Content-Type`` is already set, use the ``imghdr`` module
         # to guess the format of the image
@@ -128,7 +128,7 @@ class Img(html_base.Img, _HTMLActionTag):
 
     @partial.max_number_of_args(2)
     def action(self, action, args, with_request=False, **kw):
-        f = partial.Partial(self.generate, action=action, with_request=with_request, **kw)
+        f = partial.Partial(self.generate, action, with_request)
         return super(Img, self).action(f, with_request=True, *args, **kw)
 
 
