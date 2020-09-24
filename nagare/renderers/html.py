@@ -655,7 +655,7 @@ class _SyncRenderer(object):
         )
 
     def include_nagare_js(self):
-        if not self.request.is_xhr:
+        if (self.request is not None) and not self.request.is_xhr:
             self.head.javascript_url('nagare/js/nagare.js?ver={}'.format(NAGARE_VERSION))
 
 

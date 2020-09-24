@@ -12,7 +12,7 @@ class ViewError(LookupError):
     pass
 
 
-def render(o, renderer, comp, view_name, *args, **kw):
+def _render(o, renderer, comp, view_name, *args, **kw):
     view = getattr(o, 'render_' + (view_name or ''), None)
 
     if view is None:
@@ -25,6 +25,16 @@ def render(o, renderer, comp, view_name, *args, **kw):
         raise ViewError(msg + ' for ' + repr(o) + ' returns nothing')
 
     return rendering
+
+
+def render(o, renderer, comp, view_name, *args, **kw):
+    # Create a new renderer of the same class than the current renderer
+    renderer = renderer.new(parent=renderer, component=comp)
+    renderer.start_rendering(view_name, args, kw)
+
+    rendering = _render(o, renderer, comp, view_name, *args, **kw)
+
+    return renderer.end_rendering(rendering)
 
 
 def render_for(cls, view=None, model=None):

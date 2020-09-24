@@ -105,15 +105,7 @@ class Component(xml.Component):
 
         Forward the call to the generic method of the ``presentation`` service
         """
-        if view == 0:
-            view = self.view
-
-        # Create a new renderer of the same class than the current renderer
-        renderer = renderer.new(parent=renderer, component=self)
-        renderer.start_rendering(view, args, kw)
-
-        output = presentation.render(self.o, renderer, self, view, *args, **kw)
-        return renderer.end_rendering(output)
+        return presentation.render(self.o, renderer, self, self.view if view == 0 else view, *args, **kw)
 
     def _becomes(self, o, view, url):
         """Replace a component by an object or an other componentw

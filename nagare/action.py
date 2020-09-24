@@ -26,8 +26,12 @@ class Action(object):
 
     @staticmethod
     def _register(component, action_type, with_request, args, kw, action, render):
-        client_params = {k[:-2]: kw.pop(k) for k in list(kw) if k.endswith('_c')}
-        client_params = callbacks.callbacks_service.encode_client_params(client_params)
+        callbacks_service = callbacks.callbacks_service
+        if callbacks_service is not None:
+            client_params = {k[:-2]: kw.pop(k) for k in list(kw) if k.endswith('_c')}
+            client_params = callbacks_service.encode_client_params(client_params)
+        else:
+            client_params = ''
 
         action_id = component.register_action(action, with_request, render, args, kw)
         action_id = '_action%d%08d' % (action_type, action_id)
