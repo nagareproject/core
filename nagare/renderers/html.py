@@ -169,6 +169,8 @@ class Form(_HTMLActionTag):
             for e in form.xpath('descendant::*[contains(@class, "nagare-session-data")]'):
                 e.getparent().remove(e)
 
+        return self
+
     @partial.max_number_of_args(2)
     def pre_action(self, action, args, with_request=False, **kw):
         """Register an action that will be executed **before** the actions of the
@@ -626,11 +628,13 @@ class _SyncRenderer(object):
           - ``with_request`` -- will the request and response objects be passed to the action?
         """
         component = self.component
-        if component is not None:
-            if not isinstance(action, Action):
-                action = self.default_action(action)
+        if component is None:
+            return None
 
-            action.register(self, component, tag, action_type, with_request, args, kw)
+        if not isinstance(action, Action):
+            action = self.default_action(action)
+
+        return action.register(self, component, tag, action_type, with_request, args, kw)
 
     def start_rendering(self, view, args, kw):
         pass
