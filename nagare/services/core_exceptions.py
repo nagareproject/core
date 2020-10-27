@@ -19,8 +19,12 @@ def default_exception_handler(exception, exceptions_service, services_service, r
         # As the XHR requests use the same continuation, a callback
         # can be not found (i.e deleted by a previous XHR)
         # In this case, do nothing
-        exceptions_service.log_exception('nagare.callbacks')
-        exception = exc.HTTPOk() if request.is_xhr else exc.HTTPInternalServerError()
+        if request.is_xhr:
+            exceptions_service.logger.warning('Callback lookup error in XHR request')
+            exception = exc.HTTPOk()
+        else:
+            exceptions_service.log_exception('nagare.callbacks')
+            exception = exc.HTTPInternalServerError()
 
     if isinstance(exception, exc.HTTPOk):
         return exception
