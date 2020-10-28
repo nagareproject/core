@@ -715,7 +715,7 @@ class _AsyncRenderer(_SyncRenderer):
 
     def start_rendering(self, view, args, kw):
         if self.is_async_root:
-            self.parent._async_root = view or None, args, kw
+            self.parent._async_root = view, args, kw
 
         super(_AsyncRenderer, self).start_rendering(view, args, kw)
         self._async_root = False

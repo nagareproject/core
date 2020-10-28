@@ -31,7 +31,7 @@ class Component(xml.Component):
 
     A component has views, can be embedded, replaced, called and can answer a value.
     """
-    def __init__(self, o=None, view=0, url=None):
+    def __init__(self, o=None, view=presentation.ANON_VIEW, url=None):
         """Initialisation
 
         In:
@@ -100,12 +100,12 @@ class Component(xml.Component):
 
         return super(Component, self).__reduce__()
 
-    def render(self, renderer, view=0, *args, **kw):
+    def render(self, renderer, view=presentation.CURRENT_VIEW, *args, **kw):
         """Rendering method of a component
 
-        Forward the call to the generic method of the ``presentation`` service
+        Forward to the ``presentation`` service
         """
-        return presentation.render(self.o, renderer, self, self.view if view == 0 else view, *args, **kw)
+        return presentation.render(self.o, renderer, self, self.view, view, *args, **kw)
 
     def _becomes(self, o, view, url):
         """Replace a component by an object or an other componentw
@@ -121,10 +121,12 @@ class Component(xml.Component):
         o = self if type(o) is object else o
         self.o = o() if isinstance(o, Component) else o
 
-        self.view = view
+        if view != presentation.CURRENT_VIEW:
+            self.view = view
+
         self.url = url
 
-    def becomes(self, o=_marker, view=0, url=None):
+    def becomes(self, o=_marker, view=presentation.CURRENT_VIEW, url=None):
         """Replace a component by an object or an other component
 
         In:
@@ -175,7 +177,7 @@ class Component(xml.Component):
 
         self._becomes(previous_o, previous_view, previous_url)
 
-    def call(self, o=_marker, view=0, url=None):
+    def call(self, o=_marker, view=presentation.CURRENT_VIEW, url=None):
         # Call an other object or component
 
         # The current component is replaced and will be back when the object
