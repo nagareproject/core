@@ -30,8 +30,6 @@ You get a framework where the HTTP connectionless request / response cycle,
 the refresh, back and fork actions of the browser, don't break the normal
 control flow of the application.
 
-You get a framework with natively integrated Web 2.0 features.
-
 You get a framework where the web applications are developed in the same way
 as the desktop applications.
 

@@ -7,7 +7,7 @@
 // this distribution.
 //--
 
-"use strict"
+"use strict";
 
 class Nagare {
     constructor (error) {
@@ -43,7 +43,7 @@ class Nagare {
         link.setAttribute("rel", "stylesheet");
         link.setAttribute("type", "text/css");
         link.setAttribute("href", url);
-        for(var name in attrs)  link.setAttribute(name, attrs[name]);
+        for(var name in attrs) link.setAttribute(name, attrs[name]);
 
         document.head.appendChild(link);
     }
@@ -53,7 +53,7 @@ class Nagare {
 
         script.setAttribute("type", "text/javascript");
         script.setAttribute("src", url);
-        for(var name in attrs)  script.setAttribute(name, attrs[name]);
+        for(var name in attrs) script.setAttribute(name, attrs[name]);
 
         document.head.appendChild(script);
     }
@@ -91,21 +91,26 @@ class Nagare {
 
     replaceNode(id, html) {
         var node = document.getElementById(id);
-        var parent = node.parentNode;
-        var index = Array.prototype.indexOf.call(parent.children, node);
 
-        node.outerHTML = html;
+        if(node && html) {
+            var e = document.createElement("div");
+            e.innerHTML = html;
+            var new_node = e.children[0];
 
-        var scripts = parent.children[index].querySelectorAll("script");
-        for(var i=0; i<scripts.length; i++) setTimeout(scripts[i].textContent, 0);
+            new_node.querySelectorAll("script").forEach(
+                js => {
+                    if(js.getAttribute("src")) {
+                        var script = document.createElement("script");
+                        [...js.attributes].forEach(attr => script.setAttribute(attr.nodeName, attr.nodeValue));
+                        js.parentNode.replaceChild(script, js);
+                    } else {
+                        js.parentNode.removeChild(js);
+                        setTimeout(js.textContent, 0);
+                    }
+                }
+            );
 
-        var js = parent.children[index].querySelectorAll("script[src]");
-        for(var i=0; i<js.length; i++) {
-            var script = document.createElement("script");
-            script.setAttribute("type", "text/javascript");
-            script.setAttribute("src", js[i].getAttribute("src"));
-
-            js[i].parentNode.replaceChild(script, js[i]);
+            node.parentNode.replaceChild(new_node, node);
         }
     }
 
@@ -122,12 +127,12 @@ class Nagare {
         options.headers = {"X-REQUESTED-WITH": "XMLHttpRequest"};
 
         return fetch(url, options)
-            .catch(function () { throw new Error("Network error") })
+            .catch(function () { throw new Error("Network error"); })
             .then(function(response) {
                 var status = response.status;
 
                 if(!response.ok) {
-                    if(status == 503 && response.headers.get('location')) {
+                    if(status === 503 && response.headers.get('location')) {
                         window.document.location = response.headers.get('location');
                     } else {
                         response.text().then(text => this.error(status, text));
@@ -137,7 +142,7 @@ class Nagare {
                 }
 
                 return response;
-            }.bind(this))
+            }.bind(this));
     }
 
     callRemote(url) {
@@ -158,15 +163,15 @@ class Nagare {
                             throw e;
                         });
 
-                        if (this.then) p.then(this.then)
-                        if (this.catch) p.catch(this.catch)
+                        if (this.then) p.then(this.then);
+                        if (this.catch) p.catch(this.catch);
                     }.bind(this),
                     t
-                )
+                );
             }
 
-            then(f) { this.then = f; return this }
-            catch(f) { this.catch = f; return this }
+            then(f) { this.then = f; return this; }
+            catch(f) { this.catch = f; return this; }
         }
 
         return (t, ...params) => new _repeat(t, url, params);
@@ -177,7 +182,7 @@ class Nagare {
             .catch(Promise.reject)
             .then(response => response.text())
             .then(eval)
-            .catch(x => undefined)
+            .catch(x => undefined);
     }
 
     getAndEval(url) { this.sendAndEval(url, {method: "GET"}) }
