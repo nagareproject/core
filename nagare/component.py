@@ -126,7 +126,7 @@ class Component(xml.Component):
 
         self.url = url
 
-    def becomes(self, o=_marker, view=presentation.CURRENT_VIEW, url=None):
+    def becomes(self, o=_marker, view=presentation.ANON_VIEW, url=None):
         """Replace a component by an object or an other component
 
         In:
@@ -177,7 +177,7 @@ class Component(xml.Component):
 
         self._becomes(previous_o, previous_view, previous_url)
 
-    def call(self, o=_marker, view=presentation.CURRENT_VIEW, url=None):
+    def call(self, o=_marker, view=presentation.ANON_VIEW, url=None):
         # Call an other object or component
 
         # The current component is replaced and will be back when the object
