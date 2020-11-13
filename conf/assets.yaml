@@ -1,7 +1,9 @@
 directory: ..
 bundles:
     nagare_js:
-        filters: closure_js
+        filters:
+          - babeljs
+          - closure_js
         config:
             CLOSURE_COMPRESSOR_OPTIMIZATION: SIMPLE_OPTIMIZATIONS
             CLOSURE_EXTRA_ARGS:

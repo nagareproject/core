@@ -12,7 +12,6 @@
 import os
 import gzip
 import textwrap
-import subprocess
 
 
 from setuptools.command.sdist import sdist
@@ -39,7 +38,12 @@ class BuildAssets(Command):
         pass
 
     def run(self):
-        status = subprocess.call(['webassets', '-c', 'conf/assets.yaml', 'build', '--no-cache'])
+        from webassets import filter, script
+        from dukpy.webassets import BabelJS
+
+        filter.register_filter(BabelJS)
+
+        status = script.main(['-c', 'conf/assets.yaml', 'build', '--no-cache']) or 0
         if status == 0:
             with open('nagare/static/js/nagare.js', 'rb') as f, gzip.open('nagare/static/js/nagare.js.gz', 'wb') as g:
                 g.write(f.read())
@@ -89,6 +93,7 @@ setup(
     use_scm_version=True,
     install_requires=[
         'WebOb', 'cryptography',
+        'nagare-partial',
         'nagare-editor',
         'nagare-server-mvc',
         'nagare-services-sessions',
@@ -98,7 +103,7 @@ setup(
     message_extractors={'nagare': [('**.py', 'python', None)]},
     extras_require={
         'dev': ['nagare-services-webassets', 'closure', 'PyYAML'],
-        'doc': ['sphinx', 'sphinx_rtd_theme<0.3']
+        'doc': ['sphinx', 'sphinx_rtd_theme']
     },
     entry_points='''
         [nagare.commands]

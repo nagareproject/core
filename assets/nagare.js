@@ -125,6 +125,7 @@ class Nagare {
 
         options.cache = "no-cache";
         options.headers = {"X-REQUESTED-WITH": "XMLHttpRequest"};
+        options.credentials = "same-origin";
 
         return fetch(url, options)
             .catch(function () { throw new Error("Network error"); })
