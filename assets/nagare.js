@@ -93,7 +93,7 @@ class Nagare {
         var node = document.getElementById(id);
 
         if(node && html) {
-            var e = document.createElement("div");
+            var e = document.createElement(node.parentNode.tagName);
             e.innerHTML = html;
             var new_node = e.children[0];
 
