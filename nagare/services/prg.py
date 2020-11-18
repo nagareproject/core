@@ -20,20 +20,19 @@ class PRGService(plugin.Plugin):
     LOAD_PRIORITY = 120
 
     @staticmethod
-    def handle_request(chain, request, response, session_id, previous_state_id, **params):
+    def handle_request(chain, request, response, session_id, state_id, **params):
         if (request.method == 'POST') and not request.is_xhr:
             response = request.create_redirect_response(
                 response=response,
                 _s=session_id,
-                _c='%05d' % previous_state_id
+                _c='%05d' % state_id,
             )
-            response.use_same_state = True
         else:
             response = chain.next(
                 request=request,
                 response=response,
                 session_id=session_id,
-                previous_state_id=previous_state_id,
+                state_id=state_id,
                 **params
             )
 
