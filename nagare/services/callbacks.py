@@ -26,6 +26,8 @@ from nagare.continuation import Continuation
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
+DEFAULT_ACTION_TYPE = 2
+
 ACTION_PREFIX = '_action'
 ACTION_SYNTAX = re.compile(ACTION_PREFIX + r'(\d)(\d+)((.x)|(.y))?(#(.*))?$')
 
@@ -115,6 +117,7 @@ class CallbacksService(plugin.Plugin):
             if f is None:
                 continue
 
+            callback_type = int(callback_type)
             callback_params = self.decode_client_params(client_params or request.params.get('_p'))
             callback_params.update(kw)
 
@@ -132,17 +135,17 @@ class CallbacksService(plugin.Plugin):
             if with_request:
                 f = partial.Partial(f, request, response)
 
-            if callback_type == '3':
+            if callback_type == 3:
                 f(*(callback_args + (tuple(values),)), **callback_params)
             else:
                 for value in values:
-                    if callback_type in ('0', '2'):
-                        f(*callback_args, **callback_params)
-                    elif callback_type == '1':
-                        f(*(callback_args + (value,)), **callback_params)
-                    elif callback_type in ('4', '5', '6'):
+                    if 4 <=callback_type <= 6:
                         Continuation(f, *callback_args, **callback_params)
-                    elif (callback_type == '7') and complement:
+                    elif (callback_type == DEFAULT_ACTION_TYPE) or (callback_type == 0):
+                        f(*callback_args, **callback_params)
+                    elif callback_type == 1:
+                        f(*(callback_args + (value,)), **callback_params)
+                    elif (callback_type == 7) and complement:
                         callback_args += (complement == '.y', int(values[0]))
                         Continuation(f, *callback_args, **callback_params)
 

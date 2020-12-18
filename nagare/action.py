@@ -10,9 +10,9 @@
 import json
 import random
 
-from nagare import partial
 from nagare.renderers import xml
 from nagare.services import callbacks
+from nagare import continuation, partial
 
 
 def no_action(*args, **kw):
@@ -196,7 +196,7 @@ class Updates(Update):
             if with_request:
                 action = partial.Partial(action, request, response)
 
-            action(*args, **kw)
+            continuation.call_wrapper(action, *args, **kw)
 
     def register(self, renderer, component, tag, action_type, with_request, args, kw):
         actions = [self.action] + [update.action for update in self.updates]
@@ -205,7 +205,7 @@ class Updates(Update):
             renderer,
             component,
             tag,
-            action_type,
+            callbacks.DEFAULT_ACTION_TYPE,
             True,
             (tuple(actions), with_request) + args,
             kw,
