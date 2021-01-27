@@ -14,7 +14,7 @@ from nagare.services import plugin
 
 class CoreStaticService(plugin.Plugin):
     LOAD_PRIORITY = 120
-    CONFIG_SPEC = {'directory': 'string(default=None)'}
+    CONFIG_SPEC = dict(plugin.Plugin.CONFIG_SPEC, directory='string(default=None)')
 
     def __init__(self, name, dist, directory, statics_service):
         super(CoreStaticService, self).__init__(name, dist, directory=directory)
