@@ -139,7 +139,7 @@ class CallbacksService(plugin.Plugin):
                 f(*(callback_args + (tuple(values),)), **callback_params)
             else:
                 for value in values:
-                    if 4 <=callback_type <= 6:
+                    if 4 <= callback_type <= 6:
                         Continuation(f, *callback_args, **callback_params)
                     elif (callback_type == DEFAULT_ACTION_TYPE) or (callback_type == 0):
                         f(*callback_args, **callback_params)

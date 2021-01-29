@@ -78,10 +78,10 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
         params = {'_p': params} if params else {}
         params[action_id] = ''
 
-        href = self.get('href', '')
-        href = self.renderer.add_sessionid_in_url(href, params)
+        url = self.get(self.ACTION_ATTR, '')
+        url = self.renderer.add_sessionid_in_url(url, params)
 
-        super(A, self).set_sync_action(href, {})
+        super(A, self).set_sync_action(url, {})
 
     def set_async_action(self, action_id, params):
         super(A, self).set_async_action(action_id, params)
@@ -98,10 +98,11 @@ class Img(html_base.Img, _HTMLActionTag):
         params = {'_p': params} if params else {}
         params[action_id] = ''
 
-        href = self.get('src', '')
-        href = self.renderer.add_sessionid_in_url(href, params)
+        url = self.get('src', '')
+        url = self.renderer.add_sessionid_in_url(url, params)
+        url = self.renderer.absolute_url(url, self.renderer.url or '/')
 
-        super(Img, self).set_sync_action(href, {})
+        super(Img, self).set_sync_action(url, {})
 
     @classmethod
     def generate(cls, action, with_request, request, response, *args, **kw):
@@ -321,9 +322,10 @@ class FileInput(_HTMLActionTag):
 class ImageInput(html_base.Input, _HTMLActionTag):
     """ ``<input>`` tags with ``type=image`` attributes
     """
-    ACTION_PRIORITY = 6
+    ACTION_PRIORITY = 7
 
     def set_async_action(self, action_id, params):
+        super(ImageInput, self).set_async_action(action_id, params)
         self.set('data-nagare', str(self.ACTION_PRIORITY))
 
 
@@ -617,7 +619,7 @@ class _SyncRenderer(object):
             if self.state_id is not None:
                 params['_c'] = '%05d' % self.state_id
 
-        return self.absolute_url(url, self.url, always_relative=False, **params)
+        return self.absolute_url(url, **params)
 
     def register_callback(self, tag, action_type, action, with_request=False, *args, **kw):
         """Register a (a)synchronous action on a tag
