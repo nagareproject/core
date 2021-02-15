@@ -21,9 +21,9 @@ import pkg_resources
 from nagare import partial, var
 from nagare.action import Action, Update
 
+from nagare.services import callbacks
 from nagare.renderers.xml import TagProp
 from nagare.renderers import xml, html_base
-
 
 NAGARE_VERSION = pkg_resources.get_distribution('nagare').version
 
@@ -62,7 +62,7 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
     """ ``<a>`` tags
     """
     ACTION_ATTR = 'href'
-    ACTION_PRIORITY = 5
+    ACTION_PRIORITY = callbacks.LINK_CALLBACK | callbacks.WITH_CONTINUATION_CALLBACK
 
     def absolute_url(self, url):
         return self.renderer.absolute_url(url)
@@ -85,14 +85,14 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
 
     def set_async_action(self, action_id, params):
         super(A, self).set_async_action(action_id, params)
-        self(data_nagare=self.ACTION_PRIORITY)
+        self(data_nagare='%02X' % self.ACTION_PRIORITY)
 
 
 class Img(html_base.Img, _HTMLActionTag):
     """ ``<img>`` tags
     """
     ACTION_ATTR = 'src'
-    ACTION_PRIORITY = 2
+    ACTION_PRIORITY = callbacks.WITHOUT_VALUE_CALLBACK
 
     def set_sync_action(self, action_id, params):
         params = {'_p': params} if params else {}
@@ -136,8 +136,8 @@ class Img(html_base.Img, _HTMLActionTag):
 class Form(_HTMLActionTag):
     """ The ``<form>`` tag
     """
-    PRE_ACTION_PRIORITY = 0
-    ACTION_PRIORITY = POST_ACTION_PRIORITY = 4
+    PRE_ACTION_PRIORITY = callbacks.PRE_ACTION_CALLBACK
+    ACTION_PRIORITY = POST_ACTION_PRIORITY = callbacks.POST_ACTION_CALLBACK | callbacks.WITH_CONTINUATION_CALLBACK
     DEFAULT_ATTRS = {
         'enctype': 'multipart/form-data',
         'method': 'post',
@@ -212,7 +212,7 @@ class Form(_HTMLActionTag):
 class TextArea(_HTMLActionTag):
     """ ``<textarea>`` tags
     """
-    ACTION_PRIORITY = 1
+    ACTION_PRIORITY = callbacks.WITH_VALUE_CALLBACK
 
     @classmethod
     def clean_input(cls, action, args, v, **kw):
@@ -250,7 +250,7 @@ class RadioInput(_HTMLActionTag):
     """ ``<input>`` tags with ``type=radio`` attributes
     """
     ACTION_ATTR = 'value'
-    ACTION_PRIORITY = 2
+    ACTION_PRIORITY = callbacks.WITHOUT_VALUE_CALLBACK
 
     def selected(self, flag):
         """(de)Select the tag
@@ -272,7 +272,7 @@ class RadioInput(_HTMLActionTag):
 class CheckboxInput(_HTMLActionTag):
     """ ``<input>`` tags with ``type=checkbox`` attributes
     """
-    ACTION_PRIORITY = 1
+    ACTION_PRIORITY = callbacks.WITH_VALUE_CALLBACK
 
     def selected(self, flag):
         """(de)Select the tag
@@ -294,17 +294,17 @@ class CheckboxInput(_HTMLActionTag):
 class SubmitInput(_HTMLActionTag):
     """ ``<input>`` tags with ``type=submit`` attributes
     """
-    ACTION_PRIORITY = 6
+    ACTION_PRIORITY = callbacks.SUBMIT_CALLBACK | callbacks.WITH_CONTINUATION_CALLBACK
 
     def set_async_action(self, action_id, params):
         super(SubmitInput, self).set_async_action(action_id, params)
-        self.set('data-nagare', str(self.ACTION_PRIORITY))
+        self(data_nagare='%02X' % self.ACTION_PRIORITY)
 
 
 class FileInput(_HTMLActionTag):
     """ ``<input>`` tags with ``type=file`` attributes
     """
-    ACTION_PRIORITY = 1
+    ACTION_PRIORITY = callbacks.WITH_VALUE_CALLBACK
 
     def init(self, renderer):
         """Initialisation
@@ -322,17 +322,17 @@ class FileInput(_HTMLActionTag):
 class ImageInput(html_base.Input, _HTMLActionTag):
     """ ``<input>`` tags with ``type=image`` attributes
     """
-    ACTION_PRIORITY = 7
+    ACTION_PRIORITY = callbacks.IMAGE_CALLBACK | callbacks.WITH_CONTINUATION_CALLBACK
 
     def set_async_action(self, action_id, params):
         super(ImageInput, self).set_async_action(action_id, params)
-        self.set('data-nagare', str(self.ACTION_PRIORITY))
+        self(data_nagare='%02X' % self.ACTION_PRIORITY)
 
 
 class TextInput(_HTMLActionTag):
     """Dispatcher class for all the ``<input>`` tags
     """
-    ACTION_PRIORITY = 1
+    ACTION_PRIORITY = callbacks.WITH_VALUE_CALLBACK
     TYPES = {
         'radio': RadioInput,
         'checkbox': CheckboxInput,
@@ -401,7 +401,7 @@ class Select(_HTMLActionTag):
     """
     @property
     def ACTION_PRIORITY(self):
-        return 3 if self.get('multiple') else 1
+        return callbacks.WITH_VALUES_CALLBACK if self.get('multiple') else callbacks.WITH_VALUE_CALLBACK
 
     @classmethod
     def normalize_input(cls, action, args, v, **kw):

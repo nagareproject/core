@@ -209,7 +209,7 @@ class Nagare {
             }
         }
 
-        switch(target.dataset['nagare']) {
+        switch(target.dataset['nagare'][1]) {
             case "5":
                 var action = target.getAttribute("href");
                 this.getAndEval(action);

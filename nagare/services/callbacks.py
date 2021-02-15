@@ -26,10 +26,19 @@ from nagare.continuation import Continuation
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
-DEFAULT_ACTION_TYPE = 2
+PRE_ACTION_CALLBACK = 0  # <form>.pre_action
+WITH_VALUE_CALLBACK = 1  # <textarea>, <input type="text">
+WITHOUT_VALUE_CALLBACK = 2  # <input type="radio">, <input type="checkbox">, single select
+WITH_VALUES_CALLBACK = 3  # # multiple select
+POST_ACTION_CALLBACK = 4  # <form>.post_action
+LINK_CALLBACK = 5  # <a>
+SUBMIT_CALLBACK = 6  # <input type="submit">, <button>
+IMAGE_CALLBACK = 7  # <input type='image'>
+
+WITH_CONTINUATION_CALLBACK = (1 << 4)
 
 ACTION_PREFIX = '_action'
-ACTION_SYNTAX = re.compile(ACTION_PREFIX + r'(\d)(\d+)((.x)|(.y))?(#(.*))?$')
+ACTION_SYNTAX = re.compile(ACTION_PREFIX + r'((0|1)(\d))(\d+)((.x)|(.y))?(#(.*))?$')
 
 callbacks_service = None
 
@@ -81,6 +90,13 @@ class CallbacksService(plugin.Plugin):
 
         return json.loads(v[:-1])
 
+    @staticmethod
+    def execute_callback(callback_type, callback, args, kw):
+        if callback_type & WITH_CONTINUATION_CALLBACK:
+            Continuation(callback, *args, **kw)
+        else:
+            callback(*args, **kw)
+
     def handle_request(self, chain, callbacks, request, response, root, **params):
         """Call the actions associated to the callback identifiers received
 
@@ -94,7 +110,7 @@ class CallbacksService(plugin.Plugin):
           - the render function
         """
         # The structure of a callback identifier is
-        # '_action<priority on 1 char><key into the callbacks dictionary>'
+        # '_action<with continuation on 1 char><priority on 1 chars><key into the callbacks dictionary>'
         actions = defaultdict(list)
 
         for name, value in request.params.items():
@@ -104,11 +120,11 @@ class CallbacksService(plugin.Plugin):
             m = ACTION_SYNTAX.match(name)
             if m:
                 groups = m.groups()
-                actions[(groups[0], groups[1], groups[2], groups[-1])].append(value)
+                actions[(int(groups[2]), int(groups[0]), groups[3], groups[4], groups[-1])].append(value)
 
         render = None
 
-        for (callback_type, callback_id, complement, client_params), values in sorted(actions.items()):
+        for (type_, callback_type, callback_id, complement, client_params), values in sorted(actions.items()):
             try:
                 f, with_request, render, callback_args, kw = callbacks[int(callback_id)]
             except KeyError:
@@ -117,37 +133,22 @@ class CallbacksService(plugin.Plugin):
             if f is None:
                 continue
 
-            callback_type = int(callback_type)
             callback_params = self.decode_client_params(client_params or request.params.get('_p'))
             callback_params.update(kw)
-
-            # ``callback_type``:
-            #
-            # 0 : <form>.pre_action
-            # 1 : action with value (<textarea> ...)
-            # 2 : action without value (radio button, checkbox ..)
-            # 3 : action with multiple values (multiple select)
-            # 4 : <form>.post_action
-            # 5 : action with continuation and without value (<a>)
-            # 6 : action with continuation and without value (submit button)
-            # 7 : action with continuation and with value (special case for <input type='image'>)
 
             if with_request:
                 f = partial.Partial(f, request, response)
 
-            if callback_type == 3:
-                f(*(callback_args + (tuple(values),)), **callback_params)
+            if type_ == WITH_VALUES_CALLBACK:
+                self.execute_callback(callback_type, f, callback_args + tuple(values), callback_params)
             else:
                 for value in values:
-                    if 4 <= callback_type <= 6:
-                        Continuation(f, *callback_args, **callback_params)
-                    elif (callback_type == DEFAULT_ACTION_TYPE) or (callback_type == 0):
-                        f(*callback_args, **callback_params)
-                    elif callback_type == 1:
-                        f(*(callback_args + (value,)), **callback_params)
-                    elif (callback_type == 7) and complement:
+                    if type_ == WITH_VALUE_CALLBACK:
+                        callback_args += (value,)
+                    elif (type_ == IMAGE_CALLBACK) and complement:
                         callback_args += (complement == '.y', int(values[0]))
-                        Continuation(f, *callback_args, **callback_params)
+
+                    self.execute_callback(callback_type, f, callback_args, callback_params)
 
         return chain.next(
             callbacks=callbacks,
