@@ -120,7 +120,7 @@ class CallbacksService(plugin.Plugin):
             m = ACTION_SYNTAX.match(name)
             if m:
                 groups = m.groups()
-                actions[(int(groups[2]), int(groups[0]), groups[3], groups[4], groups[-1])].append(value)
+                actions[(int(groups[2]), int(groups[0], 16), groups[3], groups[4], groups[-1])].append(value)
 
         render = None
 
