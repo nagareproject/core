@@ -143,12 +143,14 @@ class CallbacksService(plugin.Plugin):
                 self.execute_callback(callback_type, f, callback_args + tuple(values), callback_params)
             else:
                 for value in values:
-                    if type_ == WITH_VALUE_CALLBACK:
-                        callback_args += (value,)
-                    elif (type_ == IMAGE_CALLBACK) and complement:
-                        callback_args += (complement == '.y', int(values[0]))
+                    args = callback_args
 
-                    self.execute_callback(callback_type, f, callback_args, callback_params)
+                    if type_ == WITH_VALUE_CALLBACK:
+                        args += (value,)
+                    elif (type_ == IMAGE_CALLBACK) and complement:
+                        args += (complement == '.y', int(values[0]))
+
+                    self.execute_callback(callback_type, f, args, callback_params)
 
         return chain.next(
             callbacks=callbacks,
