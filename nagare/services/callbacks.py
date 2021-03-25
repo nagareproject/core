@@ -140,7 +140,7 @@ class CallbacksService(plugin.Plugin):
                 f = partial.Partial(f, request, response)
 
             if type_ == WITH_VALUES_CALLBACK:
-                self.execute_callback(callback_type, f, callback_args + tuple(values), callback_params)
+                self.execute_callback(callback_type, f, callback_args + (tuple(values),), callback_params)
             else:
                 for value in values:
                     args = callback_args
