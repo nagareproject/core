@@ -136,12 +136,15 @@ class Update(Action):
         return partial.Partial(
             self.generate_response if with_header else self.generate_response_body,
             render, view,
-            self.component_to_update or async_root.id(),
+            self.component_to_update or async_root.id,
             tuple(params.items())
         )
 
     @staticmethod
     def generate_response_body(render, view, component_to_update, params, renderer):
+        if callable(component_to_update):
+            component_to_update = component_to_update()
+
         html = render(renderer, *view, **dict(params))
         html.set('id', html.get('id', component_to_update))
 
