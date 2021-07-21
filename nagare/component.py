@@ -126,7 +126,7 @@ class Component(xml.Component):
 
         self.url = url
 
-    def becomes(self, o=_marker, view=presentation.ANON_VIEW, url=None):
+    def becomes(self, o=_marker, view=presentation.ANON_VIEW, url=None, preserve_calls_chain=False):
         """Replace a component by an object or an other component
 
         In:
@@ -139,7 +139,8 @@ class Component(xml.Component):
           - ``self``
         """
         self._becomes(o, view, url or self.url)
-        self._cont = None
+        if not preserve_calls_chain:
+            self._cont = None
 
         return self
 

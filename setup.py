@@ -82,9 +82,8 @@ setup(
     or to create a Nagare developer installation.
     """) % LONG_DESCRIPTION,
     license='BSD',
-    keywords='web wsgi framework sqlalchemy seaside continuation ajax stackless',
+    keywords='web framework sqlalchemy continuation ajax stackless',
     url='http://www.nagare.org',
-    download_url='http://www.nagare.org/download',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
@@ -92,7 +91,8 @@ setup(
     setup_requires=['setuptools_scm', 'closure', 'webassets', 'PyYAML'],
     use_scm_version=True,
     install_requires=[
-        'WebOb', 'cryptography',
+        'WebOb',
+        'cryptography',
         'nagare-partial',
         'nagare-editor',
         'nagare-server-mvc',
@@ -103,19 +103,8 @@ setup(
     message_extractors={'nagare': [('**.py', 'python', None)]},
     extras_require={
         'dev': ['nagare-services-webassets', 'closure', 'PyYAML'],
-        'doc': ['sphinx', 'sphinx_rtd_theme']
     },
     entry_points='''
-        [nagare.commands]
-        #create-rules = nagare.admin.create_rules:CreateRules
-
-        [nagare.applications]
-        #admin = nagare.admin.admin_app:app
-
-        #[nagare.admin]
-        #info = nagare.admin.interface.info:Admin
-        #apps = nagare.admin.interface.applications:Admin
-
         [nagare.services]
         exceptions = nagare.services.core_exceptions:ExceptionsService
         state = nagare.services.state:StateService
