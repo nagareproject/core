@@ -423,6 +423,22 @@ class Label(html_base.Tag):
         super(Label, self).init(renderer)
         self.set('for', renderer.generate_id('id'))  # Generate a unique value for the ``for`` attribute
 
+
+class Error(html_base.Tag):
+
+    def add_children(self, children, attrib=None):
+        element = self.find(".//*[@class='nagare-error-input']/*[1]")
+
+        if element is None:
+            super(Error, self).add_children(children, attrib)
+        else:
+            new_element = self.renderer.makeelement(element.tag)(*element, **element.attrib)
+            new_element.text = element.text
+            new_element.tail = element.tail
+            new_element.add_children(children, attrib)
+
+            element.getparent()[0] = new_element
+
 # ----------------------------------------------------------------------------------
 
 
@@ -501,6 +517,7 @@ class _SyncRenderer(object):
     textarea = TagProp('textarea', html_base.allattrs | html_base.focusattrs | {
         'name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap'
     }, TextArea)
+    _error = TagProp('div', set(), Error)
 
     _async_root = None
 
@@ -654,9 +671,9 @@ class _SyncRenderer(object):
         if error is None:
             return element
 
-        return self.div(
+        return self._error(
             self.div(element, class_='nagare-error-input'),
-            error and self.div(error, class_='nagare-error-message'),
+            self.div(error, class_='nagare-error-message') if error else '',
             class_='nagare-generated nagare-error-field'
         )
 
