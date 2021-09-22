@@ -129,9 +129,9 @@ class Update(Action):
             view = ()
             params = {}
         else:
-            view = (render if render != '' else view,) + args
-            render = async_root.component.render
-            params = kw
+            view = (render if render != '' else view,) + (args or ())
+            render = async_root.component.render if async_root is not None else lambda h, view: None
+            params = kw or {}
 
         return partial.Partial(
             self.generate_response if with_header else self.generate_response_body,
@@ -142,10 +142,13 @@ class Update(Action):
 
     @staticmethod
     def generate_response_body(render, view, component_to_update, params, renderer):
+        html = render(renderer, *view, **dict(params))
+        if html is None:
+            return b''
+
         if callable(component_to_update):
             component_to_update = component_to_update()
 
-        html = render(renderer, *view, **dict(params))
         html.set('id', html.get('id', component_to_update))
 
         return b"nagare.replaceNode('%s', %s)" % (
@@ -169,15 +172,21 @@ class Update(Action):
 
         return body + b'; ' + head
 
-    def url(self, renderer, *args, **kw):
+    def url(self, renderer, with_input=False, **kw):
+        return (renderer.link if with_input else renderer.a).action(self, **kw).get('href')
+
+    def javascript(self, renderer, with_field=False, **kw):
         renderer.include_nagare_js()
 
-        return renderer.a.action(self, *args, **kw).get('href')
+        return '{}("{}"{})'.format(
+            self.JS_CALL,
+            self.url(renderer, with_field, **kw),
+            ' + nagare.getField(this)' if with_field else ''
+        )
+    js = javascript
 
-    def render(self, renderer, *args, **kw):
-        return '{}("{}")'.format(self.JS_CALL, self.url(renderer, *args, **kw))
-
-    javascript = render
+    def render(self, renderer, **kw):
+        return self.javascript(renderer, **kw)
 
 
 class Updates(Update):

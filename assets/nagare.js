@@ -178,6 +178,10 @@ class Nagare {
         return (t, ...params) => new _repeat(t, url, params);
     }
 
+    getField(field) {
+        return encodeURIComponent(field.type === "checkbox" && !field.checked ? "" : field.value);
+    }
+
     sendAndEval(url, options) {
         return this.sendRequest(url, options)
             .catch(Promise.reject)

@@ -14,6 +14,7 @@ This renderer is dedicated to the Nagare framework
 
 import json
 import imghdr
+from collections import OrderedDict
 
 import webob
 import pkg_resources
@@ -75,11 +76,13 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
           - ``action`` -- action
           - ``with_request`` -- will the request and response objects be passed to the action?
         """
-        params = {'_p': params} if params else {}
-        params[action_id] = ''
+        url_params = OrderedDict()
+        url_params[action_id] = ''  # MUST be the first inserted value
+        if params:
+            url_params['_p'] = params
 
         url = self.get(self.ACTION_ATTR, '')
-        url = self.renderer.add_sessionid_in_url(url, params)
+        url = self.renderer.add_sessionid_in_url(url, url_params)
 
         super(A, self).set_sync_action(url, {})
 
@@ -424,6 +427,10 @@ class Label(html_base.Tag):
         self.set('for', renderer.generate_id('id'))  # Generate a unique value for the ``for`` attribute
 
 
+class LinkWithValue(A):
+    ACTION_PRIORITY = callbacks.WITH_VALUE_CALLBACK
+
+
 class Error(html_base.Tag):
 
     def add_children(self, children, attrib=None):
@@ -518,6 +525,7 @@ class _SyncRenderer(object):
         'name', 'rows', 'cols', 'disabled', 'readonly', 'onselect', 'onchange', 'wrap'
     }, TextArea)
     _error = TagProp('div', set(), Error)
+    link = TagProp('a', set(), LinkWithValue)
 
     _async_root = None
 
