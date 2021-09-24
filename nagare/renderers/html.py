@@ -433,18 +433,41 @@ class LinkWithValue(A):
 
 class Error(html_base.Tag):
 
-    def add_children(self, children, attrib=None):
+    @property
+    def decorated(self):
         element = self.find(".//*[@class='nagare-error-input']/*[1]")
+        if element is None:
+            return None, None
+
+        new_element = getattr(self.renderer, element.tag)(*element, **element.attrib)
+        new_element.text = element.text
+        new_element.tail = element.tail
+
+        return new_element, element.getparent()
+
+    def add_children(self, children, attrib=None):
+        element, parent = self.decorated
 
         if element is None:
             super(Error, self).add_children(children, attrib)
         else:
-            new_element = self.renderer.makeelement(element.tag)(*element, **element.attrib)
-            new_element.text = element.text
-            new_element.tail = element.tail
-            new_element.add_children(children, attrib)
+            element.add_children(children, attrib)
+            parent[0] = element
 
-            element.getparent()[0] = new_element
+    def selected(self, flag):
+        element, parent = self.decorated
+        if element is not None:
+            parent[0] = element.selected(flag)
+
+        return self
+
+    @partial.max_number_of_args(2)
+    def action(self, action, args, with_request=False, **kw):
+        element, parent = self.decorated
+        if element is not None:
+            parent[0] = element.action(action, *args, with_request=with_request, **kw)
+
+        return self
 
 # ----------------------------------------------------------------------------------
 
