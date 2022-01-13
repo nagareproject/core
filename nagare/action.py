@@ -265,7 +265,7 @@ class Remote(Update, xml.Component):
         return partial.Partial(self.remote_call, self.action, self.with_request)
 
     def javascript(self, renderer, name=None):
-        js = self.render(renderer)
+        js = super(Remote, self).javascript(renderer, name)
         if name:
             renderer.head.javascript('nagare-js-' + name, 'var {} = {};'.format(name, js))
             js = ''
