@@ -1,0 +1,7 @@
+[build-system]
+requires = ['setuptools', 'wheel', 'setuptools_scm', 'closure', 'webassets', 'PyYAML', 'dukpy']
+build-backend = 'backend'
+backend-path = ['nagare/custom_build']
+
+[tool.setuptools_scm]
+

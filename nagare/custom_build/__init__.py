@@ -6,8 +6,3 @@
 # the file LICENSE.txt, which you should have received as part of
 # this distribution.
 # --
-
-"""Legacy module name
-"""
-
-from .html5 import *  # noqa: F403, F401

@@ -1,6 +1,0 @@
-prune tests
-prune doc
-prune docker
-
-graft nagare/static
-graft nagare/data
