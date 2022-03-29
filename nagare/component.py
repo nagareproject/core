@@ -17,7 +17,7 @@ import random
 from nagare.renderers import xml
 from nagare.services import router
 from nagare.partial import Partial
-from nagare import presentation, continuation
+from nagare import renderable, presentation, continuation
 
 _marker = object()
 
@@ -26,7 +26,7 @@ class AnswerWithoutCall(Exception):
     pass
 
 
-class Component(xml.Component):
+class Component(renderable.Renderable):
     """This class transforms any Python object into a component
 
     A component has views, can be embedded, replaced, called and can answer a value.
@@ -45,11 +45,6 @@ class Component(xml.Component):
         self._cont = None
         self._actions = {}
         self._new_actions = {}
-
-    def __call__(self):
-        """Return the inner object
-        """
-        return self.o
 
     def register_action(self, action, with_request, render, args, kw):
         """Register an action for this component
@@ -99,13 +94,6 @@ class Component(xml.Component):
         result.components += 1
 
         return super(Component, self).__reduce__()
-
-    def render(self, renderer, view=presentation.CURRENT_VIEW, *args, **kw):
-        """Rendering method of a component
-
-        Forward to the ``presentation`` service
-        """
-        return presentation.render(self.o, renderer, self, self.view, view, *args, **kw)
 
     def _becomes(self, o, view, url):
         """Replace a component by an object or an other componentw
@@ -226,18 +214,6 @@ class Component(xml.Component):
         """
         self.answer = Partial(f, *args, **kw) if args or kw else f
         return self
-
-    def __bool__(self):
-        return bool(self.o)
-    __nonzero__ = __bool__
-
-    def __repr__(self):
-        return '<%s with %s at 0x%x on object %r>' % (
-            self.__class__.__name__.lower(),
-            "view '%s'" % self.view if self.view else 'default view',
-            id(self),
-            self.o
-        )
 
 
 @router.route_for(Component, '{url2:.*}', ())
