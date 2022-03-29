@@ -238,7 +238,7 @@ class Updates(Update):
         return body + b'; ' + head
 
 
-class Remote(Update, xml.Component):
+class Remote(Update, xml.Renderable):
     JS_CALL = 'nagare.callRemote'
 
     def __init__(self, action, with_request=False):
