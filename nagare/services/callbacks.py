@@ -128,7 +128,9 @@ class CallbacksService(plugin.Plugin):
             try:
                 f, with_request, render, callback_args, kw = callbacks[int(callback_id)]
             except KeyError:
-                raise CallbackLookupError(callback_id)
+                exc = CallbackLookupError(callback_id)
+                exc.__cause__ = None
+                raise exc
 
             if f is None:
                 continue

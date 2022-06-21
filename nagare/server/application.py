@@ -40,7 +40,13 @@ class App(mvc_application.App):
         """
         return Request(environ, charset='utf-8', *args, **kw)
 
-    def create_renderer(self, session_id, state_id, request, response, assets_version=None, **params):
+    def create_renderer(
+        self,
+        session_id=None, state_id=None,
+        request=None, response=None,
+        assets_version=None,
+        **params
+    ):
         """Create the initial renderer (the root of all the used renderers)
 
         In:
@@ -56,7 +62,7 @@ class App(mvc_application.App):
             assets_version=assets_version
         )
 
-        if request.is_xhr:
+        if (request is not None) and request.is_xhr:
             renderer = renderer.async_renderer_factory(
                 None,
                 session_id, state_id,
