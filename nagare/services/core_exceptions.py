@@ -33,7 +33,7 @@ def default_exception_handler(exception, exceptions_service, services_service, r
         exceptions_service.log_exception()
         exception = exc.HTTPInternalServerError()
 
-    exception = services_service(exceptions_service.handle_http_exception, exception, request=request, **context)
+    exception = services_service(exceptions_service.handle_exception, exception, request=request, **context)
 
     if getattr(exception, 'commit_transaction', False):
         return exception
