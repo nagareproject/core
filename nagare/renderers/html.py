@@ -588,7 +588,7 @@ class _SyncRenderer(object):
             self.response = parent.response
             self.static_path = parent.static_path
             self.url = parent.url
-            self.component = component or parent.component
+            self.component = component if component is not None else parent.component
 
         if (component is not None) and component.url:
             self.url = self.url.rstrip('/') + '/' + component.url
