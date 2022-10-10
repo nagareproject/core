@@ -34,11 +34,14 @@ class _HTMLActionTag(html_base.Tag):
     """
     ACTION_ATTR = 'name'
 
-    def set_sync_action(self, action_id, params):
-        self.set(
-            self.ACTION_ATTR,
-            action_id + (('#' + params) if params else '')
-        )
+    def set_sync_action(self, action_id, params, keep_attr_value=True):
+        new_attr_value = action_id + (('#' + params) if params else '')
+
+        attr_value = self.get(self.ACTION_ATTR) if keep_attr_value else None
+        if attr_value:
+            new_attr_value = '|' + new_attr_value + '|' + attr_value.strip('|') + '|'
+
+        self.set(self.ACTION_ATTR, new_attr_value)
 
     def set_async_action(self, action_id, params):
         self.set_sync_action(action_id, params)
@@ -82,9 +85,12 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
             url_params['_p'] = params
 
         url = self.get(self.ACTION_ATTR, '')
-        url = self.renderer.add_sessionid_in_url(url, url_params)
+        if ('_s=' in url) and ('_c=' in url):
+            url = self.renderer.absolute_url(url, **url_params)
+        else:
+            url = self.renderer.add_sessionid_in_url(url, url_params)
 
-        super(A, self).set_sync_action(url, {})
+        super(A, self).set_sync_action(url, '', False)
 
     def set_async_action(self, action_id, params):
         super(A, self).set_async_action(action_id, params)
@@ -692,7 +698,7 @@ class _SyncRenderer(object):
     def end_rendering(self, output):
         return output
 
-    def decorate_error(self, element, error=''):
+    def decorate_error(self, element, error='', classes=''):
         """During the rendering, highlight an element that has an error
 
         In:
@@ -705,7 +711,7 @@ class _SyncRenderer(object):
         return self._error(
             self.div(element, class_='nagare-error-input'),
             self.div(error, class_='nagare-error-message') if error else '',
-            class_='nagare-generated nagare-error-field'
+            class_='nagare-generated nagare-error-field ' + classes
         )
 
     def include_nagare_js(self):
