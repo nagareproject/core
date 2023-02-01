@@ -1,0 +1,52 @@
+# --
+# Copyright (c) 2008-2021 Net-ng.
+# All rights reserved.
+#
+# This software is licensed under the BSD License, as described in
+# the file LICENSE.txt, which you should have received as part of
+# this distribution.
+# --
+
+variables:
+    CI_IMAGE: docker-registry.net-ng.com/nagare/stackless:2.7.14
+
+tests:
+    image: $CI_IMAGE
+    script:
+        - /opt/stackless/bin/pip install flake8
+        - /opt/stackless/bin/flake8 nagare
+        - /opt/stackless/bin/pip install -i http://packages.net-ng.com/repository/pypi/simple --trusted-host packages.net-ng.com -e ".[database,i18n,test]"
+        - /opt/stackless/bin/pytest
+
+pages:
+    image: $CI_IMAGE
+    stage: deploy
+    script:
+        - /opt/stackless/bin/pip install -i http://packages.net-ng.com/repository/pypi/simple --trusted-host packages.net-ng.com -e ".[doc]"
+        - /opt/stackless/bin/sphinx-apidoc -s txt -T -o doc/source nagare
+        - /opt/stackless/bin/sphinx-build -b html doc public
+    artifacts:
+        paths:
+            - public
+    only:
+        - master
+
+gh-pages:
+    image: $CI_IMAGE
+    script:
+        - /opt/stackless/bin/pip install -i http://packages.net-ng.com/repository/pypi/simple --trusted-host packages.net-ng.com -e ".[doc]"
+        - /opt/stackless/bin/sphinx-apidoc -s txt -T -o doc/source nagare
+        - git clone --branch gh-pages git@git.net-ng.com:nng/nagare-core.git gh-pages
+        - /opt/stackless/bin/sphinx-build -b html doc gh-pages
+        - git config --global user.email "alain.poirier@net-ng.com"
+        - git config --global user.name "Alain Poirier"
+        - msg=`git log master -1 --pretty=short --abbrev-commit`; cd gh-pages; git add .; git commit -m "$msg"
+        - git push git@git.net-ng.com:nng/nagare-core.git gh-pages
+    when: manual
+
+docker:
+    script:
+        - docker build -t $CI_IMAGE docker
+        - docker push $CI_IMAGE
+    when: manual
+

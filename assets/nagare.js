@@ -1,5 +1,5 @@
 //--
-// Copyright (c) 2008-2021, Net-ng.
+// Copyright (c) 2008-2023, Net-ng.
 // All rights reserved.
 //
 // This software is licensed under the BSD License, as described in
@@ -10,22 +10,22 @@
 "use strict";
 
 class Nagare {
-    constructor (error) {
+    constructor(error) {
         document.addEventListener('click', evt => this.processClick(evt), true);
         this.nagare_loaded_named_js = {};
 
-        if(error) this.error = error;
+        if (error) this.error = error;
     }
 
     evalCSS(name, css, attrs) {
-        if(css.length) {
+        if (css.length) {
             var style = document.createElement("style");
 
             style.setAttribute("type", "text/css");
             style.setAttribute("data-nagare-css", name);
-            for(var name in attrs) style.setAttribute(name, attrs[name]);
+            for (var name in attrs) style.setAttribute(name, attrs[name]);
 
-            if(style.styleSheet) style.styleSheet.cssText = css;
+            if (style.styleSheet) style.styleSheet.cssText = css;
             else style.appendChild(document.createTextNode(css));
 
             document.head.appendChild(style);
@@ -33,7 +33,7 @@ class Nagare {
     }
 
     evalJS(name, js, attrs) {
-        if(!this.nagare_loaded_named_js[name]) setTimeout(js, 0);
+        if (!this.nagare_loaded_named_js[name]) setTimeout(js, 0);
         this.nagare_loaded_named_js[name] = true;
     }
 
@@ -43,7 +43,7 @@ class Nagare {
         link.setAttribute("rel", "stylesheet");
         link.setAttribute("type", "text/css");
         link.setAttribute("href", url);
-        for(var name in attrs) link.setAttribute(name, attrs[name]);
+        for (var name in attrs) link.setAttribute(name, attrs[name]);
 
         document.head.appendChild(link);
     }
@@ -53,53 +53,53 @@ class Nagare {
 
         script.setAttribute("type", "text/javascript");
         script.setAttribute("src", url);
-        for(var name in attrs) script.setAttribute(name, attrs[name]);
+        for (var name in attrs) script.setAttribute(name, attrs[name]);
 
         document.head.appendChild(script);
     }
 
     loadAll(named_css, css, named_js, js) {
-        for(var i=0; i<named_css.length; i++) {
+        for (var i = 0; i < named_css.length; i++) {
             var name = named_css[i][0];
             var selector = "[data-nagare-css='" + name + "']";
-            if(!document.head.querySelector(selector)) this.evalCSS(name, named_css[i][1], named_css[i][2]);
+            if (!document.head.querySelector(selector)) this.evalCSS(name, named_css[i][1], named_css[i][2]);
         }
 
-        for(var i=0; i<named_js.length; i++) {
+        for (var i = 0; i < named_js.length; i++) {
             var name = named_js[i][0];
             var selector = "[data-nagare-js='" + name + "']";
-            if(!document.head.querySelector(selector)) this.evalJS(name, named_js[i][1], named_js[i][2]);
+            if (!document.head.querySelector(selector)) this.evalJS(name, named_js[i][1], named_js[i][2]);
         }
 
-        for(var i=0; i<css.length; i++) {
+        for (var i = 0; i < css.length; i++) {
             var url = css[i][0];
             var a = document.createElement('a');
             var links = document.head.querySelectorAll("link[rel=stylesheet]");
-            for(var j=0, found=false; !found && j<links.length; j++) {
+            for (var j = 0, found = false; !found && j < links.length; j++) {
                 a.href = links[j].href;
                 found = (a.host == window.location.host) && (a.pathname == url);
             }
-            if(!found) this.fetchCSS(url, css[i[1]]);
+            if (!found) this.fetchCSS(url, css[i[1]]);
         }
 
-        for(var i=0; i<js.length; i++) {
+        for (var i = 0; i < js.length; i++) {
             var url = js[i][0];
             var selector = "script[src='" + url + "']";
-            if(!document.head.querySelector(selector)) this.fetchJS(url, css[i[1]]);
+            if (!document.head.querySelector(selector)) this.fetchJS(url, css[i[1]]);
         }
     }
 
     replaceNode(id, html) {
         var node = document.getElementById(id);
 
-        if(node && html) {
+        if (node && html) {
             var e = document.createElement(node.parentNode.tagName);
             e.innerHTML = html;
             var new_node = e.children[0];
 
             new_node.querySelectorAll("script").forEach(
                 js => {
-                    if(js.getAttribute("src")) {
+                    if (js.getAttribute("src")) {
                         var script = document.createElement("script");
                         [...js.attributes].forEach(attr => script.setAttribute(attr.nodeName, attr.nodeValue));
                         js.parentNode.replaceChild(script, js);
@@ -121,19 +121,19 @@ class Nagare {
     }
 
     sendRequest(url, options, params) {
-        if(params && params.length) url += "&_params=" + encodeURIComponent(JSON.stringify(params));
+        if (params && params.length) url += "&_params=" + encodeURIComponent(JSON.stringify(params));
 
         options.cache = "no-cache";
-        options.headers = {"X-REQUESTED-WITH": "XMLHttpRequest"};
+        options.headers = { "X-REQUESTED-WITH": "XMLHttpRequest" };
         options.credentials = "same-origin";
 
         return fetch(url, options)
             .catch(function () { throw new Error("Network error"); })
-            .then(function(response) {
+            .then(function (response) {
                 var status = response.status;
 
-                if(!response.ok) {
-                    if(status === 503 && response.headers.get('location')) {
+                if (!response.ok) {
+                    if (status === 503 && response.headers.get('location')) {
                         window.document.location = response.headers.get('location');
                     } else {
                         response.text().then(text => this.error(status, text));
@@ -147,7 +147,7 @@ class Nagare {
     }
 
     callRemote(url) {
-        return (...params) => this.sendRequest(url, {method: "GET"}, params).then(response => response.json());
+        return (...params) => this.sendRequest(url, { method: "GET" }, params).then(response => response.json());
     }
 
     delay(url) {
@@ -156,10 +156,10 @@ class Nagare {
 
     repeat(url) {
         class _repeat {
-            constructor (t, url, args) {
+            constructor(t, url, args) {
                 var interval = setInterval(
-                    function() {
-                        var p = nagare.callRemote(url)(...args).catch(function(e) {
+                    function () {
+                        var p = nagare.callRemote(url)(...args).catch(function (e) {
                             clearInterval(interval);
                             throw e;
                         });
@@ -190,30 +190,30 @@ class Nagare {
             .catch(x => undefined);
     }
 
-    getAndEval(url) { this.sendAndEval(url, {method: "GET"}) }
+    getAndEval(url) { this.sendAndEval(url, { method: "GET" }) }
 
     postAndEval(form, action1, action2) {
         var data = new FormData(form);
 
-        if(action1) data.append(action1[0], action1[1]);
-        if(action2) data.append(action2[0], action2[1]);
+        if (action1) data.append(action1[0], action1[1]);
+        if (action2) data.append(action2[0], action2[1]);
 
-        return this.sendAndEval("?" , {method: "POST", body: data});
+        return this.sendAndEval("?", { method: "POST", body: data });
     }
 
     processClick(event) {
         var target = event.target;
-        if(!('nagare' in target.dataset)) {
+        if (!('nagare' in target.dataset)) {
             target = event.target.closest("a");
-            if(target) {
-                if(!('nagare' in target.dataset)) { return true }
+            if (target) {
+                if (!('nagare' in target.dataset)) { return true }
             } else {
                 target = event.target.closest("button");
-                if(!target || !('nagare' in target.dataset)) { return true }
+                if (!target || !('nagare' in target.dataset)) { return true }
             }
         }
 
-        switch(target.dataset['nagare'][1]) {
+        switch (target.dataset['nagare'][1]) {
             case "5":
                 var action = target.getAttribute("href");
                 this.getAndEval(action);

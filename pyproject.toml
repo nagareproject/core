@@ -1,7 +1,108 @@
+# =-
+# (C)opyright Net-ng 2023
+#
+# This is Net-ng proprietary source code
+# Any reproduction modification or use without prior written
+# approval from Net-ng is strictly forbidden.
+# =-
+
 [build-system]
 requires = ['setuptools', 'wheel', 'setuptools_scm', 'closure', 'webassets', 'PyYAML', 'dukpy']
 build-backend = 'backend'
-backend-path = ['nagare/custom_build']
+backend-path = ['src/nagare/custom_build']
 
 [tool.setuptools_scm]
 
+[project]
+name = 'nagare'
+dynamic = ['version', 'entry-points']
+description = 'Components-based web Python framework'
+authors = [
+    {name = 'Net-ng'},
+    {email = 'contact@net-ng.com'}
+]
+license = {file = 'LICENSE.txt'}
+keywords = ['web', 'framework', 'components', 'stateful', 'continuation', 'ajax']
+classifiers = [
+    'Framework :: Nagare',
+    'License :: OSI Approved :: BSD License',
+    'Intended Audience :: Developers',
+    'Programming Language :: Python :: 3',
+    'Environment :: Web Environment',
+    'Operating System :: Unix',
+    'Operating System :: MacOS :: MacOS X',
+    'Operating System :: Microsoft :: Windows',
+    'Topic :: Internet :: WWW/HTTP',
+    'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+    'Topic :: Software Development :: Libraries :: Python Modules'
+]
+requires-python = '>=3.7'
+dependencies = [
+    'WebOb',
+    'cryptography',
+    'nagare-partial',
+    'nagare-editor',
+    'nagare-server-mvc',
+    'nagare-services-sessions',
+    'nagare-renderers-html',
+    'nagare-services-i18n'
+]
+
+[project.readme]
+file = 'README.rst'
+content-type = 'text/x-rst'
+
+[tool.setuptools.dynamic]
+entry-points = {file = 'entry-points.txt'}
+
+[tool.setuptools.package-data]
+'nagare.static' = ['**/*']
+
+[project.optional-dependencies]
+dev = [
+    'nagare-services-webassets',
+    'closure',
+    'PyYAML',
+    'sphinx',
+    'sphinx_rtd_theme',
+    'pre-commit',
+    'black',
+    'ruff',
+    'pytest',
+    'build',
+    'twine'
+]
+
+[project.urls]
+Homepage = 'https://nagare.org'
+Documentation = 'https://nagare.org/doc'
+Source = 'https://github.com/nagareproject/core'
+Tracker = 'https://github.com/nagareproject/core/issues'
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[tool.black]
+line-length = 120
+target-version = ['py38']
+skip-string-normalization = true
+
+[tool.ruff]
+select = ['C4', 'COM', 'D', 'E', 'ERA', 'F', 'I', 'ISC', 'INP', 'PIE', 'Q', 'S', 'SIM', 'TID', 'W', 'YTT']
+ignore = ['COM812', 'D10', 'D401']
+line-length = 120
+src = ['src']
+
+[tool.ruff.flake8-quotes]
+inline-quotes = 'single'
+multiline-quotes = 'single'
+
+[tool.ruff.pydocstyle]
+convention = 'google'
+
+[tool.ruff.isort]
+known-third-party = ['nagare']
+force-sort-within-sections = true
+
+[tool.pytest.ini_options]
+testpaths = ['tests']

@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2020 Net-ng.
+# Copyright (c) 2008-2023 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -18,8 +18,8 @@ except ImportError:
     from io import BytesIO as BuffIO
 
 from lxml import etree
-from nagare import component
 from nagare.renderers import html
+from nagare import component, presentation
 
 
 def c14n(node):
@@ -55,7 +55,9 @@ def test_html1():
 
 def test_html_render_form1():
     h = html.Renderer()
-    h << h.html(h.body(h.form(h.input(type='hidden', name='input1', value='value'), h.input(type='submit', name='submit'))))
+    h << h.html(
+        h.body(h.form(h.input(type='hidden', name='input1', value='value'), h.input(type='submit', name='submit')))
+    )
     form = h.root.xpath('.//form')
     attributes = form[0].attrib
     assert attributes['method'] == 'post'
@@ -63,12 +65,22 @@ def test_html_render_form1():
     assert attributes['enctype'] == 'multipart/form-data'
     assert attributes['action'] == '?'
 
-    assert c14n(h.root) == c14n('<html><body><form enctype="multipart/form-data" method="post" accept-charset="utf-8" action="?"><input type="hidden" name="input1" value="value"/><input type="submit" name="submit"/></form></body></html>')
+    assert c14n(h.root) == c14n(
+        '<html><body><form enctype="multipart/form-data" method="post" accept-charset="utf-8" action="?"><input type="hidden" name="input1" value="value"/><input type="submit" name="submit"/></form></body></html>'
+    )
 
 
 def test_html_render_form2():
     h = html.Renderer()
-    h << h.html(h.body(h.form(h.input(type='hidden', name='input1', value='value'), h.input(type='submit', name='submit'), {'accept-charset': 'iso-8859-15'})))
+    h << h.html(
+        h.body(
+            h.form(
+                h.input(type='hidden', name='input1', value='value'),
+                h.input(type='submit', name='submit'),
+                {'accept-charset': 'iso-8859-15'},
+            )
+        )
+    )
     form = h.root.xpath('.//form')
     attributes = form[0].attrib
     assert attributes['method'] == 'post'
@@ -79,7 +91,12 @@ def test_html_render_form2():
 
 def test_html_render_form3():
     h = html.Renderer()
-    h << h.html(h.body(h.form(h.input(type='hidden', name='input1', value='value')), h.form(h.input(type='string', name='input2', value='value'))))
+    h << h.html(
+        h.body(
+            h.form(h.input(type='hidden', name='input1', value='value')),
+            h.form(h.input(type='string', name='input2', value='value')),
+        )
+    )
     forms = h.root.xpath('.//form')
     assert len(forms) == 2
 
@@ -161,9 +178,14 @@ def test_html_render_select5():
     with h.html:
         with h.body:
             with h.form:
-                h << h.select([h.option(value='option1').selected(['option1', 'option3']),
-                               h.option(value='option2').selected(['option1', 'option3']),
-                               h.option(value='option3').selected(['option1', 'option3'])], multiple=True)
+                h << h.select(
+                    [
+                        h.option(value='option1').selected(['option1', 'option3']),
+                        h.option(value='option2').selected(['option1', 'option3']),
+                        h.option(value='option3').selected(['option1', 'option3']),
+                    ],
+                    multiple=True,
+                )
 
     options = h.root.xpath('.//option')
     assert options[0].get('selected') == 'selected'
@@ -263,9 +285,24 @@ def test_html_render_radiobutton4():
     with h.html:
         with h.body:
             with h.form:
-                h << h.input(name='radio', type='radio', value='value1', id='option1') << h.label('option 1', for_='option1') << h.br
-                h << h.input(name='radio', type='radio', value='value1', id='option2', checked='checked') << h.label('option 2', for_='option2') << h.br
-                h << h.input(name='radio', type='radio', value='value1', id='option3') << h.label('option 3', for_='option3') << h.br
+                (
+                    h
+                    << h.input(name='radio', type='radio', value='value1', id='option1')
+                    << h.label('option 1', for_='option1')
+                    << h.br
+                )
+                (
+                    h
+                    << h.input(name='radio', type='radio', value='value1', id='option2', checked='checked')
+                    << h.label('option 2', for_='option2')
+                    << h.br
+                )
+                (
+                    h
+                    << h.input(name='radio', type='radio', value='value1', id='option3')
+                    << h.label('option 3', for_='option3')
+                    << h.br
+                )
     labels = h.root.xpath('.//label')
 
     assert all(label.get('for') is not None for label in labels)
@@ -344,7 +381,9 @@ def test_html_render_img1():
         with h.body:
             h << h.img(src='http://www.google.com/intl/en_ALL/images/logo.gif')
 
-    assert c14n(h.root) == c14n('<html><body><img src="http://www.google.com/intl/en_ALL/images/logo.gif"/></body></html>')
+    assert c14n(h.root) == c14n(
+        '<html><body><img src="http://www.google.com/intl/en_ALL/images/logo.gif"/></body></html>'
+    )
 
 
 def test_html_render_img2():
@@ -396,7 +435,8 @@ def test_html_render_action2():
             a = h.a(href='http://www.google.com').action(lambda x: None)
             h << a
 
-    assert a.attrib['href'] == 'http://www.google.com'
+    assert a.attrib['href'].startswith('http://www.google.com')
+    assert a.attrib['href'] != 'http://www.google.com'
 
 
 def test_html_render_action3():
@@ -411,32 +451,45 @@ def test_html_render_action3():
 
 
 def test_html_render_action4():
-    h = html.Renderer(static_url='/tmp/static/', component=component.Component())
+    class C:
+        pass
 
-    with h.html:
+    @presentation.render_for(C)
+    def render(self, h, *args):
         with h.body:
             a = h.a(href='logo.gif').action(lambda x: None)
             h << a
 
-    assert a.attrib['href'].startswith('/tmp/static/logo.gif')
+        return h.root
+
+    div = component.Component(C()).render(html.Renderer(static_url='/tmp/static/'))
+
+    print(div.tostring())
+    assert div[0].attrib['href'].startswith('/logo.gif')
 
 
 def test_html_render_action5():
-    h = html.AsyncRenderer(static_url='/tmp/static/', component=component.Component())
+    class C:
+        pass
 
-    with h.html:
-        with h.body:
+    @presentation.render_for(C)
+    def render(self, h, *args):
+        with h.div:
             a = h.a().action(lambda x: None)
             h << a
 
-    assert a.attrib['href'] is not None
+    div = component.Component(C()).render(html.AsyncRenderer(static_url='/tmp/static/'))
+
+    assert div[0].attrib['href'] is not None
 
 
 def test_html_render_action6():
-    h = html.AsyncRenderer(static_url='/tmp/static/', component=component.Component())
+    class C:
+        pass
 
-    with h.html:
-        with h.body:
+    @presentation.render_for(C)
+    def render(self, h, *args):
+        with h.div:
             a1 = h.a(href='http://www.google.com')
             h << a1
             a2 = h.a(href='http://www.google.com').action(lambda x: None)
@@ -444,26 +497,52 @@ def test_html_render_action6():
             a3 = h.a(href='/foo').action(lambda x: None)
             h << a3
 
-    assert a1.attrib['href'] == 'http://www.google.com'
-    assert 'data-nagare' not in a1.attrib
+        return h.root
 
-    assert a2.attrib['href'] == 'http://www.google.com'
-    assert a2.attrib['data-nagare'] == '4'
-    assert a3.attrib['href'].startswith('/foo')
+    div = component.Component(C()).render(html.AsyncRenderer(static_url='/tmp/static/'))
 
-    assert a3.attrib['href'] != '/foo'
-    assert a3.attrib['data-nagare'] == '4'
+    assert div[0].attrib['href'] == 'http://www.google.com'
+    assert 'data-nagare' not in div[0].attrib
+
+    assert div[1].attrib['href'].startswith('http://www.google.com')
+    assert div[1].attrib['href'] != 'http://www.google.com'
+    assert div[1].attrib['data-nagare'] == '15'
+
+    assert div[2].attrib['href'].startswith('/foo')
+    assert div[2].attrib['href'] != '/foo'
+    assert div[2].attrib['data-nagare'] == '15'
 
 
 def test_html_render_action7():
-    h = html.AsyncRenderer(static_url='/tmp/static/', component=component.Component())
+    class C7:
+        pass
 
-    with h.html:
-        with h.body:
-            a = h.img().action(lambda x: None)
-            h << a
+    @presentation.render_for(C7)
+    def render(self, h, *args):
+        with h.html:
+            with h.body:
+                a = h.img(src='/a')
+                h << a
+                b = h.img(src='b')
+                h << b
+                c = h.img.action(lambda x: None)
+                c = h.a.action(lambda: None)
+                h << c
 
-    assert a.attrib['src'] is not None
+        return a, b, c
+
+    h = html.AsyncRenderer(session_id=42, state_id=10, static_url='/tmp/static/')
+    a, b, c = component.Component(C7()).render(h)
+
+    url = urlparse.urlparse(a.attrib['src'])
+    assert url[:4] == ('', '', '/a', '')
+
+    url = urlparse.urlparse(b.attrib['src'])
+    assert url[:4] == ('', '', '/tmp/static/b', '')
+
+    assert 'data-nagare' in c.attrib
+    url = urlparse.urlparse(c.attrib['href'])
+    assert ('_s' in url[4]) and ('_c' in url[4])
 
 
 def test_a():
@@ -476,8 +555,14 @@ def test_a():
     h = html.Renderer()
 
     assert h.a('action', href='http://examples.com/a').tostring() == b'<a href="http://examples.com/a">action</a>'
-    assert h.a('action', href='http://examples.com/a').action(lambda: None).tostring() == b'<a href="http://examples.com/a">action</a>'
-    assert h.a('action', href='http://examples.com/a#b').action(lambda: None).tostring() == b'<a href="http://examples.com/a#b">action</a>'
+    assert (
+        h.a('action', href='http://examples.com/a').action(lambda: None).tostring()
+        == b'<a href="http://examples.com/a">action</a>'
+    )
+    assert (
+        h.a('action', href='http://examples.com/a#b').action(lambda: None).tostring()
+        == b'<a href="http://examples.com/a#b">action</a>'
+    )
 
     h = html.Renderer(session_id=42, state_id=10)
 
@@ -502,7 +587,8 @@ def test_a():
     class Component(object):
         url = ''
 
-        def register_callback(self, model, priority, f, with_request, render):
+        @staticmethod
+        def register_action(*args, **kw):
             return 1234
 
     h = html.Renderer(session_id=42, state_id=10, component=Component())
@@ -511,19 +597,35 @@ def test_a():
 
     a = h.a('action', href='http://examples.com/a').action(lambda: None)
     a = h.fromstring(a.tostring(), fragment=True)[0]
-    assert url_parse(a.get('href')) == ('http', 'examples.com', '/a', '', {})
+    url = url_parse(a.get('href'))
+    assert url[:4] == ('http', 'examples.com', '/a', '')
+    assert ('_s' in url[4]) and ('_c' in url[4])
 
     a = h.a('action', href='http://examples.com/a#b').action(lambda: None)
     a = h.fromstring(a.tostring(), fragment=True)[0]
-    assert url_parse(a.get('href')) == ('http', 'examples.com', '/a', 'b', {})
+    url = url_parse(a.get('href'))
+    assert url[:4] == ('http', 'examples.com', '/a', 'b')
+    assert ('_s' in url[4]) and ('_c' in url[4])
 
     a = h.a('action', href='/foo/a').action(lambda: None)
     a = h.fromstring(a.tostring(), fragment=True)[0]
-    assert url_parse(a.get('href')) == ('', '', '/foo/a', '', {'_s': ['42'], '_c': ['00010'], '_action400001234': ['']})
+    assert url_parse(a.get('href')) == (
+        '',
+        '',
+        '/foo/a',
+        '',
+        {'_s': ['42'], '_c': ['00010'], '_action1500001234': ['']},
+    )
 
     a = h.a('action', href='/foo/a#b').action(lambda: None)
     a = h.fromstring(a.tostring(), fragment=True)[0]
-    assert url_parse(a.get('href')) == ('', '', '/foo/a', 'b', {'_s': ['42'], '_c': ['00010'], '_action400001234': ['']})
+    assert url_parse(a.get('href')) == (
+        '',
+        '',
+        '/foo/a',
+        'b',
+        {'_s': ['42'], '_c': ['00010'], '_action1500001234': ['']},
+    )
 
 
 def test_area():
@@ -535,8 +637,13 @@ def test_area():
 
     h = html.Renderer()
     assert h.area(href='http://examples.com/a').tostring() == b'<area href="http://examples.com/a">'
-    assert h.area(href='http://examples.com/a').action(lambda: None).tostring() == b'<area href="http://examples.com/a">'
-    assert h.area(href='http://examples.com/a#b').action(lambda: None).tostring() == b'<area href="http://examples.com/a#b">'
+    assert (
+        h.area(href='http://examples.com/a').action(lambda: None).tostring() == b'<area href="http://examples.com/a">'
+    )
+    assert (
+        h.area(href='http://examples.com/a#b').action(lambda: None).tostring()
+        == b'<area href="http://examples.com/a#b">'
+    )
 
     h = html.Renderer(session_id=42, state_id=10)
 
@@ -553,18 +660,23 @@ def test_area():
     class Component(object):
         url = ''
 
-        def register_callback(self, model, priority, f, with_request, render):
+        @staticmethod
+        def register_action(*args, **kw):
             return 1234
 
     h = html.Renderer(session_id=42, state_id=10, component=Component())
 
     area = h.area(href='http://examples.com/a').action(lambda: None)
     area = h.fromstring(area.tostring(), fragment=True)[0]
-    assert url_parse(area.get('href')) == ('http', 'examples.com', '/a', '', {})
+    url = url_parse(area.get('href'))
+    assert url[:4] == ('http', 'examples.com', '/a', '')
+    assert ('_s' in url[4]) and ('_c' in url[4])
 
     area = h.area(href='http://examples.com/a#b').action(lambda: None)
     area = h.fromstring(area.tostring(), fragment=True)[0]
-    assert url_parse(area.get('href')) == ('http', 'examples.com', '/a', 'b', {})
+    url = url_parse(area.get('href'))
+    assert url[:4] == ('http', 'examples.com', '/a', 'b')
+    assert ('_s' in url[4]) and ('_c' in url[4])
 
     h = html.Renderer(static_url='/static/root')
     a = h.area(href='http://examples.com/a')
@@ -574,17 +686,17 @@ def test_area():
     assert a.get('href') == '/a'
 
     a = h.area(href='a')
-    assert a.get('href') == '/static/root/a'
+    assert a.get('href') == '/a'
 
 
 def test_button():
-
     class Component(object):
         url = ''
 
-        def register_callback(self, model, priority, f, with_request, render):
+        @staticmethod
+        def register_action(*args, **kw):
             return 1234
 
     h = html.Renderer(session_id=42, state_id=10, component=Component())
 
-    assert h.button.action(lambda: None).tostring() == b'<button name="_action500001234"></button>'
+    assert h.button.action(lambda: None).tostring() == b'<button name="_action1600001234"></button>'
