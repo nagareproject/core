@@ -7,11 +7,9 @@
 # this distribution.
 # --
 
-variables:
-  CI_IMAGE: docker-registry.net-ng.com/nagare/stackless:2.7.14
+image: docker-registry.net-ng.com/nng/dind-stackless:13
 
 tests:
-  image: $CI_IMAGE
   script:
     - /opt/stackless3/bin/pip install ruff black pytest .
     - /opt/stackless3/bin/ruff src
@@ -19,7 +17,6 @@ tests:
     - /opt/stackless3/bin/pytest
 
 pages:
-  image: $CI_IMAGE
   stage: deploy
   script:
     - /opt/stackless3/bin/pip install -e '.[doc]'
@@ -32,7 +29,6 @@ pages:
     - master
 
 gh-pages:
-  image: $CI_IMAGE
   script:
     - /opt/stackless3/bin/pip install -e '.[doc]'
     # - /opt/stackless/bin/sphinx-apidoc -s txt -T -o doc/source nagare
@@ -42,10 +38,4 @@ gh-pages:
     - git config --global user.name "Alain Poirier"
     - msg=`git log master -1 --pretty=short --abbrev-commit`; cd gh-pages; git add .; git commit -m "$msg"
     - git push git@git.net-ng.com:nng/nagare-core.git gh-pages
-  when: manual
-
-docker:
-  script:
-    - docker build -t $CI_IMAGE docker
-    - docker push $CI_IMAGE
   when: manual
