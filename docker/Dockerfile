@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2019 Net-ng.
+# Copyright (c) 2008-2023 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -28,4 +28,3 @@ RUN apt-get update \
 #ADD pip.conf .pip/
 ADD pydistutils.cfg .pydistutils.cfg
 #ADD pypirc .pypirc
-

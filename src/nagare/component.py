@@ -81,7 +81,6 @@ class Component(renderable.Renderable):
 
         if not clear_actions:
             views = {action[0] for action in self._actions.values()}
-            print('In serialize', views, list(old.items()))
 
             # Keep only the old actions of a view if no new actions were registered
             old = {k: v for k, v in old.items() if v[0] not in views}
