@@ -15,6 +15,9 @@ install-dev: clean
 	python -m pre_commit install
 	python -m pre_commit autoupdate
 
+webassets:
+	python src/nagare/custom_build/build_assets.py
+
 tests:
 	python -m pytest
 
