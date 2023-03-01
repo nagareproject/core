@@ -74,7 +74,9 @@ except ImportError:
               - ``f`` -- function to call
               - ``args``, ``kw`` -- ``f`` arguments
             """
-            stackless.tasklet(f)(*args, **kw).run()
+            tasklet = stackless.tasklet(f)
+            tasklet(*args, **kw).run()
+            tasklet.kill()
 
         class Channel(stackless.channel):
             def switch(self, value=None):
