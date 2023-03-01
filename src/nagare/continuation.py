@@ -74,9 +74,7 @@ except ImportError:
               - ``f`` -- function to call
               - ``args``, ``kw`` -- ``f`` arguments
             """
-            tasklet = stackless.tasklet(f)
-            tasklet(*args, **kw).run()
-            tasklet.kill()
+            stackless.tasklet(f)(*args, **kw).run()
 
         class Channel(stackless.channel):
             def switch(self, value=None):
@@ -89,9 +87,13 @@ except ImportError:
                 #   - the code of this function will be serialized.
                 #     Keep it to a minimal (no docstring ...)
                 if self.balance:
-                    self.send(value)
+                    self.send((stackless.getcurrent(), value))
                 else:
-                    return self.receive()
+                    sender, r = self.receive()
+                    if not sender.is_main:
+                        sender.kill()
+
+                    return r
 
 else:
     # PyPy
