@@ -7,7 +7,15 @@
 # =-
 
 [build-system]
-requires = ['setuptools', 'wheel', 'setuptools_scm', 'closure', 'webassets', 'PyYAML', 'dukpy']
+requires = [
+    'setuptools',
+    'wheel',
+    'setuptools_scm',
+    'closure',
+    'webassets',
+    'PyYAML',
+    'dukpy',
+]
 build-backend = 'backend'
 backend-path = ['src/nagare/custom_build']
 
@@ -17,12 +25,16 @@ backend-path = ['src/nagare/custom_build']
 name = 'nagare'
 dynamic = ['version', 'entry-points']
 description = 'Components-based web Python framework'
-authors = [
-    {name = 'Net-ng'},
-    {email = 'contact@net-ng.com'}
+authors = [{ name = 'Net-ng' }, { email = 'contact@net-ng.com' }]
+license = { file = 'LICENSE.txt' }
+keywords = [
+    'web',
+    'framework',
+    'components',
+    'stateful',
+    'continuation',
+    'ajax',
 ]
-license = {file = 'LICENSE.txt'}
-keywords = ['web', 'framework', 'components', 'stateful', 'continuation', 'ajax']
 classifiers = [
     'Framework :: Nagare',
     'License :: OSI Approved :: BSD License',
@@ -34,7 +46,7 @@ classifiers = [
     'Operating System :: Microsoft :: Windows',
     'Topic :: Internet :: WWW/HTTP',
     'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-    'Topic :: Software Development :: Libraries :: Python Modules'
+    'Topic :: Software Development :: Libraries :: Python Modules',
 ]
 requires-python = '>=3.7'
 dependencies = [
@@ -45,7 +57,7 @@ dependencies = [
     'nagare-server-mvc',
     'nagare-services-sessions',
     'nagare-renderers-html',
-    'nagare-services-i18n'
+    'nagare-services-i18n',
 ]
 
 [project.readme]
@@ -53,7 +65,7 @@ file = 'README.rst'
 content-type = 'text/x-rst'
 
 [tool.setuptools.dynamic]
-entry-points = {file = 'entry-points.txt'}
+entry-points = { file = 'entry-points.txt' }
 
 [tool.setuptools.package-data]
 'nagare.static' = ['**/*']
@@ -66,11 +78,10 @@ dev = [
     'sphinx',
     'sphinx_rtd_theme',
     'pre-commit',
-    'black',
     'ruff',
     'pytest',
     'build',
-    'twine'
+    'twine',
 ]
 
 [project.urls]
@@ -82,14 +93,26 @@ Tracker = 'https://github.com/nagareproject/core/issues'
 [tool.distutils.bdist_wheel]
 universal = true
 
-[tool.black]
-line-length = 120
-target-version = ['py38']
-skip-string-normalization = true
-
 [tool.ruff]
-select = ['C4', 'COM', 'D', 'E', 'ERA', 'F', 'I', 'ISC', 'INP', 'PIE', 'Q', 'S', 'SIM', 'TID', 'W', 'YTT']
-ignore = ['COM812', 'D10', 'D401']
+select = [
+    'C4',
+    'COM',
+    'D',
+    'E',
+    'ERA',
+    'F',
+    'I',
+    'ISC',
+    'INP',
+    'PIE',
+    'Q',
+    'S',
+    'SIM',
+    'TID',
+    'W',
+    'YTT',
+]
+ignore = ['COM812', 'D10', 'D401', 'S311', 'S305']
 line-length = 120
 src = ['src']
 
@@ -103,6 +126,9 @@ convention = 'google'
 [tool.ruff.isort]
 known-third-party = ['nagare']
 force-sort-within-sections = true
+
+[tool.ruff.format]
+quote-style = 'single'
 
 [tool.pytest.ini_options]
 testpaths = ['tests']

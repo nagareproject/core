@@ -23,12 +23,12 @@ tests:
 
 qa:
 	python -m ruff src
-	python -m black --check src
+	python -m ruff format --check src
 	$(MAKE) tests
 
 qa-fix:
 	python -m ruff --fix src
-	python -m black src
+	python -m ruff format src
 
 doc:
 	python -m sphinx.cmd.build -b html doc ${DOC_OUTPUT_DIR}

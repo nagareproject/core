@@ -112,7 +112,7 @@ class CallbacksService(plugin.Plugin):
         actions = defaultdict(list)
 
         for name, value in request.params.items():
-            if isinstance(value, (str, type(u''))) and value.startswith(ACTION_PREFIX):
+            if isinstance(value, (str, type(''))) and value.startswith(ACTION_PREFIX):
                 name = value  # For the radio buttons, the callback identifier is the value, not the name
 
             m = ACTION_SYNTAX.match(name)

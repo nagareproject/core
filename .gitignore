@@ -23,4 +23,4 @@ nbproject
 /doc/_build
 .webassets-cache
 
-src/nagare/static/js
+src/nagare/static

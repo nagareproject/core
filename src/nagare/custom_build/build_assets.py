@@ -21,9 +21,7 @@ def build_assets():
 
     status = script.main(['-c', 'conf/assets.yaml', 'build', '--no-cache']) or 0
     if status == 0:
-        with open('src/nagare/static/js/nagare.js', 'rb') as f, gzip.open(
-            'src/nagare/static/js/nagare.js.gz', 'wb'
-        ) as g:
+        with open('src/nagare/static/nagare.js', 'rb') as f, gzip.open('src/nagare/static/nagare.js.gz', 'wb') as g:
             g.write(f.read())
 
         return status

@@ -10,4 +10,4 @@ bundles:
                 - --browser_featureset_year=2019
         contents:
             - assets/nagare.js
-        output: src/nagare/static/js/nagare.js
+        output: src/nagare/static/nagare.js
