@@ -13,6 +13,10 @@ Calling ``switch()`` on a continuation permutes the current execution context
 and the captured one, thus resuming where the context was captured.
 """
 
+import sys
+import traceback
+import warnings
+
 Tasklet = None
 
 try:
@@ -24,41 +28,77 @@ except ImportError:
         # CPython
         # -------
 
-        has_continuation = False
+        warnings.filterwarnings('ignore', 'assigning None to ([0-9]+ )?unbound local', RuntimeWarning)
 
-        def get_current():
-            """Return the current execution context."""
-            return Continuation(lambda: None)
+        class ContinuationSuspended(Exception):
+            pass
 
-        class Continuation(object):
-            """A ``Continuation()`` object launches a function in a new execution context."""
+        class _Continuation:
+            def __init__(self):
+                self.f = self.args = self.kw = self.frames = self.r = None
+                self.i = 0
 
-            def __init__(self, f, *args, **kw):
-                """Create a new execution context where ``f`` is launched.
+            def populate(self, f, args, kw, frames):
+                self.f = f
+                self.args = args
+                self.kw = kw
+                self.frames = frames
 
-                This new execution context became the current one.
+            def _call_tracer(self, *args):
+                return self._line_tracer
 
-                In:
-                  - ``f`` -- function to call
-                  - ``args``, ``kw`` -- ``f`` arguments
-                """
-                # CPython: don't create an execution context. Only call the function
-                f(*args, **kw)
+            def _line_tracer(self, frame, *args):
+                code_id, lineno, locals = self.frames[self.i]
+                if hash(frame.f_code) != code_id:
+                    return self._line_tracer
 
-            def switch(self, value=None):
-                """Permute this execution context with the current one.
+                self.i += 1
+                if self.i == len(self.frames):
+                    lineno += 1
+                    locals['r'] = self.r
+                    sys.settrace(None)
 
-                In:
-                  - ``value`` - value returned to the captured execution context
-                """
-                # No continuation objects in CPython :(
-                raise NotImplementedError('Stackless Python or PyPy is needed to create continuations')
+                frame.f_locals.update(locals)
+                frame.f_lineno = lineno
+
+            def resume(self, continuation_return=None):
+                self.i = 0
+                self.r = continuation_return
+                sys.settrace(self._call_tracer)
+
+                return Continuation(self.f, *self.args, **self.kw)
+
+            def switch(self, *args):
+                r = None
+
+                if args:
+                    return self.resume(args[0])
+
+                raise ContinuationSuspended(self)
+                return r
+
+        get_current = _Continuation
+
+        def Continuation(f, *args, **kw):
+            try:
+                return f(*args, **kw)
+            except ContinuationSuspended as e:
+                continuation = e.args[0]
+                continuation.populate(
+                    f,
+                    args,
+                    kw,
+                    [
+                        (hash(frame.f_code), lineno, frame.f_locals)
+                        for frame, lineno in list(traceback.walk_tb(e.__traceback__))[1:-1]
+                    ],
+                )
+                return continuation
 
     else:
         # Stackless Python
         # ----------------
 
-        has_continuation = True
         Tasklet = stackless.tasklet
 
         def get_current():
@@ -101,7 +141,6 @@ else:
 
     import threading
 
-    has_continuation = True
     _tls = threading.local()
 
     def get_current():

@@ -9,16 +9,11 @@ repos:
       - id: check-added-large-files
         args: ["--maxkb=400"]
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    # Ruff version.
-    rev: v0.0.292
-    hooks:
-      - id: ruff-format
-        args: [--check]
-
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     # Ruff version.
-    rev: "v0.0.292"
+    rev: "v0.1.6"
     hooks:
       - id: ruff
+        files: "^src"
+      - id: ruff-format
         files: "^src"

@@ -112,13 +112,13 @@ select = [
     'W',
     'YTT',
 ]
-ignore = ['COM812', 'D10', 'D401', 'S311', 'S305']
+ignore = ['COM812', 'D10', 'D401', 'S311', 'S305', 'ISC001']
 line-length = 120
 src = ['src']
 
 [tool.ruff.flake8-quotes]
 inline-quotes = 'single'
-multiline-quotes = 'single'
+multiline-quotes = 'double'
 
 [tool.ruff.pydocstyle]
 convention = 'google'

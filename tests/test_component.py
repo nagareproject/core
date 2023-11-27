@@ -86,27 +86,25 @@ def test2():
 
 # -------------------------------------------------------------------------------------------------------
 
-if continuation.has_continuation:
+def test3():
+    """Component - call"""
+    v = var.Var(42)
+    app = Foobar()
 
-    def test3():
-        """Component - call"""
-        v = var.Var(42)
-        app = Foobar()
+    app.my_property.becomes(Foo(), 'foo')
+    assert isinstance(app.my_property(), Foo)
+    assert app.my_property.view == 'foo'
 
-        app.my_property.becomes(Foo(), 'foo')
-        assert isinstance(app.my_property(), Foo)
-        assert app.my_property.view == 'foo'
+    continuation.call_wrapper(lambda: v(app.my_property.call(Bar(), 'bar')))
 
-        continuation.call_wrapper(lambda: v(app.my_property.call(Bar(), 'bar')))
+    assert isinstance(app.my_property(), Bar)
+    assert app.my_property.view == 'bar'
 
-        assert isinstance(app.my_property(), Bar)
-        assert app.my_property.view == 'bar'
+    app.my_property.answer("I'm bar")
 
-        app.my_property.answer("I'm bar")
-
-        assert isinstance(app.my_property(), Foo)
-        assert app.my_property.view == 'foo'
-        assert v() == "I'm bar"
+    assert isinstance(app.my_property(), Foo)
+    assert app.my_property.view == 'foo'
+    assert v() == "I'm bar"
 
 
 # -------------------------------------------------------------------------------------------------------

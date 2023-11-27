@@ -134,9 +134,6 @@ class Component(renderable.Renderable):
         return self
 
     def _call1(self, o, view, url):
-        if not continuation.has_continuation:
-            raise NotImplementedError('Stackless Python or PyPy is needed for `comp.call()`')
-
         # Keep my configuration
         previous_o = self.o
         previous_view = self.view

@@ -639,8 +639,9 @@ class _SyncRenderer(object):
             self.url = parent.url
             self.component = component if component is not None else parent.component
 
-        if (component is not None) and component.url:
-            self.url = self.url.rstrip('/') + '/' + component.url
+        url = getattr(component, 'url', None)
+        if url:
+            self.url = self.url.rstrip('/') + '/' + url
 
         self.id = var.Var(self.id)
 

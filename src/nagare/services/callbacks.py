@@ -20,7 +20,7 @@ import re
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from nagare import partial
-from nagare.continuation import Continuation
+from nagare.continuation import call_wrapper
 from nagare.services import plugin
 from webob import exc
 
@@ -91,7 +91,7 @@ class CallbacksService(plugin.Plugin):
     @staticmethod
     def execute_callback(callback_type, callback, args, kw):
         if callback_type & WITH_CONTINUATION_CALLBACK:
-            Continuation(callback, *args, **kw)
+            call_wrapper(callback, *args, **kw)
         else:
             callback(*args, **kw)
 
