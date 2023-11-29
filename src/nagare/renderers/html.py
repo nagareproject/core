@@ -13,6 +13,7 @@ This renderer is dedicated to the Nagare framework
 
 from collections import OrderedDict
 import imghdr
+from importlib import metadata
 import json
 
 from nagare import partial, var
@@ -20,10 +21,9 @@ from nagare.action import Action, Update
 from nagare.renderers import html_base, xml
 from nagare.renderers.xml import TagProp
 from nagare.services import callbacks
-import pkg_resources
 import webob
 
-NAGARE_VERSION = pkg_resources.get_distribution('nagare').version
+NAGARE_VERSION = metadata.distribution('nagare').version
 
 
 class _HTMLActionTag(html_base.Tag):
