@@ -20,14 +20,13 @@ import warnings
 Tasklet = None
 
 try:
-    from _continuation import continulet
+    import stackless
 except ImportError:
-    try:
-        import stackless
-    except ImportError:
-        # CPython
-        # -------
+    # CPython
+    # -------
 
+    has_continuation = sys.version_info.major == 3 and (sys.version_info.minor in (10, 11))
+    if has_continuation:
         warnings.filterwarnings('ignore', 'assigning None to ([0-9]+ )?unbound local', RuntimeWarning)
 
         class ContinuationSuspended(Exception):
@@ -51,6 +50,7 @@ except ImportError:
                 code_id, lineno, locals = self.frames[self.i]
                 if hash(frame.f_code) != code_id:
                     return self._line_tracer
+                print('Restore', frame.f_code.co_filename, frame.f_code.co_name, lineno)
 
                 self.i += 1
                 if self.i == len(self.frames):
@@ -94,89 +94,54 @@ except ImportError:
                     ],
                 )
                 return continuation
-
     else:
-        # Stackless Python
-        # ----------------
-
-        Tasklet = stackless.tasklet
-
-        def get_current():
-            """Return the current execution context."""
-            return Channel()
 
         def Continuation(f, *args, **kw):
-            """Create a new execution context where ``f`` is launched.
+            return f(*args, **kw)
 
-            This new execution context became the current one.
-
-            In:
-              - ``f`` -- function to call
-              - ``args``, ``kw`` -- ``f`` arguments
-            """
-            stackless.tasklet(f)(*args, **kw).run()
-
-        class Channel(stackless.channel):
-            def switch(self, value=None):
-                # Permute this execution context with the current one
-
-                # In:
-                #   - ``value`` - value returned to the captured execution context
-                #
-                # .. note:
-                #   - the code of this function will be serialized.
-                #     Keep it to a minimal (no docstring ...)
-                if self.balance:
-                    self.send((stackless.getcurrent(), value))
-                else:
-                    sender, r = self.receive()
-                    if not sender.is_main:
-                        sender.kill()
-
-                    return r
+        def get_current(*args, **kw):
+            raise NotImplementedError('CPython 3.10, CPython 3.11 or Stackless Python are needed')
 
 else:
-    # PyPy
-    # ----
+    # Stackless Python
+    # ----------------
 
-    import threading
-
-    _tls = threading.local()
+    has_continuation = True
+    Tasklet = stackless.tasklet
 
     def get_current():
         """Return the current execution context."""
-        return getattr(_tls, 'current', None)
+        return Channel()
 
-    def set_current(cont):
-        """Set the current execution context."""
-        _tls.current = cont
+    def Continuation(f, *args, **kw):
+        """Create a new execution context where ``f`` is launched.
 
-    class Continuation(continulet):
-        """A ``Continuation()`` object launches a function in a new execution context."""
+        This new execution context became the current one.
 
-        def __init__(self, f, *args, **kw):
-            """Create a new execution context where ``f`` is launched.
+        In:
+            - ``f`` -- function to call
+            - ``args``, ``kw`` -- ``f`` arguments
+        """
+        stackless.tasklet(f)(*args, **kw).run()
 
-            This new execution context became the current one.
-
-            In:
-              - ``f`` -- function to call
-              - ``args``, ``kw`` -- ``f`` arguments
-            """
-            super(Continuation, self).__init__(lambda cont: f(*args, **kw))
-            self.switch()
-
+    class Channel(stackless.channel):
         def switch(self, value=None):
-            """Permute this execution context with the current one.
+            # Permute this execution context with the current one
 
-            In:
-              - ``value`` - value returned to the captured execution context
-            """
-            previous = get_current()
-            set_current(self)
-            r = super(Continuation, self).switch(value)
-            set_current(previous)
-            return r
+            # In:
+            #   - ``value`` - value returned to the captured execution context
+            #
+            # .. note:
+            #   - the code of this function will be serialized.
+            #     Keep it to a minimal (no docstring ...)
+            if self.balance:
+                self.send((stackless.getcurrent(), value))
+            else:
+                sender, r = self.receive()
+                if not sender.is_main:
+                    sender.kill()
+
+                return r
 
 
 def call_wrapper(action, *args, **kw):

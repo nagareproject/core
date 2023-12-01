@@ -5,10 +5,10 @@
 # this distribution.
 # --
 
-from nagare.renderers import html
 from nagare.component import Component
-from nagare.continuation import call_wrapper
-from nagare.presentation import render_for, CURRENT_VIEW, ANON_VIEW
+from nagare.continuation import call_wrapper, has_continuation
+from nagare.presentation import ANON_VIEW, CURRENT_VIEW, render_for
+from nagare.renderers import html
 
 
 class C(object):
@@ -123,35 +123,37 @@ def test_view_in_becomes():
     assert comp.render(h) == 'view2'
 
 
-def test_view_in_call():
-    h = html.Renderer()
+if has_continuation:
 
-    comp = Component(C)
-    call_wrapper(comp.call, view=ANON_VIEW)
-    assert comp.render(h) == 'default'
-    comp.answer()
-    assert comp.render(h) == 'default'
+    def test_view_in_call():
+        h = html.Renderer()
 
-    comp = Component(C)
-    call_wrapper(comp.call, view='view1')
-    assert comp.render(h) == 'view1'
-    comp.answer()
-    assert comp.render(h) == 'default'
+        comp = Component(C)
+        call_wrapper(comp.call, view=ANON_VIEW)
+        assert comp.render(h) == 'default'
+        comp.answer()
+        assert comp.render(h) == 'default'
 
-    comp = Component(C, 'view1')
-    call_wrapper(comp.call)
-    assert comp.render(h) == 'default'
-    comp.answer()
-    assert comp.render(h) == 'view1'
+        comp = Component(C)
+        call_wrapper(comp.call, view='view1')
+        assert comp.render(h) == 'view1'
+        comp.answer()
+        assert comp.render(h) == 'default'
 
-    comp = Component(C, 'view1')
-    call_wrapper(comp.call, view='view2')
-    assert comp.render(h) == 'view2'
-    comp.answer()
-    assert comp.render(h) == 'view1'
+        comp = Component(C, 'view1')
+        call_wrapper(comp.call)
+        assert comp.render(h) == 'default'
+        comp.answer()
+        assert comp.render(h) == 'view1'
 
-    comp = Component(C, 'view1')
-    call_wrapper(comp.call, view='view2')
-    assert comp.render(h, 'view3') == 'view3'
-    comp.answer()
-    assert comp.render(h) == 'view1'
+        comp = Component(C, 'view1')
+        call_wrapper(comp.call, view='view2')
+        assert comp.render(h) == 'view2'
+        comp.answer()
+        assert comp.render(h) == 'view1'
+
+        comp = Component(C, 'view1')
+        call_wrapper(comp.call, view='view2')
+        assert comp.render(h, 'view3') == 'view3'
+        comp.answer()
+        assert comp.render(h) == 'view1'
