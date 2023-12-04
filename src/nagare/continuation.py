@@ -14,10 +14,23 @@ and the captured one, thus resuming where the context was captured.
 """
 
 import sys
-import traceback
+from traceback import walk_tb
 import warnings
 
 Tasklet = None
+
+
+class ContinuationException(Exception):
+    pass
+
+
+class ContinuationSuspended(ContinuationException):
+    pass
+
+
+class ContinuationUnreacheableLine(ContinuationException):
+    pass
+
 
 try:
     import stackless
@@ -25,12 +38,9 @@ except ImportError:
     # CPython
     # -------
 
-    has_continuation = sys.version_info.major == 3 and (sys.version_info.minor in (10, 11))
+    has_continuation = sys.version_info >= (3, 10)  # PEP626 needed
     if has_continuation:
         warnings.filterwarnings('ignore', 'assigning None to ([0-9]+ )?unbound local', RuntimeWarning)
-
-        class ContinuationSuspended(Exception):
-            pass
 
         class _Continuation:
             def __init__(self):
@@ -50,7 +60,6 @@ except ImportError:
                 code_id, lineno, locals = self.frames[self.i]
                 if hash(frame.f_code) != code_id:
                     return self._line_tracer
-                print('Restore', frame.f_code.co_filename, frame.f_code.co_name, lineno)
 
                 self.i += 1
                 if self.i == len(self.frames):
@@ -59,7 +68,15 @@ except ImportError:
                     sys.settrace(None)
 
                 frame.f_locals.update(locals)
-                frame.f_lineno = lineno
+
+                try:
+                    frame.f_lineno = lineno
+                except ValueError:
+                    raise ContinuationUnreacheableLine(
+                        "Unreachable line {} in function '{}' of '{}'".format(
+                            lineno, frame.f_code.co_name, frame.f_code.co_filename
+                        )
+                    )
 
             def resume(self, continuation_return=None):
                 self.i = 0
@@ -88,10 +105,7 @@ except ImportError:
                     f,
                     args,
                     kw,
-                    [
-                        (hash(frame.f_code), lineno, frame.f_locals)
-                        for frame, lineno in list(traceback.walk_tb(e.__traceback__))[1:-1]
-                    ],
+                    [(hash(frame.f_code), lineno, frame.f_locals) for frame, lineno in walk_tb(e.__traceback__)][1:-1],
                 )
                 return continuation
     else:
