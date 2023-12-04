@@ -12,10 +12,10 @@ This renderer is dedicated to the Nagare framework
 """
 
 from collections import OrderedDict
-import imghdr
 from importlib import metadata
 import json
 
+import filetype
 from nagare import partial, var
 from nagare.action import Action, Update
 from nagare.renderers import html_base, xml
@@ -126,9 +126,11 @@ class Img(html_base.Img, _HTMLActionTag):
         e = webob.exc.HTTPOk(headerlist=[('Content-Type', '')])
         img = action(request, e, *args, **kw) if with_request else action(*args, **kw)
 
-        # If no ``Content-Type`` is already set, use the ``imghdr`` module
-        # to guess the format of the image
-        e.content_type = e.content_type or ('image/' + (imghdr.what(None, img[:32]) or '*'))
+        # If no ``Content-Type`` is already set, use the ``filetype`` module to guess the format of the image
+        if not e.content_type:
+            img_type = filetype.guess(img[:32])
+            if img_type is not None:
+                e.content_type = img_type.mime
         e.body = img
 
         raise e
