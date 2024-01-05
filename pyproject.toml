@@ -52,7 +52,7 @@ requires-python = '>=3.7'
 dependencies = [
     'WebOb',
     'filetype',
-    'cryptography',
+    'tinyaes',
     'nagare-partial',
     'nagare-editor',
     'nagare-server-mvc',
@@ -81,7 +81,6 @@ dev = [
     'pre-commit',
     'ruff',
     'pytest',
-    'build',
     'twine',
 ]
 
@@ -126,7 +125,7 @@ convention = 'google'
 
 [tool.ruff.isort]
 known-third-party = ['nagare']
-force-sort-within-sections = true
+length-sort = true
 
 [tool.ruff.format]
 quote-style = 'single'

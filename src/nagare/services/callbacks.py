@@ -11,18 +11,17 @@
 Manage the dictionary of the ids / callbacks associations
 """
 
-import base64
-from collections import defaultdict
-import json
 import os
 import re
+import json
+import base64
+from collections import defaultdict
 
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from nagare import partial
-from nagare.continuation import call_wrapper
-from nagare.services import plugin
 from webob import exc
+from nagare import partial
+from tinyaes import AES
+from nagare.services import plugin
+from nagare.continuation import call_wrapper
 
 PRE_ACTION_CALLBACK = 0  # <form>.pre_action
 WITH_VALUE_CALLBACK = 1  # <textarea>, <input type="text">
@@ -52,8 +51,7 @@ class CallbacksService(plugin.Plugin):
         global callbacks_service
         super(CallbacksService, self).__init__(name, dist, **config)
 
-        key = os.urandom(16)
-        self.cipher = Cipher(algorithms.AES(key), modes.ECB(), default_backend())
+        self.key = os.urandom(16)
         callbacks_service = self
 
     @staticmethod
@@ -65,11 +63,9 @@ class CallbacksService(plugin.Plugin):
         if not client_params:
             return ''
 
-        encryptor = self.cipher.encryptor()
-
         v = json.dumps(client_params).encode('utf-8')
         v = self.pad(v + b'#', 16, b' ')
-        v = encryptor.update(v) + encryptor.finalize()
+        AES(self.key).CBC_encrypt_buffer_inplace_raw(v)
         v = base64.urlsafe_b64encode(v).decode('ascii')
 
         return v
@@ -78,10 +74,8 @@ class CallbacksService(plugin.Plugin):
         if not client_params:
             return {}
 
-        decryptor = self.cipher.decryptor()
-
         v = base64.urlsafe_b64decode(client_params)
-        v = decryptor.update(v) + decryptor.finalize()
+        AES(self.key).CBC_decrypt_buffer_inplace_raw(v)
         v = v.rstrip(b' ')
         if not v.endswith(b'#'):
             raise exc.HTTPNotFound()

@@ -14,8 +14,8 @@ and the captured one, thus resuming where the context was captured.
 """
 
 import sys
-from traceback import walk_tb
 import warnings
+from traceback import walk_tb
 
 Tasklet = None
 
@@ -114,7 +114,7 @@ except ImportError:
             return f(*args, **kw)
 
         def get_current(*args, **kw):
-            raise NotImplementedError('CPython 3.10, CPython 3.11 or Stackless Python are needed')
+            raise NotImplementedError('CPython>=3.10 or Stackless Python needed')
 
 else:
     # Stackless Python

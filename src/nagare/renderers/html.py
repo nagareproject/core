@@ -11,17 +11,17 @@
 This renderer is dedicated to the Nagare framework
 """
 
-from collections import OrderedDict
-from importlib import metadata
 import json
+from importlib import metadata
+from collections import OrderedDict
 
-import filetype
-from nagare import partial, var
-from nagare.action import Action, Update
-from nagare.renderers import html_base, xml
-from nagare.renderers.xml import TagProp
-from nagare.services import callbacks
 import webob
+import filetype
+from nagare import var, partial
+from nagare.action import Action, Update
+from nagare.services import callbacks
+from nagare.renderers import xml, html_base
+from nagare.renderers.xml import TagProp
 
 NAGARE_VERSION = metadata.distribution('nagare').version
 

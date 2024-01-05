@@ -9,7 +9,7 @@
 
 """The XHTML5 renderer."""
 
-from nagare.renderers import html, html5_base, html_base
+from nagare.renderers import html, html_base, html5_base
 from nagare.renderers.xml import TagProp
 
 

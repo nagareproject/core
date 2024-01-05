@@ -8,9 +8,9 @@
 # --
 
 
+from webob import exc
 from nagare.services import http_exceptions
 from nagare.services.callbacks import CallbackLookupError
-from webob import exc
 
 
 def default_exception_handler(exception, exceptions_service, services_service, request, **context):

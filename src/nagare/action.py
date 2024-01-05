@@ -11,8 +11,8 @@ import json
 import random
 
 from nagare import partial
-from nagare.renderers import xml
 from nagare.services import callbacks
+from nagare.renderers import xml
 
 
 def no_action(*args, **kw):

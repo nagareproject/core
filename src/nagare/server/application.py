@@ -7,10 +7,10 @@
 # this distribution.
 # --
 
-from nagare.renderers import html5
 from nagare.server import mvc_application
 from nagare.services import router
 from webob.multidict import NestedMultiDict
+from nagare.renderers import html5
 
 
 class Request(mvc_application.Request):

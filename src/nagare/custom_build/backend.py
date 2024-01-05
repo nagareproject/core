@@ -10,9 +10,9 @@
 import os
 import sys
 
-from setuptools.build_meta import build_editable as _build_editable
 from setuptools.build_meta import build_sdist as _build_sdist
 from setuptools.build_meta import build_wheel as _build_wheel
+from setuptools.build_meta import build_editable as _build_editable
 from setuptools.build_meta import prepare_metadata_for_build_wheel  # noqa: F401
 
 sys.path.insert(0, os.path.dirname(__file__))

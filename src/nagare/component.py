@@ -14,7 +14,7 @@ replace and call a component. It's described in `ComponentModel`
 """
 import random
 
-from nagare import continuation, presentation, renderable
+from nagare import renderable, continuation, presentation
 from nagare.partial import Partial
 from nagare.services import router
 

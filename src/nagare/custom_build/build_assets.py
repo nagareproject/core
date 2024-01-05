@@ -9,13 +9,13 @@
 # this distribution.
 # --
 
-import gzip
 import sys
+import gzip
 
 
 def build_assets():
-    from dukpy.webassets import BabelJS
     from webassets import filter, script
+    from dukpy.webassets import BabelJS
 
     filter.register_filter(BabelJS)
 

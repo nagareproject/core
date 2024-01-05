@@ -34,5 +34,4 @@ doc:
 	python -m sphinx.cmd.build -b html doc ${DOC_OUTPUT_DIR}
 
 wheel:
-	python -m build -w
-
+	python -m pip wheel -w dist --no-deps .
