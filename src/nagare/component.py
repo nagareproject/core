@@ -12,6 +12,7 @@
 This model is inspired by the Seaside one. With the possibility to embed,
 replace and call a component. It's described in `ComponentModel`
 """
+import sys
 import random
 
 from nagare import renderable, continuation, presentation
@@ -179,6 +180,7 @@ class Component(renderable.Renderable):
 
         p = self._call1(o, view, url)
         r = self._cont.switch()
+        sys.settrace(None)
         self._call2(*p)
 
         return r

@@ -83,7 +83,10 @@ except ImportError:
                 self.r = continuation_return
                 sys.settrace(self._call_tracer)
 
-                return Continuation(self.f, *self.args, **self.kw)
+                try:
+                    return Continuation(self.f, *self.args, **self.kw)
+                finally:
+                    sys.settrace(None)
 
             def switch(self, *args):
                 r = None
