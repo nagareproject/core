@@ -7,13 +7,10 @@
 # this distribution.
 # --
 
-import sys
 
 from nagare.component import Component
 from nagare.continuation import Tasklet
 from nagare.services.http_session import SessionService
-
-PY2 = sys.version_info.major == 2
 
 
 def persistent_id(o, clean_callbacks, result):
@@ -41,10 +38,6 @@ def persistent_id(o, clean_callbacks, result):
 
     elif (Tasklet is not None) and (type(o) is Tasklet):
         result.tasklets.add(o)
-
-    elif PY2 and isinstance(o, Component):
-        result.callbacks.update(o.serialize_actions(clean_callbacks))
-        result.components += 1
 
     return r
 

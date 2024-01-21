@@ -90,9 +90,6 @@ Documentation = 'https://nagare.org/doc'
 Source = 'https://github.com/nagareproject/core'
 Tracker = 'https://github.com/nagareproject/core/issues'
 
-[tool.distutils.bdist_wheel]
-universal = true
-
 [tool.ruff]
 select = [
     'C4',
@@ -124,7 +121,6 @@ multiline-quotes = 'double'
 convention = 'google'
 
 [tool.ruff.isort]
-known-third-party = ['nagare']
 length-sort = true
 
 [tool.ruff.format]

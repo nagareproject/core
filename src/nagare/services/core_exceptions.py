@@ -9,6 +9,7 @@
 
 
 from webob import exc
+
 from nagare.services import http_exceptions
 from nagare.services.callbacks import CallbackLookupError
 

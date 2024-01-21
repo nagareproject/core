@@ -13,13 +13,15 @@ Manage the dictionary of the ids / callbacks associations
 
 import os
 import re
+import sys
 import json
 import base64
 from collections import defaultdict
 
 from webob import exc
-from nagare import partial
 from tinyaes import AES
+
+from nagare import partial
 from nagare.services import plugin
 from nagare.continuation import call_wrapper
 
@@ -146,6 +148,14 @@ class CallbacksService(plugin.Plugin):
 
                     self.execute_callback(callback_type, f, args, callback_params)
 
-        return chain.next(
+        if sys.gettrace() is not None:
+            self.logger.critical('Python debugging mode is ON')
+
+        r = chain.next(
             callbacks=callbacks, request=request, response=response, root=root, render=render or root.render, **params
         )
+
+        if sys.gettrace() is not None:
+            self.logger.critical('Python debugging mode is ON')
+
+        return r

@@ -15,6 +15,7 @@ and the captured one, thus resuming where the context was captured.
 
 import sys
 import warnings
+from functools import partial
 from traceback import walk_tb
 
 Tasklet = None
@@ -32,6 +33,10 @@ class ContinuationUnreacheableLine(ContinuationException):
     pass
 
 
+class ContinuationCodeBlockNotFound(ContinuationException):
+    pass
+
+
 try:
     import stackless
 except ImportError:
@@ -44,8 +49,7 @@ except ImportError:
 
         class _Continuation:
             def __init__(self):
-                self.f = self.args = self.kw = self.frames = self.r = None
-                self.i = 0
+                self.f = self.args = self.kw = self.frames = None
 
             def populate(self, f, args, kw, frames):
                 self.f = f
@@ -53,22 +57,12 @@ except ImportError:
                 self.kw = kw
                 self.frames = frames
 
-            def _call_tracer(self, *args):
-                return self._line_tracer
+            @staticmethod
+            def _stop(frame, event, arg):
+                return None
 
-            def _line_tracer(self, frame, *args):
-                code_id, lineno, locals = self.frames[self.i]
-                if hash(frame.f_code) != code_id:
-                    return self._line_tracer
-
-                self.i += 1
-                if self.i == len(self.frames):
-                    lineno += 1
-                    locals['r'] = self.r
-                    sys.settrace(None)
-
-                frame.f_locals.update(locals)
-
+            @classmethod
+            def _jump(cls, lineno, frame, event, arg):
                 try:
                     frame.f_lineno = lineno
                 except ValueError:
@@ -78,21 +72,46 @@ except ImportError:
                         )
                     )
 
+                return cls._stop
+
+            def _trace(self, frame, event, arg):
+                code_id, lineno, locals_ = self.frames[self.i]
+                if hash(frame.f_code) == code_id:
+                    self.i += 1
+                    if self.i == len(self.frames):
+                        lineno += 1
+                        locals_['continuation_return'] = self.continuation_return
+
+                    frame.f_locals.update(locals_)
+
+                    return partial(self._jump, lineno)
+
             def resume(self, continuation_return=None):
                 self.i = 0
-                self.r = continuation_return
-                sys.settrace(self._call_tracer)
+                self.continuation_return = continuation_return
 
-                return Continuation(self.f, *self.args, **self.kw)
+                sys.settrace(self._trace)
+                try:
+                    r = Continuation(self.f, *self.args, **self.kw)
+                    if self.i != len(self.frames):
+                        raise ContinuationCodeBlockNotFound()
+                    return r
+                finally:
+                    sys.settrace(None)
+
+            def _switch(self):
+                raise ContinuationSuspended(self)
 
             def switch(self, *args):
-                r = None
+                continuation_return = None
 
                 if args:
                     return self.resume(args[0])
 
-                raise ContinuationSuspended(self)
-                return r
+                self._switch()
+                sys.settrace(None)
+
+                return continuation_return
 
         get_current = _Continuation
 

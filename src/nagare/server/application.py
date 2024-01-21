@@ -7,9 +7,10 @@
 # this distribution.
 # --
 
+from webob.multidict import NestedMultiDict
+
 from nagare.server import mvc_application
 from nagare.services import router
-from webob.multidict import NestedMultiDict
 from nagare.renderers import html5
 
 
