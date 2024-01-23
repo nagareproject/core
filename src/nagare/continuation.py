@@ -47,6 +47,11 @@ except ImportError:
     if has_continuation:
         warnings.filterwarnings('ignore', 'assigning None to ([0-9]+ )?unbound local', RuntimeWarning)
 
+        @staticmethod
+        def frame_hash(frame):
+            code = frame.f_code
+            return hash((code.co_filename, code.co_firstlineno, code.co_code)) & 0xFFFFFFFF
+
         class _Continuation:
             def __init__(self):
                 self.f = self.args = self.kw = self.frames = None
@@ -75,8 +80,8 @@ except ImportError:
                 return cls._stop
 
             def _trace(self, frame, event, arg):
-                code_id, lineno, locals_ = self.frames[self.i]
-                if hash(frame.f_code) == code_id:
+                f_hash, lineno, locals_ = self.frames[self.i]
+                if frame_hash(frame) == f_hash:
                     self.i += 1
                     if self.i == len(self.frames):
                         lineno += 1
@@ -124,7 +129,7 @@ except ImportError:
                     f,
                     args,
                     kw,
-                    [(hash(frame.f_code), lineno, frame.f_locals) for frame, lineno in walk_tb(e.__traceback__)][1:-1],
+                    [(frame_hash(frame), lineno, frame.f_locals) for frame, lineno in walk_tb(e.__traceback__)][1:-1],
                 )
                 return continuation
     else:
