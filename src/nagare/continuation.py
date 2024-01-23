@@ -50,7 +50,7 @@ except ImportError:
         @staticmethod
         def frame_hash(frame):
             code = frame.f_code
-            return hash((code.co_filename, code.co_firstlineno, code.co_code)) & 0xFFFFFFFF
+            return hash((code.co_filename, code.co_firstlineno))
 
         class _Continuation:
             def __init__(self):
