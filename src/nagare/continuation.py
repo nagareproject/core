@@ -15,6 +15,7 @@ and the captured one, thus resuming where the context was captured.
 
 import sys
 import warnings
+from hashlib import sha256
 from functools import partial
 from traceback import walk_tb
 
@@ -50,7 +51,7 @@ except ImportError:
         @staticmethod
         def frame_hash(frame):
             code = frame.f_code
-            return hash((code.co_filename, code.co_firstlineno))
+            return sha256(code.co_filename.encode('utf-8') + str(code.co_firstlineno).encode('utf-8')).digest()[:6]
 
         class _Continuation:
             def __init__(self):
