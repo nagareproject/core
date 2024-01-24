@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2023 Net-ng.
+# Copyright (c) 2008-2024 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -13,7 +13,6 @@ Manage the dictionary of the ids / callbacks associations
 
 import os
 import re
-import sys
 import json
 import base64
 from collections import defaultdict
@@ -148,14 +147,6 @@ class CallbacksService(plugin.Plugin):
 
                     self.execute_callback(callback_type, f, args, callback_params)
 
-        if sys.gettrace() is not None:
-            self.logger.critical('Python debugging mode is ON')
-
-        r = chain.next(
+        return chain.next(
             callbacks=callbacks, request=request, response=response, root=root, render=render or root.render, **params
         )
-
-        if sys.gettrace() is not None:
-            self.logger.critical('Python debugging mode is ON')
-
-        return r
