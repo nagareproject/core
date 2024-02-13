@@ -21,8 +21,11 @@ from nagare.services import router
 _marker = object()
 
 
-class AnswerWithoutCall(Exception):
+class AnswerWithoutOnAnswer(Exception):
     pass
+
+
+AnswerWithoutCall = AnswerWithoutOnAnswer
 
 
 class Component(renderable.Renderable):
@@ -42,9 +45,11 @@ class Component(renderable.Renderable):
         """
         self._becomes(o, view, url)
 
-        self._cont = None
         self._actions = {}
         self._new_actions = {}
+
+        self._cont = None
+        self._on_answer = None
 
     def register_action(self, action, with_request, render, args, kw):
         """Register an action for this component.
@@ -138,22 +143,15 @@ class Component(renderable.Renderable):
         previous_o = self.o
         previous_view = self.view
         previous_url = self.url
-        previous_cont = self._cont
-        previous_answer = self.__dict__.pop('answer', None)
 
         # Replace me by the object and wait its answer
         self.becomes(o, view, url)
 
-        self._cont = continuation.get_current()
+        previous_cont, self._cont = self._cont, continuation.get_current()
 
-        return (previous_o, previous_view, previous_url, previous_cont, previous_answer)
+        return (previous_o, previous_view, previous_url, previous_cont)
 
-    def _call2(self, previous_o, previous_view, previous_url, previous_cont, previous_answer):
-        if previous_answer:
-            self.answer = previous_answer
-        else:
-            self.__dict__.pop('answer', None)
-
+    def _call2(self, previous_o, previous_view, previous_url, previous_cont):
         self._cont = previous_cont
 
         self._becomes(previous_o, previous_view, previous_url)
@@ -183,18 +181,21 @@ class Component(renderable.Renderable):
 
         return r
 
-    def answer(self, r=None):
+    def answer(self, r=_marker):
         """Answer to a call.
 
         In:
           - the value to answer
         """
-        # Check if I was called by a component
         if self._cont is None:
-            raise AnswerWithoutCall(self)
+            # I was not called by an other component. A `on_answer` callback must be set.
+            if self._on_answer is None:
+                raise AnswerWithoutOnAnswer(self)
 
-        # Returns my answer to the calling component
-        self._cont.switch(r)
+            self._on_answer(r) if r is not _marker else self._on_answer()
+        else:
+            # I was called by on other component. Return my answer to it
+            self._cont.switch(r if r is not _marker else None)
 
     def on_answer(self, f, *args, **kw):
         """Register a function to listen to my answer.
@@ -203,7 +204,7 @@ class Component(renderable.Renderable):
           - ``f`` -- function to call with my answer
           - ``args``, ``kw`` -- ``f`` parameters
         """
-        self.answer = Partial(f, *args, **kw) if args or kw else f
+        self._on_answer = Partial(f, *args, **kw) if args or kw else f
         return self
 
 
@@ -234,7 +235,7 @@ class Task(object):
     def _go(self, comp):
         # If I was not called by an other component and nobody is listening to
         # my answer,  I'm the root component. So I call my ``go()`` method forever
-        if comp._cont is comp.__dict__.get('answer') is None:
+        if comp._cont is comp._on_answer is None:
             while True:
                 self.go(comp)
 

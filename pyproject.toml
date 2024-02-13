@@ -91,6 +91,11 @@ Source = 'https://github.com/nagareproject/core'
 Tracker = 'https://github.com/nagareproject/core/issues'
 
 [tool.ruff]
+src = ['src']
+line-length = 120
+format.quote-style = 'single'
+
+[tool.ruff.lint]
 select = [
     'C4',
     'COM',
@@ -110,21 +115,9 @@ select = [
     'YTT',
 ]
 ignore = ['COM812', 'D10', 'D401', 'S311', 'S305', 'ISC001']
-line-length = 120
-src = ['src']
-
-[tool.ruff.flake8-quotes]
-inline-quotes = 'single'
-multiline-quotes = 'double'
-
-[tool.ruff.pydocstyle]
-convention = 'google'
-
-[tool.ruff.isort]
-length-sort = true
-
-[tool.ruff.format]
-quote-style = 'single'
+isort.length-sort = true
+pydocstyle.convention = 'google'
+flake8-quotes.inline-quotes = 'single'
 
 [tool.pytest.ini_options]
 testpaths = ['tests']
