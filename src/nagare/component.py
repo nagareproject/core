@@ -145,7 +145,7 @@ class Component(renderable.Renderable):
         previous_url = self.url
 
         # Replace me by the object and wait its answer
-        self.becomes(o, view, url)
+        self.becomes(o, view, url, True)
 
         previous_cont, self._cont = self._cont, continuation.get_current()
 
