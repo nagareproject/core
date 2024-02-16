@@ -21,6 +21,10 @@ from nagare.services import router
 _marker = object()
 
 
+class CallAnswered(Exception):
+    pass
+
+
 class AnswerWithoutOnAnswer(Exception):
     pass
 
@@ -145,7 +149,7 @@ class Component(renderable.Renderable):
         previous_url = self.url
 
         # Replace me by the object and wait its answer
-        self.becomes(o, view, url, True)
+        self._becomes(o, view, url)
 
         previous_cont, self._cont = self._cont, continuation.get_current()
 
@@ -196,6 +200,7 @@ class Component(renderable.Renderable):
         else:
             # I was called by on other component. Return my answer to it
             self._cont.switch(r if r is not _marker else None)
+            raise CallAnswered()
 
     def on_answer(self, f, *args, **kw):
         """Register a function to listen to my answer.

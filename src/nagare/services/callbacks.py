@@ -15,6 +15,7 @@ import os
 import re
 import json
 import base64
+import contextlib
 from collections import defaultdict
 
 from webob import exc
@@ -22,6 +23,7 @@ from tinyaes import AES
 
 from nagare import partial
 from nagare.services import plugin
+from nagare.component import CallAnswered
 from nagare.continuation import call_wrapper
 
 PRE_ACTION_CALLBACK = 0  # <form>.pre_action
@@ -145,7 +147,8 @@ class CallbacksService(plugin.Plugin):
                     elif (type_ == IMAGE_CALLBACK) and complement:
                         args += (complement == '.y', int(values[0]))
 
-                    self.execute_callback(callback_type, f, args, callback_params)
+                    with contextlib.suppress(CallAnswered):
+                        self.execute_callback(callback_type, f, args, callback_params)
 
         return chain.next(
             callbacks=callbacks, request=request, response=response, root=root, render=render or root.render, **params
