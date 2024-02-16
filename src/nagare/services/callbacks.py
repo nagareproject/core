@@ -23,8 +23,7 @@ from tinyaes import AES
 
 from nagare import partial
 from nagare.services import plugin
-from nagare.component import CallAnswered
-from nagare.continuation import call_wrapper
+from nagare.component import CallAnswered, call_wrapper
 
 PRE_ACTION_CALLBACK = 0  # <form>.pre_action
 WITH_VALUE_CALLBACK = 1  # <textarea>, <input type="text">

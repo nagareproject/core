@@ -181,22 +181,3 @@ else:
                     sender.kill()
 
                 return r
-
-
-def call_wrapper(action, *args, **kw):
-    """A wrapper that creates a continuation and calls a function.
-
-    It's necessary to wrapper a callable that do directly or indirectly a
-    ``comp.call(o)`` into such a ``call_wrapper``.
-
-    .. note::
-        The actions your registered on the ``<a>`` tags or on the submit buttons
-        are already wrapped for you.
-
-    In:
-      - ``action`` -- a callable. It will be called, wrapped into a new continuation,
-        with the ``args`` and ``kw`` parameters.
-      - ``args`` -- positional parameters of the callable
-      - ``kw`` -- keywords parameters of the callable
-    """
-    Continuation(action, *args, **kw)

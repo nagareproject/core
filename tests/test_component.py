@@ -9,9 +9,8 @@
 
 import pytest
 
+from nagare import var, component, continuation, presentation
 from nagare.renderers import xhtml
-
-from nagare import component, presentation, continuation, var
 
 
 class Foo(object):
@@ -87,6 +86,7 @@ def test2():
 # -------------------------------------------------------------------------------------------------------
 
 if continuation.has_continuation:
+
     def test3():
         """Component - call"""
         v = var.Var(42)
@@ -96,12 +96,12 @@ if continuation.has_continuation:
         assert isinstance(app.my_property(), Foo)
         assert app.my_property.view == 'foo'
 
-        continuation.call_wrapper(lambda: v(app.my_property.call(Bar(), 'bar')))
+        component.call_wrapper(lambda: v(app.my_property.call(Bar(), 'bar')))
 
         assert isinstance(app.my_property(), Bar)
         assert app.my_property.view == 'bar'
 
-        app.my_property.answer("I'm bar")
+        component.answer_wrapper(app.my_property, "I'm bar")
 
         assert isinstance(app.my_property(), Foo)
         assert app.my_property.view == 'foo'
