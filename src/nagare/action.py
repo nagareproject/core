@@ -10,7 +10,7 @@
 import json
 import random
 
-from nagare import partial
+from nagare import partial, component
 from nagare.services import callbacks
 from nagare.renderers import xml
 
@@ -253,7 +253,12 @@ class Remote(Update, xml.Renderable):
         if with_request:
             action = partial.Partial(action, request, response)
 
-        return json.dumps(action(*params))
+        try:
+            r = action(*params)
+        except component.CallAnswered:
+            r = None
+
+        return json.dumps(r)
 
     def register(self, renderer, component, tag, action_type, with_request, args, kw):
         return super(Remote, self).register(renderer, component, tag, action_type, False, (), {}, no_action)

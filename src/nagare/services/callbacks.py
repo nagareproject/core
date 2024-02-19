@@ -86,10 +86,11 @@ class CallbacksService(plugin.Plugin):
 
     @staticmethod
     def execute_callback(callback_type, callback, args, kw):
-        if callback_type & WITH_CONTINUATION_CALLBACK:
-            call_wrapper(callback, *args, **kw)
-        else:
-            callback(*args, **kw)
+        with contextlib.suppress(CallAnswered):
+            if callback_type & WITH_CONTINUATION_CALLBACK:
+                call_wrapper(callback, *args, **kw)
+            else:
+                callback(*args, **kw)
 
     def handle_request(self, chain, callbacks, request, response, root, **params):
         """Call the actions associated to the callback identifiers received.
@@ -146,8 +147,7 @@ class CallbacksService(plugin.Plugin):
                     elif (type_ == IMAGE_CALLBACK) and complement:
                         args += (complement == '.y', int(values[0]))
 
-                    with contextlib.suppress(CallAnswered):
-                        self.execute_callback(callback_type, f, args, callback_params)
+                    self.execute_callback(callback_type, f, args, callback_params)
 
         return chain.next(
             callbacks=callbacks, request=request, response=response, root=root, render=render or root.render, **params
