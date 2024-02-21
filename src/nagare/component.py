@@ -197,7 +197,7 @@ class Component(renderable.Renderable):
             if self._on_answer is None:
                 raise AnswerWithoutOnAnswer(self)
 
-            self._on_answer(r) if r is not _marker else self._on_answer()
+            return self._on_answer(r) if r is not _marker else self._on_answer()
         else:
             # I was called by on other component. Return my answer to it
             self._cont.switch(r if r is not _marker else None)
