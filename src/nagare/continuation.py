@@ -48,11 +48,6 @@ except ImportError:
     if has_continuation:
         warnings.filterwarnings('ignore', 'assigning None to ([0-9]+ )?unbound local', RuntimeWarning)
 
-        @staticmethod
-        def frame_hash(frame):
-            code = frame.f_code
-            return sha256(code.co_filename.encode('utf-8') + str(code.co_firstlineno).encode('utf-8')).digest()[:6]
-
         class _Continuation:
             def __init__(self):
                 self.f = self.args = self.kw = self.frames = None
@@ -61,7 +56,12 @@ except ImportError:
                 self.f = f
                 self.args = args
                 self.kw = kw
-                self.frames = frames
+                self.frames = [(self.frame_hash(frame), lineno, frame.f_locals) for frame, lineno in frames]
+
+            @staticmethod
+            def frame_hash(frame):
+                code = frame.f_code
+                return sha256(code.co_filename.encode('utf-8') + str(code.co_firstlineno).encode('utf-8')).digest()[:8]
 
             @staticmethod
             def _stop(frame, event, arg):
@@ -82,7 +82,7 @@ except ImportError:
 
             def _trace(self, frame, event, arg):
                 f_hash, lineno, locals_ = self.frames[self.i]
-                if frame_hash(frame) == f_hash:
+                if self.frame_hash(frame) == f_hash:
                     self.i += 1
                     if self.i == len(self.frames):
                         lineno += 1
@@ -126,12 +126,8 @@ except ImportError:
                 return f(*args, **kw)
             except ContinuationSuspended as e:
                 continuation = e.args[0]
-                continuation.populate(
-                    f,
-                    args,
-                    kw,
-                    [(frame_hash(frame), lineno, frame.f_locals) for frame, lineno in walk_tb(e.__traceback__)][1:-1],
-                )
+                continuation.populate(f, args, kw, list(walk_tb(e.__traceback__))[1:-1])
+
                 return continuation
     else:
 

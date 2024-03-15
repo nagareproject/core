@@ -9,11 +9,13 @@ clean:
 	@rm -rf doc/_build/*
 	@rm -f src/nagare/static/js/nagare.js*
 
+upgrade-precommit:
+	python -m pre_commit autoupdate
+
 install-dev: clean
 	python -m pip install -e '.[dev']
 	git init
 	python -m pre_commit install
-	python -m pre_commit autoupdate
 
 webassets:
 	python src/nagare/custom_build/build_assets.py
@@ -22,12 +24,12 @@ tests:
 	python -m pytest
 
 qa:
-	python -m ruff src
+	python -m ruff check src
 	python -m ruff format --check src
 	$(MAKE) tests
 
 qa-fix:
-	python -m ruff --fix src
+	python -m ruff check --fix src
 	python -m ruff format src
 
 doc:

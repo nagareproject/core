@@ -29,6 +29,6 @@ def build_wheel(*args):
     return _build_wheel(*args)
 
 
-def build_editable(*args):
+def build_editable(*args, **kw):
     build_assets()
-    return _build_editable(*args)
+    return _build_editable(*args, **kw)

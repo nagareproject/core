@@ -254,7 +254,7 @@ class Remote(Update, xml.Renderable):
             action = partial.Partial(action, request, response)
 
         try:
-            r = action(*params)
+            r = callbacks.callbacks_service.execute_callback(callbacks.WITH_CONTINUATION_CALLBACK, action, params, {})
         except component.CallAnswered:
             r = None
 

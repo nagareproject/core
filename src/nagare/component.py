@@ -12,6 +12,7 @@
 This model is inspired by the Seaside one. With the possibility to embed,
 replace and call a component. It's described in `ComponentModel`
 """
+
 import random
 import contextlib
 
@@ -278,7 +279,7 @@ def call_wrapper(action, *args, **kw):
       - ``args`` -- positional parameters of the callable
       - ``kw`` -- keywords parameters of the callable
     """
-    continuation.Continuation(action, *args, **kw)
+    return continuation.Continuation(action, *args, **kw)
 
 
 def answer_wrapper(comp, *args):

@@ -88,9 +88,9 @@ class CallbacksService(plugin.Plugin):
     def execute_callback(callback_type, callback, args, kw):
         with contextlib.suppress(CallAnswered):
             if callback_type & WITH_CONTINUATION_CALLBACK:
-                call_wrapper(callback, *args, **kw)
+                return call_wrapper(callback, *args, **kw)
             else:
-                callback(*args, **kw)
+                return callback(*args, **kw)
 
     def handle_request(self, chain, callbacks, request, response, root, **params):
         """Call the actions associated to the callback identifiers received.
@@ -119,7 +119,9 @@ class CallbacksService(plugin.Plugin):
 
         render = None
 
-        for (type_, callback_type, callback_id, complement, client_params), values in sorted(actions.items()):
+        for (type_, callback_type, callback_id, complement, client_params), values in sorted(
+            actions.items(), key=lambda e: e[0][1]
+        ):
             try:
                 f, with_request, render, callback_args, kw = callbacks[int(callback_id)]
             except KeyError:
