@@ -120,7 +120,7 @@ class CallbacksService(plugin.Plugin):
         render = None
 
         for (type_, callback_type, callback_id, complement, client_params), values in sorted(
-            actions.items(), key=lambda e: e[0][1]
+            actions.items(), key=lambda e: (e[0][0], e[0][1])
         ):
             try:
                 f, with_request, render, callback_args, kw = callbacks[int(callback_id)]
