@@ -12,7 +12,7 @@ image: docker-registry.net-ng.com/nng/dind-stackless:13
 tests:
   script:
     - /opt/stackless3/bin/pip install ruff black pytest .
-    - /opt/stackless3/bin/ruff src
+    - /opt/stackless3/bin/ruff check src
     - /opt/stackless3/bin/black src
     - /opt/stackless3/bin/pytest
 
