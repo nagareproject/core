@@ -263,6 +263,18 @@ def render_task(self, renderer, comp, view):
 # -----------------------------------------------------------------------------------------------------
 
 
+class Dummy(object):
+    pass
+
+
+@presentation.render_for(Dummy)
+def render_dummy(*args):
+    pass
+
+
+# -----------------------------------------------------------------------------------------------------
+
+
 def call_wrapper(action, *args, **kw):
     """A wrapper that creates a continuation and calls a function.
 
