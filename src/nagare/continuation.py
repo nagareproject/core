@@ -56,7 +56,7 @@ except ImportError:
                 self.f = f
                 self.args = args
                 self.kw = kw
-                self.frames = [(self.frame_hash(frame), lineno, frame.f_locals) for frame, lineno in frames]
+                self.frames = [(self.frame_hash(frame), lineno, dict(frame.f_locals)) for frame, lineno in frames]
 
             @staticmethod
             def frame_hash(frame):
