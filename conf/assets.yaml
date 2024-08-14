@@ -2,12 +2,7 @@ directory: ..
 bundles:
     nagare_js:
         filters:
-          - babeljs
-          - closure_js
-        config:
-            CLOSURE_COMPRESSOR_OPTIMIZATION: SIMPLE_OPTIMIZATIONS
-            CLOSURE_EXTRA_ARGS:
-                - --browser_featureset_year=2019
+          - rjsmin
         contents:
             - assets/nagare.js
         output: src/nagare/static/nagare.js

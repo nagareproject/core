@@ -14,10 +14,7 @@ import gzip
 
 
 def build_assets():
-    from webassets import filter, script
-    from dukpy.webassets import BabelJS
-
-    filter.register_filter(BabelJS)
+    from webassets import script
 
     status = script.main(['-c', 'conf/assets.yaml', 'build', '--no-cache']) or 0
     if status == 0:

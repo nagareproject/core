@@ -11,10 +11,8 @@ requires = [
     'setuptools',
     'wheel',
     'setuptools_scm',
-    'closure',
     'webassets',
-    'PyYAML',
-    'dukpy',
+    'PyYAML'
 ]
 build-backend = 'backend'
 backend-path = ['src/nagare/custom_build']
@@ -65,7 +63,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     'nagare-services-webassets',
-    'closure',
     'PyYAML',
     'sphinx',
     'sphinx_rtd_theme',
