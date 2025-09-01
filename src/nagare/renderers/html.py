@@ -797,6 +797,9 @@ class _AsyncRenderer(_SyncRenderer):
         },
         AsyncTextInput,
     )
+    button = TagProp(
+        'button', html_base.allattrs | html_base.focusattrs | {'name', 'value', 'type', 'disabled'}, AsyncSubmitInput
+    )
 
     def SyncRenderer(self, *args, **kw):
         """Create an associated synchronous HTML renderer.
