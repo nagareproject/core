@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2024 Net-ng.
+# Copyright (c) 2008-2025 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -18,7 +18,7 @@ class CoreStaticService(plugin.Plugin):
     CONFIG_SPEC = dict(plugin.Plugin.CONFIG_SPEC, directory='string(default=None)')
 
     def __init__(self, name, dist, directory, statics_service):
-        super(CoreStaticService, self).__init__(name, dist, directory=directory)
+        super().__init__(name, dist, directory=directory)
 
         dist = packaging.Distribution(dist)
         location = (

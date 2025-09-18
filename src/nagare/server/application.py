@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2024 Net-ng.
+# Copyright (c) 2008-2025 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -7,7 +7,7 @@
 # this distribution.
 # --
 
-from webob.multidict import NestedMultiDict
+from webob.multidict import MultiDict, NestedMultiDict
 
 from nagare.server import mvc_application
 from nagare.services import router
@@ -16,12 +16,35 @@ from nagare.renderers import html5
 
 class Request(mvc_application.Request):
     def __init__(self, *args, **kw):
-        super(Request, self).__init__(*args, **kw)
+        super().__init__(*args, **kw)
         self.client_params = {}
 
     @property
+    def POST(self):
+        if 'webob._parsed_post_vars' in self.environ:
+            vars = super().POST
+        else:
+            vars = MultiDict()
+
+            for names, values in super().POST.items():
+                if names.startswith('|_action'):
+                    names = names.strip('|').split('|')
+                    complement = names.pop(-1) if (names[-1] == '.x') or (names[-1] == '.y') else ''
+                    for name in names:
+                        vars.add(name + complement, values)
+                elif isinstance(values, str) and values.startswith('|_action'):
+                    for value in values.strip('|').split('|'):
+                        vars.add(names, value)
+                else:
+                    vars.add(names, values)
+
+            self.environ['webob._parsed_post_vars'] = (vars, self.body_file_raw)
+
+        return vars
+
+    @property
     def params(self):
-        return NestedMultiDict(super(Request, self).params, self.client_params)
+        return NestedMultiDict(super().params, self.client_params)
 
 
 class App(mvc_application.App):

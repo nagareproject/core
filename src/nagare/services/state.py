@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2024 Net-ng.
+# Copyright (c) 2008-2025 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -51,7 +51,7 @@ class StateService(SessionService):
     )
 
     def __init__(self, name, dist, services_service, session_service, **config):
-        services_service(super(StateService, self).__init__, name, dist, **config)
+        services_service(super().__init__, name, dist, **config)
 
         session_service.set_persistent_id(persistent_id)
         session_service.set_dispatch_table(self.set_dispatch_table)

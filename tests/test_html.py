@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2024 Net-ng.
+# Copyright (c) 2008-2025 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -18,12 +18,13 @@ except ImportError:
     from io import BytesIO as BuffIO
 
 from lxml import etree
-from nagare.renderers import html
+
 from nagare import component, presentation
+from nagare.renderers import html
 
 
 def c14n(node):
-    if not isinstance(node, type(u'')):
+    if not isinstance(node, type('')):
         node = node.tostring(method='xml').decode('utf-8')
 
     node = etree.fromstring(node).getroottree()
@@ -133,8 +134,8 @@ def test_html_render_select2():
         with h.body:
             with h.form:
                 with h.select:
-                    h << h.option(value="option1").selected('option2')
-                    h << h.option(value="option2").selected('option2')
+                    h << h.option(value='option1').selected('option2')
+                    h << h.option(value='option2').selected('option2')
 
     options = h.root.xpath('.//option')
     assert options[0].get('selected') is None
@@ -198,8 +199,8 @@ def test_html_render_checkbox1():
     with h.html:
         with h.body:
             with h.form:
-                h << h.input(type="checkbox", value="option1")
-                h << h.input(type="checkbox", value="option2", checked='checked')
+                h << h.input(type='checkbox', value='option1')
+                h << h.input(type='checkbox', value='option2', checked='checked')
     checkboxes = h.root.xpath('.//input[@type="checkbox"]')
     assert 'checked' not in checkboxes[0].attrib
     assert 'checked' in checkboxes[1].attrib
@@ -584,7 +585,7 @@ def test_a():
     a = h.fromstring(a.tostring(), fragment=True)[0]
     assert url_parse(a.get('href')) == ('', '', '/foo/a', 'b', {})
 
-    class Component(object):
+    class Component:
         url = ''
 
         @staticmethod
@@ -657,7 +658,7 @@ def test_area():
     area = h.fromstring(area.tostring(), fragment=True)[0]
     assert url_parse(area.get('href')) == ('http', 'examples.com', '/a', 'b', {})
 
-    class Component(object):
+    class Component:
         url = ''
 
         @staticmethod
@@ -690,7 +691,7 @@ def test_area():
 
 
 def test_button():
-    class Component(object):
+    class Component:
         url = ''
 
         @staticmethod

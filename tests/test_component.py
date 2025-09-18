@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2024 Net-ng.
+# Copyright (c) 2008-2025 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -13,7 +13,7 @@ from nagare import var, component, continuation, presentation
 from nagare.renderers import xhtml
 
 
-class Foo(object):
+class Foo:
     def __init__(self):
         self.my_property = "I'm foo"
 

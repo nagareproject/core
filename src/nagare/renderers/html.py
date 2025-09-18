@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2024 Net-ng.
+# Copyright (c) 2008-2025 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -14,7 +14,6 @@ This renderer is dedicated to the Nagare framework
 
 import json
 from importlib import metadata
-from collections import OrderedDict
 
 import webob
 import filetype
@@ -33,7 +32,10 @@ class _HTMLActionTag(html_base.Tag):
 
     ACTION_ATTR = 'name'
 
-    def set_sync_action(self, action_id, params, keep_attr_value=True):
+    def set_action_async(self):
+        pass
+
+    def set_action(self, action_id, params, keep_attr_value=True):
         new_attr_value = action_id + (('#' + params) if params else '')
 
         attr_value = self.get(self.ACTION_ATTR) if keep_attr_value else None
@@ -41,9 +43,6 @@ class _HTMLActionTag(html_base.Tag):
             new_attr_value = '|' + new_attr_value + '|' + attr_value.strip('|') + '|'
 
         self.set(self.ACTION_ATTR, new_attr_value)
-
-    def set_async_action(self, action_id, params):
-        self.set_sync_action(action_id, params)
 
     @partial.max_number_of_args(2)
     def action(self, action, args, with_request=False, **kw):
@@ -70,7 +69,13 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
     def absolute_url(self, url):
         return self.renderer.absolute_url(url)
 
-    def set_sync_action(self, action_id, params):
+    def set_action_async(self):
+        super().set_action_async()
+
+        self.renderer.include_nagare_js()
+        self.set('data-nagare', '%02X' % self.ACTION_PRIORITY)
+
+    def set_action(self, action_id, params):
         """Register a synchronous action.
 
         In:
@@ -78,10 +83,10 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
           - ``action`` -- action
           - ``with_request`` -- will the request and response objects be passed to the action?
         """
-        url_params = OrderedDict()
-        url_params[action_id] = ''  # MUST be the first inserted value
-        if params:
-            url_params['_p'] = params
+        if self.renderer.is_async:
+            self.set_action_async()
+
+        url_params = {action_id: params}
 
         url = self.get(self.ACTION_ATTR, '')
         if ('_s=' in url) and ('_c=' in url):
@@ -89,28 +94,23 @@ class A(html_base.HrefAttribute, _HTMLActionTag):
         else:
             url = self.renderer.add_sessionid_in_url(url, url_params)
 
-        super(A, self).set_sync_action(url, '', False)
-
-    def set_async_action(self, action_id, params):
-        super(A, self).set_async_action(action_id, params)
-        self(data_nagare='%02X' % self.ACTION_PRIORITY)
+        super().set_action(url, '', False)
 
 
 class Img(html_base.Img, _HTMLActionTag):
     """``<img>`` tags."""
 
     ACTION_ATTR = 'src'
-    ACTION_PRIORITY = callbacks.WITHOUT_VALUE_CALLBACK
+    ACTION_PRIORITY = callbacks.LINK_CALLBACK
 
-    def set_sync_action(self, action_id, params):
-        params = {'_p': params} if params else {}
-        params[action_id] = ''
+    def set_action(self, action_id, params):
+        url_params = {action_id: params}
 
         url = self.get('src', '')
-        url = self.renderer.add_sessionid_in_url(url, params)
+        url = self.renderer.add_sessionid_in_url(url, url_params)
         url = self.renderer.absolute_url(url, self.renderer.url or '/')
 
-        super(Img, self).set_sync_action(url, {})
+        super().set_action(url, '')
 
     @classmethod
     def generate(cls, action, with_request, request, response, *args, **kw):
@@ -140,7 +140,7 @@ class Img(html_base.Img, _HTMLActionTag):
     @partial.max_number_of_args(2)
     def action(self, action, args, with_request=False, **kw):
         f = partial.Partial(self.generate, action, with_request)
-        return super(Img, self).action(f, with_request=True, *args, **kw)
+        return super().action(f, with_request=True, *args, **kw)
 
 
 class Form(_HTMLActionTag):
@@ -156,7 +156,7 @@ class Form(_HTMLActionTag):
         In:
           - ``renderer`` -- the current renderer
         """
-        super(Form, self).init(renderer)
+        super().init(renderer)
 
         # Set the default attributes: send the form with a POST, in utf-8
         self(self.DEFAULT_ATTRS)
@@ -206,8 +206,9 @@ class Form(_HTMLActionTag):
         self.renderer.register_callback(self, self.POST_ACTION_PRIORITY, action, with_request, *args, **kw)
         return self
 
-    def set_sync_action(self, action_id, params):
-        input_ = self.renderer.input(type='hidden', name=action_id, class_='nagare-generated nagare-session-data')
+    def set_action(self, action_id, params):
+        name = action_id + (('#' + params) if params else '')
+        input_ = self.renderer.input(type='hidden', name=name, class_='nagare-generated')
         self.append(input_)
 
 
@@ -236,13 +237,13 @@ class TextArea(_HTMLActionTag):
         Return:
           - ``self``
         """
-        # The content sent to the action will have the '\r' characters deleted
+        # The content sent to the action will have the '\r' characters removed
         if not isinstance(action, Action):
             f = self.clean_input_with_request if with_request else self.clean_input
             action = partial.Partial(f, action, args)
             args = ()
 
-        return super(TextArea, self).action(action, with_request=with_request, *args, **kw)
+        return super().action(action, with_request=with_request, *args, **kw)
 
 
 # ----------------------------------------------------------------------------------
@@ -298,9 +299,17 @@ class SubmitInput(_HTMLActionTag):
 
     ACTION_PRIORITY = callbacks.SUBMIT_CALLBACK | callbacks.WITH_CONTINUATION_CALLBACK
 
-    def set_async_action(self, action_id, params):
-        super(SubmitInput, self).set_async_action(action_id, params)
-        self(data_nagare='%02X' % self.ACTION_PRIORITY)
+    def set_action_async(self):
+        super().set_action_async()
+
+        self.renderer.include_nagare_js()
+        self.set('data-nagare', '%02X' % self.ACTION_PRIORITY)
+
+    def init(self, renderer):
+        super().init(renderer)
+
+        if self.renderer.is_async:
+            self.set_action_async()
 
 
 class FileInput(_HTMLActionTag):
@@ -317,7 +326,7 @@ class FileInput(_HTMLActionTag):
         Return:
           - ``self``
         """
-        super(FileInput, self).init(renderer)
+        super().init(renderer)
         self.set('name', 'file')
 
 
@@ -326,9 +335,17 @@ class ImageInput(html_base.Input, _HTMLActionTag):
 
     ACTION_PRIORITY = callbacks.IMAGE_CALLBACK | callbacks.WITH_CONTINUATION_CALLBACK
 
-    def set_async_action(self, action_id, params):
-        super(ImageInput, self).set_async_action(action_id, params)
-        self(data_nagare='%02X' % self.ACTION_PRIORITY)
+    def set_action_async(self):
+        super().set_action_async()
+
+        self.renderer.include_nagare_js()
+        self.set('data-nagare', '%02X' % self.ACTION_PRIORITY)
+
+    def init(self, renderer):
+        super().init(renderer)
+
+        if self.renderer.is_async:
+            self.set_action_async()
 
 
 class TextInput(_HTMLActionTag):
@@ -346,27 +363,13 @@ class TextInput(_HTMLActionTag):
     def __call__(self, *children, **attrib):
         type_ = attrib.get('type', 'text')
         if type_ not in self.TYPES:
-            return super(TextInput, self).__call__(*children, **attrib)
+            return super().__call__(*children, **attrib)
 
         element = self.TYPES[type_]()
         element.init(self.renderer)
         element.tag = self.tag
 
         return element(*children, **dict(self.attrib, **attrib))
-
-
-class AsyncSubmitInput(SubmitInput):
-    """``<input>`` tags with ``type=submit`` attributes."""
-
-    def init(self, renderer):
-        super(AsyncSubmitInput, self).init(renderer)
-        self.action(lambda: None)
-
-
-class AsyncTextInput(TextInput):
-    """Dispatcher class for all the ``<input>`` tags."""
-
-    TYPES = dict(TextInput.TYPES, submit=AsyncSubmitInput)
 
 
 # ----------------------------------------------------------------------------------
@@ -423,7 +426,7 @@ class Label(html_base.Tag):
         Return:
           - ``self``
         """
-        super(Label, self).init(renderer)
+        super().init(renderer)
         self.set('for', renderer.generate_id('id'))  # Generate a unique value for the ``for`` attribute
 
 
@@ -448,7 +451,7 @@ class Error(html_base.Tag):
         element, parent = self.decorated
 
         if element is None:
-            super(Error, self).add_children(children, attrib)
+            super().add_children(children, attrib)
         else:
             element.add_children(children, attrib)
             parent[0] = element
@@ -510,8 +513,10 @@ class HeadRenderer(html_base.HeadRenderer):
         )
 
 
-class _SyncRenderer(object):
+class _SyncRenderer:
     """The XHTML synchronous renderer."""
+
+    is_async = False
 
     head_renderer_factory = HeadRenderer
     default_action = Action
@@ -624,7 +629,7 @@ class _SyncRenderer(object):
           - ``static_path`` -- path of the static contents of the application
           - ``url`` -- url prefix of the application
         """
-        super(_SyncRenderer, self).__init__(parent, static_url=static_url, assets_version=assets_version)
+        super().__init__(parent, static_url=static_url, assets_version=assets_version)
 
         if parent is None:
             self.session_id = session_id
@@ -649,18 +654,15 @@ class _SyncRenderer(object):
 
         self.id = var.Var(self.id)
 
-    def SyncRenderer(self, *args, **kw):
-        """Create an associated synchronous HTML renderer.
-
-        Return:
-          - a new synchronous renderer
-        """
+    def Renderer(self, *args, **kw):
         # If no arguments are given, this renderer becomes the parent of the
         # newly created renderer
         if not args:
             kw.setdefault('parent', self)
 
         return self.__class__(*args, **kw)
+
+    SyncRenderer = Renderer
 
     def AsyncRenderer(self, *args, **kw):
         """Create an associated asynchronous HTML renderer.
@@ -684,9 +686,7 @@ class _SyncRenderer(object):
         return None, (None, None, None)
 
     def absolute_url(self, url, url_prefix=None, always_relative=False, **params):
-        return super(_SyncRenderer, self).absolute_url(
-            url, url_prefix if url_prefix is not None else self.url, always_relative, **params
-        )
+        return super().absolute_url(url, url_prefix if url_prefix is not None else self.url, always_relative, **params)
 
     def add_sessionid_in_form(self, form):
         """Add the session and continuation ids into a ``<form>``.
@@ -732,12 +732,12 @@ class _SyncRenderer(object):
         """
         component = self.component
         if component is None:
-            return None
+            return
 
         if not isinstance(action, Action):
             action = self.default_action(action)
 
-        return action.register(self, component, tag, action_type, with_request, args, kw)
+        action.register(self, component, tag, action_type, with_request, args, kw)
 
     def start_rendering(self, view, args, kw):
         pass
@@ -769,37 +769,11 @@ class _SyncRenderer(object):
 class _AsyncRenderer(_SyncRenderer):
     """The XHTML asynchronous renderer."""
 
+    is_async = True
+
     sync_renderer_factory = None
     default_action = Update
     _async_root = (None, (), {})
-
-    input = TagProp(
-        'input',
-        html_base.allattrs
-        | html_base.focusattrs
-        | {
-            'type',
-            'name',
-            'value',
-            'checked',
-            'disabled',
-            'readonly',
-            'size',
-            'maxlength',
-            'src',
-            'alt',
-            'usemap',
-            'onselect',
-            'onchange',
-            'accept',
-            'align',
-            'border',
-        },
-        AsyncTextInput,
-    )
-    button = TagProp(
-        'button', html_base.allattrs | html_base.focusattrs | {'name', 'value', 'type', 'disabled'}, AsyncSubmitInput
-    )
 
     def SyncRenderer(self, *args, **kw):
         """Create an associated synchronous HTML renderer.
@@ -814,18 +788,7 @@ class _AsyncRenderer(_SyncRenderer):
 
         return self.sync_renderer_factory(*args, **kw)
 
-    def AsyncRenderer(self, *args, **kw):
-        """Create an associated asynchronous HTML renderer.
-
-        Return:
-          - a new asynchronous renderer
-        """
-        # If no arguments are given, this renderer becomes the parent of the
-        # newly created renderer
-        if not args:
-            kw.setdefault('parent', self)
-
-        return self.__class__(*args, **kw)
+    AsyncRenderer = _SyncRenderer.Renderer
 
     @property
     def is_async_root(self):
@@ -843,7 +806,7 @@ class _AsyncRenderer(_SyncRenderer):
         if self.is_async_root:
             self.parent._async_root = view, args, kw
 
-        super(_AsyncRenderer, self).start_rendering(view, args, kw)
+        super().start_rendering(view, args, kw)
         self._async_root = False
 
     def end_rendering(self, output):
@@ -864,7 +827,7 @@ class _AsyncRenderer(_SyncRenderer):
 
             self.id(id_)
 
-        return super(_AsyncRenderer, self).end_rendering(output)
+        return super().end_rendering(output)
 
 
 class AsyncRenderer(_AsyncRenderer, html_base.Renderer):

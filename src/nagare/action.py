@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2024 Net-ng.
+# Copyright (c) 2008-2025 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -19,7 +19,7 @@ def no_action(*args, **kw):
     return b''
 
 
-class Action(object):
+class Action:
     def __init__(self, action=no_action):
         self.action = action
 
@@ -41,18 +41,12 @@ class Action(object):
     def generate_render(renderer):
         return None
 
-    @staticmethod
-    def set_action(tag, action_id, params):
-        tag.set_sync_action(action_id, params)
-
     def register(self, renderer, component, tag, action_type, with_request, args, kw, action=None):
         action_id, client_params = self._register(
             component, action_type, with_request, args, kw, action or self.action, self.generate_render(renderer)
         )
 
-        self.set_action(tag, action_id, client_params)
-
-        return action_id, client_params
+        tag.set_action(action_id, client_params)
 
 
 class Update(Action):
@@ -89,7 +83,7 @@ class Update(Action):
           - ``permissions`` -- permissions needed to execute the action
           - ``subject`` -- subject to test the permissions on
         """
-        super(Update, self).__init__(action)
+        super().__init__(action)
         self._render = render
 
         if isinstance(component_to_update, xml.Tag):
@@ -100,10 +94,6 @@ class Update(Action):
         else:
             self.component_to_update = component_to_update
 
-    @staticmethod
-    def set_action(tag, action_id, params):
-        tag.set_async_action(action_id, params)
-
     def generate_render(self, renderer, with_header=True):
         """Generate the rendering function.
 
@@ -113,8 +103,6 @@ class Update(Action):
         Return:
           - the rendering function
         """
-        renderer.include_nagare_js()
-
         render = self._render
         if render is None:
             return no_action
@@ -175,16 +163,19 @@ class Update(Action):
         return (renderer.link if with_input else renderer.a).action(self, **kw).get('href')
 
     def javascript(self, renderer, with_field=False, **kw):
-        renderer.include_nagare_js()
-
         return '{}("{}"{})'.format(
             self.JS_CALL, self.url(renderer, with_field, **kw), ' + nagare.getField(this)' if with_field else ''
         )
 
     js = javascript
 
-    def render(self, renderer, **kw):
-        return self.javascript(renderer, **kw)
+    def render(self, renderer, *args, **kw):
+        return self.javascript(renderer, *args, **kw)
+
+    def register(self, renderer, component, tag, action_type, with_request, args, kw, action=None):
+        tag.set_action_async()
+
+        return super().register(renderer, component, tag, action_type, with_request, args, kw, action)
 
 
 class Updates(Update):
@@ -196,7 +187,7 @@ class Updates(Update):
           - ``args`` -- the list of ``Update`` objects
           - ``action`` -- global action to execute
         """
-        super(Updates, self).__init__(action)
+        super().__init__(action)
         self.updates = args
 
     @staticmethod
@@ -212,7 +203,7 @@ class Updates(Update):
     def register(self, renderer, component, tag, action_type, with_request, args, kw):
         actions = [self.action] + [update.action for update in self.updates]
 
-        return super(Updates, self).register(
+        return super().register(
             renderer,
             component,
             tag,
@@ -238,36 +229,34 @@ class Updates(Update):
 class Remote(Update, xml.Renderable):
     JS_CALL = 'nagare.callRemote'
 
-    def __init__(self, action, with_request=False):
-        super(Remote, self).__init__(action, None)
-        self.with_request = with_request
+    def __init__(self, action, *args, with_request=False, **kw):
+        super().__init__(no_action, action, ' ')
 
-    @staticmethod
-    def remote_call(action, with_request, renderer):
+        self.with_request = with_request
+        self.args = args
+        self.kw = kw
+
+    def generate_response(self, render, view, component_to_update, params, renderer):
         request = renderer.request
         response = renderer.response
 
-        response.content_type = 'application/json'
+        if self.with_request:
+            render = partial.Partial(render, request, response)
 
         params = json.loads(request.params.get('_params', '[]'))
-        if with_request:
-            action = partial.Partial(action, request, response)
 
         try:
-            r = callbacks.callbacks_service.execute_callback(callbacks.WITH_CONTINUATION_CALLBACK, action, params, {})
+            r = callbacks.callbacks_service.execute_callback(
+                callbacks.WITH_CONTINUATION_CALLBACK, render, list(self.args) + params, self.kw
+            )
         except component.CallAnswered:
             r = None
 
+        response.content_type = 'application/json'
         return json.dumps(r)
 
-    def register(self, renderer, component, tag, action_type, with_request, args, kw):
-        return super(Remote, self).register(renderer, component, tag, action_type, False, (), {}, no_action)
-
-    def generate_render(self, renderer):
-        return partial.Partial(self.remote_call, self.action, self.with_request)
-
     def javascript(self, renderer, name=None):
-        js = super(Remote, self).javascript(renderer, name)
+        js = super().javascript(renderer)
         if name:
             renderer.head.javascript('nagare-js-' + name, 'var {} = {};'.format(name, js))
             js = ''

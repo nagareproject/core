@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2024 Net-ng.
+# Copyright (c) 2008-2025 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -104,7 +104,7 @@ class Component(renderable.Renderable):
         result.callbacks.update(self.serialize_actions(clean_callbacks))
         result.components += 1
 
-        return super(Component, self).__reduce__()
+        return super().__reduce__()
 
     def _becomes(self, o, view, url):
         """Replace a component by an object or an other component.
@@ -231,7 +231,7 @@ def route(self, url, http_method, request, response, url2):
 # -----------------------------------------------------------------------------------------------------
 
 
-class Task(object):
+class Task:
     """A ``Task`` encapsulated a simple method. A ``task`` is typically used to manage other components by calling them.
 
     .. warning::
@@ -263,7 +263,7 @@ def render_task(self, renderer, comp, view):
 # -----------------------------------------------------------------------------------------------------
 
 
-class Dummy(object):
+class Dummy:
     pass
 
 

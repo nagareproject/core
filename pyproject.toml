@@ -1,10 +1,10 @@
-# =-
-# (C)opyright Net-ng 2008-2024
+# --
+# (C)opyright Net-ng 2008-2025
 #
 # This is Net-ng proprietary source code
 # Any reproduction modification or use without prior written
 # approval from Net-ng is strictly forbidden.
-# =-
+# --
 
 [build-system]
 requires = [
@@ -46,7 +46,7 @@ classifiers = [
     'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     'Topic :: Software Development :: Libraries :: Python Modules',
 ]
-requires-python = '>=3.8'
+requires-python = '>=3.9'
 dependencies = [
     'WebOb',
     "legacy-cgi ; python_full_version>='3.13.0a1'",
