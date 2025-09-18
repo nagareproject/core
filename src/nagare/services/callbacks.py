@@ -117,7 +117,7 @@ class CallbacksService(plugin.Plugin):
                 groups = m.groups()
                 actions[(int(groups[2]), int(groups[0], 16), groups[3], groups[4], groups[-1])].append(value)
 
-        renders = []
+        render = None
 
         for (type_, callback_type, callback_id, complement, client_params), values in sorted(
             actions.items(), key=lambda e: (e[0][0], e[0][1])
@@ -131,9 +131,6 @@ class CallbacksService(plugin.Plugin):
 
             if f is None:
                 continue
-
-            if render is not None:
-                renders.append(render)
 
             callback_params = self.decode_client_params(client_params) | kw
 
@@ -160,8 +157,6 @@ class CallbacksService(plugin.Plugin):
             request=request,
             response=response,
             root=root,
-            render=(lambda h: [render(h.Renderer()) for render in renders])
-            if request.is_xhr or renders
-            else root.render,
+            render=(render or (lambda h: '')) if request.is_xhr or render else root.render,
             **params,
         )

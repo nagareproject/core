@@ -488,7 +488,7 @@ class HeadRenderer(html_base.HeadRenderer):
         if not any((self._named_css, self._css_url, self._named_javascript, self._javascript_url)):
             return ''
 
-        return 'nagare.loadAll(%s, %s, %s, %s)' % (
+        return 'nagare.loadAll(%s, %s, %s, %s);' % (
             json.dumps(
                 [(name, css, attrs) for name, (css, attrs, _) in sorted(self._named_css.items(), key=lambda e: e[1][2])]
             ),
