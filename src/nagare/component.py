@@ -263,13 +263,13 @@ def render_task(self, renderer, comp, view):
 # -----------------------------------------------------------------------------------------------------
 
 
-class Dummy:
+class Empty:
     pass
 
 
-@presentation.render_for(Dummy)
-def render_dummy(*args):
-    pass
+@presentation.render_for(Empty, '*')
+def render_empty(*args):
+    return ''
 
 
 # -----------------------------------------------------------------------------------------------------
