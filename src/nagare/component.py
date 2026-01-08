@@ -15,9 +15,9 @@ replace and call a component. It's described in `ComponentModel`
 
 import random
 import contextlib
+from functools import partial
 
 from nagare import renderable, continuation, presentation
-from nagare.partial import Partial
 from nagare.services import router
 
 _marker = object()
@@ -211,7 +211,7 @@ class Component(renderable.Renderable):
           - ``f`` -- function to call with my answer
           - ``args``, ``kw`` -- ``f`` parameters
         """
-        self._on_answer = Partial(f, *args, **kw) if args or kw else f
+        self._on_answer = partial(f, *args, **kw) if args or kw else f
         return self
 
 
@@ -269,7 +269,7 @@ class Empty:
 
 @presentation.render_for(Empty, '*')
 def render_empty(*args):
-    return ''
+    pass
 
 
 # -----------------------------------------------------------------------------------------------------

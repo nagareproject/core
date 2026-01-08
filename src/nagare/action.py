@@ -9,8 +9,9 @@
 
 import json
 import random
+from functools import partial
 
-from nagare import partial, component
+from nagare import component
 from nagare.services import callbacks
 from nagare.renderers import xml
 
@@ -119,7 +120,7 @@ class Update(Action):
             render = async_root.component.render if async_root is not None else lambda h, view: None
             params = kw or {}
 
-        return partial.Partial(
+        return partial(
             self.generate_response if with_header else self.generate_response_body,
             render,
             view,
@@ -179,8 +180,7 @@ class Update(Action):
 
 
 class Updates(Update):
-    @partial.max_number_of_args(1)
-    def __init__(self, args, action=no_action):
+    def __init__(self, *args, action=no_action):
         """Initialization.
 
         In:
@@ -196,7 +196,7 @@ class Updates(Update):
 
         for action in actions:
             if with_request:
-                action = partial.Partial(action, request, response)
+                action = partial(action, request, response)
 
             callbacks_service.execute_callback(action_type, action, args, kw)
 
@@ -216,7 +216,7 @@ class Updates(Update):
 
     def generate_render(self, renderer):
         renders = [update.generate_render(renderer, False) for update in self.updates]
-        return partial.Partial(self.generate_response, tuple(renders))
+        return partial(self.generate_response, tuple(renders))
 
     @classmethod
     def generate_response(cls, renders, renderer):
@@ -241,7 +241,7 @@ class Remote(Update, xml.Renderable):
         response = renderer.response
 
         if self.with_request:
-            render = partial.Partial(render, request, response)
+            render = partial(render, request, response)
 
         params = json.loads(request.params.get('_params', '[]'))
 

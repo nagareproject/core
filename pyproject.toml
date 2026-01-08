@@ -1,9 +1,10 @@
 # --
-# (C)opyright Net-ng 2008-2025
+# Copyright (c) 2008-2025 Net-ng.
+# All rights reserved.
 #
-# This is Net-ng proprietary source code
-# Any reproduction modification or use without prior written
-# approval from Net-ng is strictly forbidden.
+# This software is licensed under the BSD License, as described in
+# the file LICENSE.txt, which you should have received as part of
+# this distribution.
 # --
 
 [build-system]
@@ -52,7 +53,6 @@ dependencies = [
     "legacy-cgi ; python_full_version>='3.13.0a1'",
     'filetype',
     'tinyaes',
-    'nagare-partial',
     'nagare-editor',
     'nagare-server-mvc',
     'nagare-services-sessions',

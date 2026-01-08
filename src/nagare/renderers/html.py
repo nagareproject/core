@@ -13,12 +13,13 @@ This renderer is dedicated to the Nagare framework
 """
 
 import json
+from functools import partial
 from importlib import metadata
 
 import webob
 import filetype
 
-from nagare import var, partial
+from nagare import var
 from nagare.action import Action, Update
 from nagare.services import callbacks
 from nagare.renderers import xml, html_base
@@ -44,8 +45,7 @@ class _HTMLActionTag(html_base.Tag):
 
         self.set(self.ACTION_ATTR, new_attr_value)
 
-    @partial.max_number_of_args(2)
-    def action(self, action, args, with_request=False, **kw):
+    def action(self, action, *args, with_request=False, **kw):
         """Register an action.
 
         In:
@@ -137,9 +137,8 @@ class Img(html_base.Img, _HTMLActionTag):
 
         raise e
 
-    @partial.max_number_of_args(2)
-    def action(self, action, args, with_request=False, **kw):
-        f = partial.Partial(self.generate, action, with_request)
+    def action(self, action, *args, with_request=False, **kw):
+        f = partial(self.generate, action, with_request)
         return super().action(f, with_request=True, *args, **kw)
 
 
@@ -176,8 +175,7 @@ class Form(_HTMLActionTag):
 
         return self
 
-    @partial.max_number_of_args(2)
-    def pre_action(self, action, args, with_request=False, **kw):
+    def pre_action(self, action, *args, with_request=False, **kw):
         """Register an action that will be executed **before** the actions of the form elements.
 
         In:
@@ -191,8 +189,7 @@ class Form(_HTMLActionTag):
         self.renderer.register_callback(self, self.PRE_ACTION_PRIORITY, action, with_request, *args, **kw)
         return self
 
-    @partial.max_number_of_args(2)
-    def post_action(self, action, args, with_request=False, **kw):
+    def post_action(self, action, *args, with_request=False, **kw):
         """Register an action that will be executed **after** the actions of the form elements.
 
         In:
@@ -225,8 +222,7 @@ class TextArea(_HTMLActionTag):
     def clean_input_with_request(cls, action, args, request, response, v, **kw):
         return cls.clean_input(action, (request, response) + args, v, **kw)
 
-    @partial.max_number_of_args(2)
-    def action(self, action, args, with_request=False, **kw):
+    def action(self, action, *args, with_request=False, **kw):
         """Register an action.
 
         In:
@@ -240,7 +236,7 @@ class TextArea(_HTMLActionTag):
         # The content sent to the action will have the '\r' characters removed
         if not isinstance(action, Action):
             f = self.clean_input_with_request if with_request else self.clean_input
-            action = partial.Partial(f, action, args)
+            action = partial(f, action, args)
             args = ()
 
         return super().action(action, with_request=with_request, *args, **kw)
@@ -463,8 +459,7 @@ class Error(html_base.Tag):
 
         return self
 
-    @partial.max_number_of_args(2)
-    def action(self, action, args, with_request=False, **kw):
+    def action(self, action, *args, with_request=False, **kw):
         element, parent = self.decorated
         if element is not None:
             parent[0] = element.action(action, *args, with_request=with_request, **kw)

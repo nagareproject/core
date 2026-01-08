@@ -24,7 +24,7 @@ from nagare.renderers import html
 
 
 def c14n(node):
-    if not isinstance(node, type('')):
+    if not isinstance(node, str):
         node = node.tostring(method='xml').decode('utf-8')
 
     node = etree.fromstring(node).getroottree()

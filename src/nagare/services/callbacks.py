@@ -16,12 +16,12 @@ import re
 import json
 import base64
 import contextlib
+from functools import partial
 from collections import defaultdict
 
 from webob import exc
 from tinyaes import AES
 
-from nagare import partial
 from nagare.services import plugin
 from nagare.component import CallAnswered, call_wrapper
 
@@ -135,7 +135,7 @@ class CallbacksService(plugin.Plugin):
             callback_params = self.decode_client_params(client_params) | kw
 
             if with_request:
-                f = partial.Partial(f, request, response)
+                f = partial(f, request, response)
 
             if type_ == WITH_VALUES_CALLBACK:
                 self.execute_callback(callback_type, f, callback_args + (tuple(values),), callback_params)
