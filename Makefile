@@ -5,7 +5,7 @@ clean:
 	@rm -rf src/*.egg-info
 	@find src \( -name '*.py[co]' -o -name '__pycache__' \) -delete
 	@rm -rf doc/_build/*
-	@rm -f src/nagare/static/js/nagare.js*
+	@rm -f src/nagare/static/nagare.js*
 
 upgrade-precommit:
 	python -m pre_commit autoupdate

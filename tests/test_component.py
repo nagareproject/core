@@ -9,7 +9,7 @@
 
 import pytest
 
-from nagare import var, component, continuation, presentation
+from nagare import var, component, presentation
 from nagare.renderers import xhtml
 
 
@@ -43,7 +43,7 @@ class App1:
 
 
 def test1():
-    """Component - test on_answer/answer"""
+    """Component - test on_answer/answer."""
     app = App1()
 
     assert app.foo.my_property == "I'm foo"
@@ -59,7 +59,7 @@ def test1():
 
 
 def test2():
-    """Component - becomes"""
+    """Component - becomes."""
     app = Foobar()
 
     assert isinstance(app.my_property(), Foo)
@@ -85,27 +85,26 @@ def test2():
 
 # -------------------------------------------------------------------------------------------------------
 
-if continuation.has_continuation:
 
-    def test3():
-        """Component - call"""
-        v = var.Var(42)
-        app = Foobar()
+def test3():
+    """Component - call."""
+    v = var.Var(42)
+    app = Foobar()
 
-        app.my_property.becomes(Foo(), 'foo')
-        assert isinstance(app.my_property(), Foo)
-        assert app.my_property.view == 'foo'
+    app.my_property.becomes(Foo(), 'foo')
+    assert isinstance(app.my_property(), Foo)
+    assert app.my_property.view == 'foo'
 
-        component.call_wrapper(lambda: v(app.my_property.call(Bar(), 'bar')))
+    component.call_wrapper(lambda: v(app.my_property.call(Bar(), 'bar')))
 
-        assert isinstance(app.my_property(), Bar)
-        assert app.my_property.view == 'bar'
+    assert isinstance(app.my_property(), Bar)
+    assert app.my_property.view == 'bar'
 
-        component.answer_wrapper(app.my_property, "I'm bar")
+    component.answer_wrapper(app.my_property, "I'm bar")
 
-        assert isinstance(app.my_property(), Foo)
-        assert app.my_property.view == 'foo'
-        assert v() == "I'm bar"
+    assert isinstance(app.my_property(), Foo)
+    assert app.my_property.view == 'foo'
+    assert v() == "I'm bar"
 
 
 # -------------------------------------------------------------------------------------------------------
@@ -122,7 +121,7 @@ def render_bar(self, h, *args):
 
 
 def test4():
-    """Component - render"""
+    """Component - render."""
     foo = component.Component(Foo())
 
     h = xhtml.Renderer()

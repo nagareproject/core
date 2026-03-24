@@ -47,13 +47,16 @@ class CallbackLookupError(LookupError):
 
 
 class CallbacksService(plugin.Plugin):
+    CONFIG_SPEC = plugin.Plugin.CONFIG_SPEC | {
+        'key': 'string(min_len=24, max_len=24, default=None, help="base64-encoded 16 bytes key")'
+    }
     LOAD_PRIORITY = 110
 
-    def __init__(self, name, dist, **config):
+    def __init__(self, name, dist, key=None, **config):
         global callbacks_service
         super().__init__(name, dist, **config)
 
-        self.key = os.urandom(16)
+        self.key = os.urandom(16) if key is None else base64.b64decode(key)
         callbacks_service = self
 
     @staticmethod

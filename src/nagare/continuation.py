@@ -7,10 +7,9 @@
 # this distribution.
 # --
 
-"""A ``Continuation()`` object captures an execution context.
+"""A ``Continuation()`` object captures a delimited execution context.
 
-Calling ``switch()`` on a continuation permutes the current execution context
-and the captured one, thus resuming where the context was captured.
+See: https://en.wikipedia.org/wiki/Delimited_continuation
 """
 
 import sys
@@ -18,6 +17,8 @@ import warnings
 from hashlib import sha256
 from functools import partial
 from traceback import walk_tb
+
+warnings.filterwarnings('ignore', 'assigning None to ([0-9]+ )?unbound local', RuntimeWarning)
 
 
 class ContinuationException(Exception):
@@ -36,95 +37,85 @@ class ContinuationCodeBlockNotFound(ContinuationException):
     pass
 
 
-has_continuation = sys.version_info >= (3, 10)  # PEP626 needed
-if not has_continuation:
+class Continuation:
+    def __init__(self):
+        self.populate(None, None, None, [])
 
-    def Continuation(f, *args, **kw):
-        return f(*args, **kw)
+    def populate(self, f, args, kw, frames):
+        self.f = f
+        self.args = args
+        self.kw = kw
+        self.frames = [(self.frame_hash(frame), lineno, dict(frame.f_locals)) for frame, lineno in frames]
 
-    def get_current(*args, **kw):
-        raise NotImplementedError('CPython>=3.10 or Stackless Python needed')
-else:
-    warnings.filterwarnings('ignore', 'assigning None to ([0-9]+ )?unbound local', RuntimeWarning)
+    @staticmethod
+    def frame_hash(frame):
+        code = frame.f_code
+        return sha256(code.co_filename.encode('utf-8') + str(code.co_firstlineno).encode('utf-8')).digest()[:8]
 
-    class _Continuation:
-        def __init__(self):
-            self.f = self.args = self.kw = self.frames = None
+    @staticmethod
+    def _stop(frame, event, arg):
+        return None
 
-        def populate(self, f, args, kw, frames):
-            self.f = f
-            self.args = args
-            self.kw = kw
-            self.frames = [(self.frame_hash(frame), lineno, dict(frame.f_locals)) for frame, lineno in frames]
+    @classmethod
+    def _jump(cls, lineno, frame, event, arg):
+        try:
+            frame.f_lineno = lineno
+        except ValueError:
+            raise ContinuationUnreacheableLine(
+                f"Unreachable line {lineno} in function '{frame.f_code.co_name}' of '{frame.f_code.co_filename}'"
+            )
 
-        @staticmethod
-        def frame_hash(frame):
-            code = frame.f_code
-            return sha256(code.co_filename.encode('utf-8') + str(code.co_firstlineno).encode('utf-8')).digest()[:8]
+        return cls._stop
 
-        @staticmethod
-        def _stop(frame, event, arg):
+    def _enter_function(self, frame, event, arg):
+        f_hash, lineno, locals_ = self.frames[self.current_frame]
+        if self.frame_hash(frame) != f_hash:
             return None
 
-        @classmethod
-        def _jump(cls, lineno, frame, event, arg):
-            try:
-                frame.f_lineno = lineno
-            except ValueError:
-                raise ContinuationUnreacheableLine(
-                    "Unreachable line {} in function '{}' of '{}'".format(
-                        lineno, frame.f_code.co_name, frame.f_code.co_filename
-                    )
-                )
+        self.current_frame += 1
+        if self.current_frame == len(self.frames):
+            lineno += 1
 
-            return cls._stop
+        frame.f_locals.update(locals_)
 
-        def _trace(self, frame, event, arg):
-            f_hash, lineno, locals_ = self.frames[self.i]
-            if self.frame_hash(frame) == f_hash:
-                self.i += 1
-                if self.i == len(self.frames):
-                    lineno += 1
-                    locals_['continuation_return'] = self.continuation_return
+        return partial(self._jump, lineno)
 
-                frame.f_locals.update(locals_)
+    def resume(self, return_value=None):
+        self.current_frame = 0
+        self.return_value = return_value
 
-                return partial(self._jump, lineno)
+        sys.settrace(self._enter_function)
 
-        def resume(self, continuation_return=None):
-            self.i = 0
-            self.continuation_return = continuation_return
-
-            sys.settrace(self._trace)
-            try:
-                r = Continuation(self.f, *self.args, **self.kw)
-                if self.i != len(self.frames):
-                    raise ContinuationCodeBlockNotFound()
-                return r
-            finally:
-                sys.settrace(None)
-
-        def _switch(self):
-            raise ContinuationSuspended(self)
-
-        def switch(self, *args):
-            continuation_return = None
-
-            if args:
-                return self.resume(args[0])
-
-            self._switch()
+        try:
+            r = delimit(self.f, *self.args, **self.kw)
+            if not self.current_frame == len(self.frames):
+                raise ContinuationCodeBlockNotFound()
+            return r
+        finally:
             sys.settrace(None)
 
-            return continuation_return
+    __call__ = resume
 
-    get_current = _Continuation
+    def _suspend(self):
+        raise ContinuationSuspended(self)
 
-    def Continuation(f, *args, **kw):
-        try:
-            return f(*args, **kw)
-        except ContinuationSuspended as e:
-            continuation = e.args[0]
-            continuation.populate(f, args, kw, list(walk_tb(e.__traceback__))[1:-1])
+    def suspend(self):
+        self._suspend()
+        sys.settrace(None)
 
-            return continuation
+        return self.return_value
+
+    shift = suspend
+
+
+def delimit(f, *args, **kw):
+    try:
+        return f(*args, **kw)
+    except ContinuationSuspended as e:
+        continuation = e.args[0]
+        continuation.populate(f, args, kw, list(walk_tb(e.__traceback__))[1:-1])
+
+        return continuation
+
+
+reset = delimit

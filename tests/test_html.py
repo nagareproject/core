@@ -7,15 +7,8 @@
 # this distribution.
 # --
 
-try:
-    import urlparse
-except ImportError:
-    import urllib.parse as urlparse
-
-try:
-    from cStringIO import StringIO as BuffIO
-except ImportError:
-    from io import BytesIO as BuffIO
+import urllib.parse as urlparse
+from io import BytesIO as BuffIO
 
 from lxml import etree
 
@@ -117,12 +110,9 @@ def test_html_render_form4():
 
 def test_html_render_select1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                with h.select:
-                    h << h.option(value='option1')
-                    h << h.option(value='option2', selected='selected')
+    with h.form, h.select:
+        h << h.option(value='option1')
+        h << h.option(value='option2', selected='selected')
     options = h.root.xpath('.//option')
     assert options[0].get('selected') is None
     assert options[1].get('selected') == 'selected'
@@ -130,12 +120,9 @@ def test_html_render_select1():
 
 def test_html_render_select2():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                with h.select:
-                    h << h.option(value='option1').selected('option2')
-                    h << h.option(value='option2').selected('option2')
+    with h.html, h.body, h.form, h.select:
+        h << h.option(value='option1').selected('option2')
+        h << h.option(value='option2').selected('option2')
 
     options = h.root.xpath('.//option')
     assert options[0].get('selected') is None
@@ -144,13 +131,10 @@ def test_html_render_select2():
 
 def test_html_render_select3():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                with h.select(multiple=True):
-                    h << h.option(value='option1').selected(['option1', 'option3'])
-                    h << h.option(value='option2').selected(['option1', 'option3'])
-                    h << h.option(value='option3').selected(['option1', 'option3'])
+    with h.html, h.body, h.form, h.select(multiple=True):
+        h << h.option(value='option1').selected(['option1', 'option3'])
+        h << h.option(value='option2').selected(['option1', 'option3'])
+        h << h.option(value='option3').selected(['option1', 'option3'])
 
     options = h.root.xpath('.//option')
     assert options[0].get('selected') == 'selected'
@@ -160,13 +144,10 @@ def test_html_render_select3():
 
 def test_html_render_select4():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                with h.select(multiple=True):
-                    h << h.option(value='option1').selected(['option1', 'option3'])
-                    h << h.option(value='option2', selected='selected').selected(['option1', 'option3'])
-                    h << h.option(value='option3').selected(['option1', 'option3'])
+    with h.html, h.body, h.form, h.select(multiple=True):
+        h << h.option(value='option1').selected(['option1', 'option3'])
+        h << h.option(value='option2', selected='selected').selected(['option1', 'option3'])
+        h << h.option(value='option3').selected(['option1', 'option3'])
 
     options = h.root.xpath('.//option')
     assert options[0].get('selected') == 'selected'
@@ -176,17 +157,15 @@ def test_html_render_select4():
 
 def test_html_render_select5():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                h << h.select(
-                    [
-                        h.option(value='option1').selected(['option1', 'option3']),
-                        h.option(value='option2').selected(['option1', 'option3']),
-                        h.option(value='option3').selected(['option1', 'option3']),
-                    ],
-                    multiple=True,
-                )
+    with h.html, h.body, h.form:
+        h << h.select(
+            [
+                h.option(value='option1').selected(['option1', 'option3']),
+                h.option(value='option2').selected(['option1', 'option3']),
+                h.option(value='option3').selected(['option1', 'option3']),
+            ],
+            multiple=True,
+        )
 
     options = h.root.xpath('.//option')
     assert options[0].get('selected') == 'selected'
@@ -196,11 +175,9 @@ def test_html_render_select5():
 
 def test_html_render_checkbox1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                h << h.input(type='checkbox', value='option1')
-                h << h.input(type='checkbox', value='option2', checked='checked')
+    with h.html, h.body, h.form:
+        h << h.input(type='checkbox', value='option1')
+        h << h.input(type='checkbox', value='option2', checked='checked')
     checkboxes = h.root.xpath('.//input[@type="checkbox"]')
     assert 'checked' not in checkboxes[0].attrib
     assert 'checked' in checkboxes[1].attrib
@@ -208,12 +185,10 @@ def test_html_render_checkbox1():
 
 def test_html_render_checkbox2():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                checkbox = h.input(type='checkbox', value='option1')
-                h << checkbox
-                h << h.input(type='checkbox', value='option2', checked='checked')
+    with h.html, h.body, h.form:
+        checkbox = h.input(type='checkbox', value='option1')
+        h << checkbox
+        h << h.input(type='checkbox', value='option2', checked='checked')
     checkboxes = h.root.xpath('.//input[@type="checkbox"]')
     checkbox.selected(True)
 
@@ -223,12 +198,10 @@ def test_html_render_checkbox2():
 
 def test_html_render_checkbox3():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                checkbox = h.input(type='checkbox', value='option1', checked='checked')
-                h << checkbox
-                h << h.input(type='checkbox', value='option2')
+    with h.html, h.body, h.form:
+        checkbox = h.input(type='checkbox', value='option1', checked='checked')
+        h << checkbox
+        h << h.input(type='checkbox', value='option2')
     checkboxes = h.root.xpath('.//input[@type="checkbox"]')
     checkbox.selected(False)
 
@@ -237,12 +210,10 @@ def test_html_render_checkbox3():
 
 def test_html_render_radiobutton1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                h << h.input(name='radio', type='radio', value='option1')
-                h << h.input(name='radio', type='radio', value='option2', checked='checked')
-                h << h.input(name='radio', type='radio', value='option3')
+    with h.html, h.body, h.form:
+        h << h.input(name='radio', type='radio', value='option1')
+        h << h.input(name='radio', type='radio', value='option2', checked='checked')
+        h << h.input(name='radio', type='radio', value='option3')
     radios = h.root.xpath('.//input[@type="radio"]')
     assert 'checked' not in radios[0].attrib
     assert 'checked' in radios[1].attrib
@@ -251,13 +222,11 @@ def test_html_render_radiobutton1():
 
 def test_html_render_radiobutton2():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                radio = h.input(name='radio', type='radio', value='option1')
-                h << radio
-                h << h.input(name='radio', type='radio', value='option2', checked='checked')
-                h << h.input(name='radio', type='radio', value='option3')
+    with h.html, h.body, h.form:
+        radio = h.input(name='radio', type='radio', value='option1')
+        h << radio
+        h << h.input(name='radio', type='radio', value='option2', checked='checked')
+        h << h.input(name='radio', type='radio', value='option3')
     radios = h.root.xpath('.//input[@type="radio"]')
     radio.selected(True)
     assert 'checked' in radios[0].attrib
@@ -267,13 +236,11 @@ def test_html_render_radiobutton2():
 
 def test_html_render_radiobutton3():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                h << h.input(name='radio', type='radio', value='option1')
-                radio = h.input(name='radio', type='radio', value='option2', checked='checked')
-                h << radio
-                h << h.input(name='radio', type='radio', value='option3')
+    with h.html, h.body, h.form:
+        h << h.input(name='radio', type='radio', value='option1')
+        radio = h.input(name='radio', type='radio', value='option2', checked='checked')
+        h << radio
+        h << h.input(name='radio', type='radio', value='option3')
     radios = h.root.xpath('.//input[@type="radio"]')
     radio.selected(False)
     assert 'checked' not in radios[0].attrib
@@ -283,27 +250,25 @@ def test_html_render_radiobutton3():
 
 def test_html_render_radiobutton4():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                (
-                    h
-                    << h.input(name='radio', type='radio', value='value1', id='option1')
-                    << h.label('option 1', for_='option1')
-                    << h.br
-                )
-                (
-                    h
-                    << h.input(name='radio', type='radio', value='value1', id='option2', checked='checked')
-                    << h.label('option 2', for_='option2')
-                    << h.br
-                )
-                (
-                    h
-                    << h.input(name='radio', type='radio', value='value1', id='option3')
-                    << h.label('option 3', for_='option3')
-                    << h.br
-                )
+    with h.html, h.body, h.form:
+        (
+            h
+            << h.input(name='radio', type='radio', value='value1', id='option1')
+            << h.label('option 1', for_='option1')
+            << h.br
+        )
+        (
+            h
+            << h.input(name='radio', type='radio', value='value1', id='option2', checked='checked')
+            << h.label('option 2', for_='option2')
+            << h.br
+        )
+        (
+            h
+            << h.input(name='radio', type='radio', value='value1', id='option3')
+            << h.label('option 3', for_='option3')
+            << h.br
+        )
     labels = h.root.xpath('.//label')
 
     assert all(label.get('for') is not None for label in labels)
@@ -311,10 +276,8 @@ def test_html_render_radiobutton4():
 
 def test_html_render_textarea1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                h << h.textarea('test', name='textearea1', type='textarea')
+    with h.html, h.body, h.form:
+        h << h.textarea('test', name='textearea1', type='textarea')
 
     textarea = h.root.xpath('.//textarea')[0]
     assert textarea.text == 'test'
@@ -322,55 +285,45 @@ def test_html_render_textarea1():
 
 def test_html_render_submit1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                input = h.input(name='submit1', type='submit')
-                h << input
+    with h.html, h.body, h.form:
+        input = h.input(name='submit1', type='submit')
+        h << input
 
     assert isinstance(input, html.SubmitInput)
 
 
 def test_html_render_password1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                input = h.input(name='password1', type='password')
-                h << input
+    with h.html, h.body, h.form:
+        input = h.input(name='password1', type='password')
+        h << input
 
     assert isinstance(input, html.TextInput)
 
 
 def test_html_render_hidden1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                input = h.input(name='hidden1', type='hidden')
-                h << input
+    with h.html, h.body, h.form:
+        input = h.input(name='hidden1', type='hidden')
+        h << input
 
     assert isinstance(input, html.TextInput)
 
 
 def test_html_render_file1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                input = h.input(name='file1', type='file')
-                h << input
+    with h.html, h.body, h.form:
+        input = h.input(name='file1', type='file')
+        h << input
 
     assert isinstance(input, html.FileInput)
 
 
 def test_html_render_text1():
     h = html.Renderer()
-    with h.html:
-        with h.body:
-            with h.form:
-                input = h.input(name='text1', type='text')
-                h << input
+    with h.html, h.body, h.form:
+        input = h.input(name='text1', type='text')
+        h << input
 
     assert isinstance(input, html.TextInput)
 
@@ -378,9 +331,8 @@ def test_html_render_text1():
 def test_html_render_img1():
     h = html.Renderer()
 
-    with h.html:
-        with h.body:
-            h << h.img(src='http://www.google.com/intl/en_ALL/images/logo.gif')
+    with h.html, h.body:
+        h << h.img(src='http://www.google.com/intl/en_ALL/images/logo.gif')
 
     assert c14n(h.root) == c14n(
         '<html><body><img src="http://www.google.com/intl/en_ALL/images/logo.gif"/></body></html>'
@@ -390,9 +342,8 @@ def test_html_render_img1():
 def test_html_render_img2():
     h = html.Renderer(static_url='/tmp/static/')
 
-    with h.html:
-        with h.body:
-            h << h.img(src='logo.gif')
+    with h.html, h.body:
+        h << h.img(src='logo.gif')
 
     assert c14n(h.root) == c14n('<html><body><img src="/tmp/static/logo.gif"/></body></html>')
 
@@ -400,9 +351,8 @@ def test_html_render_img2():
 def test_html_render_img3():
     h = html.Renderer(static_url='/tmp/static/')
 
-    with h.html:
-        with h.body:
-            h << h.img(src='/logo.gif')
+    with h.html, h.body:
+        h << h.img(src='/logo.gif')
 
     assert c14n(h.root) == c14n('<html><body><img src="/logo.gif"/></body></html>')
 
@@ -410,9 +360,8 @@ def test_html_render_img3():
 def test_html_render_a1():
     h = html.Renderer()
 
-    with h.html:
-        with h.body:
-            h << h.a('google', href='http://www.google.com')
+    with h.html, h.body:
+        h << h.a('google', href='http://www.google.com')
 
     assert c14n(h.root) == c14n('<html><body><a href="http://www.google.com">google</a></body></html>')
 
@@ -420,10 +369,9 @@ def test_html_render_a1():
 def test_html_render_action1():
     h = html.Renderer(static_url='/tmp/static/', component=component.Component())
 
-    with h.html:
-        with h.body:
-            a = h.a().action(lambda x: None)
-            h << a
+    with h.html, h.body:
+        a = h.a().action(lambda x: None)
+        h << a
 
     assert a.attrib['href'] is not None
 
@@ -431,10 +379,9 @@ def test_html_render_action1():
 def test_html_render_action2():
     h = html.Renderer(static_url='/tmp/static/', component=component.Component())
 
-    with h.html:
-        with h.body:
-            a = h.a(href='http://www.google.com').action(lambda x: None)
-            h << a
+    with h.html, h.body:
+        a = h.a(href='http://www.google.com').action(lambda x: None)
+        h << a
 
     assert a.attrib['href'].startswith('http://www.google.com')
     assert a.attrib['href'] != 'http://www.google.com'
@@ -443,10 +390,9 @@ def test_html_render_action2():
 def test_html_render_action3():
     h = html.Renderer(static_url='/tmp/static/', component=component.Component())
 
-    with h.html:
-        with h.body:
-            i = h.img().action(lambda x: None)
-            h << i
+    with h.html, h.body:
+        i = h.img().action(lambda x: None)
+        h << i
 
     assert i.attrib.get('src')
 
@@ -520,15 +466,14 @@ def test_html_render_action7():
 
     @presentation.render_for(C7)
     def render(self, h, *args):
-        with h.html:
-            with h.body:
-                a = h.img(src='/a')
-                h << a
-                b = h.img(src='b')
-                h << b
-                c = h.img.action(lambda x: None)
-                c = h.a.action(lambda: None)
-                h << c
+        with h.html, h.body:
+            a = h.img(src='/a')
+            h << a
+            b = h.img(src='b')
+            h << b
+            c = h.img.action(lambda x: None)
+            c = h.a.action(lambda: None)
+            h << c
 
         return a, b, c
 

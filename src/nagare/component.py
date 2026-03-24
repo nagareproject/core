@@ -144,24 +144,6 @@ class Component(renderable.Renderable):
 
         return self
 
-    def _call1(self, o, view, url):
-        # Keep my configuration
-        previous_o = self.o
-        previous_view = self.view
-        previous_url = self.url
-
-        # Replace me by the object and wait its answer
-        self._becomes(o, view, url)
-
-        previous_cont, self._cont = self._cont, continuation.get_current()
-
-        return (previous_o, previous_view, previous_url, previous_cont)
-
-    def _call2(self, previous_o, previous_view, previous_url, previous_cont):
-        self._cont = previous_cont
-
-        self._becomes(previous_o, previous_view, previous_url)
-
     def call(self, o=_marker, view=presentation.ANON_VIEW, url=None):
         # Call an other object or component
 
@@ -176,14 +158,14 @@ class Component(renderable.Renderable):
 
         # Return:
         #   - the answer of the called object
-        #
-        # .. note:
-        #   - the code of this function will be serialized.
-        #     Keep it to a minimal (no docstring ...)
 
-        p = self._call1(o, view, url)
-        r = self._cont.switch()
-        self._call2(*p)
+        previous = self.o, self.view, self.url, self._cont
+
+        self._becomes(o, view, url)
+        self._cont = continuation.Continuation()
+        r = self._cont.suspend()
+
+        self.o, self.view, self.url, self._cont = previous
 
         return r
 
@@ -201,7 +183,7 @@ class Component(renderable.Renderable):
             return self._on_answer(r) if r is not _marker else self._on_answer()
         else:
             # I was called by on other component. Return my answer to it
-            self._cont.switch(r if r is not _marker else None)
+            self._cont.resume(r if r is not _marker else None)
             raise CallAnswered()
 
     def on_answer(self, f, *args, **kw):
@@ -255,7 +237,7 @@ class Task:
 
 @presentation.render_for(Task)
 def render_task(self, renderer, comp, view):
-    continuation.Continuation(self._go, comp)
+    call_wrapper(self._go, comp)
 
     return comp.render(renderer.parent)
 
@@ -291,7 +273,7 @@ def call_wrapper(action, *args, **kw):
       - ``args`` -- positional parameters of the callable
       - ``kw`` -- keywords parameters of the callable
     """
-    return continuation.Continuation(action, *args, **kw)
+    return continuation.delimit(action, *args, **kw)
 
 
 def answer_wrapper(comp, *args):
