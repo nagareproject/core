@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # --
-# Copyright (c) 2008-2025 Net-ng.
+# Copyright (c) 2014-2026 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
