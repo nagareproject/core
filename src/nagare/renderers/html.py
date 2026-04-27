@@ -13,7 +13,6 @@ This renderer is dedicated to the Nagare framework
 """
 
 import json
-from functools import partial
 from importlib import metadata
 
 import webob
@@ -113,7 +112,7 @@ class Img(html_base.Img, _HTMLActionTag):
         super().set_action(url, '')
 
     @classmethod
-    def generate(cls, action, with_request, request, response, *args, **kw):
+    def generate(cls, request, response, action, *args, with_request_, **kw):
         """Generate the image and guess its format.
 
         In:
@@ -126,7 +125,7 @@ class Img(html_base.Img, _HTMLActionTag):
           - new response object raised
         """
         e = webob.exc.HTTPOk(headerlist=[('Content-Type', '')])
-        img = action(request, e, *args, **kw) if with_request else action(*args, **kw)
+        img = action(request, e, *args, **kw) if with_request_ else action(*args, **kw)
 
         # If no ``Content-Type`` is already set, use the ``filetype`` module to guess the format of the image
         if not e.content_type:
@@ -138,8 +137,7 @@ class Img(html_base.Img, _HTMLActionTag):
         raise e
 
     def action(self, action, *args, with_request=False, **kw):
-        f = partial(self.generate, action, with_request)
-        return super().action(f, with_request=True, *args, **kw)
+        return super().action(self.generate, action, *args, with_request=True, with_request_=with_request, **kw)
 
 
 class Form(_HTMLActionTag):
@@ -215,12 +213,13 @@ class TextArea(_HTMLActionTag):
     ACTION_PRIORITY = callbacks.WITH_VALUE_CALLBACK
 
     @classmethod
-    def clean_input(cls, action, args, v, **kw):
-        return action(*(args + (v.replace('\r', ''),)), **kw)
+    def clean_input(cls, action, *args, **kw):
+        args = args[:-1] + (args[-1].replace('\r', ''),)
+        return action(*args, **kw)
 
     @classmethod
-    def clean_input_with_request(cls, action, args, request, response, v, **kw):
-        return cls.clean_input(action, (request, response) + args, v, **kw)
+    def clean_input_with_request(cls, request, response, action, *args, **kw):
+        return cls.clean_input(action, request, response, *args, **kw)
 
     def action(self, action, *args, with_request=False, **kw):
         """Register an action.
@@ -235,9 +234,8 @@ class TextArea(_HTMLActionTag):
         """
         # The content sent to the action will have the '\r' characters removed
         if not isinstance(action, Action):
-            f = self.clean_input_with_request if with_request else self.clean_input
-            action = partial(f, action, args)
-            args = ()
+            args = (action,) + args
+            action = self.clean_input_with_request if with_request else self.clean_input
 
         return super().action(action, with_request=with_request, *args, **kw)
 
