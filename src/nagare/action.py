@@ -20,6 +20,14 @@ def no_action(*args, **kw):
     return b''
 
 
+class Partial(partial):
+    def __hash__(self):
+        return hash((self.func, self.args, tuple(self.keywords.items())))
+
+    def __eq__(self, partial):
+        return (self.func is partial.func) and (self.args == partial.args) and (self.keywords == partial.keywords)
+
+
 class Action:
     def __init__(self, action=no_action):
         self.action = action
@@ -120,7 +128,7 @@ class Update(Action):
             render = async_root.component.render if async_root is not None else lambda h, view: None
             params = kw or {}
 
-        return partial(
+        return Partial(
             self.generate_response if with_header else self.generate_response_body,
             render,
             view,
@@ -196,7 +204,7 @@ class Updates(Update):
 
         for action in actions:
             if with_request:
-                action = partial(action, request, response)
+                action = Partial(action, request, response)
 
             callbacks_service.execute_callback(action_type, action, args, kw)
 
@@ -216,7 +224,7 @@ class Updates(Update):
 
     def generate_render(self, renderer):
         renders = [update.generate_render(renderer, False) for update in self.updates]
-        return partial(self.generate_response, tuple(renders))
+        return Partial(self.generate_response, tuple(renders))
 
     @classmethod
     def generate_response(cls, renders, renderer):
@@ -241,7 +249,7 @@ class Remote(Update, xml.Renderable):
         response = renderer.response
 
         if self.with_request:
-            render = partial(render, request, response)
+            render = Partial(render, request, response)
 
         params = json.loads(request.params.get('_params', '[]'))
 
