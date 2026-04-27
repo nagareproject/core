@@ -42,19 +42,25 @@ class StateService(SessionService):
     CONFIG_SPEC = SessionService.CONFIG_SPEC | {
         'states_history': 'boolean(default=True)',
         'session_cookie': {'name': 'string(default="")'},
+        'send_response': 'boolean(default=True)',
     }
 
-    def __init__(self, name, dist, services_service, session_service, **config):
-        services_service(super().__init__, name, dist, **config)
+    def __init__(self, name, dist, send_response, services_service, session_service, **config):
+        services_service(super().__init__, name, dist, send_response=send_response, **config)
 
         session_service.set_persistent_id(persistent_id)
         session_service.set_dispatch_table(self.set_dispatch_table)
 
+        self.send_response = send_response
+
     def set_dispatch_table(self, clean_callbacks, result):
         return {Component: lambda comp: comp.reduce(clean_callbacks, result)}
 
-    @staticmethod
-    def _handle_request(request, start_response, response, **params):
-        start_response(response.status, response.headerlist)(response.body)
+    def _handle_request(self, request, start_response, response, **params):
+        write = start_response(response.status, response.headerlist)
 
-        return lambda environ, start_response: []
+        if self.send_response and (write is not None):
+            write(response.body)
+            return lambda environ, start_response: []
+
+        return lambda environ, start_response: [response.body]
