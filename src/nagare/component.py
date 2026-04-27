@@ -34,6 +34,10 @@ class AnswerWithoutOnAnswer(Exception):
 AnswerWithoutCall = AnswerWithoutOnAnswer
 
 
+class TaskWithoutCall(Exception):
+    pass
+
+
 class Component(renderable.Renderable):
     """This class transforms any Python object into a component.
 
@@ -213,7 +217,15 @@ def route(self, url, http_method, request, response, url2):
 # -----------------------------------------------------------------------------------------------------
 
 
-class Task:
+class TaskMeta(type):
+    def __call__(cls, *args, **kw):
+        task = super().__call__(*args, **kw)
+        task.init()
+
+        return task
+
+
+class Task(metaclass=TaskMeta):
     """A ``Task`` encapsulated a simple method. A ``task`` is typically used to manage other components by calling them.
 
     .. warning::
@@ -221,25 +233,24 @@ class Task:
        A ``Task`` is an object, not a component: you must wrap it into a ``Component()`` to use it.
     """
 
-    def _go(self, comp):
-        # If I was not called by an other component and nobody is listening to
-        # my answer,  I'm the root component. So I call my ``go()`` method forever
-        if comp._cont is comp._on_answer is None:
-            while True:
-                self.go(comp)
+    def init(self):
+        self.content = Component(Empty()).on_answer(self.raise_task_without_call)
+        call_wrapper(self._go, self.content)
 
-        # Else, answer with the return of the ``go`` method
-        comp.answer(self.go(comp))
+    def raise_task_without_call(self, _):
+        raise TaskWithoutCall(self)
+
+    def _go(self, comp):
+        while True:
+            comp.answer(self.go(comp))
 
     def go(self, comp):
         raise NotImplementedError()
 
 
 @presentation.render_for(Task)
-def render_task(self, renderer, comp, view):
-    call_wrapper(self._go, comp)
-
-    return comp.render(renderer.parent)
+def render_task(self, h, comp, view, *args, **kw):
+    return self.content.on_answer(comp.answer if comp._on_answer else lambda r: None).render(h, *args, **kw)
 
 
 # -----------------------------------------------------------------------------------------------------
