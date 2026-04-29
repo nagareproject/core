@@ -234,7 +234,7 @@ class Task(metaclass=TaskMeta):
     """
 
     def init(self):
-        self.content = Component(Empty()).on_answer(self.raise_task_without_call)
+        self.content = Component(self).on_answer(self.raise_task_without_call)
         call_wrapper(self._go, self.content)
 
     def raise_task_without_call(self, _):
