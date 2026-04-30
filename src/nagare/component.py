@@ -217,15 +217,7 @@ def route(self, url, http_method, request, response, url2):
 # -----------------------------------------------------------------------------------------------------
 
 
-class TaskMeta(type):
-    def __call__(cls, *args, **kw):
-        task = super().__call__(*args, **kw)
-        task.init()
-
-        return task
-
-
-class Task(metaclass=TaskMeta):
+class Task:
     """A ``Task`` encapsulated a simple method. A ``task`` is typically used to manage other components by calling them.
 
     .. warning::
@@ -233,7 +225,7 @@ class Task(metaclass=TaskMeta):
        A ``Task`` is an object, not a component: you must wrap it into a ``Component()`` to use it.
     """
 
-    def init(self):
+    def run(self):
         self.content = Component(self).on_answer(self.raise_task_without_call)
         call_wrapper(self._go, self.content)
 
@@ -249,8 +241,11 @@ class Task(metaclass=TaskMeta):
 
 
 @presentation.render_for(Task)
-def render_task(self, h, comp, view, *args, **kw):
-    return self.content.on_answer(comp.answer if comp._on_answer else lambda r: None).render(h, *args, **kw)
+def render_task(self, renderer, comp, view, *args, **kw):
+    if not hasattr(self, 'content'):
+        self.run()
+
+    return self.content.on_answer(comp.answer if comp._on_answer else lambda r: None).render(renderer, *args, **kw)
 
 
 # -----------------------------------------------------------------------------------------------------
